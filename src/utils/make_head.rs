@@ -10,6 +10,8 @@ pub fn make_head() -> &'static str {
     
     <title>value</title>
     </head>
+    <body>
+    <div id="oranda"><div class="body"><div class="container">
     "#;
     return head;
 }

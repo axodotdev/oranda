@@ -7,6 +7,7 @@ use utils::syntax_highlight::syntax_highlight;
 use comrak::adapters::SyntaxHighlighterAdapter;
 use comrak::{markdown_to_html_with_plugins, ComrakOptions, ComrakPlugins};
 
+use crate::utils::make_footer::make_footer;
 use crate::utils::make_head::make_head;
 
 fn initialize_comrak_options() -> ComrakOptions {
@@ -45,8 +46,9 @@ pub fn create_html(md: &str) -> String {
     plugins.render.codefence_syntax_highlighter = Some(&adapter);
 
     let head = make_head();
+    let footer = make_footer();
 
     let body = markdown_to_html_with_plugins(md, &options, &plugins);
 
-    return format!("{}{}</html>", head, body);
+    return format!("{}{}{}", head, body, footer);
 }
