@@ -30,7 +30,13 @@ pub fn create_html(md: &str) -> String {
     pub struct MockAdapter {}
     impl SyntaxHighlighterAdapter for MockAdapter {
         fn highlight(&self, lang: Option<&str>, code: &str) -> String {
-            syntax_highlight(lang, code)
+            let highlighted_code = syntax_highlight(lang, code);
+
+            // requires a string to be returned
+            match highlighted_code {
+                Ok(code) => code,
+                Err(_) => String::from(""),
+            }
         }
 
         fn build_pre_tag(&self, _attributes: &HashMap<String, String>) -> String {
