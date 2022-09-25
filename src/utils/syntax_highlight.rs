@@ -8,6 +8,5 @@ pub fn syntax_highlight(lang: Option<&str>, code: &str) -> String {
     let language = if lang.is_none() { "rs" } else { "js" };
     let syntax = ps.find_syntax_by_extension(language).unwrap();
 
-    return highlighted_html_for_string(code, &ps, syntax, &ts.themes["base16-ocean.dark"])
-        .unwrap();
+    highlighted_html_for_string(code, &ps, syntax, &ts.themes["base16-ocean.dark"]).unwrap()
 }

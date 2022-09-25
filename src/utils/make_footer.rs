@@ -1,6 +1,5 @@
 pub fn make_footer() -> &'static str {
-    let footer = r#"
+    r#"
     </div></div></div></body></html>
-    "#;
-    return footer;
+    "#
 }

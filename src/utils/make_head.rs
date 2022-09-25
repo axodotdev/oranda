@@ -1,5 +1,5 @@
 pub fn make_head() -> &'static str {
-    let head = r#"
+    r#"
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -12,6 +12,5 @@ pub fn make_head() -> &'static str {
     </head>
     <body>
     <div id="oranda"><div class="body"><div class="container">
-    "#;
-    return head;
+    "#
 }

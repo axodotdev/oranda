@@ -20,7 +20,7 @@ fn initialize_comrak_options() -> ComrakOptions {
     options.extension.footnotes = true;
     options.extension.description_lists = true;
 
-    return options;
+    options
 }
 
 pub fn create_html(md: &str) -> String {
@@ -50,5 +50,5 @@ pub fn create_html(md: &str) -> String {
 
     let body = markdown_to_html_with_plugins(md, &options, &plugins);
 
-    return format!("{}{}{}", head, body, footer);
+    format!("{}{}{}", head, body, footer)
 }
