@@ -1,6 +1,12 @@
 use oranda;
 
 #[test]
+fn returns_css() {
+    let (_, css) = oranda::create_html("# hello");
+    assert!(css.contains("--text-light:#fafafa;--text-800:#1f2937;"));
+}
+
+#[test]
 fn parses_basic_markdown() {
     let (html, _) = oranda::create_html("# hello");
     assert!(html.contains("<h1>hello</h1>"));
