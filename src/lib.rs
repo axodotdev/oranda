@@ -24,7 +24,12 @@ fn initialize_comrak_options() -> ComrakOptions {
     options
 }
 
-pub fn create_html(md: &str) -> (String, String) {
+pub struct Site {
+    pub html: String,
+    pub css: String,
+}
+
+pub fn create_html(md: &str) -> Site {
     let options = initialize_comrak_options();
     let mut plugins = ComrakPlugins::default();
 
@@ -65,5 +70,5 @@ pub fn create_html(md: &str) -> (String, String) {
     let body = markdown_to_html_with_plugins(md, &options, &plugins);
     let html = format!("{}{}{}", head, body, footer);
 
-    (html, css)
+    Site { html, css }
 }
