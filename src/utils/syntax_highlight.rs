@@ -11,7 +11,6 @@ pub fn syntax_highlight(lang: Option<&str>, code: &str) -> Result<String, Error>
         Some(l) => l,
     };
 
-    print!("{}", language);
     let syntax = ps.find_syntax_by_extension(language);
 
     return match syntax {
