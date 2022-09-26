@@ -1,0 +1,65 @@
+.body.dark {
+  --text: #fafafa;
+  --text-light: #d1d1d1;
+  --bg: #18181b;
+  --link: #facc15;
+  --table-bg: #161618;
+  --table-border: #27272a;
+  --table-header-bg: #27272a;
+
+  color: var(--text);
+  background: var(--bg);
+
+  .anchor svg path {
+    fill: var(--text);
+  }
+
+  h1,
+  h2,
+  h3,
+  h5,
+  h4,
+  h6,
+  p,
+  nav a {
+    color: var(--text);
+  }
+
+  a {
+    color: var(--link);
+  }
+
+  blockquote,
+  blockquote p {
+    color: var(--text-light);
+  }
+
+  table,
+  tr,
+  td {
+    background-color: var(--table-bg);
+  }
+
+  table {
+    tbody {
+      tr {
+        &:not(:last-of-type) {
+          border-color: var(--table-border);
+        }
+      }
+    }
+    thead {
+      th {
+        background-color: var(--table-header-bg);
+        color: var(--text);
+      }
+    }
+  }
+
+  .tabs {
+    label {
+      box-shadow: none;
+      background-color: var(--bg);
+    }
+  }
+}
