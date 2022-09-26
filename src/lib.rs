@@ -63,6 +63,7 @@ pub fn create_html(md: &str) -> (String, String) {
     .unwrap_or("There was a problem parsing the CSS".to_string());
 
     let body = markdown_to_html_with_plugins(md, &options, &plugins);
+    let html = format!("{}{}{}", head, body, footer);
 
-    (format!("{}{}{}", head, body, footer), css)
+    (html, css)
 }
