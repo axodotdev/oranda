@@ -20,3 +20,16 @@ pub fn syntax_highlight(lang: Option<&str>, code: &str) -> Result<String, Error>
         }
     };
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn parses_lists() {
+        /// syntax_highlight(Some("js"), "console.log(5)")?
+        assert_eq!(
+            syntax_highlight(Some("js"), "console.log(5)"),
+            Ok("".to_string())
+        );
+    }
+}
