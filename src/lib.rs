@@ -29,7 +29,7 @@ pub struct Site {
     pub css: String,
 }
 
-pub fn create_html(md: &str) -> Site {
+pub fn create_site(md: &str) -> Site {
     let options = initialize_comrak_options();
     let mut plugins = ComrakPlugins::default();
 

@@ -2,7 +2,7 @@ use oranda;
 
 #[test]
 fn returns_css() {
-    let site = oranda::create_html("# hello");
+    let site = oranda::create_site("# hello");
     assert!(site
         .css
         .contains("--text-light:#fafafa;--text-800:#1f2937;"));
@@ -10,13 +10,13 @@ fn returns_css() {
 
 #[test]
 fn parses_basic_markdown() {
-    let site = oranda::create_html("# hello");
+    let site = oranda::create_site("# hello");
     assert!(site.html.contains("<h1>hello</h1>"));
 }
 
 #[test]
 fn parses_images() {
-    let site = oranda::create_html("![Stormtroopocat](https://test.com/test.jpg)");
+    let site = oranda::create_site("![Stormtroopocat](https://test.com/test.jpg)");
     assert!(site
         .html
         .contains("<img src=\"https://test.com/test.jpg\" alt=\"Stormtroopocat\" />"));
@@ -24,13 +24,13 @@ fn parses_images() {
 
 #[test]
 fn parses_lists() {
-    let site = oranda::create_html("- A list item");
+    let site = oranda::create_site("- A list item");
     assert!(site.html.contains("<li>A list item</li>"));
 }
 
 #[test]
 fn parses_links() {
-    let site = oranda::create_html("[link text](http://test.com)");
+    let site = oranda::create_site("[link text](http://test.com)");
     assert!(site
         .html
         .contains("<a href=\"http://test.com\">link text</a>"));
@@ -38,7 +38,7 @@ fn parses_links() {
 
 #[test]
 fn parses_code() {
-    let site = oranda::create_html(
+    let site = oranda::create_site(
         r#"
 
 ```js
