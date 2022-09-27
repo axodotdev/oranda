@@ -9,6 +9,7 @@ use comrak::{markdown_to_html_with_plugins, ComrakOptions, ComrakPlugins};
 
 use crate::utils::make_footer::make_footer;
 use crate::utils::make_head::make_head;
+use grass::{Options, OutputStyle};
 
 fn initialize_comrak_options() -> ComrakOptions {
     let mut options = ComrakOptions::default();
@@ -23,7 +24,12 @@ fn initialize_comrak_options() -> ComrakOptions {
     options
 }
 
-pub fn create_html(md: &str) -> String {
+pub struct Site {
+    pub html: String,
+    pub css: String,
+}
+
+pub fn create_site(md: &str) -> Site {
     let options = initialize_comrak_options();
     let mut plugins = ComrakPlugins::default();
 
@@ -53,8 +59,16 @@ pub fn create_html(md: &str) -> String {
 
     let head = make_head();
     let footer = make_footer();
+    let css_options = Options::default();
+
+    let css = grass::from_path(
+        "src/css/style.scss",
+        &css_options.style(OutputStyle::Compressed),
+    )
+    .unwrap_or("There was a problem parsing the CSS".to_string());
 
     let body = markdown_to_html_with_plugins(md, &options, &plugins);
+    let html = format!("{}{}{}", head, body, footer);
 
-    format!("{}{}{}", head, body, footer)
+    Site { html, css }
 }
