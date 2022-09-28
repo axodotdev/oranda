@@ -38,7 +38,7 @@ pub fn do_oranda() -> Result<Report> {
     let mut css_file = File::create("public/styles.css")?;
     css_file.write_all(site.css.as_bytes())?;
 
-    let report = Report { };
+    let report = Report {};
 
     Ok(report)
 }
