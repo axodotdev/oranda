@@ -1,4 +1,4 @@
-use oranda;
+use crate as oranda;
 
 #[test]
 fn returns_css() {

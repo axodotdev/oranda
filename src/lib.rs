@@ -1,15 +1,47 @@
-pub mod utils;
-
-use std::collections::HashMap;
-
-use utils::syntax_highlight::syntax_highlight;
+use std::{
+    collections::HashMap,
+    fs::File,
+    io::{Read, Write},
+};
 
 use comrak::adapters::SyntaxHighlighterAdapter;
 use comrak::{markdown_to_html_with_plugins, ComrakOptions, ComrakPlugins};
+use grass::{Options, OutputStyle};
+use serde::{Deserialize, Serialize};
 
 use crate::utils::make_footer::make_footer;
 use crate::utils::make_head::make_head;
-use grass::{Options, OutputStyle};
+use crate::utils::syntax_highlight::syntax_highlight;
+use errors::*;
+
+pub mod errors;
+#[cfg(test)]
+mod tests;
+pub mod utils;
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Report {
+    // TODO: report useful paths/details for other tools
+}
+
+pub fn do_oranda() -> Result<Report> {
+    let mut file = File::open("test.md")?;
+    let mut data = String::new();
+    file.read_to_string(&mut data)?;
+    let site = create_site(&data);
+
+    std::fs::create_dir_all("public")?;
+
+    let mut html_file = File::create("public/index.html")?;
+    html_file.write_all(site.html.as_bytes())?;
+
+    let mut css_file = File::create("public/styles.css")?;
+    css_file.write_all(site.css.as_bytes())?;
+
+    let report = Report {};
+
+    Ok(report)
+}
 
 fn initialize_comrak_options() -> ComrakOptions {
     let mut options = ComrakOptions::default();
@@ -65,7 +97,7 @@ pub fn create_site(md: &str) -> Site {
         "src/css/style.scss",
         &css_options.style(OutputStyle::Compressed),
     )
-    .unwrap_or("There was a problem parsing the CSS".to_string());
+    .unwrap_or_else(|_| "There was a problem parsing the CSS".to_string());
 
     let body = markdown_to_html_with_plugins(md, &options, &plugins);
     let html = format!("{}{}{}", head, body, footer);
