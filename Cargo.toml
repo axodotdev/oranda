@@ -7,3 +7,7 @@ license = "MPL-2.0"
 
 [dependencies]
 assert_cmd="2"
+comrak = "0.14"
+syntect = "5.0"
+anyhow = "1.0"
+grass = "0.11.2"
