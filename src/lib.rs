@@ -1,15 +1,46 @@
-pub mod utils;
-
-use std::collections::HashMap;
-
-use utils::syntax_highlight::syntax_highlight;
+use std::{collections::HashMap, fs::File, io::{Read, Write}};
 
 use comrak::adapters::SyntaxHighlighterAdapter;
 use comrak::{markdown_to_html_with_plugins, ComrakOptions, ComrakPlugins};
+use serde::{Deserialize, Serialize};
+use grass::{Options, OutputStyle};
 
 use crate::utils::make_footer::make_footer;
 use crate::utils::make_head::make_head;
-use grass::{Options, OutputStyle};
+use crate::utils::syntax_highlight::syntax_highlight;
+use errors::*;
+
+pub mod errors;
+pub mod utils;
+#[cfg(test)]
+mod tests;
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Report {
+    pub cats_are_cute: bool,
+}
+
+pub fn some_op() -> Result<Report> {
+    let mut file = File::open("test.md")?;
+    let mut data = String::new();
+    file.read_to_string(&mut data)?;
+    let site = create_site(&data);
+
+    std::fs::create_dir_all("public")?;
+
+    let mut html_file = File::create("public/index.html")?;
+    html_file.write_all(site.html.as_bytes())?;
+
+    let mut css_file = File::create("public/styles.css")?;
+    css_file.write_all(site.css.as_bytes())?;
+
+    let report = Report {
+        cats_are_cute: true,
+    };
+
+    Ok(report)
+}
+
 
 fn initialize_comrak_options() -> ComrakOptions {
     let mut options = ComrakOptions::default();
