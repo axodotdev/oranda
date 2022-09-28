@@ -14,7 +14,9 @@ pub fn syntax_highlight(lang: Option<&str>, code: &str) -> Result<String> {
     let syntax = ps.find_syntax_by_extension(language);
 
     return match syntax {
-        None => Err(OrandaError::Other("Please add the language to your code snippets".to_owned())),
+        None => Err(OrandaError::Other(
+            "Please add the language to your code snippets".to_owned(),
+        )),
         Some(s) => {
             Ok(highlighted_html_for_string(code, &ps, s, &ts.themes["base16-ocean.dark"]).unwrap())
         }

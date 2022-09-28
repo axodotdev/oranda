@@ -3,12 +3,12 @@ use std::panic;
 use std::sync::Mutex;
 
 // Import everything from the lib version of ourselves
-use oranda::*;
 use clap::Parser;
 use cli::{Cli, OutputFormat};
 use console::Term;
 use lazy_static::lazy_static;
 use miette::{Diagnostic, IntoDiagnostic};
+use oranda::*;
 use thiserror::Error;
 use tracing::error;
 

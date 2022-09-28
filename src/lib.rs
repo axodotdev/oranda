@@ -1,9 +1,13 @@
-use std::{collections::HashMap, fs::File, io::{Read, Write}};
+use std::{
+    collections::HashMap,
+    fs::File,
+    io::{Read, Write},
+};
 
 use comrak::adapters::SyntaxHighlighterAdapter;
 use comrak::{markdown_to_html_with_plugins, ComrakOptions, ComrakPlugins};
-use serde::{Deserialize, Serialize};
 use grass::{Options, OutputStyle};
+use serde::{Deserialize, Serialize};
 
 use crate::utils::make_footer::make_footer;
 use crate::utils::make_head::make_head;
@@ -11,9 +15,9 @@ use crate::utils::syntax_highlight::syntax_highlight;
 use errors::*;
 
 pub mod errors;
-pub mod utils;
 #[cfg(test)]
 mod tests;
+pub mod utils;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Report {
@@ -40,7 +44,6 @@ pub fn some_op() -> Result<Report> {
 
     Ok(report)
 }
-
 
 fn initialize_comrak_options() -> ComrakOptions {
     let mut options = ComrakOptions::default();
