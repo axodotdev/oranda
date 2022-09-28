@@ -41,7 +41,7 @@ fn test_long_help() {
         .output()
         .unwrap();
 
-    insta::assert_snapshot!("long-help", format_outputs(&output));
+    insta::assert_snapshot!(format_outputs(&output));
     assert!(output.status.success(), "{}", output.status);
 }
 
@@ -54,6 +54,6 @@ fn test_short_help() {
         .output()
         .unwrap();
 
-    insta::assert_snapshot!("short-help", format_outputs(&output));
+    insta::assert_snapshot!(format_outputs(&output));
     assert!(output.status.success(), "{}", output.status);
 }

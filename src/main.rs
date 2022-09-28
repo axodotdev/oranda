@@ -120,7 +120,7 @@ fn main() {
 }
 
 fn real_main(cli: &Cli) -> Result<(), miette::Report> {
-    let report = some_op()?;
+    let report = do_oranda()?;
     let mut out = Term::stdout();
 
     match cli.output_format {
@@ -131,12 +131,8 @@ fn real_main(cli: &Cli) -> Result<(), miette::Report> {
     Ok(())
 }
 
-fn print_human(out: &mut Term, report: &Report) -> Result<(), std::io::Error> {
-    if report.cats_are_cute {
-        writeln!(out, "cats are cute! :3")?;
-    } else {
-        writeln!(out, "cats aren't cute?!")?;
-    }
+fn print_human(_out: &mut Term, _report: &Report) -> Result<(), std::io::Error> {
+    // Nothing to report on success to humans? (yay!)
     Ok(())
 }
 

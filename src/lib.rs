@@ -21,10 +21,10 @@ pub mod utils;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Report {
-    pub cats_are_cute: bool,
+    // TODO: report useful paths/details for other tools
 }
 
-pub fn some_op() -> Result<Report> {
+pub fn do_oranda() -> Result<Report> {
     let mut file = File::open("test.md")?;
     let mut data = String::new();
     file.read_to_string(&mut data)?;
@@ -38,9 +38,7 @@ pub fn some_op() -> Result<Report> {
     let mut css_file = File::create("public/styles.css")?;
     css_file.write_all(site.css.as_bytes())?;
 
-    let report = Report {
-        cats_are_cute: true,
-    };
+    let report = Report { };
 
     Ok(report)
 }
