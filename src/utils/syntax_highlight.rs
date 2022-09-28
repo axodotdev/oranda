@@ -7,7 +7,7 @@ pub fn syntax_highlight(lang: Option<&str>, code: &str) -> Result<String, Error>
     let ps = SyntaxSet::load_defaults_newlines();
     let ts = ThemeSet::load_defaults();
     let language = match lang {
-        None => "rs",
+        None | Some("") => "rs",
         Some(l) => l,
     };
 
@@ -22,10 +22,8 @@ pub fn syntax_highlight(lang: Option<&str>, code: &str) -> Result<String, Error>
 }
 
 #[test]
-fn parses_lists() {
-    /// syntax_highlight(Some("js"), "console.log(5)")?
-    assert_eq!(
-        syntax_highlight(Some("js"), "console.log(5)"),
-        Ok("".to_string())
-    );
+fn creates_syntax() {
+    assert!(syntax_highlight(Some("js"), "console.log(5)")
+        .unwrap()
+        .contains("<span style=\"color:#c0c5ce;\">console.</span>"));
 }
