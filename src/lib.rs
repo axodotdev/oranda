@@ -99,7 +99,7 @@ pub fn create_site(md: &str) -> Site {
         "src/css/style.scss",
         &css_options.style(OutputStyle::Compressed),
     )
-    .unwrap_or("There was a problem parsing the CSS".to_string());
+    .unwrap_or_else(|_| "There was a problem parsing the CSS".to_string());
 
     let body = markdown_to_html_with_plugins(md, &options, &plugins);
     let html = format!("{}{}{}", head, body, footer);
