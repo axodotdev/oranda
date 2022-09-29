@@ -1,14 +1,17 @@
 use std::fs::{self};
 use std::path::Path;
 
+use serde::{Deserialize, Serialize};
 use toml::Value;
 use twelf::config;
 pub struct Downloads {}
 
-// enum Theme {
-//     Light,
-//     Dark,
-// }
+#[allow(non_camel_case_types)]
+#[derive(Debug, Eq, PartialEq, Serialize, Deserialize, Clone)]
+pub enum Theme {
+    light,
+    dark,
+}
 
 #[config]
 #[derive(Debug, Eq, PartialEq)]
@@ -22,20 +25,7 @@ pub struct Options {
     // pub shareCard: String,
     // pub homepage: String,
     pub no_header: Option<bool>,
-    // pub theme: Theme,
-}
-
-pub struct FilledOptions {
-    // Your Readme.md name
-    pub file: String,
-    pub dist: String,
-    pub name: String,
-    pub description: String,
-    // pub logo: String,
-    // pub shareCard: String,
-    // pub homepage: String,
-    pub no_header: bool,
-    // pub theme: Theme,
+    pub theme: Option<Theme>,
 }
 
 impl Default for Options {
@@ -56,6 +46,7 @@ impl Default for Options {
             no_header: Some(false),
             name: Some(name),
             description: Some(description),
+            theme: Some(Theme::light),
         }
     }
 }

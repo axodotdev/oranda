@@ -1,6 +1,16 @@
-use super::options::Options;
+use super::options::{Options, Theme};
 
 pub fn make_head(options: &Options) -> String {
+    let theme = match &options.theme {
+        Some(t) => {
+            if t.eq(&Theme::dark) {
+                "dark".to_string()
+            } else {
+                "".to_string()
+            }
+        }
+        None => "".to_string(),
+    };
     format!(
         r#"
    <!DOCTYPE html>
@@ -16,9 +26,10 @@ pub fn make_head(options: &Options) -> String {
    <meta name="description" content={description} />
    </head>
    <body>
-   <div id="oranda"><div class="body"><div class="container">
+   <div id="oranda"><div class="body {theme}"><div class="container">
    "#,
         name = options.name.as_ref().unwrap(),
-        description = options.description.as_ref().unwrap()
+        description = options.description.as_ref().unwrap(),
+        theme = theme,
     )
 }

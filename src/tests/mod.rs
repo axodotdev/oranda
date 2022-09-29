@@ -1,4 +1,7 @@
-use crate::{self as oranda, utils::options::Options};
+use crate::{
+    self as oranda,
+    utils::options::{Options, Theme},
+};
 
 #[test]
 fn returns_css() {
@@ -105,4 +108,16 @@ fn reads_description() {
     assert!(site
         .html
         .contains("<meta name=\"description\" content=description />"));
+}
+
+#[test]
+fn reads_test() {
+    let site = oranda::create_site(
+        "hello",
+        &Options {
+            theme: Some(Theme::dark),
+            ..Default::default()
+        },
+    );
+    assert!(site.html.contains("<div class=\"body dark\">"));
 }

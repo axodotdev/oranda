@@ -33,6 +33,7 @@ pub fn do_oranda(options: Options) -> Result<Report> {
         no_header: options.no_header.or(defaults.no_header),
         description: options.description.or(defaults.description),
         name: options.name.or(defaults.name),
+        theme: options.theme.or(defaults.theme),
     };
     let file = parsed_options.file.as_ref();
     let mut file = File::open(file.unwrap())?;
