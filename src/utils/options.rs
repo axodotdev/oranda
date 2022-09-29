@@ -35,7 +35,7 @@ impl Default for Options {
 
             value["package"]
                 .get(key)
-                .unwrap_or_else(|| &empty_default)
+                .unwrap_or(&empty_default)
                 .to_string()
         }
 
