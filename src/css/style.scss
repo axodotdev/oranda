@@ -19,7 +19,9 @@
         5px 10px 12.6px -2.5px hsl(var(--shadow-color) / 0.36);
 }
 
-  
+@import url("https://unpkg.com/normalize.css@8.0.1/normalize.css");
+@import url('https://fonts.googleapis.com/css?family=Inter');
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700');
 @import 'tacit';
 @import 'main';
 @import 'gh-corner';
