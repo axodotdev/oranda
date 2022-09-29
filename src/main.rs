@@ -1,7 +1,7 @@
 use std::io::Write;
 use std::panic;
 use std::sync::Mutex;
-
+use twelf::Layer;
 // Import everything from the lib version of ourselves
 use clap::Parser;
 use cli::{Cli, OutputFormat};
@@ -11,6 +11,7 @@ use miette::{Diagnostic, IntoDiagnostic};
 use oranda::*;
 use thiserror::Error;
 use tracing::error;
+use utils::options::Options;
 
 mod cli;
 
@@ -101,7 +102,7 @@ fn main() {
                     .location()
                     .map(|loc| format!("at {}:{}:{}", loc.file(), loc.line(), loc.column())),
             })
-            .wrap_err("cargo vet panicked"),
+            .wrap_err("oranda panicked"),
         );
     }));
 
@@ -120,7 +121,13 @@ fn main() {
 }
 
 fn real_main(cli: &Cli) -> Result<(), miette::Report> {
-    let report = do_oranda()?;
+    let config = Options::with_layers(&[
+        Layer::Json(".oranda.config.json".into()),
+        Layer::Env(Some(String::from("ORANDA_"))),
+    ])
+    .unwrap();
+
+    let report = do_oranda(config)?;
     let mut out = Term::stdout();
 
     match cli.output_format {

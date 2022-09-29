@@ -272,6 +272,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "config-derive"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "01486510ac4bea7d665acaa7c672e8dae4a74b6e0923c90475c9c314f9e1a6fd"
+dependencies = [
+ "heck",
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
 name = "console"
 version = "0.15.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -381,6 +393,15 @@ name = "entities"
 version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b5320ae4c3782150d900b79807611a59a99fc9a1d61d686faafc24b93fc8d7ca"
+
+[[package]]
+name = "envy"
+version = "0.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3f47e0157f2cb54f5ae1bd371b30a2ae4311e1c028f575cd4e81de7353215965"
+dependencies = [
+ "serde",
+]
 
 [[package]]
 name = "fancy-regex"
@@ -916,6 +937,7 @@ dependencies = [
  "thiserror",
  "tracing",
  "tracing-subscriber",
+ "twelf",
 ]
 
 [[package]]
@@ -1681,6 +1703,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "toml"
+version = "0.5.9"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8d82e1a7758622a465f8cee077614c73484dac5b836c02ff6a40d5d1010324d7"
+dependencies = [
+ "serde",
+]
+
+[[package]]
 name = "tower-service"
 version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1750,6 +1781,22 @@ name = "try-lock"
 version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "59547bce71d9c38b83d9c0e92b6066c4253371f15005def0c30d9657f50c7642"
+
+[[package]]
+name = "twelf"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "203cf486be0f0c91bbcac0dad653f4673087a0424f1bb18cba3e718620b5663c"
+dependencies = [
+ "clap 3.2.22",
+ "config-derive",
+ "envy",
+ "log",
+ "serde",
+ "serde_json",
+ "thiserror",
+ "toml",
+]
 
 [[package]]
 name = "typed-arena"

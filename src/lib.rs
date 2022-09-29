@@ -6,8 +6,9 @@ use std::{
 
 use comrak::adapters::SyntaxHighlighterAdapter;
 use comrak::{markdown_to_html_with_plugins, ComrakOptions, ComrakPlugins};
-use grass::{Options, OutputStyle};
+use grass::OutputStyle;
 use serde::{Deserialize, Serialize};
+use utils::options::{Options, OptionsFilled};
 
 use crate::utils::make_footer::make_footer;
 use crate::utils::make_head::make_head;
@@ -24,18 +25,35 @@ pub struct Report {
     // TODO: report useful paths/details for other tools
 }
 
-pub fn do_oranda() -> Result<Report> {
-    let mut file = File::open("test.md")?;
+pub fn create_options(options: Options) -> OptionsFilled {
+    let path = match options.file {
+        Some(f) => f,
+        None => "Readme.md".to_string(),
+    };
+
+    let dist = match options.dist {
+        Some(f) => f,
+        None => "public".to_string(),
+    };
+
+    OptionsFilled { file: path, dist }
+}
+
+pub fn do_oranda(options: Options) -> Result<Report> {
+    let parsed_options = create_options(options);
+    let mut file = File::open(parsed_options.file)?;
     let mut data = String::new();
     file.read_to_string(&mut data)?;
     let site = create_site(&data);
 
-    std::fs::create_dir_all("public")?;
-
-    let mut html_file = File::create("public/index.html")?;
+    let dist = parsed_options.dist;
+    std::fs::create_dir_all(&dist)?;
+    let html_path = format!("{}/index.html", &dist);
+    let css_path = format!("{}/styles.css", &dist);
+    let mut html_file = File::create(html_path)?;
     html_file.write_all(site.html.as_bytes())?;
 
-    let mut css_file = File::create("public/styles.css")?;
+    let mut css_file = File::create(css_path)?;
     css_file.write_all(site.css.as_bytes())?;
 
     let report = Report {};
@@ -91,7 +109,7 @@ pub fn create_site(md: &str) -> Site {
 
     let head = make_head();
     let footer = make_footer();
-    let css_options = Options::default();
+    let css_options = grass::Options::default();
 
     let css = grass::from_path(
         "src/css/style.scss",
