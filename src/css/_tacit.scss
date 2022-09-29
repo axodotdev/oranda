@@ -180,7 +180,7 @@ address {
   margin-bottom: 32px;
 }
 
-section {
+section:not(.footnotes) {
   margin-left: auto;
   margin-right: auto;
   width: 900px;
