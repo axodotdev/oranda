@@ -18,7 +18,7 @@ pub fn make_head(options: &Options) -> String {
    <body>
    <div id="oranda"><div class="body"><div class="container">
    "#,
-        name = options.name.as_ref().unwrap().to_string(),
-        description = options.description.as_ref().unwrap().to_string()
+        name = options.name.as_ref().unwrap(),
+        description = options.description.as_ref().unwrap()
     )
 }
