@@ -33,7 +33,7 @@ pub fn do_oranda(options: Options) -> Result<Report> {
     let site = create_site(&data, &parsed_options);
     match create_site_files(parsed_options, site) {
         Err(_) => Err(OrandaError::Other(
-            "Please add the language to your code snippets".to_owned(),
+            "There was a problem creating your website files".to_owned(),
         )),
         Ok(_) => {
             let report = Report {};
