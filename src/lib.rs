@@ -1,4 +1,6 @@
-use std::{collections::HashMap, fs::File, io::Read};
+use std::collections::HashMap;
+use std::fs::File;
+use std::io::Read;
 
 use comrak::adapters::SyntaxHighlighterAdapter;
 use comrak::{markdown_to_html_with_plugins, ComrakOptions, ComrakPlugins};
