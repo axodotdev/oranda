@@ -29,6 +29,7 @@ tracing-subscriber = { version = "0.3.15", optional = true }
 serde_json = { version = "1.0.85", optional = true }
 console = "0.15.1"
 twelf = { version = "0.4", default-features = false, features = ["json", "toml", "env", "clap"] }
+toml = "0.5.9"
 
 # Features used by the cli and library
 miette = { version = "5.3.0" }

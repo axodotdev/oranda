@@ -935,6 +935,7 @@ dependencies = [
  "serde_json",
  "syntect 5.0.0",
  "thiserror",
+ "toml",
  "tracing",
  "tracing-subscriber",
  "twelf",
