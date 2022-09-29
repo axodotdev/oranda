@@ -1,14 +1,13 @@
-use std::{
-    collections::HashMap,
-    fs::File,
-    io::{Read, Write},
-};
+use std::{collections::HashMap, fs::File, io::Read};
 
 use comrak::adapters::SyntaxHighlighterAdapter;
 use comrak::{markdown_to_html_with_plugins, ComrakOptions, ComrakPlugins};
 use grass::OutputStyle;
 use serde::{Deserialize, Serialize};
-use utils::options::Options;
+use utils::{
+    create_site_files::create_site_files,
+    options::{create_parsed_options, Options},
+};
 
 use crate::utils::make_footer::make_footer;
 use crate::utils::make_head::make_head;
@@ -26,36 +25,22 @@ pub struct Report {
 }
 
 pub fn do_oranda(options: Options) -> Result<Report> {
-    let defaults = Options::default();
-    let parsed_options = Options {
-        file: options.file.or(defaults.file),
-        dist: options.dist.or(defaults.dist),
-        no_header: options.no_header.or(defaults.no_header),
-        description: options.description.or(defaults.description),
-        name: options.name.or(defaults.name),
-        theme: options.theme.or(defaults.theme),
-        homepage: options.homepage.or(defaults.homepage),
-    };
+    let parsed_options = create_parsed_options(options);
     let file = parsed_options.file.as_ref();
     let mut file = File::open(file.unwrap())?;
     let mut data = String::new();
     file.read_to_string(&mut data)?;
     let site = create_site(&data, &parsed_options);
+    match create_site_files(parsed_options, site) {
+        Err(_) => Err(OrandaError::Other(
+            "Please add the language to your code snippets".to_owned(),
+        )),
+        Ok(_) => {
+            let report = Report {};
 
-    let dist = &parsed_options.dist.unwrap_or_default();
-
-    std::fs::create_dir_all(&dist)?;
-    let html_path = format!("{}/index.html", &dist);
-    let css_path = format!("{}/styles.css", &dist);
-    let mut html_file = File::create(html_path)?;
-    html_file.write_all(site.html.as_bytes())?;
-
-    let mut css_file = File::create(css_path)?;
-    css_file.write_all(site.css.as_bytes())?;
-
-    let report = Report {};
-
-    Ok(report)
+            Ok(report)
+        }
+    }
 }
 
 fn initialize_comrak_options() -> ComrakOptions {

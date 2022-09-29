@@ -74,3 +74,16 @@ impl Default for Options {
         }
     }
 }
+
+pub fn create_parsed_options(options: Options) -> Options {
+    let defaults = Options::default();
+    Options {
+        file: options.file.or(defaults.file),
+        dist: options.dist.or(defaults.dist),
+        no_header: options.no_header.or(defaults.no_header),
+        description: options.description.or(defaults.description),
+        name: options.name.or(defaults.name),
+        theme: options.theme.or(defaults.theme),
+        homepage: options.homepage.or(defaults.homepage),
+    }
+}
