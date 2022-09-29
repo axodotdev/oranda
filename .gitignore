@@ -1,2 +1,5 @@
 /target
 public/
+
+# MAC
+.DS_Store
