@@ -34,6 +34,7 @@ pub fn do_oranda(options: Options) -> Result<Report> {
         description: options.description.or(defaults.description),
         name: options.name.or(defaults.name),
         theme: options.theme.or(defaults.theme),
+        homepage: options.homepage.or(defaults.homepage),
     };
     let file = parsed_options.file.as_ref();
     let mut file = File::open(file.unwrap())?;

@@ -2,7 +2,7 @@ use std::fs::{self};
 use std::path::Path;
 
 use serde::{Deserialize, Serialize};
-use toml::Value;
+use serde_json::Value;
 use twelf::config;
 pub struct Downloads {}
 
@@ -21,23 +21,46 @@ pub struct Options {
     pub dist: Option<String>,
     pub name: Option<String>,
     pub description: Option<String>,
+    pub homepage: Option<String>,
     // pub logo: String,
     // pub shareCard: String,
-    // pub homepage: String,
     pub no_header: Option<bool>,
     pub theme: Option<Theme>,
 }
 
 impl Default for Options {
     fn default() -> Self {
+        fn get_nested_toml(value: &Value, key: String) -> String {
+            let empty_default = Value::String("".to_string());
+
+            value["package"]
+                .get(key)
+                .unwrap_or_else(|| &empty_default)
+                .to_string()
+        }
+
         let mut name = String::new();
         let mut description = String::new();
+        let mut homepage = String::new();
+
         let cargo_file = "Cargo.toml";
+        let package_json_file = "package.json";
         if Path::new(cargo_file).exists() {
             let file = fs::read_to_string(cargo_file).unwrap();
-            let value = file.parse::<Value>().unwrap();
-            name = value["package"]["name"].to_string();
-            description = value["package"]["description"].to_string();
+
+            let value: Value = toml::from_str(&file).unwrap();
+
+            name = get_nested_toml(&value, "name".to_string());
+            description = get_nested_toml(&value, "description".to_string());
+            homepage = get_nested_toml(&value, "homepage".to_string());
+        };
+
+        if Path::new(package_json_file).exists() {
+            let file = fs::read_to_string(package_json_file).unwrap();
+            let value: serde_json::Value = serde_json::from_str(&file).unwrap();
+            name = value["name"].to_string();
+            description = value["description"].to_string();
+            homepage = value["homepage"].to_string();
         };
 
         Options {
@@ -46,6 +69,7 @@ impl Default for Options {
             no_header: Some(false),
             name: Some(name),
             description: Some(description),
+            homepage: Some(homepage),
             theme: Some(Theme::light),
         }
     }

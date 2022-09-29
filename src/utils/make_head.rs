@@ -24,6 +24,7 @@ pub fn make_head(options: &Options) -> String {
    
    <title>{name}</title>
    <meta name="description" content={description} />
+    <meta property="og:url" content={homepage}>
    </head>
    <body>
    <div id="oranda"><div class="body {theme}"><div class="container">
@@ -31,5 +32,6 @@ pub fn make_head(options: &Options) -> String {
         name = options.name.as_ref().unwrap(),
         description = options.description.as_ref().unwrap(),
         theme = theme,
+        homepage = options.homepage.as_ref().unwrap(),
     )
 }
