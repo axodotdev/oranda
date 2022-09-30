@@ -1,6 +1,5 @@
 use std::collections::HashMap;
-use std::fs::File;
-use std::io::Read;
+use std::fs;
 
 use comrak::adapters::SyntaxHighlighterAdapter;
 use comrak::{markdown_to_html_with_plugins, ComrakOptions, ComrakPlugins};
@@ -25,14 +24,11 @@ pub struct Report {
     // TODO: report useful paths/details for other tools
 }
 
-pub fn exec(options: Options) -> Result<Report> {
-    let parsed_options = options::create_parsed_options(options);
-    let file = parsed_options.file.as_ref();
-    let mut file = File::open(file.unwrap())?;
-    let mut data = String::new();
-    file.read_to_string(&mut data)?;
-    let site = create_site(&data, &parsed_options);
-    match create_site_files(parsed_options, site) {
+pub fn exec() -> Result<Report> {
+    let opts = Options::build();
+    let readme_data = fs::read_to_string(&opts.readme_path)?;
+    let site = create_site(&readme_data, &opts);
+    match create_site_files(opts, site) {
         Err(_) => Err(OrandaError::Other(
             "There was a problem creating your website files".to_owned(),
         )),

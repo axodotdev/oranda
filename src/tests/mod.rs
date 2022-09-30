@@ -1,6 +1,6 @@
 use crate::{
     self as oranda,
-    options::{Options, Theme},
+    options::{Options, theme::Theme},
 };
 
 #[test]
@@ -89,7 +89,7 @@ fn reads_title() {
     let site = oranda::create_site(
         "hello",
         &Options {
-            name: Some("TITLE".to_string()),
+            name: "TITLE".to_string(),
             ..Default::default()
         },
     );
@@ -101,7 +101,7 @@ fn reads_description() {
     let site = oranda::create_site(
         "hello",
         &Options {
-            description: Some("description".to_string()),
+            description: "description".to_string(),
             ..Default::default()
         },
     );
@@ -115,7 +115,7 @@ fn reads_test() {
     let site = oranda::create_site(
         "hello",
         &Options {
-            theme: Some(Theme::dark),
+            theme: Theme::Dark,
             ..Default::default()
         },
     );

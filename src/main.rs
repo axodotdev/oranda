@@ -1,8 +1,6 @@
 use std::panic;
 use std::sync::Mutex;
-use std::{io::Write, path::Path};
-use twelf::Layer;
-// Import everything from the lib version of ourselves
+use std::io::Write;
 use clap::Parser;
 use cli::{Cli, OutputFormat};
 use console::Term;
@@ -119,17 +117,7 @@ fn main() {
 }
 
 fn real_main(cli: &Cli) -> Result<(), miette::Report> {
-    let oranda_config_file = ".oranda.config.json";
-    let mut layers = vec![];
-    layers.push(Layer::Env(Some(String::from("ORANDA_"))));
-
-    if Path::new(&oranda_config_file).exists() {
-        layers.push(Layer::Json(oranda_config_file.into()))
-    };
-
-    let config = oranda::options::Options::with_layers(&layers).unwrap();
-
-    let report = oranda::exec(config)?;
+    let report = oranda::exec()?;
     let mut out = Term::stdout();
 
     match cli.output_format {

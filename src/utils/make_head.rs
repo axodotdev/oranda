@@ -1,16 +1,6 @@
-use crate::options::{Options, Theme};
+use crate::options::{Options, theme};
 
 pub fn make_head(options: &Options) -> String {
-    let theme = match &options.theme {
-        Some(t) => {
-            if t.eq(&Theme::dark) {
-                "dark".to_string()
-            } else {
-                "".to_string()
-            }
-        }
-        None => "".to_string(),
-    };
     format!(
         r#"
    <!DOCTYPE html>
@@ -29,9 +19,9 @@ pub fn make_head(options: &Options) -> String {
    <body>
    <div id="oranda"><div class="body {theme}"><div class="container">
    "#,
-        name = options.name.as_ref().unwrap(),
-        description = options.description.as_ref().unwrap(),
-        theme = theme,
-        homepage = options.homepage.as_ref().unwrap(),
+        name = &options.name,
+        description = &options.description,
+        theme = theme::css_class(&options.theme),
+        homepage = &options.homepage.as_ref().unwrap(),
     )
 }
