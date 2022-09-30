@@ -1,4 +1,4 @@
-use crate::options::{Options, theme};
+use crate::options::{theme, Options};
 
 pub fn make_head(options: &Options) -> String {
     format!(

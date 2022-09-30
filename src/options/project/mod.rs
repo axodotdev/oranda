@@ -24,7 +24,7 @@ impl Options {
             None
         }
     }
-    
+
     fn detect() -> Option<Type> {
         if Rust::config().exists() {
             Some(Type::Rust(Rust {}))
@@ -38,7 +38,7 @@ impl Options {
 
 enum Type {
     Rust(Rust),
-    JavaScript(JavaScript)
+    JavaScript(JavaScript),
 }
 
 struct Rust {}
@@ -64,4 +64,3 @@ impl JavaScript {
         Path::new(PACKAGE_JSON)
     }
 }
-

@@ -1,11 +1,11 @@
-use std::panic;
-use std::sync::Mutex;
-use std::io::Write;
 use clap::Parser;
 use cli::{Cli, OutputFormat};
 use console::Term;
 use lazy_static::lazy_static;
 use miette::{Diagnostic, IntoDiagnostic};
+use std::io::Write;
+use std::panic;
+use std::sync::Mutex;
 use thiserror::Error;
 use tracing::error;
 

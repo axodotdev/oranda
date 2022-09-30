@@ -1,6 +1,6 @@
 use crate::{
     self as oranda,
-    options::{Options, theme::Theme},
+    options::{theme::Theme, Options},
 };
 
 #[test]
