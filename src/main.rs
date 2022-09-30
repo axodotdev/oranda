@@ -1,7 +1,6 @@
 use std::panic;
 use std::sync::Mutex;
 use std::{io::Write, path::Path};
-use twelf::Layer;
 // Import everything from the lib version of ourselves
 use clap::Parser;
 use cli::{Cli, OutputFormat};
