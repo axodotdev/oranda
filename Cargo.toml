@@ -39,12 +39,12 @@ tracing = { version = "0.1.36", features = ["log"] }
 lazy_static = "1.4.0"
 serde = { version = "1.0.144", features = ["derive"] }
 
-assert_cmd="2"
 comrak = "0.14"
 syntect = "5.0"
 grass = "0.11.2"
 
 [dev-dependencies]
+assert_cmd="2"
 insta = "1.19.1"
 
 
