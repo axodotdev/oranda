@@ -8,10 +8,8 @@ use cli::{Cli, OutputFormat};
 use console::Term;
 use lazy_static::lazy_static;
 use miette::{Diagnostic, IntoDiagnostic};
-use oranda::*;
 use thiserror::Error;
 use tracing::error;
-use utils::options::Options;
 
 mod cli;
 
@@ -129,9 +127,9 @@ fn real_main(cli: &Cli) -> Result<(), miette::Report> {
         layers.push(Layer::Json(oranda_config_file.into()))
     };
 
-    let config = Options::with_layers(&layers).unwrap();
+    let config = oranda::options::Options::with_layers(&layers).unwrap();
 
-    let report = do_oranda(config)?;
+    let report = oranda::exec(config)?;
     let mut out = Term::stdout();
 
     match cli.output_format {
@@ -142,12 +140,12 @@ fn real_main(cli: &Cli) -> Result<(), miette::Report> {
     Ok(())
 }
 
-fn print_human(_out: &mut Term, _report: &Report) -> Result<(), std::io::Error> {
+fn print_human(_out: &mut Term, _report: &oranda::Report) -> Result<(), std::io::Error> {
     // Nothing to report on success to humans? (yay!)
     Ok(())
 }
 
-fn print_json(out: &mut Term, report: &Report) -> Result<(), std::io::Error> {
+fn print_json(out: &mut Term, report: &oranda::Report) -> Result<(), std::io::Error> {
     let string = serde_json::to_string_pretty(report).unwrap();
     writeln!(out, "{}", string)?;
     Ok(())

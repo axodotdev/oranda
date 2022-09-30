@@ -6,17 +6,16 @@ use comrak::adapters::SyntaxHighlighterAdapter;
 use comrak::{markdown_to_html_with_plugins, ComrakOptions, ComrakPlugins};
 use grass::OutputStyle;
 use serde::{Deserialize, Serialize};
-use utils::{
-    create_site_files::create_site_files,
-    options::{create_parsed_options, Options},
-};
+use utils::create_site_files::create_site_files;
 
+use crate::options::Options;
 use crate::utils::make_footer::make_footer;
 use crate::utils::make_head::make_head;
 use crate::utils::syntax_highlight::syntax_highlight;
 use errors::*;
 
 pub mod errors;
+pub mod options;
 #[cfg(test)]
 mod tests;
 pub mod utils;
@@ -26,8 +25,8 @@ pub struct Report {
     // TODO: report useful paths/details for other tools
 }
 
-pub fn do_oranda(options: Options) -> Result<Report> {
-    let parsed_options = create_parsed_options(options);
+pub fn exec(options: Options) -> Result<Report> {
+    let parsed_options = options::create_parsed_options(options);
     let file = parsed_options.file.as_ref();
     let mut file = File::open(file.unwrap())?;
     let mut data = String::new();

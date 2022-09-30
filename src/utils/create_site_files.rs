@@ -1,4 +1,4 @@
-use super::options::Options;
+use crate::options::Options;
 use crate::Site;
 use std::{fs::File, io::Write};
 

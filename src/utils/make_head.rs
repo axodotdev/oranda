@@ -1,4 +1,4 @@
-use super::options::{Options, Theme};
+use crate::options::{Options, Theme};
 
 pub fn make_head(options: &Options) -> String {
     let theme = match &options.theme {
