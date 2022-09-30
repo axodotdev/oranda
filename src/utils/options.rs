@@ -3,7 +3,6 @@ use std::path::Path;
 
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
-use twelf::config;
 pub struct Downloads {}
 
 #[allow(non_camel_case_types)]
@@ -13,19 +12,40 @@ pub enum Theme {
     dark,
 }
 
-#[config]
+enum ProjectConfig {
+    CargoToml,
+    PackageJson
+}
+
 #[derive(Debug, Eq, PartialEq)]
 pub struct Options {
     // Your Readme.md name
-    pub file: Option<String>,
-    pub dist: Option<String>,
-    pub name: Option<String>,
-    pub description: Option<String>,
-    pub homepage: Option<String>,
+    pub file: String,
+    pub dist: String,
+    pub name: String,
+    pub description: String,
+    pub homepage: String,
     // pub logo: String,
     // pub shareCard: String,
-    pub no_header: Option<bool>,
-    pub theme: Option<Theme>,
+    pub no_header: bool,
+    pub theme: Theme,
+    pub project_config: <Option<ProjectConfig>>,
+}
+
+impl Options {
+    pub fn build() -> Options {}
+    pub fn parse(&self) -> Self {
+        let defaults = Options::default();
+        Options {
+            file: self.file.or(defaults.file),
+            dist: self.dist.or(defaults.dist),
+            no_header: self.no_header.or(defaults.no_header),
+            description: self.description.or(defaults.description),
+            name: self.name.or(defaults.name),
+            theme: self.theme.or(defaults.theme),
+            homepage: self.homepage.or(defaults.homepage),
+        }
+    }
 }
 
 impl Default for Options {
@@ -42,7 +62,7 @@ impl Default for Options {
         let mut name = String::new();
         let mut description = String::new();
         let mut homepage = String::new();
-
+        let oranda_config_file = ".oranda.config.json";
         let cargo_file = "Cargo.toml";
         let package_json_file = "package.json";
         if Path::new(cargo_file).exists() {
@@ -72,18 +92,5 @@ impl Default for Options {
             homepage: Some(homepage),
             theme: Some(Theme::light),
         }
-    }
-}
-
-pub fn create_parsed_options(options: Options) -> Options {
-    let defaults = Options::default();
-    Options {
-        file: options.file.or(defaults.file),
-        dist: options.dist.or(defaults.dist),
-        no_header: options.no_header.or(defaults.no_header),
-        description: options.description.or(defaults.description),
-        name: options.name.or(defaults.name),
-        theme: options.theme.or(defaults.theme),
-        homepage: options.homepage.or(defaults.homepage),
     }
 }

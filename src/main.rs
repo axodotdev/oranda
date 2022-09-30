@@ -121,17 +121,17 @@ fn main() {
 }
 
 fn real_main(cli: &Cli) -> Result<(), miette::Report> {
-    let oranda_config_file = ".oranda.config.json";
-    let mut layers = vec![];
-    layers.push(Layer::Env(Some(String::from("ORANDA_"))));
+    // let oranda_config_file = ".oranda.config.json";
+    // let mut layers = vec![];
+    // layers.push(Layer::Env(Some(String::from("ORANDA_"))));
 
-    if Path::new(&oranda_config_file).exists() {
-        layers.push(Layer::Json(oranda_config_file.into()))
-    };
+    // if Path::new(&oranda_config_file).exists() {
+    //     layers.push(Layer::Json(oranda_config_file.into()))
+    // };
 
-    let config = Options::with_layers(&layers).unwrap();
+    // let config = Options::with_layers(&layers).unwrap();
 
-    let report = do_oranda(config)?;
+    let report = do_oranda()?;
     let mut out = Term::stdout();
 
     match cli.output_format {

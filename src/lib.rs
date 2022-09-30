@@ -1,15 +1,13 @@
-use std::collections::HashMap;
-use std::fs::File;
-use std::io::Read;
-
 use comrak::adapters::SyntaxHighlighterAdapter;
 use comrak::{markdown_to_html_with_plugins, ComrakOptions, ComrakPlugins};
 use grass::OutputStyle;
 use serde::{Deserialize, Serialize};
-use utils::{
-    create_site_files::create_site_files,
-    options::{create_parsed_options, Options},
-};
+use serde_json::Value;
+use std::collections::HashMap;
+use std::fs::{self, File};
+use std::io::Read;
+use std::path::Path;
+use utils::{create_site_files::create_site_files, options::Options};
 
 use crate::utils::make_footer::make_footer;
 use crate::utils::make_head::make_head;
@@ -26,8 +24,47 @@ pub struct Report {
     // TODO: report useful paths/details for other tools
 }
 
-pub fn do_oranda(options: Options) -> Result<Report> {
-    let parsed_options = create_parsed_options(options);
+fn get_nested_toml(value: &Value, key: String) -> String {
+    let empty_default = Value::String("".to_string());
+
+    value["package"]
+        .get(key)
+        .unwrap_or(&empty_default)
+        .to_string()
+}
+
+fn check_config_files() -> () {
+    let mut name = String::new();
+    let mut description = String::new();
+    let mut homepage = String::new();
+
+    let oranda_config_file = ".oranda.config.json";
+    let cargo_file = "Cargo.toml";
+    let package_json_file = "package.json";
+
+    if Path::new(cargo_file).exists() {
+        let file = fs::read_to_string(cargo_file).unwrap();
+
+        let value: Value = toml::from_str(&file).unwrap();
+
+        name = get_nested_toml(&value, "name".to_string());
+        description = get_nested_toml(&value, "description".to_string());
+        homepage = get_nested_toml(&value, "homepage".to_string());
+    };
+
+    if Path::new(package_json_file).exists() {
+        let file = fs::read_to_string(package_json_file).unwrap();
+        let value: serde_json::Value = serde_json::from_str(&file).unwrap();
+        name = value["name"].to_string();
+        description = value["description"].to_string();
+        homepage = value["homepage"].to_string();
+    };
+
+    return;
+}
+
+pub fn do_oranda() -> Result<Report> {
+    let parsed_options = Options::build();
     let file = parsed_options.file.as_ref();
     let mut file = File::open(file.unwrap())?;
     let mut data = String::new();
