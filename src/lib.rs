@@ -1,13 +1,15 @@
-use std::{
-    collections::HashMap,
-    fs::File,
-    io::{Read, Write},
-};
+use std::collections::HashMap;
+use std::fs::File;
+use std::io::Read;
 
 use comrak::adapters::SyntaxHighlighterAdapter;
 use comrak::{markdown_to_html_with_plugins, ComrakOptions, ComrakPlugins};
-use grass::{Options, OutputStyle};
+use grass::OutputStyle;
 use serde::{Deserialize, Serialize};
+use utils::{
+    create_site_files::create_site_files,
+    options::{create_parsed_options, Options},
+};
 
 use crate::utils::make_footer::make_footer;
 use crate::utils::make_head::make_head;
@@ -24,23 +26,23 @@ pub struct Report {
     // TODO: report useful paths/details for other tools
 }
 
-pub fn do_oranda() -> Result<Report> {
-    let mut file = File::open("test.md")?;
+pub fn do_oranda(options: Options) -> Result<Report> {
+    let parsed_options = create_parsed_options(options);
+    let file = parsed_options.file.as_ref();
+    let mut file = File::open(file.unwrap())?;
     let mut data = String::new();
     file.read_to_string(&mut data)?;
-    let site = create_site(&data);
+    let site = create_site(&data, &parsed_options);
+    match create_site_files(parsed_options, site) {
+        Err(_) => Err(OrandaError::Other(
+            "There was a problem creating your website files".to_owned(),
+        )),
+        Ok(_) => {
+            let report = Report {};
 
-    std::fs::create_dir_all("public")?;
-
-    let mut html_file = File::create("public/index.html")?;
-    html_file.write_all(site.html.as_bytes())?;
-
-    let mut css_file = File::create("public/styles.css")?;
-    css_file.write_all(site.css.as_bytes())?;
-
-    let report = Report {};
-
-    Ok(report)
+            Ok(report)
+        }
+    }
 }
 
 fn initialize_comrak_options() -> ComrakOptions {
@@ -61,8 +63,8 @@ pub struct Site {
     pub css: String,
 }
 
-pub fn create_site(md: &str) -> Site {
-    let options = initialize_comrak_options();
+pub fn create_site(md: &str, options: &Options) -> Site {
+    let comrak_options = initialize_comrak_options();
     let mut plugins = ComrakPlugins::default();
 
     pub struct MockAdapter {}
@@ -89,9 +91,9 @@ pub fn create_site(md: &str) -> Site {
     let adapter = MockAdapter {};
     plugins.render.codefence_syntax_highlighter = Some(&adapter);
 
-    let head = make_head();
+    let head = make_head(options);
     let footer = make_footer();
-    let css_options = Options::default();
+    let css_options = grass::Options::default();
 
     let css = grass::from_path(
         "src/css/style.scss",
@@ -99,7 +101,7 @@ pub fn create_site(md: &str) -> Site {
     )
     .unwrap_or_else(|_| "There was a problem parsing the CSS".to_string());
 
-    let body = markdown_to_html_with_plugins(md, &options, &plugins);
+    let body = markdown_to_html_with_plugins(md, &comrak_options, &plugins);
     let html = format!("{}{}{}", head, body, footer);
 
     Site { html, css }
