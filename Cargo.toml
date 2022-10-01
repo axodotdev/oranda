@@ -17,19 +17,13 @@ required-features = ["cli"]
 
 [features]
 default = ["cli"]
-cli = ["clap", "tracing-subscriber", "miette/fancy", "serde_json"]
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
+cli = ["clap", "tracing-subscriber", "miette/fancy"]
 
 [dependencies]
 # Features only used by the cli
 clap = { version = "3.2.21", optional = true, features = ["derive"] }
 tracing-subscriber = { version = "0.3.15", optional = true }
-serde_json = { version = "1.0.85", optional = true }
 console = "0.15.1"
-twelf = { version = "0.4", default-features = false, features = ["json", "toml", "env", "clap"] }
-toml = "0.5.9"
 
 # Features used by the cli and library
 miette = { version = "5.3.0" }
@@ -38,6 +32,8 @@ thiserror = "1.0.37"
 tracing = { version = "0.1.36", features = ["log"] }
 lazy_static = "1.4.0"
 serde = { version = "1.0.144", features = ["derive"] }
+serde_json = { version = "1.0.85"}
+toml = "0.5.9"
 
 comrak = "0.14"
 syntect = "5.0"

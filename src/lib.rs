@@ -25,7 +25,7 @@ pub struct Report {
 }
 
 pub fn exec() -> Result<Report> {
-    let opts = Options::build();
+    let opts = Options::build()?;
     let readme_data = fs::read_to_string(&opts.readme_path)?;
     let site = create_site(&readme_data, &opts);
     match create_site_files(opts, site) {

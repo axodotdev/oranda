@@ -1,6 +1,7 @@
 mod project;
 pub mod theme;
 
+use crate::OrandaError;
 use theme::Theme;
 
 #[derive(Debug)]
@@ -15,10 +16,10 @@ pub struct Options {
 }
 
 impl Options {
-    pub fn build() -> Options {
+    pub fn build() -> Result<Options, OrandaError> {
         let default = Options::default();
-        if let Some(popts) = project::Options::load() {
-            Options {
+        if let Ok(Some(popts)) = project::Options::load() {
+            Ok(Options {
                 description: popts.description,
                 dist_dir: default.dist_dir,
                 homepage: popts.homepage,
@@ -26,9 +27,9 @@ impl Options {
                 no_header: default.no_header,
                 readme_path: default.readme_path,
                 theme: default.theme,
-            }
+            })
         } else {
-            default
+            Ok(default)
         }
     }
 }

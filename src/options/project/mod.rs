@@ -1,6 +1,7 @@
 use std::fs;
 use std::path::Path;
 
+use crate::OrandaError;
 use serde::Deserialize;
 
 static CARGO_TOML: &'static str = "Cargo.toml";
@@ -14,14 +15,14 @@ pub struct Options {
 }
 
 impl Options {
-    pub fn load() -> Option<Options> {
+    pub fn load() -> Result<Option<Options>, OrandaError> {
         if let Some(ptype) = Options::detect() {
             match ptype {
-                Type::Rust(project) => Some(project.read()),
-                Type::JavaScript(project) => Some(project.read()),
+                Type::JavaScript(project) => Ok(Some(project.read()?)),
+                Type::Rust(project) => Ok(Some(project.read()?)),
             }
         } else {
-            None
+            Ok(None)
         }
     }
 
@@ -43,9 +44,10 @@ enum Type {
 
 struct Rust {}
 impl Rust {
-    fn read(&self) -> Options {
-        let cargo_toml = fs::read_to_string(CARGO_TOML).unwrap();
-        toml::from_str(&cargo_toml).unwrap()
+    fn read(&self) -> Result<Options, OrandaError> {
+        let cargo_toml = fs::read_to_string(CARGO_TOML)?;
+        let data: Options = toml::from_str(&cargo_toml)?;
+        Ok(data)
     }
 
     fn config() -> &'static Path {
@@ -55,9 +57,10 @@ impl Rust {
 
 struct JavaScript {}
 impl JavaScript {
-    fn read(&self) -> Options {
-        let package_json = fs::read_to_string(PACKAGE_JSON).unwrap();
-        serde_json::from_str(&package_json).unwrap()
+    fn read(&self) -> Result<Options, OrandaError> {
+        let package_json = fs::read_to_string(PACKAGE_JSON)?;
+        let data: Options = serde_json::from_str(&package_json)?;
+        Ok(data)
     }
 
     fn config() -> &'static Path {
