@@ -1,6 +1,6 @@
-use crate::options::{theme, Options};
+use crate::config::{theme, Config};
 
-pub fn make_head(options: &Options) -> String {
+pub fn make_head(config: &Config) -> String {
     format!(
         r#"
    <!DOCTYPE html>
@@ -19,9 +19,9 @@ pub fn make_head(options: &Options) -> String {
    <body>
    <div id="oranda"><div class="body {theme}"><div class="container">
    "#,
-        name = &options.name,
-        description = &options.description,
-        theme = theme::css_class(&options.theme),
-        homepage = &options.homepage.as_ref().unwrap(),
+        name = &config.name,
+        description = &config.description,
+        theme = theme::css_class(&config.theme),
+        homepage = &config.homepage.as_ref().unwrap(),
     )
 }

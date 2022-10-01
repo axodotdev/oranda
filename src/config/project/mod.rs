@@ -8,15 +8,15 @@ static CARGO_TOML: &'static str = "Cargo.toml";
 static PACKAGE_JSON: &'static str = "package.json";
 
 #[derive(Debug, Deserialize)]
-pub struct Options {
+pub struct Config {
     pub name: String,
     pub description: String,
     pub homepage: Option<String>,
 }
 
-impl Options {
-    pub fn load() -> Result<Option<Options>, OrandaError> {
-        if let Some(ptype) = Options::detect() {
+impl Config {
+    pub fn load() -> Result<Option<Config>, OrandaError> {
+        if let Some(ptype) = Config::detect() {
             match ptype {
                 Type::JavaScript(project) => Ok(Some(project.read()?)),
                 Type::Rust(project) => Ok(Some(project.read()?)),
@@ -44,9 +44,9 @@ enum Type {
 
 struct Rust {}
 impl Rust {
-    fn read(&self) -> Result<Options, OrandaError> {
+    fn read(&self) -> Result<Config, OrandaError> {
         let cargo_toml = fs::read_to_string(CARGO_TOML)?;
-        let data: Options = toml::from_str(&cargo_toml)?;
+        let data: Config = toml::from_str(&cargo_toml)?;
         Ok(data)
     }
 
@@ -57,9 +57,9 @@ impl Rust {
 
 struct JavaScript {}
 impl JavaScript {
-    fn read(&self) -> Result<Options, OrandaError> {
+    fn read(&self) -> Result<Config, OrandaError> {
         let package_json = fs::read_to_string(PACKAGE_JSON)?;
-        let data: Options = serde_json::from_str(&package_json)?;
+        let data: Config = serde_json::from_str(&package_json)?;
         Ok(data)
     }
 

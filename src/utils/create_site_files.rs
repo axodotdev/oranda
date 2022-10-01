@@ -1,9 +1,9 @@
-use crate::options::Options;
+use crate::config::Config;
 use crate::Site;
 use std::{fs::File, io::Write};
 
-pub fn create_site_files(parsed_options: Options, site: Site) -> Result<(), std::io::Error> {
-    let dist = &parsed_options.dist_dir;
+pub fn create_site_files(config: Config, site: Site) -> Result<(), std::io::Error> {
+    let dist = &config.dist_dir;
     std::fs::create_dir_all(&dist)?;
     let html_path = format!("{}/index.html", &dist);
     let css_path = format!("{}/styles.css", &dist);

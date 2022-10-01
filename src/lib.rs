@@ -7,14 +7,14 @@ use grass::OutputStyle;
 use serde::{Deserialize, Serialize};
 use utils::create_site_files::create_site_files;
 
-use crate::options::Options;
+use crate::config::Config;
 use crate::utils::make_footer::make_footer;
 use crate::utils::make_head::make_head;
 use crate::utils::syntax_highlight::syntax_highlight;
 use errors::*;
 
+pub mod config;
 pub mod errors;
-pub mod options;
 #[cfg(test)]
 mod tests;
 pub mod utils;
@@ -25,10 +25,10 @@ pub struct Report {
 }
 
 pub fn exec() -> Result<Report> {
-    let opts = Options::build()?;
-    let readme_data = fs::read_to_string(&opts.readme_path)?;
-    let site = create_site(&readme_data, &opts);
-    match create_site_files(opts, site) {
+    let config = Config::build()?;
+    let readme_data = fs::read_to_string(&config.readme_path)?;
+    let site = create_site(&readme_data, &config);
+    match create_site_files(config, site) {
         Err(_) => Err(OrandaError::Other(
             "There was a problem creating your website files".to_owned(),
         )),
@@ -58,7 +58,7 @@ pub struct Site {
     pub css: String,
 }
 
-pub fn create_site(md: &str, options: &Options) -> Site {
+pub fn create_site(md: &str, config: &Config) -> Site {
     let comrak_options = initialize_comrak_options();
     let mut plugins = ComrakPlugins::default();
 
@@ -86,7 +86,7 @@ pub fn create_site(md: &str, options: &Options) -> Site {
     let adapter = MockAdapter {};
     plugins.render.codefence_syntax_highlighter = Some(&adapter);
 
-    let head = make_head(options);
+    let head = make_head(config);
     let footer = make_footer();
     let css_options = grass::Options::default();
 

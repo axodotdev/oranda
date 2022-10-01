@@ -1,13 +1,13 @@
 use crate::{
     self as oranda,
-    options::{theme::Theme, Options},
+    config::{theme::Theme, Config},
 };
 
 #[test]
 fn returns_css() {
     let site = oranda::create_site(
         "# hello",
-        &Options {
+        &Config {
             ..Default::default()
         },
     );
@@ -20,7 +20,7 @@ fn returns_css() {
 fn parses_basic_markdown() {
     let site = oranda::create_site(
         "# hello",
-        &Options {
+        &Config {
             ..Default::default()
         },
     );
@@ -31,7 +31,7 @@ fn parses_basic_markdown() {
 fn parses_images() {
     let site = oranda::create_site(
         "![Stormtroopocat](https://test.com/test.jpg)",
-        &Options {
+        &Config {
             ..Default::default()
         },
     );
@@ -44,7 +44,7 @@ fn parses_images() {
 fn parses_lists() {
     let site = oranda::create_site(
         "- A list item",
-        &Options {
+        &Config {
             ..Default::default()
         },
     );
@@ -55,7 +55,7 @@ fn parses_lists() {
 fn parses_links() {
     let site = oranda::create_site(
         "[link text](http://test.com)",
-        &Options {
+        &Config {
             ..Default::default()
         },
     );
@@ -77,7 +77,7 @@ var foo = function (bar) {
 console.log(foo(5));
 ```
     "#,
-        &Options {
+        &Config {
             ..Default::default()
         },
     );
@@ -88,7 +88,7 @@ console.log(foo(5));
 fn reads_title() {
     let site = oranda::create_site(
         "hello",
-        &Options {
+        &Config {
             name: "TITLE".to_string(),
             ..Default::default()
         },
@@ -100,7 +100,7 @@ fn reads_title() {
 fn reads_description() {
     let site = oranda::create_site(
         "hello",
-        &Options {
+        &Config {
             description: "description".to_string(),
             ..Default::default()
         },
@@ -114,7 +114,7 @@ fn reads_description() {
 fn reads_test() {
     let site = oranda::create_site(
         "hello",
-        &Options {
+        &Config {
             theme: Theme::Dark,
             ..Default::default()
         },

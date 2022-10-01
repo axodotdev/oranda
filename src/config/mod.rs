@@ -5,7 +5,7 @@ use crate::OrandaError;
 use theme::Theme;
 
 #[derive(Debug)]
-pub struct Options {
+pub struct Config {
     pub description: String,
     pub dist_dir: String,
     pub homepage: Option<String>,
@@ -15,11 +15,11 @@ pub struct Options {
     pub theme: Theme,
 }
 
-impl Options {
-    pub fn build() -> Result<Options, OrandaError> {
-        let default = Options::default();
-        if let Ok(Some(popts)) = project::Options::load() {
-            Ok(Options {
+impl Config {
+    pub fn build() -> Result<Config, OrandaError> {
+        let default = Config::default();
+        if let Ok(Some(popts)) = project::Config::load() {
+            Ok(Config {
                 description: popts.description,
                 dist_dir: default.dist_dir,
                 homepage: popts.homepage,
@@ -34,9 +34,9 @@ impl Options {
     }
 }
 
-impl Default for Options {
+impl Default for Config {
     fn default() -> Self {
-        Options {
+        Config {
             description: String::from("Queen triggerfish viperfish trench lightfish flying gurnard candlefish; Atlantic cod North American freshwater catfish four-eyed fish zebra lionfish worm eel."),
             dist_dir: String::from("public"),
             homepage: None,
