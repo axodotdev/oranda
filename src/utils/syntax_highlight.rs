@@ -17,9 +17,12 @@ pub fn syntax_highlight(lang: Option<&str>, code: &str) -> Result<String> {
         None => Err(OrandaError::Other(
             "Please add the language to your code snippets".to_owned(),
         )),
-        Some(s) => {
-            Ok(highlighted_html_for_string(code, &ps, s, &ts.themes["base16-ocean.dark"]).unwrap())
-        }
+        Some(s) => Ok(highlighted_html_for_string(
+            code,
+            &ps,
+            s,
+            &ts.themes["base16-ocean.dark"],
+        )?),
     }
 }
 

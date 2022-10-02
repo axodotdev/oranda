@@ -14,6 +14,9 @@ pub enum OrandaError {
     #[error(transparent)]
     Json(#[from] serde_json::Error),
 
+    #[error(transparent)]
+    Syntect(#[from] syntect::Error),
+
     #[error("{0}")]
     Other(String),
     // TODO: at some context fields / miette stuff
