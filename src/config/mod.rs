@@ -1,7 +1,7 @@
 mod project;
 pub mod theme;
 
-use crate::OrandaError;
+use crate::errors::*;
 use theme::Theme;
 
 #[derive(Debug)]
@@ -16,7 +16,7 @@ pub struct Config {
 }
 
 impl Config {
-    pub fn build() -> Result<Config, OrandaError> {
+    pub fn build() -> Result<Config> {
         let default = Config::default();
         if let Ok(Some(popts)) = project::Config::load() {
             Ok(Config {
