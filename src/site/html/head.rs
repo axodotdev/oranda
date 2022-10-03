@@ -22,6 +22,9 @@ pub fn head(config: &Config) -> String {
         name = &config.name,
         description = &config.description,
         theme = theme::css_class(&config.theme),
-        homepage = &config.homepage.as_ref().unwrap(),
+        homepage = config
+            .homepage
+            .as_ref()
+            .unwrap_or(&String::from("No homepage provided.")),
     )
 }

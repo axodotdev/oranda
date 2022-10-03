@@ -62,7 +62,8 @@ impl Site {
 #[cfg(test)]
 fn config() -> Config {
     Config {
-        readme_path: String::from("fixtures/readme.md"),
+        description: String::from("description"),
+        readme_path: String::from("./src/site/fixtures/readme.md"),
         theme: Theme::Dark,
         ..Default::default()
     }
