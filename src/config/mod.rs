@@ -2,6 +2,7 @@ mod project;
 pub mod theme;
 
 use crate::errors::*;
+use project::ProjectConfig;
 use theme::Theme;
 
 #[derive(Debug)]
@@ -18,7 +19,7 @@ pub struct Config {
 impl Config {
     pub fn build() -> Result<Config> {
         let default = Config::default();
-        if let Ok(Some(popts)) = project::Config::load() {
+        if let Ok(Some(popts)) = ProjectConfig::load() {
             Ok(Config {
                 description: popts.description,
                 dist_dir: default.dist_dir,

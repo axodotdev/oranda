@@ -8,15 +8,15 @@ static CARGO_TOML: &str = "Cargo.toml";
 static PACKAGE_JSON: &str = "package.json";
 
 #[derive(Debug, Deserialize)]
-pub struct Config {
+pub struct ProjectConfig {
     pub name: String,
     pub description: String,
     pub homepage: Option<String>,
 }
 
-impl Config {
-    pub fn load() -> Result<Option<Config>> {
-        if let Some(ptype) = Config::detect() {
+impl ProjectConfig {
+    pub fn load() -> Result<Option<ProjectConfig>> {
+        if let Some(ptype) = ProjectConfig::detect() {
             match ptype {
                 Type::JavaScript(project) => Ok(Some(project.read()?)),
                 Type::Rust(project) => Ok(Some(project.read()?)),
@@ -44,9 +44,9 @@ enum Type {
 
 struct Rust {}
 impl Rust {
-    fn read(&self) -> Result<Config> {
+    fn read(&self) -> Result<ProjectConfig> {
         let cargo_toml = fs::read_to_string(CARGO_TOML)?;
-        let data: Config = toml::from_str(&cargo_toml)?;
+        let data: ProjectConfig = toml::from_str(&cargo_toml)?;
         Ok(data)
     }
 
@@ -57,9 +57,9 @@ impl Rust {
 
 struct JavaScript {}
 impl JavaScript {
-    fn read(&self) -> Result<Config> {
+    fn read(&self) -> Result<ProjectConfig> {
         let package_json = fs::read_to_string(PACKAGE_JSON)?;
-        let data: Config = serde_json::from_str(&package_json)?;
+        let data: ProjectConfig = serde_json::from_str(&package_json)?;
         Ok(data)
     }
 
