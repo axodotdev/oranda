@@ -17,6 +17,9 @@ pub enum OrandaError {
     #[error(transparent)]
     Syntect(#[from] syntect::Error),
 
+    #[error(transparent)]
+    Grass(#[from] Box<grass::Error>),
+
     #[error("{0}")]
     Other(String),
     // TODO: at some context fields / miette stuff

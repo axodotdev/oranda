@@ -1,6 +1,6 @@
 use crate::config::{theme, Config};
 
-pub fn make_head(config: &Config) -> String {
+pub fn head(config: &Config) -> String {
     format!(
         r#"
    <!DOCTYPE html>
