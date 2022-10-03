@@ -4,8 +4,8 @@ use std::path::Path;
 use crate::errors::*;
 use serde::Deserialize;
 
-static CARGO_TOML: &'static str = "Cargo.toml";
-static PACKAGE_JSON: &'static str = "package.json";
+static CARGO_TOML: &str = "Cargo.toml";
+static PACKAGE_JSON: &str = "package.json";
 
 #[derive(Debug, Deserialize)]
 pub struct Config {

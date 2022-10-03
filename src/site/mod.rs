@@ -33,7 +33,7 @@ impl Site {
         let html = format!(
             "{}{}{}",
             html::head(config),
-            markdown::body(&readme_path)?,
+            markdown::body(readme_path)?,
             html::footer()
         );
         let css = Self::css()?;
