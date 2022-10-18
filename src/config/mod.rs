@@ -1,6 +1,8 @@
+mod oranda;
 mod project;
 pub mod theme;
 
+use self::oranda::OrandaConfig;
 use crate::errors::*;
 use project::ProjectConfig;
 use theme::Theme;
@@ -18,19 +20,81 @@ pub struct Config {
 
 impl Config {
     pub fn build() -> Result<Config> {
+        //Users can have multiple types of configuration or no configuration at all
+        //
+        //- Project configuration comes from a project manifest file. We currently
+        //  support `Cargo.toml` and `package.json`, but could support any manifest
+        //  that provided a `name`, `description`, and `homepage` field.
+        //
+        //- Custom configuration comes from a `oranda.config.json` file. If this
+        //  file exists, it has precedence over project configuration, which means
+        //  you could use this file to override fields in your project manifest.
+        //  This file can contain all possible public configuration fields.
         let default = Config::default();
-        if let Ok(Some(popts)) = ProjectConfig::load() {
-            Ok(Config {
-                description: popts.description,
-                dist_dir: default.dist_dir,
-                homepage: popts.homepage,
-                name: popts.name,
-                no_header: default.no_header,
-                readme_path: default.readme_path,
-                theme: default.theme,
-            })
+        let custom = OrandaConfig::load()?;
+        let project = ProjectConfig::load(None)?;
+
+        // if there is no oranda.config file present...
+        if custom.is_none() {
+            // but there is a project manifest file
+            if let Some(project) = project {
+                // return a merge of the default and project config
+                return Ok(Config {
+                    description: project.description,
+                    homepage: project.homepage,
+                    name: project.name,
+                    ..Default::default()
+                });
+            } else {
+                // otherwise return the default
+                return Ok(default);
+            }
+        }
+
+        // if there is an oranda.config file
+        if let Some(custom) = custom {
+            // but there is not project manifest
+            if project.is_none() {
+                //return a merge of custom config and default config
+                return Ok(Config {
+                    description: custom.description.unwrap_or(default.description),
+                    dist_dir: custom.dist_dir.unwrap_or(default.dist_dir),
+                    homepage: Self::homepage(custom.homepage, None, default.homepage),
+                    name: custom.name.unwrap_or(default.name),
+                    no_header: custom.no_header.unwrap_or(default.no_header),
+                    readme_path: custom.readme_path.unwrap_or(default.readme_path),
+                    theme: custom.theme.unwrap_or(default.theme),
+                });
+            // otherwise both oranda config and project manifest exists
+            } else if let Some(project) = project {
+                // so return a merge of custom > project > default
+                return Ok(Config {
+                    description: custom.description.unwrap_or(project.description),
+                    dist_dir: custom.dist_dir.unwrap_or(default.description),
+                    homepage: Self::homepage(custom.homepage, project.homepage, default.homepage),
+                    name: custom.name.unwrap_or(project.name),
+                    no_header: custom.no_header.unwrap_or(default.no_header),
+                    readme_path: custom.readme_path.unwrap_or(default.readme_path),
+                    theme: custom.theme.unwrap_or(default.theme),
+                });
+            }
+        }
+        Err(crate::OrandaError::Config(String::from(
+            "Your config is a bag of bees. Not today, Satan",
+        )))
+    }
+
+    pub fn homepage(
+        custom: Option<String>,
+        project: Option<String>,
+        default: Option<String>,
+    ) -> Option<String> {
+        if custom.is_some() {
+            return custom;
+        } else if project.is_some() {
+            return project;
         } else {
-            Ok(default)
+            default
         }
     }
 }
