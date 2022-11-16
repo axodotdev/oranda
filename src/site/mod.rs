@@ -22,7 +22,7 @@ impl Site {
     fn css() -> Result<String> {
         let css_options = grass::Options::default();
         let css = grass::from_path(
-            "src/css/style.scss",
+            "src/site/css/style.scss",
             &css_options.style(OutputStyle::Compressed),
         )?;
         Ok(css)
@@ -45,7 +45,7 @@ impl Site {
         let site = Self::build(config)?;
 
         let dist = &config.dist_dir;
-        std::fs::create_dir_all(&dist)?;
+        std::fs::create_dir_all(dist)?;
         let html_path = format!("{}/index.html", &dist);
         let css_path = format!("{}/styles.css", &dist);
 

@@ -79,7 +79,7 @@ impl Config {
                 });
             }
         }
-        Err(crate::OrandaError::Config(String::from(
+        Err(OrandaError::Other(String::from(
             "Your config is a bag of bees. Not today, Satan",
         )))
     }
@@ -90,9 +90,9 @@ impl Config {
         default: Option<String>,
     ) -> Option<String> {
         if custom.is_some() {
-            return custom;
+            custom
         } else if project.is_some() {
-            return project;
+            project
         } else {
             default
         }

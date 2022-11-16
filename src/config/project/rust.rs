@@ -10,18 +10,19 @@ use crate::config::project::Type;
 use crate::config::ProjectConfig;
 use crate::errors::*;
 
-static CARGO_TOML: &str = "Cargo.toml";
+static CARGO_TOML: &str = "./Cargo.toml";
 
 #[derive(Debug, Deserialize)]
 struct CargoToml {
     package: ProjectConfig,
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, Eq, PartialEq)]
 pub struct Rust {}
 impl Rust {
     pub fn read(&self, project_root: &Option<PathBuf>) -> Result<ProjectConfig> {
-        let cargo_toml = fs::read_to_string(Rust::config(&project_root))?;
+        println!("reading from cargo toml...");
+        let cargo_toml = fs::read_to_string(Rust::config(project_root))?;
         let data: CargoToml = toml::from_str(&cargo_toml)?;
         Ok(data.package)
     }

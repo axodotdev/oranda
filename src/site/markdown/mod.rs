@@ -45,8 +45,15 @@ fn initialize_comrak_options() -> ComrakOptions {
 }
 
 fn load(readme_path: &Path) -> Result<String> {
-    let readme = fs::read_to_string(readme_path)?;
-    Ok(readme)
+    if readme_path.exists() {
+        let readme = fs::read_to_string(readme_path)?;
+        Ok(readme)
+    } else {
+        Err(OrandaError::FileNotFound {
+            filedesc: String::from("README"),
+            path: readme_path.display().to_string(),
+        })
+    }
 }
 
 pub fn body(readme_path: &Path) -> Result<String> {

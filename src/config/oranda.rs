@@ -6,7 +6,7 @@ use serde::Deserialize;
 use crate::config::theme::Theme;
 use crate::errors::*;
 
-static ORANDA_JSON: &str = "oranda.json";
+static ORANDA_JSON: &str = "./oranda.json";
 
 #[derive(Debug, Deserialize)]
 pub struct OrandaConfig {
@@ -21,10 +21,13 @@ pub struct OrandaConfig {
 
 impl OrandaConfig {
     pub fn load() -> Result<Option<OrandaConfig>> {
+        println!("reading from oranda config...");
         if Path::new(ORANDA_JSON).exists() {
             let oranda_json = fs::read_to_string(ORANDA_JSON)?;
+            println!("read json: {:?}", &oranda_json);
             let data: OrandaConfig = serde_json::from_str(&oranda_json)?;
-            return Ok(Some(data));
+            println!("read data: {:?}", &data);
+            Ok(Some(data))
         } else {
             Ok(None)
         }
