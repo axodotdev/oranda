@@ -8,13 +8,14 @@ use crate::config::project::Type;
 use crate::config::ProjectConfig;
 use crate::errors::*;
 
-static PACKAGE_JSON: &str = "package.json";
+static PACKAGE_JSON: &str = "./package.json";
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, Eq, PartialEq)]
 pub struct JavaScript {}
 impl JavaScript {
     pub fn read(&self, project_root: &Option<PathBuf>) -> Result<ProjectConfig> {
-        let package_json = fs::read_to_string(JavaScript::config(&project_root))?;
+        println!("reading from package.json...");
+        let package_json = fs::read_to_string(JavaScript::config(project_root))?;
         let data: ProjectConfig = serde_json::from_str(&package_json)?;
         Ok(data)
     }

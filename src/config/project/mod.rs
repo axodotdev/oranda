@@ -9,7 +9,7 @@ use crate::errors::*;
 use javascript::JavaScript;
 use rust::Rust;
 
-#[derive(Debug, Deserialize, PartialEq)]
+#[derive(Debug, Deserialize, Eq, PartialEq)]
 pub struct ProjectConfig {
     pub name: String,
     pub description: String,
@@ -29,17 +29,20 @@ impl ProjectConfig {
     }
 
     fn detect(project_root: &Option<PathBuf>) -> Option<Type> {
-        if Rust::config(&project_root).exists() {
+        if Rust::config(project_root).exists() {
+            println!("detected rust project...");
             Some(Type::Rust(Rust {}))
-        } else if JavaScript::config(&project_root).exists() {
+        } else if JavaScript::config(project_root).exists() {
+            println!("detected javascript project...");
             Some(Type::JavaScript(JavaScript {}))
         } else {
+            println!("could not detect project type...");
             None
         }
     }
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, Eq, PartialEq)]
 pub enum Type {
     Rust(Rust),
     JavaScript(JavaScript),

@@ -1,13 +1,9 @@
-use miette::Diagnostic;
 use thiserror::Error;
 
 pub type Result<T> = std::result::Result<T, OrandaError>;
 
-#[derive(Debug, Error, Diagnostic)]
+#[derive(Debug, Error)]
 pub enum OrandaError {
-    #[error("{0}")]
-    Config(String),
-
     #[error(transparent)]
     Io(#[from] std::io::Error),
 
@@ -23,7 +19,9 @@ pub enum OrandaError {
     #[error(transparent)]
     Grass(#[from] Box<grass::Error>),
 
+    #[error("failed to read {filedesc} at {path}")]
+    FileNotFound { filedesc: String, path: String },
+
     #[error("{0}")]
     Other(String),
-    // TODO: at some context fields / miette stuff
 }
