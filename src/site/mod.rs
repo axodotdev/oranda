@@ -83,7 +83,7 @@ fn reads_description() {
     let site = Site::build(&config()).unwrap();
     assert!(site
         .html
-        .contains("<meta name=\"description\" content=description />"));
+        .contains("<meta name=\"description\" content=\"description\">"));
 }
 
 #[test]
