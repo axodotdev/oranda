@@ -1,7 +1,6 @@
 use crate::config::{theme, Config};
 
 pub fn head(config: &Config) -> String {
-    println!("{:?}", &config.description);
     format!(
         r#"
    <!DOCTYPE html>
