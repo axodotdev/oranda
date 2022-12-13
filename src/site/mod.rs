@@ -1,4 +1,4 @@
-use std::fs::File;
+use std::fs::{read_to_string, File};
 use std::io::Write;
 use std::path::Path;
 
@@ -19,12 +19,18 @@ pub struct Site {
 }
 
 impl Site {
-    fn css() -> Result<String> {
-        let css_options = grass::Options::default();
-        let css = grass::from_path(
-            "src/site/css/style.scss",
-            &css_options.style(OutputStyle::Compressed),
-        )?;
+    fn css(config: &Config) -> Result<String> {
+        let css_options = grass::Options::default().style(OutputStyle::Compressed);
+        let mut css = grass::from_path("src/site/css/style.scss", &css_options)?;
+
+        if !config.additional_css.is_empty() && Path::new(&config.additional_css).exists() {
+            let additional_css_str = read_to_string(&config.additional_css)?;
+
+            let additional_css =
+                grass::from_string(format!("#oranda{{{}}}", additional_css_str), &css_options)?;
+
+            css = format!("{css}{additional}", css = css, additional = additional_css);
+        }
         Ok(css)
     }
 
@@ -36,7 +42,7 @@ impl Site {
             markdown::body(readme_path)?,
             html::footer()
         );
-        let css = Self::css()?;
+        let css = Self::css(config)?;
 
         Ok(Site { html, css })
     }

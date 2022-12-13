@@ -16,6 +16,7 @@ pub struct Config {
     pub no_header: bool,
     pub readme_path: String,
     pub theme: Theme,
+    pub additional_css: String,
 }
 
 impl Config {
@@ -64,18 +65,20 @@ impl Config {
                     no_header: custom.no_header.unwrap_or(default.no_header),
                     readme_path: custom.readme_path.unwrap_or(default.readme_path),
                     theme: custom.theme.unwrap_or(default.theme),
+                    additional_css: custom.additional_css.unwrap_or(default.additional_css),
                 });
             // otherwise both oranda config and project manifest exists
             } else if let Some(project) = project {
                 // so return a merge of custom > project > default
                 return Ok(Config {
                     description: custom.description.unwrap_or(project.description),
-                    dist_dir: custom.dist_dir.unwrap_or(default.description),
+                    dist_dir: custom.dist_dir.unwrap_or(default.dist_dir),
                     homepage: Self::homepage(custom.homepage, project.homepage, default.homepage),
                     name: custom.name.unwrap_or(project.name),
                     no_header: custom.no_header.unwrap_or(default.no_header),
                     readme_path: custom.readme_path.unwrap_or(default.readme_path),
                     theme: custom.theme.unwrap_or(default.theme),
+                    additional_css: custom.additional_css.unwrap_or(default.additional_css),
                 });
             }
         }
@@ -102,13 +105,14 @@ impl Config {
 impl Default for Config {
     fn default() -> Self {
         Config {
-            description: String::from("Queen triggerfish viperfish trench lightfish flying gurnard candlefish; Atlantic cod North American freshwater catfish four-eyed fish zebra lionfish worm eel."),
+            description: String::from(""),
             dist_dir: String::from("public"),
             homepage: None,
             name: String::from("My Axo project"),
             no_header: false,
             readme_path: String::from("README.md"),
             theme: Theme::Light,
+            additional_css: String::from(""),
         }
     }
 }

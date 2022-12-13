@@ -8,9 +8,7 @@ body,
   min-height: 100%;
   margin: 0;
   padding: 0;
-  color: var(--text);
-  
-  background-color: var(--bg);
+
   scroll-behavior: smooth;
 }
 
@@ -18,7 +16,9 @@ body {
   font-family: var(--sans-serif-font);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
+  color: var(--text);
+  background-color: var(--bg);
+  
   .body {
     padding-top: 40px;
     padding-bottom: 60px;
