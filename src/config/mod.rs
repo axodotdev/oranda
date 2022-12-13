@@ -70,7 +70,7 @@ impl Config {
                 // so return a merge of custom > project > default
                 return Ok(Config {
                     description: custom.description.unwrap_or(project.description),
-                    dist_dir: custom.dist_dir.unwrap_or(default.description),
+                    dist_dir: custom.dist_dir.unwrap_or(default.dist_dir),
                     homepage: Self::homepage(custom.homepage, project.homepage, default.homepage),
                     name: custom.name.unwrap_or(project.name),
                     no_header: custom.no_header.unwrap_or(default.no_header),

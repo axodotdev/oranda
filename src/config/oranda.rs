@@ -6,7 +6,7 @@ use serde::Deserialize;
 use crate::config::theme::Theme;
 use crate::errors::*;
 
-static ORANDA_JSON: &str = "./oranda.json";
+static ORANDA_JSON: &str = "./oranda.config.json";
 
 #[derive(Debug, Deserialize)]
 pub struct OrandaConfig {
