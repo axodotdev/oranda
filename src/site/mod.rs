@@ -1,8 +1,8 @@
+use crate::errors::*;
+use grass::OutputStyle;
 use std::fs::File;
 use std::io::Write;
 use std::path::Path;
-
-use grass::OutputStyle;
 
 mod html;
 mod markdown;
@@ -11,7 +11,6 @@ mod markdown;
 use crate::config::theme::Theme;
 
 use crate::config::Config;
-use crate::errors::*;
 
 pub struct Site {
     pub html: String,
@@ -28,9 +27,21 @@ impl Site {
 
         if !config.remote_styles.is_empty() {
             for path in &config.remote_styles {
-                let resp = reqwest::blocking::get(path).unwrap().text().unwrap();
-
-                css = format!("{css}{additional}", css = css, additional = resp);
+                let resp = reqwest::blocking::get(path);
+                match resp {
+                    Err(_) => {
+                        return Err(OrandaError::Other(
+                            "There was a problem fetching your remote styles".to_owned(),
+                        ));
+                    }
+                    Ok(additional) => {
+                        css = format!(
+                            "{css}{additional}",
+                            css = css,
+                            additional = additional.text().unwrap()
+                        )
+                    }
+                }
             }
         }
         Ok(css)
