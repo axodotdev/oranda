@@ -26,13 +26,14 @@ impl Site {
         )?;
 
         if !config.remote_styles.is_empty() {
-            for path in &config.remote_styles {
-                let resp = reqwest::blocking::get(path);
+            for url in &config.remote_styles {
+                let resp = reqwest::blocking::get(url);
                 match resp {
                     Err(_) => {
-                        return Err(OrandaError::Other(
-                            "There was a problem fetching your remote styles".to_owned(),
-                        ));
+                        return Err(OrandaError::RequestFailed {
+                            url: url.to_string(),
+                            resource: String::from("Remote CSS"),
+                        });
                     }
                     Ok(additional) => {
                         css = format!(

@@ -22,6 +22,9 @@ pub enum OrandaError {
     #[error("failed to read {filedesc} at {path}")]
     FileNotFound { filedesc: String, path: String },
 
+    #[error("failed to fetch {resource} at {url}")]
+    RequestFailed { resource: String, url: String },
+
     #[error("{0}")]
     Other(String),
 }
