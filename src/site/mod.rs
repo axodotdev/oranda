@@ -70,6 +70,7 @@ fn config() -> Config {
     Config {
         description: String::from("description"),
         readme_path: String::from("./src/site/fixtures/readme.md"),
+        additional_css: String::from("./src/site/fixtures/additional.css"),
         theme: Theme::Dark,
         ..Default::default()
     }
@@ -96,4 +97,10 @@ fn reads_description() {
 fn reads_theme() {
     let site = Site::build(&config()).unwrap();
     assert!(site.html.contains("<div class=\"body dark\">"));
+}
+
+#[test]
+fn reads_additional_css() {
+    let site = Site::build(&config()).unwrap();
+    assert!(site.css.contains("#oranda body{background:red}"));
 }
