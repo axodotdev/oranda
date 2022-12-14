@@ -17,6 +17,7 @@ pub struct OrandaConfig {
     pub no_header: Option<bool>,
     pub readme_path: Option<String>,
     pub theme: Option<Theme>,
+    pub remote_styles: Option<Vec<String>>,
 }
 
 impl OrandaConfig {

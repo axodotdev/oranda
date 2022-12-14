@@ -1,3 +1,4 @@
 {
-  "theme": "axo"
+  "theme": "axo",
+  "remote_styles": ["https://unpkg.com/awsm.css@3.0.7/dist/awsm.min.css"]
 }

@@ -19,12 +19,20 @@ pub struct Site {
 }
 
 impl Site {
-    fn css() -> Result<String> {
+    fn css(config: &Config) -> Result<String> {
         let css_options = grass::Options::default();
-        let css = grass::from_path(
+        let mut css = grass::from_path(
             "src/site/css/style.scss",
             &css_options.style(OutputStyle::Compressed),
         )?;
+
+        if config.remote_styles.len() > 0 {
+            for path in &config.remote_styles {
+                let resp = reqwest::blocking::get(path).unwrap().text().unwrap();
+
+                css = format!("{css}{additional}", css = css, additional = resp);
+            }
+        }
         Ok(css)
     }
 
@@ -36,7 +44,7 @@ impl Site {
             markdown::body(readme_path)?,
             html::footer()
         );
-        let css = Self::css()?;
+        let css = Self::css(config)?;
 
         Ok(Site { html, css })
     }

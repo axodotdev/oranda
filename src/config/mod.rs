@@ -16,6 +16,7 @@ pub struct Config {
     pub no_header: bool,
     pub readme_path: String,
     pub theme: Theme,
+    pub remote_styles: Vec<String>,
 }
 
 impl Config {
@@ -64,6 +65,7 @@ impl Config {
                     no_header: custom.no_header.unwrap_or(default.no_header),
                     readme_path: custom.readme_path.unwrap_or(default.readme_path),
                     theme: custom.theme.unwrap_or(default.theme),
+                    remote_styles: custom.remote_styles.unwrap_or(default.remote_styles),
                 });
             // otherwise both oranda config and project manifest exists
             } else if let Some(project) = project {
@@ -76,6 +78,7 @@ impl Config {
                     no_header: custom.no_header.unwrap_or(default.no_header),
                     readme_path: custom.readme_path.unwrap_or(default.readme_path),
                     theme: custom.theme.unwrap_or(default.theme),
+                    remote_styles: custom.remote_styles.unwrap_or(default.remote_styles),
                 });
             }
         }
@@ -109,6 +112,7 @@ impl Default for Config {
             no_header: false,
             readme_path: String::from("README.md"),
             theme: Theme::Light,
+            remote_styles: vec![],
         }
     }
 }
