@@ -4,6 +4,7 @@ use std::path::{Path, PathBuf};
 #[cfg(test)]
 use assert_fs::fixture::{FileWriteStr, PathChild};
 
+#[allow(unused_imports)]
 use crate::config::project::Type;
 use crate::config::ProjectConfig;
 use crate::errors::*;

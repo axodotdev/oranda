@@ -26,7 +26,7 @@ impl Site {
             &css_options.style(OutputStyle::Compressed),
         )?;
 
-        if config.remote_styles.len() > 0 {
+        if !config.remote_styles.is_empty() {
             for path in &config.remote_styles {
                 let resp = reqwest::blocking::get(path).unwrap().text().unwrap();
 
