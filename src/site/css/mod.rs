@@ -42,7 +42,7 @@ fn fetch_remote_css(config: &Config) -> Result<String> {
         }
     }
 
-    Ok(css.to_string())
+    Ok(css)
 }
 
 pub fn build(config: &Config) -> Result<String> {
