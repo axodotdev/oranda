@@ -20,7 +20,7 @@ pub struct Site {
 
 impl Site {
     fn css(config: &Config) -> Result<String> {
-        let css = build_css(&config).unwrap();
+        let css = build_css(config).unwrap();
         Ok(css)
     }
 
