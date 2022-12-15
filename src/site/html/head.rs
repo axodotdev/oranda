@@ -4,7 +4,7 @@ pub fn head(config: &Config) -> String {
     format!(
         r#"
    <!DOCTYPE html>
-   <html lang="en">
+   <html lang="en" id="oranda">
    <head>
    
    <meta charset="utf-8" />
@@ -17,7 +17,7 @@ pub fn head(config: &Config) -> String {
     <meta property="og:url" content="{homepage}">
    </head>
    <body>
-   <div id="oranda"><div class="body {theme}"><div class="container">
+   <div><div class="body {theme}"><div class="container">
    "#,
         name = &config.name,
         description = &config.description,

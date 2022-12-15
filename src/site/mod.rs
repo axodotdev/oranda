@@ -1,9 +1,10 @@
 use crate::errors::*;
-use grass::OutputStyle;
+use crate::site::css::build_css;
 use std::fs::File;
 use std::io::Write;
 use std::path::Path;
 
+mod css;
 mod html;
 mod markdown;
 
@@ -19,32 +20,7 @@ pub struct Site {
 
 impl Site {
     fn css(config: &Config) -> Result<String> {
-        let css_options = grass::Options::default();
-        let mut css = grass::from_path(
-            "src/site/css/style.scss",
-            &css_options.style(OutputStyle::Compressed),
-        )?;
-
-        if !config.remote_styles.is_empty() {
-            for url in &config.remote_styles {
-                let resp = reqwest::blocking::get(url);
-                match resp {
-                    Err(_) => {
-                        return Err(OrandaError::RequestFailed {
-                            url: url.to_string(),
-                            resource: String::from("Remote CSS"),
-                        });
-                    }
-                    Ok(additional) => {
-                        css = format!(
-                            "{css}{additional}",
-                            css = css,
-                            additional = additional.text().unwrap()
-                        )
-                    }
-                }
-            }
-        }
+        let css = build_css(&config).unwrap();
         Ok(css)
     }
 
@@ -84,6 +60,7 @@ fn config() -> Config {
     Config {
         description: String::from("description"),
         readme_path: String::from("./src/site/fixtures/readme.md"),
+        additional_css: String::from("./src/site/fixtures/additional.css"),
         theme: Theme::Dark,
         ..Default::default()
     }
@@ -110,4 +87,10 @@ fn reads_description() {
 fn reads_theme() {
     let site = Site::build(&config()).unwrap();
     assert!(site.html.contains("<div class=\"body dark\">"));
+}
+
+#[test]
+fn reads_additional_css() {
+    let site = Site::build(&config()).unwrap();
+    assert!(site.css.contains("#oranda body{background:red}"));
 }

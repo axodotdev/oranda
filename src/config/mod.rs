@@ -17,6 +17,7 @@ pub struct Config {
     pub readme_path: String,
     pub theme: Theme,
     pub remote_styles: Vec<String>,
+    pub additional_css: String,
 }
 
 impl Config {
@@ -66,6 +67,7 @@ impl Config {
                     readme_path: custom.readme_path.unwrap_or(default.readme_path),
                     theme: custom.theme.unwrap_or(default.theme),
                     remote_styles: custom.remote_styles.unwrap_or(default.remote_styles),
+                    additional_css: custom.additional_css.unwrap_or(default.additional_css),
                 });
             // otherwise both oranda config and project manifest exists
             } else if let Some(project) = project {
@@ -79,6 +81,7 @@ impl Config {
                     readme_path: custom.readme_path.unwrap_or(default.readme_path),
                     theme: custom.theme.unwrap_or(default.theme),
                     remote_styles: custom.remote_styles.unwrap_or(default.remote_styles),
+                    additional_css: custom.additional_css.unwrap_or(default.additional_css),
                 });
             }
         }
@@ -105,7 +108,7 @@ impl Config {
 impl Default for Config {
     fn default() -> Self {
         Config {
-            description: String::from("Queen triggerfish viperfish trench lightfish flying gurnard candlefish; Atlantic cod North American freshwater catfish four-eyed fish zebra lionfish worm eel."),
+            description: String::from(""),
             dist_dir: String::from("public"),
             homepage: None,
             name: String::from("My Axo project"),
@@ -113,6 +116,7 @@ impl Default for Config {
             readme_path: String::from("README.md"),
             theme: Theme::Light,
             remote_styles: vec![],
+            additional_css: String::from(""),
         }
     }
 }
