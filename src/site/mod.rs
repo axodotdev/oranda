@@ -1,9 +1,10 @@
-use std::fs::{read_to_string, File};
+use crate::errors::*;
+use crate::site::css::build;
+use std::fs::File;
 use std::io::Write;
 use std::path::Path;
 
-use grass::OutputStyle;
-
+mod css;
 mod html;
 mod markdown;
 
@@ -11,7 +12,6 @@ mod markdown;
 use crate::config::theme::Theme;
 
 use crate::config::Config;
-use crate::errors::*;
 
 pub struct Site {
     pub html: String,
@@ -20,17 +20,7 @@ pub struct Site {
 
 impl Site {
     fn css(config: &Config) -> Result<String> {
-        let css_options = grass::Options::default().style(OutputStyle::Compressed);
-        let mut css = grass::from_path("src/site/css/style.scss", &css_options)?;
-
-        if !config.additional_css.is_empty() && Path::new(&config.additional_css).exists() {
-            let additional_css_str = read_to_string(&config.additional_css)?;
-
-            let additional_css =
-                grass::from_string(format!("#oranda{{{}}}", additional_css_str), &css_options)?;
-
-            css = format!("{css}{additional}", css = css, additional = additional_css);
-        }
+        let css = build(config).unwrap();
         Ok(css)
     }
 
