@@ -18,7 +18,7 @@ pub struct Config {
     pub theme: Theme,
     pub remote_styles: Vec<String>,
     pub additional_css: String,
-    pub logo: String,
+    pub logo: Option<String>,
 }
 
 impl Config {
@@ -69,7 +69,7 @@ impl Config {
                     theme: custom.theme.unwrap_or(default.theme),
                     remote_styles: custom.remote_styles.unwrap_or(default.remote_styles),
                     additional_css: custom.additional_css.unwrap_or(default.additional_css),
-                    logo: custom.logo.unwrap_or(default.logo),
+                    logo: custom.logo,
                 });
             // otherwise both oranda config and project manifest exists
             } else if let Some(project) = project {
@@ -84,7 +84,7 @@ impl Config {
                     theme: custom.theme.unwrap_or(default.theme),
                     remote_styles: custom.remote_styles.unwrap_or(default.remote_styles),
                     additional_css: custom.additional_css.unwrap_or(default.additional_css),
-                    logo: custom.logo.unwrap_or(default.logo),
+                    logo: custom.logo,
                 });
             }
         }
@@ -120,7 +120,7 @@ impl Default for Config {
             theme: Theme::Light,
             remote_styles: vec![],
             additional_css: String::from(""),
-            logo: String::from(""),
+            logo: None,
         }
     }
 }

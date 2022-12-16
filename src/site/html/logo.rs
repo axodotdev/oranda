@@ -7,26 +7,27 @@ use std::{
 use crate::{config::Config, errors::*};
 
 pub fn get_logo(config: &Config) -> Result<Option<&PathBuf>> {
-    let mut logo_url = None;
-
-    if config.logo.is_empty() {
+    if !config.logo.is_none() {
         return Ok(None);
     }
 
-    if config.logo.starts_with("http") {
-        let resp = reqwest::blocking::get(&config.logo);
+    let mut logo_url = None;
+    let logo = Option::expect(config.logo, "hmm, shouldn't really happen");
+
+    if logo.starts_with("http") {
+        let resp = reqwest::blocking::get(&logo);
 
         match resp {
             Err(_) => {
                 return Err(OrandaError::RequestFailed {
-                    url: config.logo.to_string(),
+                    url: logo.to_string(),
                     resource: String::from("Logo"),
                 });
             }
             Ok(img) => {
                 let logo_path = Path::join(
                     Path::new(&config.dist_dir),
-                    Path::new(&config.logo).file_name().unwrap(),
+                    Path::new(&logo).file_name().unwrap(),
                 );
 
                 let mut logo_file = File::create(&logo_path)?;
@@ -36,18 +37,18 @@ pub fn get_logo(config: &Config) -> Result<Option<&PathBuf>> {
             }
         }
     } else {
-        if !Path::new(&config.logo).exists() {
+        if !Path::new(&logo).exists() {
             return Err(OrandaError::FileNotFound {
                 filedesc: "Logo".to_owned(),
-                path: config.logo.to_owned(),
+                path: logo.to_owned(),
             });
         }
 
         let new_path = Path::join(
             Path::new(&config.dist_dir),
-            Path::new(&config.logo).file_name().unwrap(),
+            Path::new(&logo).file_name().unwrap(),
         );
-        fs::copy(&config.logo, &new_path).unwrap();
+        fs::copy(&logo, &new_path).unwrap();
         logo_url = Some(&new_path);
     }
 
