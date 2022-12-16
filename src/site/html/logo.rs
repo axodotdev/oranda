@@ -7,7 +7,7 @@ use std::{
 use crate::{config::Config, errors::*};
 
 pub fn get_logo(config: &Config) -> Result<Option<&PathBuf>> {
-    let mut logo_url;
+    let mut logo_url = None;
 
     if config.logo.is_empty() {
         return Ok(None);
@@ -32,7 +32,7 @@ pub fn get_logo(config: &Config) -> Result<Option<&PathBuf>> {
                 let mut logo_file = File::create(&logo_path)?;
                 logo_file.write_all(&img.bytes().unwrap())?;
 
-                logo_url = &logo_path;
+                logo_url = Some(&logo_path)
             }
         }
     } else {
@@ -48,8 +48,8 @@ pub fn get_logo(config: &Config) -> Result<Option<&PathBuf>> {
             Path::new(&config.logo).file_name().unwrap(),
         );
         fs::copy(&config.logo, &new_path).unwrap();
-        logo_url = &new_path;
+        logo_url = Some(&new_path);
     }
 
-    Ok(Some(&logo_url))
+    Ok(&logo_url)
 }
