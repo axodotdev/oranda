@@ -5,7 +5,7 @@ use crate::config::{theme, Config};
 
 pub fn build(config: &Config, content: String) -> String {
     let theme = theme::css_class(&config.theme);
-    let classlist: &str = &format!("body container {}", theme)[..];
+    let classlist: &str = &format!("body {}", theme)[..];
     let description = &config.description;
     let logo_url = get_logo(&config);
 
@@ -19,7 +19,11 @@ pub fn build(config: &Config, content: String) -> String {
             <link rel="stylesheet" href="styles.css"></link>
         </head>
         <body>
-            <div class=classlist>{ unsafe_text!(content) }</div>
+            <div class=classlist>
+                <div class="container">
+                    { unsafe_text!(content) }
+                </div>
+            </div>
         </body>
     </html>
      );
