@@ -4,7 +4,8 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use crate::{config::Config, errors::*};
+use crate::config::Config;
+use crate::errors::*;
 
 pub fn get_logo(config: &Config) -> Result<Option<&PathBuf>> {
     if !config.logo.is_none() {

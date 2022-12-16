@@ -3,7 +3,7 @@ use crate::{
     errors::*,
 };
 
-use super::get_logo;
+use crate::site::html::logo::get_logo;
 
 pub fn head(config: &Config) -> Result<String> {
     let logo_url = get_logo(&config);
