@@ -8,10 +8,10 @@ pub enum Theme {
     Axo,
 }
 
-pub fn css_class(theme: &Theme) -> String {
+pub fn css_class(theme: &Theme) -> &str {
     match theme {
-        Theme::Dark => String::from("dark"),
-        Theme::Axo => String::from("axo"),
-        _ => String::from(""),
+        Theme::Dark => "dark",
+        Theme::Axo => "axo",
+        _ => "light",
     }
 }

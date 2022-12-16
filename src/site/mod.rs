@@ -26,12 +26,8 @@ impl Site {
 
     fn build(config: &Config) -> Result<Site> {
         let readme_path = Path::new(&config.readme_path);
-        let html = format!(
-            "{}{}{}",
-            html::head(config),
-            markdown::body(readme_path)?,
-            html::footer()
-        );
+        let content = markdown::body(readme_path)?;
+        let html = html::build(config, content);
         let css = Self::css(config)?;
 
         Ok(Site { html, css })
