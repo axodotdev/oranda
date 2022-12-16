@@ -26,12 +26,8 @@ impl Site {
 
     fn build(config: &Config) -> Result<Site> {
         let readme_path = Path::new(&config.readme_path);
-        let html = format!(
-            "{}{}{}",
-            html::head(config),
-            markdown::body(readme_path)?,
-            html::footer()
-        );
+        let content = markdown::body(readme_path)?;
+        let html = html::build(config, content);
         let css = Self::css(config)?;
 
         Ok(Site { html, css })
@@ -58,7 +54,7 @@ impl Site {
 #[cfg(test)]
 fn config() -> Config {
     Config {
-        description: String::from("description"),
+        description: String::from("you axolotl questions"),
         readme_path: String::from("./src/site/fixtures/readme.md"),
         additional_css: String::from("./src/site/fixtures/additional.css"),
         theme: Theme::Dark,
@@ -78,15 +74,13 @@ fn it_builds_the_site() {
 #[test]
 fn reads_description() {
     let site = Site::build(&config()).unwrap();
-    assert!(site
-        .html
-        .contains("<meta name=\"description\" content=\"description\">"));
+    assert!(site.html.contains("you axolotl questions"));
 }
 
 #[test]
 fn reads_theme() {
     let site = Site::build(&config()).unwrap();
-    assert!(site.html.contains("<div class=\"body dark\">"));
+    assert!(site.html.contains("<div class=\"body container dark\">"));
 }
 
 #[test]
