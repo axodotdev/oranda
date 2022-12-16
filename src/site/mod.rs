@@ -28,7 +28,7 @@ impl Site {
         let readme_path = Path::new(&config.readme_path);
         let html = format!(
             "{}{}{}",
-            html::head(config),
+            html::head(config)?,
             markdown::body(readme_path)?,
             html::footer()
         );

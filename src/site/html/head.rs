@@ -1,7 +1,13 @@
-use crate::config::{theme, Config};
+use crate::{
+    config::{theme, Config},
+    errors::*,
+};
 
-pub fn head(config: &Config) -> String {
-    format!(
+use super::get_logo;
+
+pub fn head(config: &Config) -> Result<String> {
+    let logo_url = get_logo(&config);
+    let head = format!(
         r#"
    <!DOCTYPE html>
    <html lang="en" id="oranda">
@@ -26,5 +32,7 @@ pub fn head(config: &Config) -> String {
             .homepage
             .as_ref()
             .unwrap_or(&String::from("No homepage provided.")),
-    )
+    );
+
+    Ok(head)
 }
