@@ -11,16 +11,16 @@ pub fn build(config: &Config, content: String) -> String {
 
     let doc: DOMTree<String> = html!(
     <html lang="en" id="oranda">
-    <head>
-    <title>{ text!(&config.name) }</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content=description />
-    <link rel="stylesheet" href="styles.css"></link>
-    </head>
-    <body>
-    <div class=classlist>{ unsafe_text!(content) }</div>
-    </body>
+        <head>
+            <title>{ text!(&config.name) }</title>
+            <meta charset="utf-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <meta name="description" content=description />
+            <link rel="stylesheet" href="styles.css"></link>
+        </head>
+        <body>
+            <div class=classlist>{ unsafe_text!(content) }</div>
+        </body>
     </html>
      );
     doc.to_string()
