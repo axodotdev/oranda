@@ -5,7 +5,7 @@ use crate::config::{theme, Config};
 
 pub fn build(config: &Config, content: String) -> String {
     let theme = theme::css_class(&config.theme);
-    let classlist: &str = &format!("body container {}", theme)[..];
+    let classlist: &str = &format!("body {}", theme)[..];
     let description = &config.description;
     let logo_dist_path = if let Some(logo_origin_path) = &config.logo {
         Some(logo::fetch(&config.dist_dir, logo_origin_path))
@@ -24,7 +24,9 @@ pub fn build(config: &Config, content: String) -> String {
         </head>
         <body>
             <div class=classlist>
-                { unsafe_text!(content) }
+                <div class="container">
+                    { unsafe_text!(content) }
+                </div>
             </div>
         </body>
     </html>
