@@ -7,11 +7,10 @@ pub fn build(config: &Config, content: String) -> String {
     let theme = theme::css_class(&config.theme);
     let classlist: &str = &format!("body {}", theme)[..];
     let description = &config.description;
-    let logo_dist_path = if let Some(logo_origin_path) = &config.logo {
-        Some(logo::fetch(&config.dist_dir, logo_origin_path))
-    } else {
-        None
-    };
+    let logo_dist_path = config
+        .logo
+        .as_ref()
+        .map(|logo_origin_path| logo::fetch(&config.dist_dir, logo_origin_path));
 
     let doc: DOMTree<String> = html!(
     <html lang="en" id="oranda">

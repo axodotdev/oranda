@@ -20,7 +20,7 @@ pub struct Site {
 
 impl Site {
     fn css(config: &Config) -> Result<String> {
-        Ok(css::build(config)?)
+        css::build(config)
     }
 
     fn build(config: &Config) -> Result<Site> {
