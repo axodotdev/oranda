@@ -1,5 +1,4 @@
 use crate::errors::*;
-use crate::site::css::build;
 use std::fs::File;
 use std::io::Write;
 use std::path::Path;
@@ -21,8 +20,7 @@ pub struct Site {
 
 impl Site {
     fn css(config: &Config) -> Result<String> {
-        let css = build(config).unwrap();
-        Ok(css)
+        Ok(css::build(config)?)
     }
 
     fn build(config: &Config) -> Result<Site> {
