@@ -3,6 +3,7 @@ use std::fs::File;
 use std::io::Write;
 use std::path::Path;
 
+mod asset;
 mod css;
 mod html;
 mod logo;
