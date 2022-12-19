@@ -6,12 +6,11 @@ pub fn build(config: &Config, content: String) -> String {
     let theme = theme::css_class(&config.theme);
     let classlist: &str = &format!("body container {}", theme)[..];
     let description = &config.description;
-    let homepage = match &config.homepage {
-        Some(homepage) => Some(html!(
-            <meta property="og:url" content=homepage/>
-        )),
-        None => None,
-    };
+    let homepage = config.homepage.as_ref().map(|homepage| {
+        html!(
+          <meta property="og:url" content=homepage/>
+        )
+    });
 
     let doc: DOMTree<String> = html!(
     <html lang="en" id="oranda">
