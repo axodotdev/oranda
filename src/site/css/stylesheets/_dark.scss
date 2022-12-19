@@ -62,4 +62,16 @@
       background-color: var(--bg);
     }
   }
+
+  .repo_banner {
+    background: linear-gradient(to right, rgb(255, 228, 230), rgb(204, 251, 241));
+
+    .icon {
+      filter: invert(0);
+    }
+    
+    > a {
+      color: var(--bg);
+    }
+  }
 }

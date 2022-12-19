@@ -73,10 +73,22 @@
   }
 
   .tabs label {
-
     box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
       var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
     background-color: var(--bg);
+  }
+
+  .repo_banner {
+    background: linear-gradient(
+      to right,
+      rgb(236, 72, 153),
+      rgb(239, 68, 68),
+      rgb(234, 179, 8)
+    );
+    
+    > a {
+      color: var(--text);
+    }
   }
 }
 
