@@ -1,32 +1,18 @@
-use std::fs;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 
 use crate::errors::*;
 
-pub fn copy(dist_dir: &str, origin_path: &str, label: &str) -> Result<Option<PathBuf>> {
-    let dist_path = dist_path(dist_dir, origin_path)?;
-    if Path::new(&origin_path).exists() {
-        fs::copy(origin_path, &dist_path)?;
-    } else {
-        return Err(OrandaError::FileNotFound {
-            filedesc: label.to_owned(),
-            path: origin_path.to_string(),
-        });
-    }
-    Ok(Some(dist_path))
-}
+mod local;
+mod remote;
 
-fn filename(origin_path: &str) -> Result<PathBuf> {
-    if let Some(filename) = Path::new(origin_path).file_name() {
-        Ok(filename.into())
+pub fn copy(dist_dir: &str, origin_path: &str, label: &str) -> Result<PathBuf> {
+    if is_remote(origin_path) {
+        remote::copy(dist_dir, origin_path, label)
     } else {
-        Err(OrandaError::Other(
-            "provided path has no filename".to_string(),
-        ))
+        local::copy(dist_dir, origin_path, label)
     }
 }
 
-fn dist_path(dist_dir: &str, origin_path: &str) -> Result<PathBuf> {
-    let filename = filename(origin_path)?;
-    Ok(Path::new(&dist_dir).join(filename))
+fn is_remote(origin_path: &str) -> bool {
+    false
 }

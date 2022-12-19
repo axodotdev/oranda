@@ -1222,6 +1222,7 @@ dependencies = [
  "tokio",
  "toml",
  "tower-http",
+ "url",
 ]
 
 [[package]]

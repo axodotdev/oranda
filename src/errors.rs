@@ -19,6 +19,9 @@ pub enum OrandaError {
     #[error(transparent)]
     Grass(#[from] Box<grass::Error>),
 
+    #[error(transparent)]
+    Reqwest(#[from] reqwest::Error),
+
     #[error("failed to read {filedesc} at {path}")]
     FileNotFound { filedesc: String, path: String },
 
