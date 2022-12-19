@@ -1,6 +1,7 @@
 use axohtml::{dom::DOMTree, html, text, unsafe_text};
 
 use crate::config::{theme, Config};
+use axohtml::elements::div;
 
 pub fn build(config: &Config, content: String) -> String {
     let theme = theme::css_class(&config.theme);
@@ -11,6 +12,7 @@ pub fn build(config: &Config, content: String) -> String {
           <meta property="og:url" content=homepage/>
         )
     });
+    let banner = repo_banner(config);
 
     let doc: DOMTree<String> = html!(
     <html lang="en" id="oranda">
@@ -24,9 +26,22 @@ pub fn build(config: &Config, content: String) -> String {
     <link rel="stylesheet" href="styles.css"></link>
     </head>
     <body>
-    <div class=classlist>{ unsafe_text!(content) }</div>
+    <div class=classlist>{banner}{ unsafe_text!(content) }</div>
     </body>
     </html>
      );
     doc.to_string()
+}
+
+fn repo_banner(config: &Config) -> Option<Box<div<String>>> {
+    config.repository.as_ref().map(|repository| {
+        html!(
+                  <div class="repo_banner">
+                     <a href=repository>
+                         <div class="icon" aria-hidden="true"/>
+                        {text!("Check out our GitHub")}
+                    </a>
+         </div>
+        )
+    })
 }
