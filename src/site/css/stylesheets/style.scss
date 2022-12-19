@@ -1,30 +1,29 @@
 :root {
-    --sans-serif-font: 'Inter', sans-serif;
-    --serif-font: 'comfortaa', serif;
+  --sans-serif-font: "Inter", sans-serif;
+  --serif-font: "comfortaa", serif;
 
-    --text: #111827;
-    --text-light: #fafafa;
-    --text-800: #1f2937;
-    --bg: #f4f4f5;
-    --link: #ea580c;
-    --table-bg: #f0f0f0;
-    --table-border: #e4e4e7;
-    --table-header-bg: #27272a;
+  --text: #111827;
+  --text-light: #fafafa;
+  --text-800: #1f2937;
+  --bg: #f4f4f5;
+  --link: #ea580c;
+  --table-bg: #f0f0f0;
+  --table-border: #e4e4e7;
+  --table-header-bg: #27272a;
 
-    --shadow-color: 0deg 0% 60%;
-    --shadow-elevation-medium:
-        0.3px 0.5px 0.7px hsl(var(--shadow-color) / 0.36),
-        0.8px 1.6px 2px -0.8px hsl(var(--shadow-color) / 0.36),
-        2.1px 4.1px 5.2px -1.7px hsl(var(--shadow-color) / 0.36),
-        5px 10px 12.6px -2.5px hsl(var(--shadow-color) / 0.36);
+  --shadow-color: 0deg 0% 60%;
+  --shadow-elevation-medium: 0.3px 0.5px 0.7px hsl(var(--shadow-color) / 0.36),
+    0.8px 1.6px 2px -0.8px hsl(var(--shadow-color) / 0.36),
+    2.1px 4.1px 5.2px -1.7px hsl(var(--shadow-color) / 0.36),
+    5px 10px 12.6px -2.5px hsl(var(--shadow-color) / 0.36);
 }
 
 @import url("https://unpkg.com/normalize.css@8.0.1/normalize.css");
-@import url('https://fonts.googleapis.com/css?family=Inter');
-@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700');
-@import 'tacit';
-@import 'main';
-@import 'gh-corner';
-@import 'dark';
-@import 'axo';
+@import url("https://fonts.googleapis.com/css?family=Inter");
+@import url("https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700");
+@import "tacit";
+@import "main";
+@import "gh-corner";
+@import "dark";
+@import "axo";
 @import "tabs";

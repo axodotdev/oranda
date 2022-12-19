@@ -19,6 +19,7 @@ pub struct OrandaConfig {
     pub theme: Option<Theme>,
     pub remote_styles: Option<Vec<String>>,
     pub additional_css: Option<String>,
+    pub repository: Option<String>,
 }
 
 impl OrandaConfig {
