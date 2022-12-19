@@ -27,15 +27,14 @@ pub fn build(config: &Config, content: String) -> String {
 }
 
 fn repo_banner(config: &Config) -> Option<Box<div<String>>> {
-    match &config.repository {
-        Some(repository) => Some(html!(
-        <div class="repo_banner">
-        <a href=repository>
-            <div class="icon" />
-            {text!("Check out our GitHub")}
-        </a>
-        </div>
-        )),
-        None => None,
-    }
+    config.repository.as_ref().map(|repository| {
+        html!(
+                  <div class="repo_banner">
+                     <a href=repository>
+                         <div class="icon" />
+                        {text!("Check out our GitHub")}
+                    </a>
+         </div>
+        )
+    })
 }
