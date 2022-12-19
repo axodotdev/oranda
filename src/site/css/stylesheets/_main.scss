@@ -18,7 +18,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   color: var(--text);
   background-color: var(--bg);
-  
+
   .body {
     padding-top: 40px;
     padding-bottom: 60px;
@@ -35,7 +35,8 @@ a {
   color: var(--link);
 }
 
-nav a, .anchor svg path {
+nav a,
+.anchor svg path {
   color: var(--text);
 }
 
@@ -148,7 +149,7 @@ h3 {
   display: flex;
   align-items: center;
 
-  >a {
+  > a {
     margin-top: 0;
   }
 }
@@ -161,7 +162,6 @@ h5,
 h6 {
   font-weight: bold;
   font-family: var(--serif-font);
-
 }
 
 .anchor {
@@ -183,12 +183,10 @@ h6 {
   margin: 0;
 }
 
-
 .shiki {
   padding: 1em;
   border-radius: 4px;
 }
-
 
 table,
 tr,
@@ -201,7 +199,6 @@ table {
   border-radius: 8px;
 
   tbody {
-
     td,
     th {
       padding: 1em;
@@ -227,7 +224,6 @@ table {
       a {
         color: var(--table-bg);
       }
-
     }
   }
 }
