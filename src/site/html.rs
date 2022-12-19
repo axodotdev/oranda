@@ -7,7 +7,7 @@ pub fn build(config: &Config, content: String) -> String {
     let theme = theme::css_class(&config.theme);
     let classlist: &str = &format!("body container {}", theme)[..];
     let description = &config.description;
-    let banner = repo_banner(&config);
+    let banner = repo_banner(config);
 
     let doc: DOMTree<String> = html!(
     <html lang="en" id="oranda">
