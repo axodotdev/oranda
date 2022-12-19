@@ -10,7 +10,7 @@ license = "MPL-2.0"
 name = "oranda"
 
 [dependencies]
-axohtml = "0.1.0"
+axohtml = "0.2.0"
 axum = "0.5.17"
 clap = { version = "3.2.21", features = ["derive"] }
 comrak = "0.14"
