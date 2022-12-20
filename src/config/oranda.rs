@@ -6,6 +6,8 @@ use serde::Deserialize;
 use crate::config::theme::Theme;
 use crate::errors::*;
 
+use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxThemes;
+
 static ORANDA_JSON: &str = "./oranda.json";
 
 #[derive(Debug, Deserialize)]
@@ -20,6 +22,7 @@ pub struct OrandaConfig {
     pub remote_styles: Option<Vec<String>>,
     pub additional_css: Option<String>,
     pub repository: Option<String>,
+    pub syntax_theme: Option<SyntaxThemes>,
 }
 
 impl OrandaConfig {

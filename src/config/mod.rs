@@ -1,10 +1,11 @@
 mod oranda;
 mod project;
 pub mod theme;
-
 use self::oranda::OrandaConfig;
 use crate::errors::*;
+use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxThemes;
 use project::ProjectConfig;
+
 use theme::Theme;
 
 #[derive(Debug)]
@@ -19,6 +20,7 @@ pub struct Config {
     pub remote_styles: Vec<String>,
     pub additional_css: String,
     pub repository: Option<String>,
+    pub syntax_theme: SyntaxThemes,
 }
 
 impl Config {
@@ -70,6 +72,7 @@ impl Config {
                     remote_styles: custom.remote_styles.unwrap_or(default.remote_styles),
                     additional_css: custom.additional_css.unwrap_or(default.additional_css),
                     repository: custom.repository,
+                    syntax_theme: custom.syntax_theme.unwrap_or(default.syntax_theme),
                 });
             // otherwise both oranda config and project manifest exists
             } else if let Some(project) = project {
@@ -85,6 +88,7 @@ impl Config {
                     remote_styles: custom.remote_styles.unwrap_or(default.remote_styles),
                     additional_css: custom.additional_css.unwrap_or(default.additional_css),
                     repository: custom.repository,
+                    syntax_theme: custom.syntax_theme.unwrap_or(default.syntax_theme),
                 });
             }
         }
@@ -121,6 +125,7 @@ impl Default for Config {
             remote_styles: vec![],
             additional_css: String::from(""),
             repository: None,
+            syntax_theme: SyntaxThemes::MaterialTheme,
         }
     }
 }

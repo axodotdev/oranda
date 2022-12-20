@@ -169,21 +169,11 @@ h6 {
   margin: 0;
 }
 
-.body.dark .shiki-light {
-  display: none;
-}
-
-.body.light .shiki-dark {
-  display: none;
-}
 
 #oranda .body pre:not([class]) {
   background-color: transparent;
   padding-left: 0;
   margin: 0;
-}
-
-.shiki {
   padding: 1em;
   border-radius: 4px;
 }
