@@ -9,12 +9,12 @@ fn find_syntax<'a>(ps: &'a SyntaxSet, language: &'a str) -> Result<&'a SyntaxRef
     let syntax_extension = ps.find_syntax_by_extension(language);
     let syntax_name = ps.find_syntax_by_token(language);
 
-    if syntax_extension.is_some() {
-        return Ok(syntax_extension.unwrap());
+    if let Some(syntax_extension) = syntax_extension {
+        return Ok(syntax_extension);
     }
 
-    if syntax_name.is_some() {
-        return Ok(syntax_name.unwrap());
+    if let Some(syntax_name) = syntax_name {
+        return Ok(syntax_name);
     }
 
     Err(OrandaError::Other(
