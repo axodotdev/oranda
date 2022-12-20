@@ -1,14 +1,13 @@
+pub mod syntax_highlight;
+
 use std::collections::HashMap;
 use std::fs;
 use std::path::Path;
 
 use crate::errors::*;
-
+use crate::site::markdown::syntax_highlight::syntax_highlight;
 use comrak::adapters::SyntaxHighlighterAdapter;
 use comrak::{self, ComrakOptions, ComrakPlugins};
-
-mod syntax_highlight;
-use syntax_highlight::syntax_highlight;
 
 pub struct Adapters {}
 impl SyntaxHighlighterAdapter for Adapters {

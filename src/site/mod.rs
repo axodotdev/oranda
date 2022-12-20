@@ -6,7 +6,7 @@ use std::path::Path;
 
 mod css;
 mod html;
-mod markdown;
+pub mod markdown;
 
 #[cfg(test)]
 use crate::config::theme::Theme;

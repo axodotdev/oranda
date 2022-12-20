@@ -1,11 +1,10 @@
 mod oranda;
 mod project;
 pub mod theme;
-pub mod types;
 use self::oranda::OrandaConfig;
 use crate::errors::*;
+use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxThemes;
 use project::ProjectConfig;
-use types::syntax::SyntaxThemes;
 
 use theme::Theme;
 

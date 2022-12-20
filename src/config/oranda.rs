@@ -6,7 +6,7 @@ use serde::Deserialize;
 use crate::config::theme::Theme;
 use crate::errors::*;
 
-use crate::config::types::syntax::SyntaxThemes;
+use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxThemes;
 
 static ORANDA_JSON: &str = "./oranda.json";
 
