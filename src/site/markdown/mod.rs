@@ -10,8 +10,8 @@ use comrak::{self, ComrakOptions, ComrakPlugins};
 mod syntax_highlight;
 use syntax_highlight::syntax_highlight;
 
-pub struct MockAdapter {}
-impl SyntaxHighlighterAdapter for MockAdapter {
+pub struct Adapters {}
+impl SyntaxHighlighterAdapter for Adapters {
     fn highlight(&self, lang: Option<&str>, code: &str) -> String {
         let highlighted_code = syntax_highlight(lang, code);
 
@@ -61,7 +61,7 @@ pub fn body(readme_path: &Path) -> Result<String> {
     let options = initialize_comrak_options();
 
     let mut plugins = ComrakPlugins::default();
-    let adapter = MockAdapter {};
+    let adapter = Adapters {};
     plugins.render.codefence_syntax_highlighter = Some(&adapter);
 
     Ok(comrak::markdown_to_html_with_plugins(

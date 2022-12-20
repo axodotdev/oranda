@@ -1,35 +1,13 @@
 mod oranda;
 mod project;
 pub mod theme;
+pub mod types;
 use self::oranda::OrandaConfig;
 use crate::errors::*;
 use project::ProjectConfig;
-use serde::Deserialize;
-use theme::Theme;
+use types::syntax::SyntaxThemes;
 
-#[derive(Debug, Deserialize)]
-pub enum SyntaxThemes {
-    AgilaClassicOceanicNext,
-    AgilaCobalt,
-    AgilaLightSolarized,
-    AgilaMonokaiExtended,
-    AgilaNeonMonocyanide,
-    AgilaOceanicNext,
-    AgilaOriginOceanicNext,
-    Base16EightiesDark,
-    Base16MochaDark,
-    Base16OceanDark,
-    Base16OceanLight,
-    Darkmatter,
-    Dracula,
-    GitHubLight,
-    MaterialTheme,
-    MaterialThemeDarker,
-    MaterialThemeLighter,
-    MaterialThemePalenight,
-    NightOwl,
-    OneDark,
-}
+use theme::Theme;
 
 #[derive(Debug)]
 pub struct Config {

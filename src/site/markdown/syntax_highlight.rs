@@ -1,36 +1,48 @@
+use crate::config::types::syntax::SyntaxThemes;
+use crate::config::Config;
 use crate::errors::*;
 use syntect::highlighting::ThemeSet;
 use syntect::html::highlighted_html_for_string;
-use syntect::parsing::SyntaxSet;
+use syntect::parsing::{SyntaxReference, SyntaxSet};
 
-// ["Agila Classic Oceanic Next", "Agila Cobalt", "Agila Light Solarized", "Agila Monokai Extended", "Agila Neon Monocyanide", "Agila Oceanic Next", "Agila Origin Oceanic Next", "Base16 Eighties Dark", "Base16 Mocha Dark", "Base16 Ocean Dark", "Base16 Ocean Light", "Darkmatter", "Dracula", "GitHub Light", "Material-Theme", "Material-Theme-Darker", "Material-Theme-Lighter", "Material-Theme-Palenight", "Night Owl", "One Dark"]
+fn find_syntax<'a>(ps: &'a SyntaxSet, language: &'a str) -> Result<&'a SyntaxReference> {
+    let syntax_extension = ps.find_syntax_by_extension(language);
+    let syntax_name = ps.find_syntax_by_token(language);
+
+    if syntax_extension.is_some() {
+        return Ok(syntax_extension.unwrap());
+    }
+
+    if syntax_name.is_some() {
+        return Ok(syntax_name.unwrap());
+    }
+
+    Err(OrandaError::Other(
+        "Please add the language to your code snippets".to_owned(),
+    ))
+}
 
 pub fn syntax_highlight(lang: Option<&str>, code: &str) -> Result<String> {
+    let config = Config::build()?;
     let ps = SyntaxSet::load_defaults_newlines();
-    let ts = ThemeSet::load_from_folder("src/site/markdown/syntax_themes").unwrap();
+    let theme_set = ThemeSet::load_from_folder("src/site/markdown/syntax_themes").unwrap();
     let language = match lang {
         None | Some("") => "rs",
         Some(l) => l,
     };
+    let syntax = find_syntax(&ps, language)?;
 
-    let syntax = ps.find_syntax_by_extension(language);
-
-    match syntax {
-        None => Err(OrandaError::Other(
-            "Please add the language to your code snippets".to_owned(),
-        )),
-        Some(s) => Ok(highlighted_html_for_string(
-            code,
-            &ps,
-            s,
-            &ts.themes["Material-Theme-Palenight"],
-        )?),
-    }
+    Ok(highlighted_html_for_string(
+        code,
+        &ps,
+        syntax,
+        &theme_set.themes[SyntaxThemes::as_str(&config.syntax_theme)],
+    )?)
 }
 
 #[test]
 fn creates_syntax() {
     assert!(syntax_highlight(Some("js"), "console.log(5)")
         .unwrap()
-        .contains("<span style=\"color:#c0c5ce;\">console.</span>"));
+        .contains("<span style=\"color:#addb67;\">console</span>"));
 }
