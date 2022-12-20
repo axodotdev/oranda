@@ -1,44 +1,44 @@
-## Agila Classic Oceanic Next
+## AgilaClassicOceanicNext
 
 ![](./theme-images/Agila%20Classic%20Oceanic%20Next.png)
 
-## Agila Cobalt
+## AgilaCobalt
 
 ![](./theme-images/Agila%20Cobalt.png)
 
-## Agila Light Solarized
+## AgilaLightSolarized
 
 ![](./theme-images/Agila%20Light%20Solarized.png)
 
-## Agila Monokai Extended
+## AgilaMonokaiExtended
 
 ![](./theme-images/Agila%20Monokai%20Extended.png)
 
-## Agila Neon Monocyanide
+## AgilaNeonMonocyanide
 
 ![](./theme-images/Agila%20Neon%20Monocyanide.png)
 
-## Agila Oceanic Next
+## AgilaOceanicNext
 
 ![](./theme-images/Agila%20Oceanic%20Next.png)
 
-## Agila Origin Oceanic Next
+## AgilaOriginOceanicNext
 
 ![](./theme-images/Agila%20Origin%20Oceanic%20Next.png)
 
-## Base16 Eighties Dark
+## Base16EightiesDark
 
 ![](./theme-images/Base16%20Eighties%20Dark.png)
 
-## Base16 Mocha Dark
+## Base16MochaDark
 
 ![](./theme-images/Base16%20Mocha%20Dark.png)
 
-## Base16 Ocean Dark
+## Base16OceanDark
 
 ![](./theme-images/Base16%20Ocean%20Dark.png)
 
-## Base16 Ocean Light
+## Base16OceanLight
 
 ![](./theme-images/Base16%20Ocean%20Light.png)
 
@@ -50,30 +50,30 @@
 
 ![](./theme-images/Dracula.png)
 
-## GitHub Light
+## GitHubLight
 
 ![](./theme-images/GitHub%20Light.png)
 
-## Material-Theme
+## MaterialTheme
 
 ![](./theme-images/Material-Theme.png)
 
-## Material-Theme-Darker
+## MaterialThemeDarker
 
 ![](./theme-images/Material-Theme-Darker.png)
 
-## Material-Theme-Lighter
+## MaterialThemeLighter
 
 ![](./theme-images/Material-Theme-Lighter.png)
 
-## Material-Theme-Palenight
+## MaterialThemePalenight
 
 ![](./theme-images/Material-Theme-Palenight.png)
 
-## Night Owl
+## NightOwl
 
 ![](./theme-images/Night%20Owl.png)
 
-## One Dark
+## OneDark
 
 ![](./theme-images/One%20Dark.png)
