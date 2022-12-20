@@ -7,9 +7,10 @@ use syntect::highlighting::ThemeSet;
 use syntect::html::highlighted_html_for_string;
 use syntect::parsing::{SyntaxReference, SyntaxSet};
 
-// The reason for this function is that find_syntax_by_extension will work when your snippet uses rs but not when it uses rust as the language.
-
+// The reason for this function is that find_syntax_by_extension will work when your
+// snippet uses rs but not when it uses rust as the language.
 // The other one works backwards so trash code it is
+
 fn find_syntax<'a>(ps: &'a SyntaxSet, language: &'a str) -> Result<&'a SyntaxReference> {
     let syntax_extension = ps.find_syntax_by_extension(language);
     let syntax_name = ps.find_syntax_by_token(language);
