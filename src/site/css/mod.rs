@@ -6,19 +6,21 @@ use std::path::Path;
 use crate::config::Config;
 
 fn fetch_additional_css(config: &Config, css_options: Options) -> Result<String> {
-    if !Path::new(&config.additional_css).exists() {
-        return Err(OrandaError::FileNotFound {
-            filedesc: "Additional CSS".to_string(),
-            path: config.additional_css.to_owned(),
-        });
+    match Path::new(&config.additional_css).try_exists() {
+        Ok(_) => {
+            let additional_css_str = read_to_string(&config.additional_css)?;
+
+            let additional_css =
+                grass::from_string(format!("#oranda{{{}}}", additional_css_str), &css_options)?;
+
+            Ok(additional_css)
+        }
+        Err(details) => Err(OrandaError::LocalAssetNotFound {
+            asset: "Additional CSS".to_string(),
+            origin_path: config.additional_css.to_string(),
+            details: details.to_string(),
+        }),
     }
-
-    let additional_css_str = read_to_string(&config.additional_css)?;
-
-    let additional_css =
-        grass::from_string(format!("#oranda{{{}}}", additional_css_str), &css_options)?;
-
-    Ok(additional_css)
 }
 
 fn fetch_remote_css(config: &Config) -> Result<String> {
@@ -26,10 +28,11 @@ fn fetch_remote_css(config: &Config) -> Result<String> {
     for url in &config.remote_styles {
         let resp = reqwest::blocking::get(url);
         match resp {
-            Err(_) => {
-                return Err(OrandaError::RequestFailed {
+            Err(details) => {
+                return Err(OrandaError::RemoteAssetRequestFailed {
                     url: url.to_string(),
-                    resource: String::from("Remote CSS"),
+                    asset: "Remote CSS".to_string(),
+                    details: details.to_string(),
                 });
             }
             Ok(additional) => {

@@ -25,8 +25,27 @@ pub enum OrandaError {
     #[error("failed to read {filedesc} at {path}")]
     FileNotFound { filedesc: String, path: String },
 
-    #[error("failed to fetch {resource} at {url}")]
-    RequestFailed { resource: String, url: String },
+    #[error("failed to fetch {asset} at {url}: Encountered an error when requesting a remote asset. Make sure the url you prodived is accurate. Details:\r{details}")]
+    RemoteAssetRequestFailed {
+        asset: String,
+        url: String,
+        details: String,
+    },
+
+    #[error("failed to fetch {asset} at {origin_path}: Could not find asset at provided path. Make sure your path is relative to your oranda config or project manifest file. Details:\r{details} ")]
+    LocalAssetNotFound {
+        asset: String,
+        origin_path: String,
+        details: String,
+    },
+
+    #[error("failed to copy {asset} from {origin_path} to {dist_path}: Could not find asset at provided path. Make sure your path is relative to your oranda config or project manifest file. Details:\r{details}")]
+    LocalAssetCopyFailed {
+        asset: String,
+        origin_path: String,
+        dist_path: String,
+        details: String,
+    },
 
     #[error("{0}")]
     Other(String),
