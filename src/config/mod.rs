@@ -126,7 +126,7 @@ impl Default for Config {
             remote_styles: vec![],
             additional_css: String::from(""),
             repository: None,
-            syntax_theme: SyntaxThemes::NightOwl,
+            syntax_theme: SyntaxThemes::MaterialTheme,
         }
     }
 }
