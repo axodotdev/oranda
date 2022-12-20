@@ -36,7 +36,7 @@ pub fn syntax_highlight(lang: Option<&str>, code: &str) -> Result<String> {
         code,
         &ps,
         syntax,
-        &theme_set.themes[SyntaxThemes::as_str(&config.syntax_theme)],
+        &theme_set.themes[&SyntaxThemes::as_str(&config.syntax_theme)],
     )?)
 }
 
