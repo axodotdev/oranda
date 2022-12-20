@@ -44,5 +44,5 @@ pub fn syntax_highlight(lang: Option<&str>, code: &str) -> Result<String> {
 fn creates_syntax() {
     assert!(syntax_highlight(Some("js"), "console.log(5)")
         .unwrap()
-        .contains("<span style=\"color:#addb67;\">console</span>"));
+        .contains("<span style=\"color:#ffcb6b;\">console</span>"));
 }
