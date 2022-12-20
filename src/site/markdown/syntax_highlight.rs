@@ -3,9 +3,11 @@ use syntect::highlighting::ThemeSet;
 use syntect::html::highlighted_html_for_string;
 use syntect::parsing::SyntaxSet;
 
+// ["Agila Classic Oceanic Next", "Agila Cobalt", "Agila Light Solarized", "Agila Monokai Extended", "Agila Neon Monocyanide", "Agila Oceanic Next", "Agila Origin Oceanic Next", "Base16 Eighties Dark", "Base16 Mocha Dark", "Base16 Ocean Dark", "Base16 Ocean Light", "Darkmatter", "Dracula", "GitHub Light", "Material-Theme", "Material-Theme-Darker", "Material-Theme-Lighter", "Material-Theme-Palenight", "Night Owl", "One Dark"]
+
 pub fn syntax_highlight(lang: Option<&str>, code: &str) -> Result<String> {
     let ps = SyntaxSet::load_defaults_newlines();
-    let ts = ThemeSet::load_defaults();
+    let ts = ThemeSet::load_from_folder("src/site/markdown/syntax_themes").unwrap();
     let language = match lang {
         None | Some("") => "rs",
         Some(l) => l,
@@ -21,7 +23,7 @@ pub fn syntax_highlight(lang: Option<&str>, code: &str) -> Result<String> {
             code,
             &ps,
             s,
-            &ts.themes["base16-ocean.dark"],
+            &ts.themes["Material-Theme-Palenight"],
         )?),
     }
 }
