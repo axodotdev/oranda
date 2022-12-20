@@ -9,7 +9,7 @@ use crate::errors::*;
 
 #[derive(Debug, Parser)]
 pub struct Serve {
-    #[clap(long, default_value = "7979")]
+    #[arg(long, default_value = "7979")]
     port: u16,
 }
 

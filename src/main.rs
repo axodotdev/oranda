@@ -9,7 +9,7 @@ use commands::{Build, Serve};
 use errors::*;
 
 #[derive(Parser, Debug)]
-#[clap(author, version, about, long_about = None)]
+#[command(author, version, about, long_about = None)]
 struct Cli {
     #[clap(subcommand)]
     command: Command,

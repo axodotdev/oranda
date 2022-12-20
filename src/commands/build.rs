@@ -8,7 +8,7 @@ use crate::site::Site;
 
 #[derive(Debug, Parser)]
 pub struct Build {
-    #[clap(long, default_value = "./")]
+    #[arg(long, default_value = "./")]
     path: PathBuf,
 }
 
