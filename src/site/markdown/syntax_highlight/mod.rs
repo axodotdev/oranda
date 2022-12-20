@@ -30,7 +30,8 @@ fn find_syntax<'a>(ps: &'a SyntaxSet, language: &'a str) -> Result<&'a SyntaxRef
 pub fn syntax_highlight(lang: Option<&str>, code: &str) -> Result<String> {
     let config = Config::build()?;
     let ps = SyntaxSet::load_defaults_newlines();
-    let theme_set = ThemeSet::load_from_folder("src/site/markdown/syntax_themes").unwrap();
+    let theme_set =
+        ThemeSet::load_from_folder("src/site/markdown/syntax_highlight/syntax_themes").unwrap();
     let language = match lang {
         None | Some("") => "rs",
         Some(l) => l,
