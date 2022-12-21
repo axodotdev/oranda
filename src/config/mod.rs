@@ -1,6 +1,8 @@
+pub mod analytics;
 mod oranda;
 mod project;
 pub mod theme;
+use self::analytics::Analytics;
 use self::oranda::OrandaConfig;
 use crate::errors::*;
 use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxThemes;
@@ -21,6 +23,7 @@ pub struct Config {
     pub additional_css: String,
     pub repository: Option<String>,
     pub syntax_theme: SyntaxThemes,
+    pub analytics: Option<Analytics>,
 }
 
 impl Config {
@@ -73,6 +76,7 @@ impl Config {
                     additional_css: custom.additional_css.unwrap_or(default.additional_css),
                     repository: custom.repository,
                     syntax_theme: custom.syntax_theme.unwrap_or(default.syntax_theme),
+                    analytics: custom.analytics,
                 });
             // otherwise both oranda config and project manifest exists
             } else if let Some(project) = project {
@@ -89,6 +93,7 @@ impl Config {
                     additional_css: custom.additional_css.unwrap_or(default.additional_css),
                     repository: custom.repository,
                     syntax_theme: custom.syntax_theme.unwrap_or(default.syntax_theme),
+                    analytics: custom.analytics,
                 });
             }
         }
@@ -126,6 +131,7 @@ impl Default for Config {
             additional_css: String::from(""),
             repository: None,
             syntax_theme: SyntaxThemes::MaterialTheme,
+            analytics: None,
         }
     }
 }

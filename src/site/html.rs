@@ -1,11 +1,14 @@
-use axohtml::{dom::DOMTree, html, text, unsafe_text};
-
+use crate::config::analytics::get_analytics;
 use crate::config::{theme, Config};
+
 use axohtml::elements::div;
+
+use axohtml::{dom::DOMTree, html, text, unsafe_text};
 
 pub fn build(config: &Config, content: String) -> String {
     let theme = theme::css_class(&config.theme);
     let classlist: &str = &format!("body container {}", theme)[..];
+    let analytics = get_analytics(config);
     let description = &config.description;
     let homepage = config.homepage.as_ref().map(|homepage| {
         html!(
@@ -27,6 +30,7 @@ pub fn build(config: &Config, content: String) -> String {
     </head>
     <body>
     <div class=classlist>{banner}{ unsafe_text!(content) }</div>
+    { analytics}
     </body>
     </html>
      );
