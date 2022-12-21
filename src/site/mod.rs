@@ -64,7 +64,7 @@ impl Site {
 
         for file in files {
             let site = Self::build(config, file)?;
-            let file_name = Self::get_html_file_name(file, &config).unwrap();
+            let file_name = Self::get_html_file_name(file, config).unwrap();
 
             std::fs::create_dir_all(dist)?;
             let html_path = format!("{}/{}", &dist, file_name);
