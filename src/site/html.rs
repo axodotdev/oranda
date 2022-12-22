@@ -1,4 +1,4 @@
-use crate::config::analytics::get_analytics;
+use crate::config::analytics::{get_analytics, get_google_script};
 use crate::config::{theme, Config};
 
 use axohtml::elements::div;
@@ -9,6 +9,7 @@ pub fn build(config: &Config, content: String) -> String {
     let theme = theme::css_class(&config.theme);
     let classlist: &str = &format!("body container {}", theme)[..];
     let analytics = get_analytics(config);
+    let google_script = get_google_script(config);
     let description = &config.description;
     let homepage = config.homepage.as_ref().map(|homepage| {
         html!(
@@ -30,7 +31,8 @@ pub fn build(config: &Config, content: String) -> String {
     </head>
     <body>
     <div class=classlist>{banner}{ unsafe_text!(content) }</div>
-    { analytics}
+        {analytics}
+        {google_script}
     </body>
     </html>
      );

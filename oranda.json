@@ -3,8 +3,8 @@
   "homepage": "https://oranda.axo.dev",
   "repository": "https://github.com/axodotdev/oranda",
   "analytics": {
-    "plausible": {
-      "domain": "oranda.axo.dev"
+    "google": {
+      "tracking_id": "oranda.axo.dev"
     }
   }
 }
