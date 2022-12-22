@@ -5,11 +5,26 @@ use crate::errors::*;
 mod local;
 mod remote;
 
+pub enum Asset {
+    LocalAsset(local::LocalAsset),
+    RemoteAsset(remote::RemoteAsset),
+}
+
 pub fn copy(dist_dir: &str, origin_path: &str, label: &str) -> Result<PathBuf> {
     if is_remote(origin_path, label)? {
-        remote::copy(dist_dir, origin_path, label)
+        remote::RemoteAsset {
+            dist_dir: dist_dir.to_string(),
+            origin_path: origin_path.to_string(),
+            label: label.to_string(),
+        }
+        .copy()
     } else {
-        local::copy(dist_dir, origin_path, label)
+        local::LocalAsset {
+            dist_dir: dist_dir.to_string(),
+            origin_path: origin_path.to_string(),
+            label: label.to_string(),
+        }
+        .copy()
     }
 }
 
