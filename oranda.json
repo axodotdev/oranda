@@ -1,5 +1,10 @@
 {
   "theme": "axo",
   "homepage": "https://oranda.axo.dev",
-  "repository": "https://github.com/axodotdev/oranda"
+  "repository": "https://github.com/axodotdev/oranda",
+  "analytics": {
+    "plausible": {
+      "domain": "oranda.axo.dev"
+    }
+  }
 }
