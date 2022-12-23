@@ -5,7 +5,7 @@ on:
   pull_request:    
 
 jobs:
-  book:
+  web:
     name: Build and deploy site and docs
     runs-on: ubuntu-latest
     steps:
@@ -39,7 +39,10 @@ jobs:
       - name: Build book
         run: |
           mdbook --version
-          (cd docs && mdbook build --dest-dir public/docs)
+          (cd docs && mdbook build)
+      - name: Move mdbook to public
+        run: |
+          (mv docs/book public/book && ls public)
 
       - name: Deploy book
         uses: JamesIves/github-pages-deploy-action@4.1.4
