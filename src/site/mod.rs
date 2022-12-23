@@ -59,8 +59,10 @@ impl Site {
         let site = Self::build(config, readme_path)?;
         let dist = &config.dist_dir;
         let mut files = vec![readme_path];
-        if config.additional_pages.is_some() {
-            files.extend(config.additional_pages.as_ref().unwrap())
+
+        match &config.additional_pages {
+            Some(pages) => files.extend(pages),
+            None => {}
         }
 
         for file in files {
