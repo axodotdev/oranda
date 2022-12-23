@@ -5,7 +5,7 @@ use axohtml::elements::div;
 
 pub fn build(config: &Config, content: String) -> String {
     let theme = theme::css_class(&config.theme);
-    let classlist: &str = &format!("body container {}", theme)[..];
+    let classlist: &str = &format!("body {}", theme)[..];
     let description = &config.description;
     let homepage = config.homepage.as_ref().map(|homepage| {
         html!(
@@ -26,7 +26,10 @@ pub fn build(config: &Config, content: String) -> String {
     <link rel="stylesheet" href="styles.css"></link>
     </head>
     <body>
-    <div class=classlist>{banner}{ unsafe_text!(content) }</div>
+    <div class=classlist>
+        {banner}
+        <div class="container">{ unsafe_text!(content) }</div>
+    </div>
     </body>
     </html>
      );
