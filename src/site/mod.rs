@@ -80,7 +80,7 @@ fn reads_description() {
 #[test]
 fn reads_theme() {
     let site = Site::build(&config()).unwrap();
-    assert!(site.html.contains("<div class=\"body container dark\">"));
+    assert!(site.html.contains("<div class=\"body dark\">"));
 }
 
 #[test]
