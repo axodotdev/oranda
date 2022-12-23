@@ -1,0 +1,54 @@
+name: Web
+
+on:
+  push:
+  pull_request:    
+
+jobs:
+  web:
+    name: Build and deploy site and docs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-mdbook
+        with:
+          path: |
+            ~/.cargo/.crates.toml
+            ~/.cargo/.crates2.json
+            ~/.cargo/bin
+            ~/.cargo/registry/index
+            ~/.cargo/registry/cache
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-0.3 }}
+
+      - name: Run oranda
+        run: cargo run -- build
+
+      - name: Install mdbook
+        run: |
+          (test -x $HOME/.cargo/bin/cargo-install-update || cargo install cargo-update)
+          (test -x $HOME/.cargo/bin/mdbook || cargo install mdbook)
+          cargo install-update -a
+      - name: Build book
+        run: |
+          mdbook --version
+          (cd docs && mdbook build)
+      - name: Move mdbook to public
+        run: |
+          (mv docs/book public/book && ls public)
+
+      - name: Deploy book
+        uses: JamesIves/github-pages-deploy-action@4.1.4
+        if: ${{ github.ref == 'refs/heads/main' }}
+        with:
+          branch: gh-pages
+          folder: public
+          token: ${{ secrets.GITHUB_TOKEN }}
+          single-commit: true
