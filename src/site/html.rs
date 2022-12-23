@@ -1,12 +1,39 @@
+use std::path::Path;
+
 use axohtml::{dom::DOMTree, html, text, unsafe_text};
 
 use crate::config::{theme, Config};
-use axohtml::elements::div;
+use axohtml::elements::{div, header, li};
+
+fn create_header(config: &Config) -> Box<header<String>> {
+    let nav = match config.additional_pages.as_ref() {
+        Some(pages) => {
+            let mut html: Vec<Box<li<String>>> = vec![];
+            html.extend(html!(<li><a href="/">"Home"</a></li>));
+            for page in pages.into_iter() {
+                let file_name = Path::new(page).file_stem().unwrap().to_string_lossy();
+                let path = format!("/{}", file_name);
+                html.extend(html!(<li><a href=path>{text!(file_name)}</a></li>));
+            }
+            Some(html!(
+            <nav>
+                <ul>
+                     {html}
+                </ul>
+            </nav>
+            ))
+        }
+        None => None,
+    };
+
+    html!(<header>{nav}<h1>{text!(&config.name)}</h1></header>)
+}
 
 pub fn build(config: &Config, content: String) -> String {
     let theme = theme::css_class(&config.theme);
     let classlist: &str = &format!("body {}", theme)[..];
     let description = &config.description;
+    let header = create_header(config);
     let homepage = config.homepage.as_ref().map(|homepage| {
         html!(
           <meta property="og:url" content=homepage/>
@@ -28,7 +55,7 @@ pub fn build(config: &Config, content: String) -> String {
     <body>
     <div class=classlist>
         {banner}
-        <div class="container">{ unsafe_text!(content) }</div>
+        <div class="container">{header}{ unsafe_text!(content) }</div>
     </div>
     </body>
     </html>
