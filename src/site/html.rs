@@ -10,8 +10,12 @@ fn create_header(config: &Config) -> Box<header<String>> {
         Some(pages) => {
             let mut html: Vec<Box<li<String>>> = vec![];
             html.extend(html!(<li><a href="/">"Home"</a></li>));
-            for page in pages.into_iter() {
-                let file_name = Path::new(page).file_stem().unwrap().to_string_lossy();
+            for page in pages.iter() {
+                let path = Path::new(page);
+                let file_name = path
+                    .file_stem()
+                    .unwrap_or(path.as_os_str())
+                    .to_string_lossy();
                 let path = format!("/{}", file_name);
                 html.extend(html!(<li><a href=path>{text!(file_name)}</a></li>));
             }
