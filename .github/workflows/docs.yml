@@ -45,7 +45,7 @@ jobs:
           (mv docs/book public/book && ls public)
 
       - name: Deploy book
-        uses: JamesIves/github-pages-deploy-action@4
+        uses: JamesIves/github-pages-deploy-action@4.4.1
         if: ${{ github.ref == 'refs/heads/main' }}
         with:
           branch: gh-pages
