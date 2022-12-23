@@ -23,7 +23,7 @@ pub struct OrandaConfig {
     pub additional_css: Option<String>,
     pub repository: Option<String>,
     pub syntax_theme: Option<SyntaxThemes>,
-    pub additional_files: Option<Vec<String>>,
+    pub additional_pages: Option<Vec<String>>,
 }
 
 impl OrandaConfig {

@@ -21,7 +21,7 @@ pub struct Config {
     pub additional_css: String,
     pub repository: Option<String>,
     pub syntax_theme: SyntaxThemes,
-    pub additional_files: Option<Vec<String>>,
+    pub additional_pages: Option<Vec<String>>,
 }
 
 impl Config {
@@ -74,7 +74,7 @@ impl Config {
                     additional_css: custom.additional_css.unwrap_or(default.additional_css),
                     repository: custom.repository,
                     syntax_theme: custom.syntax_theme.unwrap_or(default.syntax_theme),
-                    additional_files: custom.additional_files,
+                    additional_pages: custom.additional_pages,
                 });
             // otherwise both oranda config and project manifest exists
             } else if let Some(project) = project {
@@ -91,7 +91,7 @@ impl Config {
                     additional_css: custom.additional_css.unwrap_or(default.additional_css),
                     repository: custom.repository,
                     syntax_theme: custom.syntax_theme.unwrap_or(default.syntax_theme),
-                    additional_files: custom.additional_files,
+                    additional_pages: custom.additional_pages,
                 });
             }
         }
@@ -129,7 +129,7 @@ impl Default for Config {
             additional_css: String::from(""),
             repository: None,
             syntax_theme: SyntaxThemes::MaterialTheme,
-            additional_files: None,
+            additional_pages: None,
         }
     }
 }
