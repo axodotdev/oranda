@@ -19,36 +19,36 @@ pub fn build(config: &Config, content: String) -> String {
 
     let doc: DOMTree<String> = html!(
     <html lang="en" id="oranda">
-    <head>
-    <title>{ text!(&config.name) }</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    { homepage }
-    <meta name="description" content=description />
-    <meta property="og:description" content=description/>
-    <link rel="stylesheet" href="styles.css"></link>
-    </head>
-    <body>
-    <div class=classlist>
-        {banner}
-        <div class="container">{header}{ unsafe_text!(content) }</div>
-    </div>
-    </body>
+        <head>
+            <title>{ text!(&config.name) }</title>
+            <meta charset="utf-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            { homepage }
+            <meta name="description" content=description />
+            <meta property="og:description" content=description/>
+            <link rel="stylesheet" href="styles.css"></link>
+        </head>
+        <body>
+            <div class=classlist>
+                {banner}
+                <div class="container">{header}{ unsafe_text!(content) }</div>
+            </div>
+        </body>
     </html>
-     );
+         );
     doc.to_string()
 }
 
 fn repo_banner(config: &Config) -> Option<Box<div<String>>> {
     config.repository.as_ref().map(|repository| {
         html!(
-                  <div class="repo_banner">
-                     <a href=repository>
-                         <div class="icon" aria-hidden="true"/>
-                        {text!("Check out our GitHub")}
-                    </a>
-         </div>
-        )
+        <div class="repo_banner">
+            <a href=repository>
+                <div class="icon" aria-hidden="true"/>
+                {text!("Check out our GitHub")}
+            </a>
+        </div>
+                )
     })
 }
 
