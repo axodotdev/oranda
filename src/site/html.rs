@@ -58,8 +58,7 @@ fn create_header(config: &Config) -> Option<Box<header<String>>> {
     }
     let nav = match config.additional_pages.as_ref() {
         Some(pages) => {
-            let mut html: Vec<Box<li<String>>> = vec![];
-            html.extend(html!(<li><a href="/">"Home"</a></li>));
+            let mut html: Vec<Box<li<String>>> = vec![html!(<li><a href="/">"Home"</a></li>)];
             for page in pages.iter() {
                 let path = Path::new(page);
                 let file_name = path
