@@ -52,7 +52,10 @@ fn repo_banner(config: &Config) -> Option<Box<div<String>>> {
     })
 }
 
-fn create_header(config: &Config) -> Box<header<String>> {
+fn create_header(config: &Config) -> Option<Box<header<String>>> {
+    if config.no_header {
+        return None;
+    }
     let nav = match config.additional_pages.as_ref() {
         Some(pages) => {
             let mut html: Vec<Box<li<String>>> = vec![];
@@ -77,5 +80,5 @@ fn create_header(config: &Config) -> Box<header<String>> {
         None => None,
     };
 
-    html!(<header>{nav}<h1>{text!(&config.name)}</h1></header>)
+    Some(html!(<header>{nav}<h1>{text!(&config.name)}</h1></header>))
 }
