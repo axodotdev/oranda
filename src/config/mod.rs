@@ -16,8 +16,7 @@ pub struct Config {
     pub no_header: bool,
     pub readme_path: String,
     pub theme: Theme,
-    pub remote_styles: Vec<String>,
-    pub additional_css: String,
+    pub css: Option<Vec<String>>,
     pub logo: Option<String>,
 }
 
@@ -67,8 +66,7 @@ impl Config {
                     no_header: custom.no_header.unwrap_or(default.no_header),
                     readme_path: custom.readme_path.unwrap_or(default.readme_path),
                     theme: custom.theme.unwrap_or(default.theme),
-                    remote_styles: custom.remote_styles.unwrap_or(default.remote_styles),
-                    additional_css: custom.additional_css.unwrap_or(default.additional_css),
+                    css: custom.css,
                     logo: custom.logo,
                 });
             // otherwise both oranda config and project manifest exists
@@ -82,8 +80,7 @@ impl Config {
                     no_header: custom.no_header.unwrap_or(default.no_header),
                     readme_path: custom.readme_path.unwrap_or(default.readme_path),
                     theme: custom.theme.unwrap_or(default.theme),
-                    remote_styles: custom.remote_styles.unwrap_or(default.remote_styles),
-                    additional_css: custom.additional_css.unwrap_or(default.additional_css),
+                    css: custom.css,
                     logo: custom.logo,
                 });
             }
@@ -118,8 +115,7 @@ impl Default for Config {
             no_header: false,
             readme_path: String::from("README.md"),
             theme: Theme::Light,
-            remote_styles: vec![],
-            additional_css: String::from(""),
+            css: None,
             logo: None,
         }
     }
