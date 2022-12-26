@@ -2,6 +2,34 @@ use axohtml::{dom::DOMTree, html, text, unsafe_text};
 
 use crate::config::{theme, Config};
 use axohtml::elements::div;
+use axohtml::elements::meta;
+
+fn create_social_cards(config: &Config) -> Vec<Box<meta<String>>> {
+    let mut html = vec![];
+    match config.social.as_ref() {
+        Some(social) => {
+            social.image.as_ref().map(|image| {
+                html.extend(html!(<meta name="twitter:card" content="summary_large_image"/>));
+
+                html.extend(html!(<meta property="og:image" content=image />));
+            });
+            social.image_alt.as_ref().map(|image_alt| {
+                html.extend(html!(<meta property="og:image:alt" content=image_alt />));
+            });
+
+            social.twitter_account.as_ref().map(|twitter_account| {
+                html.extend(html!(<meta name="twitter:creator" content=twitter_account/>));
+                html.extend(html!(<meta name="twitter:site" content=twitter_account/>));
+            });
+
+            Some(())
+        }
+
+        None => None,
+    };
+
+    html
+}
 
 pub fn build(config: &Config, content: String) -> String {
     let theme = theme::css_class(&config.theme);
@@ -12,6 +40,7 @@ pub fn build(config: &Config, content: String) -> String {
           <meta property="og:url" content=homepage/>
         )
     });
+    let social_meta = create_social_cards(config);
     let banner = repo_banner(config);
 
     let doc: DOMTree<String> = html!(
@@ -23,6 +52,9 @@ pub fn build(config: &Config, content: String) -> String {
     { homepage }
     <meta name="description" content=description />
     <meta property="og:description" content=description/>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content=&config.name />
+    {social_meta}
     <link rel="stylesheet" href="styles.css"></link>
     </head>
     <body>

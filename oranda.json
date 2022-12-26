@@ -2,5 +2,10 @@
   "theme": "axo",
   "homepage": "https://oranda.axo.dev",
   "repository": "https://github.com/axodotdev/oranda",
-  "additional_pages": ["./docs/src/theme/themes.md"]
+  "additional_pages": ["./docs/src/theme/themes.md"],
+  "social": {
+    "image": "https://letsplayretro.games/meta.png",
+    "image_alt": "lOL",
+    "twitter_account": "@NikkitaFTW"
+  }
 }
