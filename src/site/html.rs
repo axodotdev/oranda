@@ -8,19 +8,19 @@ fn create_social_cards(config: &Config) -> Vec<Box<meta<String>>> {
     let mut html = vec![];
     match config.social.as_ref() {
         Some(social) => {
-            social.image.as_ref().map(|image| {
+            if let Some(image) = social.image.as_ref() {
                 html.extend(html!(<meta name="twitter:card" content="summary_large_image"/>));
 
                 html.extend(html!(<meta property="og:image" content=image />));
-            });
-            social.image_alt.as_ref().map(|image_alt| {
+            };
+            if let Some(image_alt) = social.image_alt.as_ref() {
                 html.extend(html!(<meta property="og:image:alt" content=image_alt />));
-            });
+            }
 
-            social.twitter_account.as_ref().map(|twitter_account| {
+            if let Some(twitter_account) = social.twitter_account.as_ref() {
                 html.extend(html!(<meta name="twitter:creator" content=twitter_account/>));
                 html.extend(html!(<meta name="twitter:site" content=twitter_account/>));
-            });
+            };
 
             Some(())
         }
