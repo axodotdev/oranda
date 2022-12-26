@@ -4,8 +4,8 @@
   "repository": "https://github.com/axodotdev/oranda",
   "additional_pages": ["./docs/src/theme/themes.md"],
   "social": {
-    "image": "https://letsplayretro.games/meta.png",
-    "image_alt": "lOL",
-    "twitter_account": "@NikkitaFTW"
+    "image": "https://www.axo.dev/meta_small.jpeg",
+    "image_alt": "AXO",
+    "twitter_account": "@axodotdev"
   }
 }
