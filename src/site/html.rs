@@ -4,6 +4,9 @@ use crate::config::{theme, Config};
 use axohtml::elements::div;
 use axohtml::elements::meta;
 
+// Clippy issue as explained here
+// https://github.com/rust-lang/rust-clippy/issues/7472
+#[allow(clippy::vec_box)]
 fn create_social_cards(config: &Config) -> Vec<Box<meta<String>>> {
     let mut html = vec![];
     match config.social.as_ref() {
