@@ -3,7 +3,7 @@ mod oranda;
 mod project;
 pub mod theme;
 use self::analytics::Analytics;
-use self::oranda::OrandaConfig;
+use self::oranda::{OrandaConfig, Social};
 use crate::errors::*;
 use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxThemes;
 use project::ProjectConfig;
@@ -25,6 +25,7 @@ pub struct Config {
     pub syntax_theme: SyntaxThemes,
     pub analytics: Option<Analytics>,
     pub additional_pages: Option<Vec<String>>,
+    pub social: Option<Social>,
 }
 
 impl Config {
@@ -79,6 +80,7 @@ impl Config {
                     syntax_theme: custom.syntax_theme.unwrap_or(default.syntax_theme),
                     analytics: custom.analytics,
                     additional_pages: custom.additional_pages,
+                    social: custom.social,
                 });
             // otherwise both oranda config and project manifest exists
             } else if let Some(project) = project {
@@ -97,6 +99,7 @@ impl Config {
                     syntax_theme: custom.syntax_theme.unwrap_or(default.syntax_theme),
                     analytics: custom.analytics,
                     additional_pages: custom.additional_pages,
+                    social: custom.social,
                 });
             }
         }
@@ -136,6 +139,7 @@ impl Default for Config {
             syntax_theme: SyntaxThemes::MaterialTheme,
             analytics: None,
             additional_pages: None,
+            social: None,
         }
     }
 }

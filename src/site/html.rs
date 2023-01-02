@@ -2,6 +2,37 @@ use crate::config::analytics::{get_analytics, get_google_script};
 use crate::config::{theme, Config};
 
 use axohtml::elements::div;
+use axohtml::elements::meta;
+
+// False positive duplicate allocation warning
+// https://github.com/rust-lang/rust-clippy/issues?q=is%3Aissue+redundant_allocation+sort%3Aupdated-desc
+#[allow(clippy::vec_box)]
+fn create_social_cards(config: &Config) -> Vec<Box<meta<String>>> {
+    let mut html = vec![];
+    match config.social.as_ref() {
+        Some(social) => {
+            if let Some(image) = social.image.as_ref() {
+                html.extend(html!(<meta name="twitter:card" content="summary_large_image"/>));
+
+                html.extend(html!(<meta property="og:image" content=image />));
+            };
+            if let Some(image_alt) = social.image_alt.as_ref() {
+                html.extend(html!(<meta property="og:image:alt" content=image_alt />));
+            }
+
+            if let Some(twitter_account) = social.twitter_account.as_ref() {
+                html.extend(html!(<meta name="twitter:creator" content=twitter_account/>));
+                html.extend(html!(<meta name="twitter:site" content=twitter_account/>));
+            };
+
+            Some(())
+        }
+
+        None => None,
+    };
+
+    html
+}
 
 use axohtml::{dom::DOMTree, html, text, unsafe_text};
 
@@ -16,6 +47,7 @@ pub fn build(config: &Config, content: String) -> String {
           <meta property="og:url" content=homepage/>
         )
     });
+    let social_meta = create_social_cards(config);
     let banner = repo_banner(config);
 
     let doc: DOMTree<String> = html!(
@@ -27,6 +59,9 @@ pub fn build(config: &Config, content: String) -> String {
     { homepage }
     <meta name="description" content=description />
     <meta property="og:description" content=description/>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content=&config.name />
+    {social_meta}
     <link rel="stylesheet" href="styles.css"></link>
     </head>
     <body>

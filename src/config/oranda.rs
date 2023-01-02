@@ -9,6 +9,12 @@ use crate::errors::*;
 use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxThemes;
 
 use super::analytics::Analytics;
+#[derive(Debug, Deserialize)]
+pub struct Social {
+    pub image: Option<String>,
+    pub image_alt: Option<String>,
+    pub twitter_account: Option<String>,
+}
 
 static ORANDA_JSON: &str = "./oranda.json";
 
@@ -27,6 +33,7 @@ pub struct OrandaConfig {
     pub syntax_theme: Option<SyntaxThemes>,
     pub analytics: Option<Analytics>,
     pub additional_pages: Option<Vec<String>>,
+    pub social: Option<Social>,
 }
 
 impl OrandaConfig {
