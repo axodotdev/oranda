@@ -4,8 +4,8 @@ use crate::config::{theme, Config};
 use axohtml::elements::div;
 use axohtml::elements::meta;
 
-// Clippy issue as explained here
-// https://github.com/rust-lang/rust-clippy/issues/7472
+// False positive duplicate allocation warning
+// https://github.com/rust-lang/rust-clippy/issues?q=is%3Aissue+redundant_allocation+sort%3Aupdated-desc
 #[allow(clippy::vec_box)]
 fn create_social_cards(config: &Config) -> Vec<Box<meta<String>>> {
     let mut html = vec![];

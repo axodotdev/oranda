@@ -5,7 +5,7 @@
   "additional_pages": ["./docs/src/theme/themes.md"],
   "social": {
     "image": "https://www.axo.dev/meta_small.jpeg",
-    "image_alt": "AXO",
+    "image_alt": "axo",
     "twitter_account": "@axodotdev"
   }
 }
