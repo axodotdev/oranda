@@ -6,5 +6,6 @@
     "google": {
       "tracking_id": "oranda.axo.dev"
     }
-  }
+  },
+  "additional_pages": ["./docs/src/theme/themes.md"]
 }

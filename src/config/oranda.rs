@@ -26,6 +26,7 @@ pub struct OrandaConfig {
     pub repository: Option<String>,
     pub syntax_theme: Option<SyntaxThemes>,
     pub analytics: Option<Analytics>,
+    pub additional_pages: Option<Vec<String>>,
 }
 
 impl OrandaConfig {

@@ -23,7 +23,11 @@ pub struct Config {
     pub additional_css: String,
     pub repository: Option<String>,
     pub syntax_theme: SyntaxThemes,
+<<<<<<< HEAD
     pub analytics: Option<Analytics>,
+=======
+    pub additional_pages: Option<Vec<String>>,
+>>>>>>> ca53c24e8d4c4ffd378e4183050f89430eef665b
 }
 
 impl Config {
@@ -76,7 +80,11 @@ impl Config {
                     additional_css: custom.additional_css.unwrap_or(default.additional_css),
                     repository: custom.repository,
                     syntax_theme: custom.syntax_theme.unwrap_or(default.syntax_theme),
+<<<<<<< HEAD
                     analytics: custom.analytics,
+=======
+                    additional_pages: custom.additional_pages,
+>>>>>>> ca53c24e8d4c4ffd378e4183050f89430eef665b
                 });
             // otherwise both oranda config and project manifest exists
             } else if let Some(project) = project {
@@ -93,7 +101,11 @@ impl Config {
                     additional_css: custom.additional_css.unwrap_or(default.additional_css),
                     repository: custom.repository,
                     syntax_theme: custom.syntax_theme.unwrap_or(default.syntax_theme),
+<<<<<<< HEAD
                     analytics: custom.analytics,
+=======
+                    additional_pages: custom.additional_pages,
+>>>>>>> ca53c24e8d4c4ffd378e4183050f89430eef665b
                 });
             }
         }
@@ -131,7 +143,11 @@ impl Default for Config {
             additional_css: String::from(""),
             repository: None,
             syntax_theme: SyntaxThemes::MaterialTheme,
+<<<<<<< HEAD
             analytics: None,
+=======
+            additional_pages: None,
+>>>>>>> ca53c24e8d4c4ffd378e4183050f89430eef665b
         }
     }
 }
