@@ -4,7 +4,7 @@
   "repository": "https://github.com/axodotdev/oranda",
   "analytics": {
     "google": {
-      "tracking_id": "oranda.axo.dev"
+      "tracking_id": "12312"
     }
   },
   "additional_pages": ["./docs/src/theme/themes.md"]

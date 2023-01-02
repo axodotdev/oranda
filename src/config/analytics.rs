@@ -1,7 +1,7 @@
 use crate::config::Config;
 use axohtml::elements::script;
 
-use axohtml::{html, text};
+use axohtml::{html, unsafe_text};
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
@@ -45,9 +45,9 @@ pub fn get_google_script(config: &Config) -> Option<Box<script<String>>> {
     match analytics {
         None => None,
         Some(Analytics::Google(g)) => {
-            let code = text!("window.dataLayer = window.dataLayer || []; function gtag(){{dataLayer.push(arguments);}} gtag('js', new Date());gtag('config', {});", g.tracking_id);
+            let code = format!("window.dataLayer = window.dataLayer || []; function gtag(){{dataLayer.push(arguments);}} gtag('js', new Date());gtag('config', '{}');", g.tracking_id);
 
-            Some(html!(<script>{code}</script>))
+            Some(html!(<script>{unsafe_text!(code)}</script>))
         }
         Some(_) => None,
     }

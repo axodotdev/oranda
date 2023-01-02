@@ -7,7 +7,7 @@ use axohtml::{dom::DOMTree, html, text, unsafe_text};
 
 pub fn build(config: &Config, content: String) -> String {
     let theme = theme::css_class(&config.theme);
-    let classlist: &str = &format!("body container {}", theme)[..];
+    let classlist: &str = &format!("body {}", theme)[..];
     let analytics = get_analytics(config);
     let google_script = get_google_script(config);
     let description = &config.description;
