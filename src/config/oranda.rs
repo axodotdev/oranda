@@ -6,9 +6,9 @@ use serde::Deserialize;
 use crate::config::theme::Theme;
 use crate::errors::*;
 
+use crate::config::analytics::Analytics;
 use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxThemes;
 
-use super::analytics::Analytics;
 #[derive(Debug, Deserialize)]
 pub struct Social {
     pub image: Option<String>,

@@ -4,7 +4,7 @@
   "repository": "https://github.com/axodotdev/oranda",
   "analytics": {
     "plausible": {
-      "domain": "oranda.axo.dev"
+      "domain": "tools.axo.dev/oranda"
     }
   },
   "additional_pages": ["./docs/src/theme/themes.md"],
