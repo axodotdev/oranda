@@ -1,7 +1,7 @@
 mod oranda;
 mod project;
 pub mod theme;
-use self::oranda::OrandaConfig;
+use self::oranda::{OrandaConfig, Social};
 use crate::errors::*;
 use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxThemes;
 use project::ProjectConfig;
@@ -22,6 +22,7 @@ pub struct Config {
     pub repository: Option<String>,
     pub syntax_theme: SyntaxThemes,
     pub additional_pages: Option<Vec<String>>,
+    pub social: Option<Social>,
 }
 
 impl Config {
@@ -75,6 +76,7 @@ impl Config {
                     repository: custom.repository,
                     syntax_theme: custom.syntax_theme.unwrap_or(default.syntax_theme),
                     additional_pages: custom.additional_pages,
+                    social: custom.social,
                 });
             // otherwise both oranda config and project manifest exists
             } else if let Some(project) = project {
@@ -92,6 +94,7 @@ impl Config {
                     repository: custom.repository,
                     syntax_theme: custom.syntax_theme.unwrap_or(default.syntax_theme),
                     additional_pages: custom.additional_pages,
+                    social: custom.social,
                 });
             }
         }
@@ -130,6 +133,7 @@ impl Default for Config {
             repository: None,
             syntax_theme: SyntaxThemes::MaterialTheme,
             additional_pages: None,
+            social: None,
         }
     }
 }
