@@ -3,8 +3,8 @@
   "homepage": "https://oranda.axo.dev",
   "repository": "https://github.com/axodotdev/oranda",
   "analytics": {
-    "google": {
-      "tracking_id": "12312"
+    "plausible": {
+      "domain": "oranda.axo.dev"
     }
   },
   "additional_pages": ["./docs/src/theme/themes.md"]
