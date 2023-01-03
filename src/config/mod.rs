@@ -1,3 +1,4 @@
+pub mod logo;
 mod oranda;
 mod project;
 pub mod theme;
@@ -23,6 +24,7 @@ pub struct Config {
     pub syntax_theme: SyntaxThemes,
     pub additional_pages: Option<Vec<String>>,
     pub social: Option<Social>,
+    pub logo: Option<String>,
 }
 
 impl Config {
@@ -77,6 +79,7 @@ impl Config {
                     syntax_theme: custom.syntax_theme.unwrap_or(default.syntax_theme),
                     additional_pages: custom.additional_pages,
                     social: custom.social,
+                    logo: custom.logo,
                 });
             // otherwise both oranda config and project manifest exists
             } else if let Some(project) = project {
@@ -95,6 +98,7 @@ impl Config {
                     syntax_theme: custom.syntax_theme.unwrap_or(default.syntax_theme),
                     additional_pages: custom.additional_pages,
                     social: custom.social,
+                    logo: custom.logo,
                 });
             }
         }
@@ -134,6 +138,7 @@ impl Default for Config {
             syntax_theme: SyntaxThemes::MaterialTheme,
             additional_pages: None,
             social: None,
+            logo: None,
         }
     }
 }

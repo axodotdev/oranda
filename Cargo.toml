@@ -22,6 +22,7 @@ thiserror = "1.0.37"
 tokio = { version = "1.0", features = ["full"] }
 toml = "0.5.9"
 tower-http = { version = "0.3.0", features = ["fs", "trace"] }
+axoasset = {git="https://github.com/axodotdev/axoasset"}
 
 [dev-dependencies]
 assert_cmd="2"

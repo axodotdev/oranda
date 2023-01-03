@@ -1,5 +1,6 @@
 use axohtml::{dom::DOMTree, html, text, unsafe_text};
 
+use crate::config::logo;
 use crate::config::{theme, Config};
 use axohtml::elements::div;
 use axohtml::elements::meta;
@@ -43,9 +44,10 @@ pub fn build(config: &Config, content: String) -> String {
           <meta property="og:url" content=homepage/>
         )
     });
+    let logo = logo::get_logo(config);
+
     let social_meta = create_social_cards(config);
     let banner = repo_banner(config);
-
     let doc: DOMTree<String> = html!(
     <html lang="en" id="oranda">
     <head>
@@ -63,6 +65,7 @@ pub fn build(config: &Config, content: String) -> String {
     <body>
     <div class=classlist>
         {banner}
+        {logo}
         <div class="container">{ unsafe_text!(content) }</div>
     </div>
     </body>
