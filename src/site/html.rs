@@ -1,9 +1,10 @@
+use std::path::Path;
+
 use axohtml::{dom::DOMTree, html, text, unsafe_text};
 
 use crate::config::logo;
 use crate::config::{theme, Config};
-use axohtml::elements::div;
-use axohtml::elements::meta;
+use axohtml::elements::{div, header, li, meta};
 
 // False positive duplicate allocation warning
 // https://github.com/rust-lang/rust-clippy/issues?q=is%3Aissue+redundant_allocation+sort%3Aupdated-desc
@@ -39,13 +40,12 @@ pub fn build(config: &Config, content: String) -> String {
     let theme = theme::css_class(&config.theme);
     let classlist: &str = &format!("body {}", theme)[..];
     let description = &config.description;
+    let header = create_header(config);
     let homepage = config.homepage.as_ref().map(|homepage| {
         html!(
           <meta property="og:url" content=homepage/>
         )
     });
-    let logo = logo::get_logo(config);
-
     let social_meta = create_social_cards(config);
     let banner = repo_banner(config);
     let doc: DOMTree<String> = html!(
@@ -65,24 +65,61 @@ pub fn build(config: &Config, content: String) -> String {
     <body>
     <div class=classlist>
         {banner}
-        {logo}
-        <div class="container">{ unsafe_text!(content) }</div>
+
+        <div class="container">{header}{ unsafe_text!(content) }</div>
     </div>
     </body>
     </html>
-     );
+         );
     doc.to_string()
 }
 
 fn repo_banner(config: &Config) -> Option<Box<div<String>>> {
     config.repository.as_ref().map(|repository| {
         html!(
-                  <div class="repo_banner">
-                     <a href=repository>
-                         <div class="icon" aria-hidden="true"/>
-                        {text!("Check out our GitHub")}
-                    </a>
-         </div>
-        )
+        <div class="repo_banner">
+            <a href=repository>
+                <div class="icon" aria-hidden="true"/>
+                {text!("Check out our GitHub")}
+            </a>
+        </div>
+                )
     })
+}
+
+fn create_header(config: &Config) -> Option<Box<header<String>>> {
+    if config.no_header {
+        return None;
+    }
+    let logo = logo::get_logo(config);
+    let nav = match config.additional_pages.as_ref() {
+        Some(pages) => {
+            let mut html: Vec<Box<li<String>>> = vec![html!(<li><a href="/">"Home"</a></li>)];
+            for page in pages.iter() {
+                let path = Path::new(page);
+                let file_name = path
+                    .file_stem()
+                    .unwrap_or(path.as_os_str())
+                    .to_string_lossy();
+                let path = format!("/{}", file_name);
+                html.extend(html!(<li><a href=path>{text!(file_name)}</a></li>));
+            }
+            Some(html!(
+            <nav>
+                <ul>
+                     {html}
+                </ul>
+            </nav>
+            ))
+        }
+        None => None,
+    };
+
+    Some(html!(
+        <header>
+            {nav}
+            <h1>{text!(&config.name)}</h1>
+            {logo.unwrap()}
+        </header>
+    ))
 }
