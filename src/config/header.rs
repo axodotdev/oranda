@@ -1,25 +1,24 @@
 use crate::errors::*;
 use axohtml::{html, text};
 use std::path::Path;
-use syntect::html;
 
 use crate::config::Config;
 use axohtml::elements::{header, img, li};
 
 fn get_logo(config: &Config) -> Option<Result<Box<img<String>>>> {
-    match &config.logo {
-        None => None,
-        Some(logo) => Some(fetch_logo(&config.dist_dir, logo.to_string(), &config.name)),
-    }
+    config
+        .logo
+        .as_ref()
+        .map(|logo| fetch_logo(&config.dist_dir, logo.to_string(), &config.name))
 }
 
 fn fetch_logo(dist_dir: &str, origin_path: String, name: &String) -> Result<Box<img<String>>> {
     if Path::new(&origin_path).exists() {
-        match axoasset::copy(&origin_path, &dist_dir, "Logo") {
+        match axoasset::copy(&origin_path, dist_dir, "Logo") {
             Ok(path) => {
                 let path_as_string = path.strip_prefix(&dist_dir).unwrap().to_string_lossy();
 
-                return Ok(html!(<img src=path_as_string alt=name/>));
+                Ok(html!(<img src=path_as_string alt=name/>))
             }
             Err(_) => Err(OrandaError::Other(
                 "There was a problem copying your logo".to_owned(),
@@ -28,7 +27,7 @@ fn fetch_logo(dist_dir: &str, origin_path: String, name: &String) -> Result<Box<
     } else {
         Err(OrandaError::FileNotFound {
             filedesc: "Logo".to_owned(),
-            path: origin_path.to_string(),
+            path: origin_path,
         })
     }
 }
