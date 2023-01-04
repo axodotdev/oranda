@@ -45,6 +45,7 @@ pub fn build(config: &Config, content: String) -> String {
     });
     let social_meta = create_social_cards(config);
     let banner = repo_banner(config);
+
     let doc: DOMTree<String> = html!(
     <html lang="en" id="oranda">
     <head>
@@ -66,7 +67,7 @@ pub fn build(config: &Config, content: String) -> String {
     </div>
     </body>
     </html>
-         );
+    );
     doc.to_string()
 }
 
