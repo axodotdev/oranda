@@ -1,31 +1,30 @@
 use crate::errors::*;
 use axohtml::{html, text};
 use std::path::Path;
+use syntect::html;
 
 use crate::config::Config;
 use axohtml::elements::{header, img, li};
 
 fn get_logo(config: &Config) -> Option<Result<Box<img<String>>>> {
-    config
-        .logo
-        .to_owned()
-        .map(|logo_origin_path| fetch_logo(&config.dist_dir, logo_origin_path))
+    match &config.logo {
+        None => None,
+        Some(logo) => Some(fetch_logo(&config.dist_dir, logo.to_string(), &config.name)),
+    }
 }
 
-fn fetch_logo(dist_dir: &str, origin_path: String) -> Result<Box<img<String>>> {
+fn fetch_logo(dist_dir: &str, origin_path: String, name: &String) -> Result<Box<img<String>>> {
     if Path::new(&origin_path).exists() {
-        let new_path = match axoasset::copy(&origin_path, "Logo", &dist_dir) {
+        match axoasset::copy(&origin_path, &dist_dir, "Logo") {
             Ok(path) => {
-                let path_as_string = path.to_str().unwrap();
-                println!("OMG HERE {:?}", path_as_string);
-                return Ok(html!(<img src=path_as_string />));
+                let path_as_string = path.strip_prefix(&dist_dir).unwrap().to_string_lossy();
+
+                return Ok(html!(<img src=path_as_string alt=name/>));
             }
             Err(_) => Err(OrandaError::Other(
                 "There was a problem copying your logo".to_owned(),
             )),
-        };
-
-        new_path
+        }
     } else {
         Err(OrandaError::FileNotFound {
             filedesc: "Logo".to_owned(),
@@ -38,7 +37,7 @@ pub fn create_header(config: &Config) -> Option<Box<header<String>>> {
     if config.no_header {
         return None;
     }
-    let logo = get_logo(config);
+    let logo = get_logo(config).unwrap();
     let nav = match config.additional_pages.as_ref() {
         Some(pages) => {
             let mut html: Vec<Box<li<String>>> = vec![html!(<li><a href="/">"Home"</a></li>)];
@@ -65,7 +64,7 @@ pub fn create_header(config: &Config) -> Option<Box<header<String>>> {
     <header>
         {nav}
         <h1>{text!(&config.name)}</h1>
-        {logo.unwrap()}
+        {logo}
     </header>
     ))
 }
