@@ -16,7 +16,7 @@ fn fetch_logo(dist_dir: &str, origin_path: String, name: &String) -> Result<Box<
     if Path::new(&origin_path).exists() {
         match axoasset::copy(&origin_path, dist_dir, "Logo") {
             Ok(path) => {
-                let path_as_string = path.strip_prefix(&dist_dir).unwrap().to_string_lossy();
+                let path_as_string = path.strip_prefix(dist_dir).unwrap().to_string_lossy();
 
                 Ok(html!(<img src=path_as_string alt=name/>))
             }
