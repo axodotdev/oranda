@@ -61,6 +61,11 @@ pub fn create_header(config: &Config) -> Option<Box<header<String>>> {
         }
         None => None,
     };
-
-    Some(html!(<header>{nav}<h1>{text!(&config.name)}</h1></header>))
+    Some(html!(
+    <header>
+        {nav}
+        <h1>{text!(&config.name)}</h1>
+        {logo.unwrap()}
+    </header>
+    ))
 }
