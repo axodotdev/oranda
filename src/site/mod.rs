@@ -125,6 +125,5 @@ fn reads_additional_css() {
 #[test]
 fn creates_nav() {
     let site = Site::build(&config(), &config().readme_path).unwrap();
-    println!("{:?}", site.html);
     assert!(site.html.contains("<nav><ul><li><a href=\"/\">Home</a></li><li><a href=\"/readme\">readme</a></li></ul></nav>"));
 }
