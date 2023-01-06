@@ -36,7 +36,10 @@ pub fn create_header(config: &Config) -> Option<Box<header<String>>> {
     if config.no_header {
         return None;
     }
-    let logo = get_logo(config).unwrap();
+    let logo = match get_logo(config) {
+        Some(html) => Some(html.unwrap()),
+        None => None,
+    };
     let nav = match config.additional_pages.as_ref() {
         Some(pages) => {
             let mut html: Vec<Box<li<String>>> = vec![html!(<li><a href="/">"Home"</a></li>)];
@@ -59,6 +62,7 @@ pub fn create_header(config: &Config) -> Option<Box<header<String>>> {
         }
         None => None,
     };
+
     Some(html!(
     <header>
         {nav}
