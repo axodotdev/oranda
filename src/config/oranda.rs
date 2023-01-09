@@ -32,7 +32,6 @@ pub struct OrandaConfig {
     pub syntax_theme: Option<SyntaxThemes>,
     pub additional_pages: Option<Vec<String>>,
     pub social: Option<Social>,
-    pub logo: Option<String>,
 }
 
 impl OrandaConfig {

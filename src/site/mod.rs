@@ -87,7 +87,6 @@ fn config() -> Config {
     Config {
         description: String::from("you axolotl questions"),
         readme_path: String::from("./src/site/fixtures/readme.md"),
-        additional_pages: Some(vec![String::from("./src/site/fixtures/readme.md")]),
         additional_css: String::from("./src/site/fixtures/additional.css"),
         theme: Theme::Dark,
         ..Default::default()
@@ -107,7 +106,6 @@ fn it_builds_the_site() {
 fn reads_description() {
     let site = Site::build(&config(), &config().readme_path).unwrap();
     assert!(site.html.contains("you axolotl questions"));
-    assert!(site.html.contains("<h1>axo</h1>"))
 }
 
 #[test]
@@ -120,10 +118,4 @@ fn reads_theme() {
 fn reads_additional_css() {
     let site = Site::build(&config(), &config().readme_path).unwrap();
     assert!(site.css.contains("#oranda body{background:red}"));
-}
-
-#[test]
-fn creates_nav() {
-    let site = Site::build(&config(), &config().readme_path).unwrap();
-    assert!(site.html.contains("<nav><ul><li><a href=\"/\">Home</a></li><li><a href=\"/readme\">readme</a></li></ul></nav>"));
 }
