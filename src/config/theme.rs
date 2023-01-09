@@ -5,13 +5,14 @@ use serde::Deserialize;
 pub enum Theme {
     Light,
     Dark,
-    Axo,
+    #[serde(rename = "axo-dark")]
+    AxoDark,
 }
 
 pub fn css_class(theme: &Theme) -> &str {
     match theme {
         Theme::Dark => "dark",
-        Theme::Axo => "axo",
+        Theme::AxoDark => "axo-dark",
         _ => "light",
     }
 }
