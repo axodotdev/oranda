@@ -6,6 +6,6 @@ By default Oranda will always look for this value in your `package.json`/`cargo.
 
 ```json
 {
-  "description": String
+  "description": "String"
 }
 ```

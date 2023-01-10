@@ -1,4 +1,4 @@
-# Dist dir
+# Destination directory
 
 This option allows you to set the directory you want to build your website to.
 
