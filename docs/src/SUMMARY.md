@@ -15,3 +15,4 @@
   - [no_header](./options/no-header.md)
   - [Additional CSS](./options/additional-css.md)
   - [Social](./options/social.md)
+  - [Analytics](./options/analytics.md)
