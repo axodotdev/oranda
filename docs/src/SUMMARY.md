@@ -10,3 +10,8 @@
   - [Readme path](./options/readme-path.md)
   - [Syntax theme](./options/syntax-theme.md)
     - [Available themes](./options/themes/themes.md)
+  - [Additional pages](./options/additional-pages.md)
+  - [Repository](./options/repository.md)
+  - [no_header](./options/no-header.md)
+  - [Additional CSS](./options/additional-css.md)
+  - [Social](./options/social.md)
