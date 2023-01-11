@@ -6,6 +6,6 @@ By default Oranda uses the `public` directory.
 
 ```json
 {
-  "dist-dir": String
+  "dist-dir": "String"
 }
 ```
