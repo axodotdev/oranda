@@ -1,13 +1,13 @@
 pub mod syntax_highlight;
 
+use crate::errors::*;
+use crate::site::markdown::syntax_highlight::syntax_highlight;
+use ammonia::clean;
+use comrak::adapters::SyntaxHighlighterAdapter;
+use comrak::{self, ComrakOptions, ComrakPlugins};
 use std::collections::HashMap;
 use std::fs;
 use std::path::Path;
-
-use crate::errors::*;
-use crate::site::markdown::syntax_highlight::syntax_highlight;
-use comrak::adapters::SyntaxHighlighterAdapter;
-use comrak::{self, ComrakOptions, ComrakPlugins};
 
 pub struct Adapters {}
 impl SyntaxHighlighterAdapter for Adapters {
@@ -39,6 +39,7 @@ fn initialize_comrak_options() -> ComrakOptions {
     options.extension.tasklist = true;
     options.extension.footnotes = true;
     options.extension.description_lists = true;
+    options.render.unsafe_ = true;
 
     options
 }
@@ -46,7 +47,8 @@ fn initialize_comrak_options() -> ComrakOptions {
 fn load(readme_path: &Path) -> Result<String> {
     if readme_path.exists() {
         let readme = fs::read_to_string(readme_path)?;
-        Ok(readme)
+        let safe_html = clean(&*readme);
+        Ok(safe_html)
     } else {
         Err(OrandaError::FileNotFound {
             filedesc: String::from("README"),
