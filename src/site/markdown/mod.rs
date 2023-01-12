@@ -47,8 +47,7 @@ fn initialize_comrak_options() -> ComrakOptions {
 fn load(readme_path: &Path) -> Result<String> {
     if readme_path.exists() {
         let readme = fs::read_to_string(readme_path)?;
-        let safe_html = clean(&readme);
-        Ok(safe_html)
+        Ok(readme)
     } else {
         Err(OrandaError::FileNotFound {
             filedesc: String::from("README"),
@@ -65,7 +64,7 @@ pub fn body(readme_path: &Path) -> Result<String> {
     let adapter = Adapters {};
     plugins.render.codefence_syntax_highlighter = Some(&adapter);
 
-    Ok(comrak::markdown_to_html_with_plugins(
-        &readme, &options, &plugins,
-    ))
+    let unsafe_html = comrak::markdown_to_html_with_plugins(&readme, &options, &plugins);
+    let safe_html = clean(&unsafe_html);
+    Ok(safe_html)
 }
