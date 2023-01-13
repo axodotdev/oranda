@@ -2,10 +2,10 @@ pub mod syntax_highlight;
 
 use crate::errors::*;
 use crate::site::markdown::syntax_highlight::syntax_highlight;
-use ammonia::clean;
+use ammonia::{clean, Builder};
 use comrak::adapters::SyntaxHighlighterAdapter;
 use comrak::{self, ComrakOptions, ComrakPlugins};
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::fs;
 use std::path::Path;
 
@@ -65,6 +65,9 @@ pub fn body(readme_path: &Path) -> Result<String> {
     plugins.render.codefence_syntax_highlighter = Some(&adapter);
 
     let unsafe_html = comrak::markdown_to_html_with_plugins(&readme, &options, &plugins);
-    let safe_html = clean(&unsafe_html);
+    let safe_html = Builder::new()
+        .add_generic_attributes(&["style"])
+        .clean(&unsafe_html)
+        .to_string();
     Ok(safe_html)
 }
