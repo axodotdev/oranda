@@ -2,10 +2,10 @@ pub mod syntax_highlight;
 
 use crate::errors::*;
 use crate::site::markdown::syntax_highlight::syntax_highlight;
-use ammonia::{clean, Builder};
+use ammonia::Builder;
 use comrak::adapters::SyntaxHighlighterAdapter;
 use comrak::{self, ComrakOptions, ComrakPlugins};
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 use std::fs;
 use std::path::Path;
 
