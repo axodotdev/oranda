@@ -57,7 +57,7 @@ pub fn build(config: &Config, content: String) -> String {
     <meta property="og:type" content="website" />
     <meta property="og:title" content=&config.name />
     {social_meta}
-    <link rel="stylesheet" href="http://sarahghp.com/themes/axo-oranda.css"></link>
+    <link rel="stylesheet" href="https://www.unpkg.com/@axodotdev/fringe/themes/axo-oranda.css"></link>
     <link rel="stylesheet" href="styles.css"></link>
     </head>
     <body>
