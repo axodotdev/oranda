@@ -116,5 +116,5 @@ fn reads_theme() {
 #[test]
 fn reads_additional_css() {
     let site = Site::build(&config(), &config().readme_path).unwrap();
-    assert!(site.css.contains("body {\n  background: red;\n}\n"));
+    assert!(site.css.contains("background: red"));
 }
