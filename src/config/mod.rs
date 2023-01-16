@@ -127,7 +127,7 @@ impl Default for Config {
             name: String::from("My Axo project"),
             no_header: false,
             readme_path: String::from("README.md"),
-            theme: Theme::AxoDark,
+            theme: Theme::Dark,
             remote_styles: vec![],
             additional_css: String::from(""),
             repository: None,
