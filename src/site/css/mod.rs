@@ -13,7 +13,7 @@ fn fetch_additional_css(config: &Config) -> Result<String> {
     }
 
     let additional_css = read_to_string(&config.additional_css)?;
-    
+
     Ok(additional_css)
 }
 

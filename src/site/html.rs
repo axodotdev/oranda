@@ -36,7 +36,6 @@ fn create_social_cards(config: &Config) -> Vec<Box<meta<String>>> {
 
 pub fn build(config: &Config, content: String) -> String {
     let theme = theme::css_class(&config.theme);
-    let classlist: &str = &format!("{}", theme)[..];
     let description = &config.description;
     let homepage = config.homepage.as_ref().map(|homepage| {
         html!(
@@ -47,7 +46,7 @@ pub fn build(config: &Config, content: String) -> String {
     let banner = repo_banner(config);
 
     let doc: DOMTree<String> = html!(
-    <html lang="en" id="oranda" class=classlist>
+    <html lang="en" id="oranda" class=theme>
     <head>
     <title>{ text!(&config.name) }</title>
     <meta charset="utf-8" />

@@ -13,6 +13,7 @@ use crate::config::theme::Theme;
 
 use crate::config::Config;
 
+#[derive(Debug)]
 pub struct Site {
     pub html: String,
     pub css: String,
@@ -96,10 +97,8 @@ fn config() -> Config {
 #[test]
 fn it_builds_the_site() {
     let site = Site::build(&config(), &config().readme_path).unwrap();
-    assert!(site
-        .css
-        .contains("--text-light:#fafafa;--text-800:#1f2937;"));
     assert!(site.html.contains("<h1>axo</h1>"));
+    assert!(site.html.contains("axo-oranda.css"));
 }
 
 #[test]
@@ -111,11 +110,11 @@ fn reads_description() {
 #[test]
 fn reads_theme() {
     let site = Site::build(&config(), &config().readme_path).unwrap();
-    assert!(site.html.contains("<div class=\"body dark\">"));
+    assert!(site.html.contains("html class=\"dark\""));
 }
 
 #[test]
 fn reads_additional_css() {
     let site = Site::build(&config(), &config().readme_path).unwrap();
-    assert!(site.css.contains("#oranda body{background:red}"));
+    assert!(site.css.contains("body {\n  background: red;\n}\n"));
 }
