@@ -10,6 +10,7 @@ name = "oranda"
 
 [dependencies]
 axohtml = "0.3.0"
+futures = "0.3"
 ammonia = "3"
 axum = "0.5.17"
 clap = { version = "4", features = ["derive", "help", "usage", "error-context", "wrap_help"] }
@@ -22,7 +23,7 @@ thiserror = "1.0.37"
 tokio = { version = "1.0", features = ["full"] }
 toml = "0.5.9"
 tower-http = { version = "0.3.0", features = ["fs", "trace"] }
-axoasset = {git="https://github.com/axodotdev/axoasset"}
+axoasset = { git="https://github.com/axodotdev/axoasset", branch = "main" }
 
 [dev-dependencies]
 assert_cmd="2"

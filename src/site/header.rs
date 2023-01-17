@@ -1,20 +1,31 @@
+use crate::config::Config;
 use crate::errors::*;
+use axohtml::elements::{header, img, li};
 use axohtml::{html, text};
+use futures::executor::block_on;
 use std::path::Path;
 
-use crate::config::Config;
-use axohtml::elements::{header, img, li};
-
 fn get_logo(config: &Config) -> Option<Result<Box<img<String>>>> {
-    config
-        .logo
-        .as_ref()
-        .map(|logo| fetch_logo(&config.dist_dir, logo.to_string(), &config.name))
+    match &config.logo {
+        None => None,
+        Some(logo) => {
+            let fetched_logo = fetch_logo(&config.dist_dir, logo.to_string(), &config.name);
+
+            let logo = block_on(fetched_logo);
+
+            Some(logo)
+        }
+    }
 }
 
-fn fetch_logo(dist_dir: &str, origin_path: String, name: &String) -> Result<Box<img<String>>> {
+async fn fetch_logo(
+    dist_dir: &str,
+    origin_path: String,
+    name: &String,
+) -> Result<Box<img<String>>> {
     if Path::new(&origin_path).exists() {
-        match axoasset::copy(&origin_path, dist_dir, "Logo") {
+        let copy_result = axoasset::copy(&origin_path, dist_dir).await;
+        match copy_result {
             Ok(path) => {
                 let path_as_string = path.strip_prefix(dist_dir).unwrap().to_string_lossy();
 
@@ -64,7 +75,7 @@ pub fn create(config: &Config) -> Box<header<String>> {
             {logo}
             <h1 class="title">{text!(&config.name)}</h1>
             {nav}
-           
+
         </header>
     )
 }
