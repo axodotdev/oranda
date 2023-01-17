@@ -38,7 +38,10 @@ fn create_social_cards(config: &Config) -> Vec<Box<meta<String>>> {
 pub fn build(config: &Config, content: String) -> String {
     let theme = theme::css_class(&config.theme);
     let description = &config.description;
-    let header = header::create(config);
+    let header = match config.no_header {
+        true => None,
+        false => Some(header::create(config)),
+    };
     let homepage = config.homepage.as_ref().map(|homepage| {
         html!(
           <meta property="og:url" content=homepage/>

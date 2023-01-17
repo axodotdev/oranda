@@ -5,10 +5,7 @@ use axohtml::{html, text};
 use crate::config::Config;
 use axohtml::elements::{header, li};
 
-pub fn create(config: &Config) -> Option<Box<header<String>>> {
-    if config.no_header {
-        return None;
-    }
+pub fn create(config: &Config) -> Box<header<String>> {
     let nav = match config.additional_pages.as_ref() {
         Some(pages) => {
             let mut html: Vec<Box<li<String>>> = vec![html!(<li><a href="/">"Home"</a></li>)];
@@ -22,15 +19,19 @@ pub fn create(config: &Config) -> Option<Box<header<String>>> {
                 html.extend(html!(<li><a href=path>{text!(file_name)}</a></li>));
             }
             Some(html!(
-            <nav class="nav">
-                <ul>
-                     {html}
-                </ul>
-            </nav>
+                <nav class="nav">
+                    <ul>
+                        {html}
+                    </ul>
+                </nav>
             ))
         }
         None => None,
     };
 
-    Some(html!(<header><h1 class="text-center">{text!(&config.name)}</h1>{nav}</header>))
+    html!(
+        <header>
+            <h1 class="text-center">{text!(&config.name)}</h1>{nav}
+        </header>
+    )
 }
