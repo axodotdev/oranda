@@ -1,4 +1,4 @@
-use crate::config::analytics::{get_analytics, GoogleTracking};
+use crate::config::analytics::{get_analytics, Analytics};
 use crate::config::{theme, Config};
 
 use axohtml::elements::div;
@@ -39,7 +39,10 @@ use axohtml::{dom::DOMTree, html, text, unsafe_text};
 pub fn build(config: &Config, content: String) -> String {
     let theme = theme::css_class(&config.theme);
     let analytics = get_analytics(config);
-    let google_script = GoogleTracking::get_google_script(config);
+    let google_script = match &config.analytics {
+        Some(Analytics::Google(g)) => Some(g.get_script()),
+        _ => None,
+    };
     let description = &config.description;
     let homepage = config.homepage.as_ref().map(|homepage| {
         html!(

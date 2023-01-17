@@ -40,20 +40,13 @@ const PLAUSIBLE_SCRIPT_URL: &str = "https://plausible.io/js/script.js";
 const FATHOM_SCRIPT_URL: &str = "https://cdn.usefathom.com/script.js";
 
 impl GoogleTracking {
-    pub fn get_google_script(config: &Config) -> Option<Box<script<String>>> {
-        let analytics = config.analytics.as_ref();
+    pub fn get_script(&self) -> Box<script<String>> {
+        let code = format!("window.dataLayer = window.dataLayer || []; function gtag(){{dataLayer.push(arguments);}} gtag('js', new Date());gtag('config', '{}');", self.tracking_id);
 
-        match analytics {
-            None => None,
-            Some(Analytics::Google(g)) => {
-                let code = format!("window.dataLayer = window.dataLayer || []; function gtag(){{dataLayer.push(arguments);}} gtag('js', new Date());gtag('config', '{}');", g.tracking_id);
-
-                Some(html!(<script>{unsafe_text!(code)}</script>))
-            }
-            Some(_) => None,
-        }
+        html!(<script>{unsafe_text!(code)}</script>)
     }
 }
+
 pub fn get_analytics(config: &Config) -> Option<Box<script<String>>> {
     let analytics = config.analytics.as_ref();
 
