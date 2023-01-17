@@ -1,7 +1,6 @@
 {
   "homepage": "https://oranda.axo.dev",
   "repository": "https://github.com/axodotdev/oranda",
-  "logo": "static/logo.png",
   "analytics": {
     "plausible": {
       "domain": "tools.axo.dev/oranda"
