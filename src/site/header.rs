@@ -7,9 +7,7 @@ use std::path::Path;
 fn get_logo(logo: String, config: &Config) -> Result<Box<img<String>>> {
     let fetched_logo = fetch_logo(&config.dist_dir, logo, &config.name);
 
-    let logo = tokio::runtime::Handle::current().block_on(fetched_logo);
-
-    logo
+    tokio::runtime::Handle::current().block_on(fetched_logo)
 }
 
 async fn fetch_logo(
