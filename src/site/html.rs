@@ -1,5 +1,4 @@
-use axohtml::{dom::DOMTree, html, text, unsafe_text};
-
+use crate::config::analytics::{get_analytics, Analytics};
 use crate::config::{theme, Config};
 use axohtml::elements::{div, meta};
 
@@ -35,8 +34,15 @@ fn create_social_cards(config: &Config) -> Vec<Box<meta<String>>> {
     html
 }
 
+use axohtml::{dom::DOMTree, html, text, unsafe_text};
+
 pub fn build(config: &Config, content: String) -> String {
     let theme = theme::css_class(&config.theme);
+    let analytics = get_analytics(config);
+    let google_script = match &config.analytics {
+        Some(Analytics::Google(g)) => Some(g.get_script()),
+        _ => None,
+    };
     let description = &config.description;
     let header = match config.no_header {
         true => None,
@@ -70,6 +76,8 @@ pub fn build(config: &Config, content: String) -> String {
         {banner}
         <main>{header}{ unsafe_text!(content) }</main>
     </div>
+        {analytics}
+        {google_script}
     </body>
     </html>
          );

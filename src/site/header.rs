@@ -31,7 +31,8 @@ pub fn create(config: &Config) -> Box<header<String>> {
 
     html!(
         <header>
-            <h1 class="text-center">{text!(&config.name)}</h1>{nav}
+            <h1 class="title">{text!(&config.name)}</h1>
+            {nav}
         </header>
     )
 }
