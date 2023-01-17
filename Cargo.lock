@@ -1259,6 +1259,7 @@ dependencies = [
  "clap 4.0.29",
  "comrak",
  "reqwest",
+ "schemars",
  "serde",
  "serde_json",
  "syntect 5.0.0",

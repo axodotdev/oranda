@@ -45,7 +45,7 @@ pub fn build(config: &Config, content: String) -> String {
     });
     let social_meta = create_social_cards(config);
     let banner = repo_banner(config);
-    let artifacts_tabs = create_artifacts_tabs(config);
+    let artifacts_tabs = create_artifacts_tabs(config).unwrap();
 
     let doc: DOMTree<String> = html!(
     <html lang="en" id="oranda" class=theme>

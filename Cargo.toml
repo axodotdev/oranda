@@ -11,6 +11,7 @@ name = "oranda"
 
 [dependencies]
 axohtml = "0.3.0"
+schemars = "0.8.11"
 ammonia = "3"
 axum = "0.5.17"
 cargo-dist-schema = {git= "https://github.com/axodotdev/cargo-dist"}
