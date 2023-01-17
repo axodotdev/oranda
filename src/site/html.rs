@@ -1,7 +1,9 @@
 use axohtml::{dom::DOMTree, html, text, unsafe_text};
 
-use crate::config::{header::create_header, theme, Config};
+use crate::config::{theme, Config};
 use axohtml::elements::{div, meta};
+
+use crate::site::header;
 
 // False positive duplicate allocation warning
 // https://github.com/rust-lang/rust-clippy/issues?q=is%3Aissue+redundant_allocation+sort%3Aupdated-desc
@@ -36,7 +38,7 @@ fn create_social_cards(config: &Config) -> Vec<Box<meta<String>>> {
 pub fn build(config: &Config, content: String) -> String {
     let theme = theme::css_class(&config.theme);
     let description = &config.description;
-    let header = create_header(config);
+    let header = header::create(config);
     let homepage = config.homepage.as_ref().map(|homepage| {
         html!(
           <meta property="og:url" content=homepage/>

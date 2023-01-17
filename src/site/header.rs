@@ -5,7 +5,7 @@ use axohtml::{html, text};
 use crate::config::Config;
 use axohtml::elements::{header, li};
 
-pub fn create_header(config: &Config) -> Option<Box<header<String>>> {
+pub fn create(config: &Config) -> Option<Box<header<String>>> {
     if config.no_header {
         return None;
     }

@@ -5,6 +5,7 @@ use std::io::Write;
 use std::path::Path;
 
 mod css;
+mod header;
 mod html;
 pub mod markdown;
 
