@@ -27,7 +27,7 @@ fn main() -> Result<()> {
         .max_blocking_threads(128)
         .enable_all()
         .build()
-        .unwrap();
+        .expect("Initializing tokio runtime failed");
     let _guard = runtime.enter();
     let cli = Cli::parse();
 
