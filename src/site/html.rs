@@ -1,8 +1,9 @@
 use axohtml::{dom::DOMTree, html, text, unsafe_text};
 
 use crate::config::{theme, Config};
-use axohtml::elements::div;
-use axohtml::elements::meta;
+use axohtml::elements::{div, meta};
+
+use crate::site::header;
 
 // False positive duplicate allocation warning
 // https://github.com/rust-lang/rust-clippy/issues?q=is%3Aissue+redundant_allocation+sort%3Aupdated-desc
@@ -37,6 +38,10 @@ fn create_social_cards(config: &Config) -> Vec<Box<meta<String>>> {
 pub fn build(config: &Config, content: String) -> String {
     let theme = theme::css_class(&config.theme);
     let description = &config.description;
+    let header = match config.no_header {
+        true => None,
+        false => Some(header::create(config)),
+    };
     let homepage = config.homepage.as_ref().map(|homepage| {
         html!(
           <meta property="og:url" content=homepage/>
@@ -63,23 +68,23 @@ pub fn build(config: &Config, content: String) -> String {
     <body>
     <div class="container">
         {banner}
-        <main>{ unsafe_text!(content) }</main>
+        <main>{header}{ unsafe_text!(content) }</main>
     </div>
     </body>
     </html>
-     );
+         );
     doc.to_string()
 }
 
 fn repo_banner(config: &Config) -> Option<Box<div<String>>> {
     config.repository.as_ref().map(|repository| {
         html!(
-                  <div class="repo_banner">
-                     <a href=repository>
-                         <div class="icon" aria-hidden="true"/>
-                         <div>{text!("Check out our GitHub")}</div>
-                    </a>
-         </div>
+        <div class="repo_banner">
+            <a href=repository>
+                <div class="icon" aria-hidden="true"/>
+                {text!("Check out our GitHub")}
+            </a>
+        </div>
         )
     })
 }
