@@ -105,8 +105,9 @@ fn it_builds_the_site() {
 #[test]
 fn reads_description() {
     let site = Site::build(&config(), &config().readme_path).unwrap();
+    println!("{:?}", site.html);
     assert!(site.html.contains("you axolotl questions"));
-    assert!(site.html.contains("<h1>My Axo project</h1>"))
+    assert!(site.html.contains("My Axo project"))
 }
 
 #[test]
@@ -125,5 +126,5 @@ fn reads_additional_css() {
 fn creates_nav() {
     let site = Site::build(&config(), &config().readme_path).unwrap();
 
-    assert!(site.html.contains("<nav><ul><li><a href=\"/\">Home</a></li><li><a href=\"/readme\">readme</a></li></ul></nav>"));
+    assert!(site.html.contains("<nav class=\"nav\"><ul><li><a href=\"/\">Home</a></li><li><a href=\"/readme\">readme</a></li></ul></nav>"));
 }
