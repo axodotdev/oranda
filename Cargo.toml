@@ -10,7 +10,6 @@ name = "oranda"
 
 [dependencies]
 axohtml = "0.3.0"
-futures = "0.3"
 ammonia = "3"
 axum = "0.5.17"
 clap = { version = "4", features = ["derive", "help", "usage", "error-context", "wrap_help"] }
@@ -20,7 +19,7 @@ serde_json = { version = "1.0.85"}
 reqwest = { version = "0.11.13", features = ["blocking", "json"] }
 syntect = "5.0"
 thiserror = "1.0.37"
-tokio = { version = "1.0", features = ["full"] }
+tokio = { version = "1.20.1", features = ["full"] }
 toml = "0.5.9"
 tower-http = { version = "0.3.0", features = ["fs", "trace"] }
 axoasset = { git="https://github.com/axodotdev/axoasset", branch = "main" }

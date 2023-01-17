@@ -2,13 +2,12 @@ use crate::config::Config;
 use crate::errors::*;
 use axohtml::elements::{header, img, li};
 use axohtml::{html, text};
-use futures::executor::block_on;
 use std::path::Path;
 
 fn get_logo(logo: String, config: &Config) -> Result<Box<img<String>>> {
     let fetched_logo = fetch_logo(&config.dist_dir, logo, &config.name);
 
-    let logo = block_on(fetched_logo);
+    let logo = tokio::runtime::Handle::current().block_on(fetched_logo);
 
     logo
 }

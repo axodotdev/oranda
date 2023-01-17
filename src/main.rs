@@ -22,7 +22,13 @@ enum Command {
 }
 
 fn main() -> Result<()> {
-    println!(">o_o<");
+    let runtime = tokio::runtime::Builder::new_multi_thread()
+        .worker_threads(1)
+        .max_blocking_threads(128)
+        .enable_all()
+        .build()
+        .unwrap();
+    let _guard = runtime.enter();
     let cli = Cli::parse();
 
     match &cli.command {
