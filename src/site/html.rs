@@ -1,8 +1,8 @@
 use crate::config::analytics::{get_analytics, Analytics};
 use crate::config::{theme, Config};
-use axohtml::elements::{div, meta};
 use crate::errors::*;
 use crate::site::header;
+use axohtml::elements::{div, meta};
 
 // False positive duplicate allocation warning
 // https://github.com/rust-lang/rust-clippy/issues?q=is%3Aissue+redundant_allocation+sort%3Aupdated-desc
@@ -68,7 +68,8 @@ pub fn build(config: &Config, content: String) -> Result<String> {
     <meta property="og:type" content="website" />
     <meta property="og:title" content=&config.name />
     {social_meta}
-    <link rel="stylesheet" href="https://market-assets.fra1.cdn.digitaloceanspaces.com//themes/axo-oranda.css" />    <link rel="stylesheet" href="styles.css"></link>
+    <link rel="stylesheet" href="https://www.unpkg.com/@axodotdev/fringe/themes/axo-oranda.css"></link>
+    <link rel="stylesheet" href="styles.css"></link>
     </head>
     <body>
     <div class="container">
