@@ -1,8 +1,8 @@
 use crate::config::analytics::{get_analytics, Analytics};
 use crate::config::{theme, Config};
-use axohtml::elements::{div, meta};
-
+use crate::errors::*;
 use crate::site::header;
+use axohtml::elements::{div, meta};
 
 // False positive duplicate allocation warning
 // https://github.com/rust-lang/rust-clippy/issues?q=is%3Aissue+redundant_allocation+sort%3Aupdated-desc
@@ -36,7 +36,7 @@ fn create_social_cards(config: &Config) -> Vec<Box<meta<String>>> {
 
 use axohtml::{dom::DOMTree, html, text, unsafe_text};
 
-pub fn build(config: &Config, content: String) -> String {
+pub fn build(config: &Config, content: String) -> Result<String> {
     let theme = theme::css_class(&config.theme);
     let analytics = get_analytics(config);
     let google_script = match &config.analytics {
@@ -46,7 +46,7 @@ pub fn build(config: &Config, content: String) -> String {
     let description = &config.description;
     let header = match config.no_header {
         true => None,
-        false => Some(header::create(config)),
+        false => Some(header::create(config)?),
     };
     let homepage = config.homepage.as_ref().map(|homepage| {
         html!(
@@ -80,8 +80,8 @@ pub fn build(config: &Config, content: String) -> String {
         {google_script}
     </body>
     </html>
-         );
-    doc.to_string()
+    );
+    Ok(doc.to_string())
 }
 
 fn repo_banner(config: &Config) -> Option<Box<div<String>>> {

@@ -3,7 +3,6 @@ use crate::site::css::build;
 use std::fs::File;
 use std::io::Write;
 use std::path::Path;
-
 mod css;
 mod header;
 mod html;
@@ -29,7 +28,7 @@ impl Site {
     fn build(config: &Config, file_path: &String) -> Result<Site> {
         let readme_path = Path::new(&file_path);
         let content = markdown::body(readme_path)?;
-        let html = html::build(config, content);
+        let html = html::build(config, content)?;
         let css = Self::css(config)?;
 
         Ok(Site { html, css })

@@ -26,6 +26,7 @@ pub struct Config {
     pub analytics: Option<Analytics>,
     pub additional_pages: Option<Vec<String>>,
     pub social: Option<Social>,
+    pub logo: Option<String>,
 }
 
 impl Config {
@@ -81,6 +82,7 @@ impl Config {
                     analytics: custom.analytics,
                     additional_pages: custom.additional_pages,
                     social: custom.social,
+                    logo: custom.logo,
                 });
             // otherwise both oranda config and project manifest exists
             } else if let Some(project) = project {
@@ -100,6 +102,7 @@ impl Config {
                     analytics: custom.analytics,
                     additional_pages: custom.additional_pages,
                     social: custom.social,
+                    logo: custom.logo,
                 });
             }
         }
@@ -140,6 +143,7 @@ impl Default for Config {
             analytics: None,
             additional_pages: None,
             social: None,
+            logo: None,
         }
     }
 }
