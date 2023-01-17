@@ -135,8 +135,14 @@ pub fn create_artifacts_tabs(config: &Config) -> Result<Option<Box<div<String>>>
     let typed = &resp.json::<DistManifest>().unwrap();
 
     println!("{:?}", typed.releases);
+    let mut html: Vec<Box<div<String>>> = vec![];
+    for release in typed.releases.iter() {
+        for artifact in release.artifacts.iter() {
+            html.extend(html!(<div>{text!(&artifact.name)}</div>));
+        }
+    }
 
     return Ok(Some(
-        html!(<div><h2 class="text-center">{text!("Download for your platform")}</h2></div>),
+        html!(<div><h2 class="text-center">{text!("Download for your platform")}</h2>{html}</div>),
     ));
 }
