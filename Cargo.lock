@@ -107,7 +107,7 @@ checksum = "d468802bab17cbc0cc575e9b053f41e72aa36bfa6b7f55e3529ffa43161b97fa"
 [[package]]
 name = "axoasset"
 version = "0.1.0"
-source = "git+https://github.com/axodotdev/axoasset?branch=main#3f057ea598676448eaed72a465fbac73a9c00c49"
+source = "git+https://github.com/axodotdev/axoasset?branch=main#c3624c58c74e53397836713af11f8ad2bd4cb159"
 dependencies = [
  "image",
  "mime",

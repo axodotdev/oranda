@@ -5,17 +5,12 @@ use axohtml::{html, text};
 use futures::executor::block_on;
 use std::path::Path;
 
-fn get_logo(config: &Config) -> Option<Result<Box<img<String>>>> {
-    match &config.logo {
-        None => None,
-        Some(logo) => {
-            let fetched_logo = fetch_logo(&config.dist_dir, logo.to_string(), &config.name);
+fn get_logo(logo: String, config: &Config) -> Result<Box<img<String>>> {
+    let fetched_logo = fetch_logo(&config.dist_dir, logo, &config.name);
 
-            let logo = block_on(fetched_logo);
+    let logo = block_on(fetched_logo);
 
-            Some(logo)
-        }
-    }
+    logo
 }
 
 async fn fetch_logo(
@@ -23,29 +18,22 @@ async fn fetch_logo(
     origin_path: String,
     name: &String,
 ) -> Result<Box<img<String>>> {
-    if Path::new(&origin_path).exists() {
-        let copy_result = axoasset::copy(&origin_path, dist_dir).await;
-        match copy_result {
-            Ok(path) => {
-                let path_as_string = path.strip_prefix(dist_dir).unwrap().to_string_lossy();
+    let copy_result = axoasset::copy(&origin_path, dist_dir).await?;
 
-                Ok(html!(<img src=path_as_string alt=name class="logo" />))
-            }
-            Err(_) => Err(OrandaError::Other(
-                "There was a problem copying your logo".to_owned(),
-            )),
-        }
-    } else {
-        Err(OrandaError::FileNotFound {
-            filedesc: "Logo".to_owned(),
-            path: origin_path,
-        })
-    }
+    let path_as_string = copy_result
+        .strip_prefix(dist_dir)
+        .unwrap()
+        .to_string_lossy();
+
+    Ok(html!(<img src=path_as_string alt=name class="logo" />))
 }
 
-pub fn create(config: &Config) -> Box<header<String>> {
-    // we want to unwrap here since we want the error from the logo functions to surface if there is one
-    let logo = get_logo(config).map(|html| html.unwrap());
+pub fn create(config: &Config) -> Result<Box<header<String>>> {
+    let logo = if let Some(logo) = config.logo.clone() {
+        Some(get_logo(logo, config)?)
+    } else {
+        None
+    };
 
     let nav = match config.additional_pages.as_ref() {
         Some(pages) => {
@@ -70,12 +58,11 @@ pub fn create(config: &Config) -> Box<header<String>> {
         None => None,
     };
 
-    html!(
+    Ok(html!(
         <header>
             {logo}
             <h1 class="title">{text!(&config.name)}</h1>
             {nav}
-
         </header>
-    )
+    ))
 }

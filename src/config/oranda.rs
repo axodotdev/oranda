@@ -3,10 +3,9 @@ use std::path::Path;
 
 use serde::Deserialize;
 
+use crate::config::analytics::Analytics;
 use crate::config::theme::Theme;
 use crate::errors::*;
-
-use crate::config::analytics::Analytics;
 use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxThemes;
 
 #[derive(Debug, Deserialize)]

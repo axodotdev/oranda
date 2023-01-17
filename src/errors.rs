@@ -16,6 +16,9 @@ pub enum OrandaError {
     #[error(transparent)]
     Syntect(#[from] syntect::Error),
 
+    #[error(transparent)]
+    AxoAsset(#[from] axoasset::AxoassetError),
+
     #[error("failed to read {filedesc} at {path}")]
     FileNotFound { filedesc: String, path: String },
 
