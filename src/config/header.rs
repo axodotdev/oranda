@@ -11,7 +11,8 @@ pub fn create_header(config: &Config) -> Option<Box<header<String>>> {
     }
     let nav = match config.additional_pages.as_ref() {
         Some(pages) => {
-            let mut html: Vec<Box<li<String>>> = vec![html!(<li><a href="/">"Home"</a></li>)];
+            let mut html: Vec<Box<li<String>>> =
+                vec![html!(<li style="margin: 0" class="capitalize"><a href="/">"Home"</a></li>)];
             for page in pages.iter() {
                 let path = Path::new(page);
                 let file_name = path
@@ -19,11 +20,13 @@ pub fn create_header(config: &Config) -> Option<Box<header<String>>> {
                     .unwrap_or(path.as_os_str())
                     .to_string_lossy();
                 let path = format!("/{}", file_name);
-                html.extend(html!(<li><a href=path>{text!(file_name)}</a></li>));
+                html.extend(
+                    html!(<li style="margin: 0" class="capitalize"><a href=path>{text!(file_name)}</a></li>),
+                );
             }
             Some(html!(
-            <nav>
-                <ul>
+            <nav class="p-0 text-center mb-8">
+                <ul class="p-0 flex gap-6 items-center text-center list-none justify-center">
                      {html}
                 </ul>
             </nav>
@@ -32,5 +35,5 @@ pub fn create_header(config: &Config) -> Option<Box<header<String>>> {
         None => None,
     };
 
-    Some(html!(<header>{nav}<h1>{text!(&config.name)}</h1></header>))
+    Some(html!(<header><h1 class="text-center">{text!(&config.name)}</h1>{nav}</header>))
 }
