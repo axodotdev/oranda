@@ -16,9 +16,6 @@ pub enum OrandaError {
     #[error(transparent)]
     Syntect(#[from] syntect::Error),
 
-    #[error(transparent)]
-    Grass(#[from] Box<grass::Error>),
-
     #[error("failed to read {filedesc} at {path}")]
     FileNotFound { filedesc: String, path: String },
 

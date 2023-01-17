@@ -38,7 +38,6 @@ use axohtml::{dom::DOMTree, html, text, unsafe_text};
 
 pub fn build(config: &Config, content: String) -> String {
     let theme = theme::css_class(&config.theme);
-    let classlist: &str = &format!("body {}", theme)[..];
     let analytics = get_analytics(config);
     let google_script = GoogleTracking::get_google_script(config);
     let description = &config.description;
@@ -51,7 +50,7 @@ pub fn build(config: &Config, content: String) -> String {
     let banner = repo_banner(config);
 
     let doc: DOMTree<String> = html!(
-    <html lang="en" id="oranda">
+    <html lang="en" id="oranda" class=theme>
     <head>
     <title>{ text!(&config.name) }</title>
     <meta charset="utf-8" />
@@ -62,12 +61,13 @@ pub fn build(config: &Config, content: String) -> String {
     <meta property="og:type" content="website" />
     <meta property="og:title" content=&config.name />
     {social_meta}
+    <link rel="stylesheet" href="https://www.unpkg.com/@axodotdev/fringe/themes/axo-oranda.css"></link>
     <link rel="stylesheet" href="styles.css"></link>
     </head>
     <body>
-    <div class=classlist>
+    <div class="container">
         {banner}
-        <div class="container">{ unsafe_text!(content) }</div>
+        <main>{ unsafe_text!(content) }</main>
     </div>
         {analytics}
         {google_script}
@@ -83,7 +83,7 @@ fn repo_banner(config: &Config) -> Option<Box<div<String>>> {
                   <div class="repo_banner">
                      <a href=repository>
                          <div class="icon" aria-hidden="true"/>
-                        {text!("Check out our GitHub")}
+                         <div>{text!("Check out our GitHub")}</div>
                     </a>
          </div>
         )
