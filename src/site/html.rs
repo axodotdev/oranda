@@ -1,5 +1,6 @@
 use axohtml::{dom::DOMTree, html, text, unsafe_text};
 
+use crate::config::artifacts::create_artifacts_tabs;
 use crate::config::{theme, Config};
 use axohtml::elements::div;
 use axohtml::elements::meta;
@@ -44,6 +45,7 @@ pub fn build(config: &Config, content: String) -> String {
     });
     let social_meta = create_social_cards(config);
     let banner = repo_banner(config);
+    let artifacts_tabs = create_artifacts_tabs(config);
 
     let doc: DOMTree<String> = html!(
     <html lang="en" id="oranda" class=theme>
@@ -63,6 +65,7 @@ pub fn build(config: &Config, content: String) -> String {
     <body>
     <div class="container">
         {banner}
+        {artifacts_tabs}
         <main>{ unsafe_text!(content) }</main>
     </div>
     </body>

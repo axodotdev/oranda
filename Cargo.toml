@@ -1,9 +1,10 @@
 [package]
 name = "oranda"
 description = ">o_o<"
-version = "0.0.0"
+version = "0.2.2-prerelease7"
 edition = "2021"
 license = "MPL-2.0"
+repository = "https://github.com/axodotdev/cargo-dist/"
 
 [[bin]]
 name = "oranda"
@@ -12,6 +13,7 @@ name = "oranda"
 axohtml = "0.3.0"
 ammonia = "3"
 axum = "0.5.17"
+cargo-dist-schema = {git= "https://github.com/axodotdev/cargo-dist"}
 clap = { version = "4", features = ["derive", "help", "usage", "error-context", "wrap_help"] }
 comrak = "0.14"
 serde = { version = "1.0.144", features = ["derive"] }

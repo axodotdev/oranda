@@ -1,6 +1,8 @@
+pub mod artifacts;
 mod oranda;
 mod project;
 pub mod theme;
+use self::artifacts::Artifacts;
 use self::oranda::{OrandaConfig, Social};
 use crate::errors::*;
 use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxThemes;
@@ -9,6 +11,7 @@ use project::ProjectConfig;
 use theme::Theme;
 
 #[derive(Debug)]
+
 pub struct Config {
     pub description: String,
     pub dist_dir: String,
@@ -23,6 +26,8 @@ pub struct Config {
     pub syntax_theme: SyntaxThemes,
     pub additional_pages: Option<Vec<String>>,
     pub social: Option<Social>,
+    pub artifacts: Option<Artifacts>,
+    pub version: Option<String>,
 }
 
 impl Config {
@@ -50,6 +55,8 @@ impl Config {
                     description: project.description,
                     homepage: project.homepage,
                     name: project.name,
+                    repository: project.repository,
+                    version: project.version,
                     ..Default::default()
                 });
             } else {
@@ -77,6 +84,8 @@ impl Config {
                     syntax_theme: custom.syntax_theme.unwrap_or(default.syntax_theme),
                     additional_pages: custom.additional_pages,
                     social: custom.social,
+                    artifacts: custom.artifacts,
+                    version: None,
                 });
             // otherwise both oranda config and project manifest exists
             } else if let Some(project) = project {
@@ -91,13 +100,20 @@ impl Config {
                     theme: custom.theme.unwrap_or(default.theme),
                     remote_styles: custom.remote_styles.unwrap_or(default.remote_styles),
                     additional_css: custom.additional_css.unwrap_or(default.additional_css),
-                    repository: custom.repository,
+                    repository: Some(
+                        custom
+                            .repository
+                            .unwrap_or(project.repository.unwrap_or_default()),
+                    ),
                     syntax_theme: custom.syntax_theme.unwrap_or(default.syntax_theme),
                     additional_pages: custom.additional_pages,
                     social: custom.social,
+                    artifacts: custom.artifacts,
+                    version: Some(project.version.unwrap_or_default()),
                 });
             }
         }
+
         Err(OrandaError::Other(String::from(
             "Your config is a bag of bees. Not today, Satan",
         )))
@@ -134,6 +150,8 @@ impl Default for Config {
             syntax_theme: SyntaxThemes::MaterialTheme,
             additional_pages: None,
             social: None,
+            artifacts: None,
+            version: None,
         }
     }
 }

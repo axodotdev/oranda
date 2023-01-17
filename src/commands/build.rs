@@ -15,6 +15,7 @@ pub struct Build {
 impl Build {
     pub fn run(&self) -> Result<()> {
         let config = Config::build()?;
+        println!("final config {:?}", config);
         Site::write(&config)?;
         Ok(())
     }

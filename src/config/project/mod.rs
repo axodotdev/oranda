@@ -14,6 +14,8 @@ pub struct ProjectConfig {
     pub name: String,
     pub description: String,
     pub homepage: Option<String>,
+    pub repository: Option<String>,
+    pub version: Option<String>,
 }
 
 impl ProjectConfig {
