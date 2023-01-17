@@ -18,7 +18,7 @@ fn fetch_logo(dist_dir: &str, origin_path: String, name: &String) -> Result<Box<
             Ok(path) => {
                 let path_as_string = path.strip_prefix(dist_dir).unwrap().to_string_lossy();
 
-                Ok(html!(<img src=path_as_string alt=name/>))
+                Ok(html!(<img src=path_as_string alt=name class="logo" />))
             }
             Err(_) => Err(OrandaError::Other(
                 "There was a problem copying your logo".to_owned(),
@@ -32,11 +32,7 @@ fn fetch_logo(dist_dir: &str, origin_path: String, name: &String) -> Result<Box<
     }
 }
 
-pub fn create_header(config: &Config) -> Option<Box<header<String>>> {
-    if config.no_header {
-        return None;
-    }
-
+pub fn create(config: &Config) -> Box<header<String>> {
     // we want to unwrap here since we want the error from the logo functions to surface if there is one
     let logo = get_logo(config).map(|html| html.unwrap());
 
@@ -53,21 +49,22 @@ pub fn create_header(config: &Config) -> Option<Box<header<String>>> {
                 html.extend(html!(<li><a href=path>{text!(file_name)}</a></li>));
             }
             Some(html!(
-            <nav>
-                <ul>
-                     {html}
-                </ul>
-            </nav>
+                <nav class="nav">
+                    <ul>
+                        {html}
+                    </ul>
+                </nav>
             ))
         }
         None => None,
     };
 
-    Some(html!(
-    <header>
-        {nav}
-        <h1>{text!(&config.name)}</h1>
-        {logo}
-    </header>
-    ))
+    html!(
+        <header>
+            {logo}
+            <h1 class="title">{text!(&config.name)}</h1>
+            {nav}
+           
+        </header>
+    )
 }

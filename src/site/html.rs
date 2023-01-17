@@ -1,7 +1,8 @@
-use axohtml::{dom::DOMTree, html, text, unsafe_text};
-
-use crate::config::{header::create_header, theme, Config};
+use crate::config::analytics::{get_analytics, Analytics};
+use crate::config::{theme, Config};
 use axohtml::elements::{div, meta};
+
+use crate::site::header;
 
 // False positive duplicate allocation warning
 // https://github.com/rust-lang/rust-clippy/issues?q=is%3Aissue+redundant_allocation+sort%3Aupdated-desc
@@ -33,11 +34,20 @@ fn create_social_cards(config: &Config) -> Vec<Box<meta<String>>> {
     html
 }
 
+use axohtml::{dom::DOMTree, html, text, unsafe_text};
+
 pub fn build(config: &Config, content: String) -> String {
     let theme = theme::css_class(&config.theme);
-    let classlist: &str = &format!("body {}", theme)[..];
+    let analytics = get_analytics(config);
+    let google_script = match &config.analytics {
+        Some(Analytics::Google(g)) => Some(g.get_script()),
+        _ => None,
+    };
     let description = &config.description;
-    let header = create_header(config);
+    let header = match config.no_header {
+        true => None,
+        false => Some(header::create(config)),
+    };
     let homepage = config.homepage.as_ref().map(|homepage| {
         html!(
           <meta property="og:url" content=homepage/>
@@ -47,7 +57,7 @@ pub fn build(config: &Config, content: String) -> String {
     let banner = repo_banner(config);
 
     let doc: DOMTree<String> = html!(
-    <html lang="en" id="oranda">
+    <html lang="en" id="oranda" class=theme>
     <head>
     <title>{ text!(&config.name) }</title>
     <meta charset="utf-8" />
@@ -58,13 +68,15 @@ pub fn build(config: &Config, content: String) -> String {
     <meta property="og:type" content="website" />
     <meta property="og:title" content=&config.name />
     {social_meta}
-    <link rel="stylesheet" href="styles.css"></link>
+    <link rel="stylesheet" href="https://market-assets.fra1.cdn.digitaloceanspaces.com//themes/axo-oranda.css" />    <link rel="stylesheet" href="styles.css"></link>
     </head>
     <body>
-    <div class=classlist>
+    <div class="container">
         {banner}
-        <div class="container">{header}{ unsafe_text!(content) }</div>
+        <main>{header}{ unsafe_text!(content) }</main>
     </div>
+        {analytics}
+        {google_script}
     </body>
     </html>
     );
@@ -80,6 +92,6 @@ fn repo_banner(config: &Config) -> Option<Box<div<String>>> {
                 {text!("Check out our GitHub")}
             </a>
         </div>
-                )
+        )
     })
 }

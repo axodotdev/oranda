@@ -1,7 +1,8 @@
-pub mod header;
+pub mod analytics;
 mod oranda;
 mod project;
 pub mod theme;
+use self::analytics::Analytics;
 use self::oranda::{OrandaConfig, Social};
 use crate::errors::*;
 use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxThemes;
@@ -22,6 +23,7 @@ pub struct Config {
     pub additional_css: String,
     pub repository: Option<String>,
     pub syntax_theme: SyntaxThemes,
+    pub analytics: Option<Analytics>,
     pub additional_pages: Option<Vec<String>>,
     pub social: Option<Social>,
     pub logo: Option<String>,
@@ -77,6 +79,7 @@ impl Config {
                     additional_css: custom.additional_css.unwrap_or(default.additional_css),
                     repository: custom.repository,
                     syntax_theme: custom.syntax_theme.unwrap_or(default.syntax_theme),
+                    analytics: custom.analytics,
                     additional_pages: custom.additional_pages,
                     social: custom.social,
                     logo: custom.logo,
@@ -96,6 +99,7 @@ impl Config {
                     additional_css: custom.additional_css.unwrap_or(default.additional_css),
                     repository: custom.repository,
                     syntax_theme: custom.syntax_theme.unwrap_or(default.syntax_theme),
+                    analytics: custom.analytics,
                     additional_pages: custom.additional_pages,
                     social: custom.social,
                     logo: custom.logo,
@@ -131,11 +135,12 @@ impl Default for Config {
             name: String::from("My Axo project"),
             no_header: false,
             readme_path: String::from("README.md"),
-            theme: Theme::Light,
+            theme: Theme::Dark,
             remote_styles: vec![],
             additional_css: String::from(""),
             repository: None,
             syntax_theme: SyntaxThemes::MaterialTheme,
+            analytics: None,
             additional_pages: None,
             social: None,
             logo: None,

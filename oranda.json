@@ -1,7 +1,12 @@
 {
-  "theme": "axo",
   "homepage": "https://oranda.axo.dev",
   "repository": "https://github.com/axodotdev/oranda",
+  "logo": "static/logo.png",
+  "analytics": {
+    "plausible": {
+      "domain": "tools.axo.dev/oranda"
+    }
+  },
   "additional_pages": ["./docs/src/theme/themes.md"],
   "social": {
     "image": "https://www.axo.dev/meta_small.jpeg",

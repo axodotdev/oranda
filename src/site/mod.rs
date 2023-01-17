@@ -5,6 +5,7 @@ use std::io::Write;
 use std::path::Path;
 
 mod css;
+mod header;
 mod html;
 pub mod markdown;
 
@@ -13,6 +14,7 @@ use crate::config::theme::Theme;
 
 use crate::config::Config;
 
+#[derive(Debug)]
 pub struct Site {
     pub html: String,
     pub css: String,
@@ -97,33 +99,33 @@ fn config() -> Config {
 #[test]
 fn it_builds_the_site() {
     let site = Site::build(&config(), &config().readme_path).unwrap();
-    assert!(site
-        .css
-        .contains("--text-light:#fafafa;--text-800:#1f2937;"));
     assert!(site.html.contains("<h1>axo</h1>"));
+    assert!(site.html.contains("axo-oranda.css"));
 }
 
 #[test]
 fn reads_description() {
     let site = Site::build(&config(), &config().readme_path).unwrap();
+    println!("{:?}", site.html);
     assert!(site.html.contains("you axolotl questions"));
-    assert!(site.html.contains("<h1>axo</h1>"))
+    assert!(site.html.contains("My Axo project"))
 }
 
 #[test]
 fn reads_theme() {
     let site = Site::build(&config(), &config().readme_path).unwrap();
-    assert!(site.html.contains("<div class=\"body dark\">"));
+    assert!(site.html.contains("html class=\"dark\""));
 }
 
 #[test]
 fn reads_additional_css() {
     let site = Site::build(&config(), &config().readme_path).unwrap();
-    assert!(site.css.contains("#oranda body{background:red}"));
+    assert!(site.css.contains("background: red"));
 }
 
 #[test]
 fn creates_nav() {
     let site = Site::build(&config(), &config().readme_path).unwrap();
-    assert!(site.html.contains("<nav><ul><li><a href=\"/\">Home</a></li><li><a href=\"/readme\">readme</a></li></ul></nav>"));
+
+    assert!(site.html.contains("<nav class=\"nav\"><ul><li><a href=\"/\">Home</a></li><li><a href=\"/readme\">readme</a></li></ul></nav>"));
 }

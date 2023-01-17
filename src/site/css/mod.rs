@@ -1,11 +1,10 @@
 use crate::errors::*;
-use grass::{Options, OutputStyle};
 use std::fs::read_to_string;
 use std::path::Path;
 
 use crate::config::Config;
 
-fn fetch_additional_css(config: &Config, css_options: Options) -> Result<String> {
+fn fetch_additional_css(config: &Config) -> Result<String> {
     if !Path::new(&config.additional_css).exists() {
         return Err(OrandaError::FileNotFound {
             filedesc: "Additional CSS".to_string(),
@@ -13,10 +12,7 @@ fn fetch_additional_css(config: &Config, css_options: Options) -> Result<String>
         });
     }
 
-    let additional_css_str = read_to_string(&config.additional_css)?;
-
-    let additional_css =
-        grass::from_string(format!("#oranda{{{}}}", additional_css_str), &css_options)?;
+    let additional_css = read_to_string(&config.additional_css)?;
 
     Ok(additional_css)
 }
@@ -46,10 +42,9 @@ fn fetch_remote_css(config: &Config) -> Result<String> {
 }
 
 pub fn build(config: &Config) -> Result<String> {
-    let css_options = grass::Options::default().style(OutputStyle::Compressed);
-    let mut css = grass::from_path("src/site/css/stylesheets/style.scss", &css_options)?;
+    let mut css = String::from("");
     if !config.additional_css.is_empty() {
-        let additional_css = fetch_additional_css(config, css_options)?;
+        let additional_css = fetch_additional_css(config)?;
 
         css = format!("{css}{additional}", css = css, additional = additional_css);
     }

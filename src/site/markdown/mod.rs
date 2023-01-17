@@ -1,13 +1,13 @@
 pub mod syntax_highlight;
 
+use crate::errors::*;
+use crate::site::markdown::syntax_highlight::syntax_highlight;
+use ammonia::Builder;
+use comrak::adapters::SyntaxHighlighterAdapter;
+use comrak::{self, ComrakOptions, ComrakPlugins};
 use std::collections::HashMap;
 use std::fs;
 use std::path::Path;
-
-use crate::errors::*;
-use crate::site::markdown::syntax_highlight::syntax_highlight;
-use comrak::adapters::SyntaxHighlighterAdapter;
-use comrak::{self, ComrakOptions, ComrakPlugins};
 
 pub struct Adapters {}
 impl SyntaxHighlighterAdapter for Adapters {
@@ -39,6 +39,7 @@ fn initialize_comrak_options() -> ComrakOptions {
     options.extension.tasklist = true;
     options.extension.footnotes = true;
     options.extension.description_lists = true;
+    options.render.unsafe_ = true;
 
     options
 }
@@ -63,7 +64,10 @@ pub fn body(readme_path: &Path) -> Result<String> {
     let adapter = Adapters {};
     plugins.render.codefence_syntax_highlighter = Some(&adapter);
 
-    Ok(comrak::markdown_to_html_with_plugins(
-        &readme, &options, &plugins,
-    ))
+    let unsafe_html = comrak::markdown_to_html_with_plugins(&readme, &options, &plugins);
+    let safe_html = Builder::new()
+        .add_generic_attributes(&["style"])
+        .clean(&unsafe_html)
+        .to_string();
+    Ok(safe_html)
 }
