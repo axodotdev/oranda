@@ -33,7 +33,13 @@ pub fn create_runtime_tokio() -> Runtime {
 }
 
 fn main() -> Result<()> {
-    let _guard = create_runtime_tokio().enter();
+    let runtime = tokio::runtime::Builder::new_multi_thread()
+        .worker_threads(1)
+        .max_blocking_threads(128)
+        .enable_all()
+        .build()
+        .expect("Initializing tokio runtime failed");
+    let _guard = runtime.enter();
     let cli = Cli::parse();
 
     match &cli.command {
