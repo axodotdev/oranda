@@ -3,6 +3,21 @@ use crate::errors::*;
 use axohtml::elements::{link, meta};
 use axohtml::html;
 
+pub fn fetch_additional_css(config: &Config) -> Result<Vec<Box<link<String>>>> {
+    let mut css = vec![];
+    for url in &config.additional_css {
+        let additional_css_future = axoasset::copy(url, &config.dist_dir);
+
+        let additional_path = tokio::runtime::Handle::current().block_on(additional_css_future)?;
+        let path_as_string = additional_path
+            .strip_prefix(&config.dist_dir)?
+            .to_string_lossy();
+
+        css.push(html!(<link rel="stylesheet" href=path_as_string.to_string()></link>))
+    }
+    Ok(css)
+}
+
 // False positive duplicate allocation warning
 // https://github.com/rust-lang/rust-clippy/issues?q=is%3Aissue+redundant_allocation+sort%3Aupdated-desc
 #[allow(clippy::vec_box)]

@@ -1,9 +1,7 @@
 use crate::errors::*;
-use crate::site::css::build;
 use std::fs::File;
 use std::io::Write;
 use std::path::Path;
-mod css;
 mod head;
 mod header;
 mod html;
@@ -17,24 +15,17 @@ use crate::config::Config;
 #[derive(Debug)]
 pub struct Site {
     pub html: String,
-    pub css: String,
 }
 
 impl Site {
-    fn css(config: &Config) -> Result<String> {
-        let css = build(config).unwrap();
-        Ok(css)
-    }
-
     fn build(config: &Config, file_path: &String) -> Result<Site> {
         let dist = &config.dist_dir;
         std::fs::create_dir_all(dist)?;
         let readme_path = Path::new(&file_path);
         let content = markdown::body(readme_path)?;
         let html = html::build(config, content)?;
-        let css = Self::css(config)?;
 
-        Ok(Site { html, css })
+        Ok(Site { html })
     }
 
     fn get_html_file_name(file: &String, config: &Config) -> Result<String> {
@@ -59,7 +50,6 @@ impl Site {
 
     pub fn write(config: &Config) -> Result<()> {
         let readme_path = &config.readme_path;
-        let site = Self::build(config, readme_path)?;
         let dist = &config.dist_dir;
 
         let mut files = vec![readme_path];
@@ -77,11 +67,6 @@ impl Site {
             html_file.write_all(site.html.as_bytes())?;
         }
 
-        let css_path = format!("{}/styles.css", &dist);
-
-        let mut css_file = File::create(css_path)?;
-        css_file.write_all(site.css.as_bytes())?;
-
         Ok(())
     }
 }
@@ -92,7 +77,7 @@ fn config() -> Config {
         description: String::from("you axolotl questions"),
         readme_path: String::from("./src/site/fixtures/readme.md"),
         additional_pages: Some(vec![String::from("./src/site/fixtures/readme.md")]),
-        additional_css: String::from("./src/site/fixtures/additional.css"),
+        additional_css: vec![String::from("./src/site/fixtures/additional.css")],
         theme: Theme::Dark,
         ..Default::default()
     }
@@ -117,12 +102,6 @@ fn reads_description() {
 fn reads_theme() {
     let site = Site::build(&config(), &config().readme_path).unwrap();
     assert!(site.html.contains("html class=\"dark\""));
-}
-
-#[test]
-fn reads_additional_css() {
-    let site = Site::build(&config(), &config().readme_path).unwrap();
-    assert!(site.css.contains("background: red"));
 }
 
 #[test]
