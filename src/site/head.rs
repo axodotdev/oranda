@@ -45,6 +45,9 @@ pub fn get_favicon(favicon: String, dist_dir: String) -> Result<Box<link<String>
     Ok(html!(<link rel="icon" href=path_as_string />))
 }
 
+// False positive duplicate allocation warning
+// https://github.com/rust-lang/rust-clippy/issues?q=is%3Aissue+redundant_allocation+sort%3Aupdated-desc
+#[allow(clippy::vec_box)]
 pub fn create_meta_tags(config: &Config) -> Vec<Box<meta<String>>> {
     let mut social_meta = create_social_cards(config);
     let description = &config.description;
