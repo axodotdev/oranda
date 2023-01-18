@@ -4,8 +4,7 @@ use std::path::{Path, PathBuf};
 #[cfg(test)]
 use assert_fs::fixture::{FileWriteStr, PathChild};
 
-use crate::config::project::Type;
-use crate::config::ProjectConfig;
+use crate::config::{project::ProjectType, ProjectConfig};
 use crate::errors::*;
 use crate::message::{self, MessageType};
 
@@ -53,7 +52,7 @@ fn it_detects_a_js_project() {
 
     assert_eq!(
         ProjectConfig::detect(&Some(tempdir.path().to_path_buf())),
-        Some(Type::JavaScript(JavaScript {}))
+        Some(ProjectType::JavaScript(JavaScript {}))
     );
     tempdir
         .close()

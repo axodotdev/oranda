@@ -6,8 +6,7 @@ use serde::Deserialize;
 #[cfg(test)]
 use assert_fs::fixture::{FileWriteStr, PathChild};
 
-use crate::config::project::Type;
-use crate::config::ProjectConfig;
+use crate::config::{project::ProjectType, ProjectConfig};
 use crate::errors::*;
 use crate::message::{self, MessageType};
 
@@ -56,7 +55,7 @@ description = ">o_o<"
 
     assert_eq!(
         ProjectConfig::detect(&Some(tempdir.path().to_path_buf())),
-        Some(Type::Rust(Rust {}))
+        Some(ProjectType::Rust(Rust {}))
     );
     tempdir
         .close()

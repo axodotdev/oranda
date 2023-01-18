@@ -21,27 +21,27 @@ impl ProjectConfig {
     pub fn load(project_root: Option<PathBuf>) -> Result<Option<ProjectConfig>> {
         if let Some(ptype) = ProjectConfig::detect(&project_root) {
             match ptype {
-                Type::JavaScript(project) => Ok(Some(project.read(&project_root)?)),
-                Type::Rust(project) => Ok(Some(project.read(&project_root)?)),
+                ProjectType::JavaScript(project) => Ok(Some(project.read(&project_root)?)),
+                ProjectType::Rust(project) => Ok(Some(project.read(&project_root)?)),
             }
         } else {
             Ok(None)
         }
     }
 
-    fn detect(project_root: &Option<PathBuf>) -> Option<Type> {
+    fn detect(project_root: &Option<PathBuf>) -> Option<ProjectType> {
         if Rust::config(project_root).exists() {
             println!(
                 "{}",
                 message::build(MessageType::Info, "Detected Rust project...")
             );
-            Some(Type::Rust(Rust {}))
+            Some(ProjectType::Rust(Rust {}))
         } else if JavaScript::config(project_root).exists() {
             println!(
                 "{}",
                 message::build(MessageType::Info, "Detected JavaScript project...")
             );
-            Some(Type::JavaScript(JavaScript {}))
+            Some(ProjectType::JavaScript(JavaScript {}))
         } else {
             println!(
                 "{}",
@@ -53,7 +53,7 @@ impl ProjectConfig {
 }
 
 #[derive(Debug, Eq, PartialEq)]
-pub enum Type {
+pub enum ProjectType {
     Rust(Rust),
     JavaScript(JavaScript),
 }
