@@ -22,10 +22,10 @@ pub enum OrandaError {
     #[error(transparent)]
     AxoAsset(#[from] axoasset::AxoassetError),
 
-    #[error("failed to read {filedesc} at {path}")]
+    #[error("Failed to read {filedesc} at {path}")]
     FileNotFound { filedesc: String, path: String },
 
-    #[error("failed to fetch {resource} at {url}")]
+    #[error("Failed to fetch {resource} at {url}")]
     RequestFailed { resource: String, url: String },
 
     #[error("{0}")]

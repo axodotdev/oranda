@@ -9,6 +9,7 @@ use assert_fs::fixture::{FileWriteStr, PathChild};
 use crate::config::project::Type;
 use crate::config::ProjectConfig;
 use crate::errors::*;
+use crate::message::{self, MessageType};
 
 static CARGO_TOML: &str = "./Cargo.toml";
 
@@ -21,9 +22,12 @@ struct CargoToml {
 pub struct Rust {}
 impl Rust {
     pub fn read(&self, project_root: &Option<PathBuf>) -> Result<ProjectConfig> {
-        println!("reading from cargo toml...");
         let cargo_toml = fs::read_to_string(Rust::config(project_root))?;
         let data: CargoToml = toml::from_str(&cargo_toml)?;
+        println!(
+            "{}",
+            message::build(MessageType::Debug, &format!("cargo_toml: {}", &cargo_toml))
+        );
         Ok(data.package)
     }
 

@@ -2,6 +2,7 @@ use std::net::SocketAddr;
 
 use crate::config::Config;
 use crate::errors::*;
+use crate::message::{self, MessageType};
 use axum::{http::StatusCode, routing::get_service, Router};
 use clap::Parser;
 use tower_http::services::ServeDir;
@@ -14,6 +15,7 @@ pub struct Serve {
 
 impl Serve {
     pub fn run(&self) -> Result<()> {
+        println!("{}", message::build(MessageType::Info, "Running serve..."));
         let config = Config::build()?;
         self.serve(config)?;
         Ok(())
