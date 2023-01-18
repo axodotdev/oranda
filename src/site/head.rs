@@ -3,6 +3,9 @@ use crate::errors::*;
 use axohtml::elements::{link, meta};
 use axohtml::html;
 
+// False positive duplicate allocation warning
+// https://github.com/rust-lang/rust-clippy/issues?q=is%3Aissue+redundant_allocation+sort%3Aupdated-desc
+#[allow(clippy::vec_box)]
 pub fn fetch_additional_css(config: &Config) -> Result<Vec<Box<link<String>>>> {
     let mut css = vec![];
     for url in &config.additional_css {
