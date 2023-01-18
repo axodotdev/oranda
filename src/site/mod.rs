@@ -27,6 +27,8 @@ impl Site {
     }
 
     fn build(config: &Config, file_path: &String) -> Result<Site> {
+        let dist = &config.dist_dir;
+        std::fs::create_dir_all(dist)?;
         let readme_path = Path::new(&file_path);
         let content = markdown::body(readme_path)?;
         let html = html::build(config, content)?;
@@ -59,6 +61,7 @@ impl Site {
         let readme_path = &config.readme_path;
         let site = Self::build(config, readme_path)?;
         let dist = &config.dist_dir;
+
         let mut files = vec![readme_path];
         if config.additional_pages.is_some() {
             files.extend(config.additional_pages.as_ref().unwrap())
@@ -68,7 +71,6 @@ impl Site {
             let site = Self::build(config, file)?;
             let file_name = Self::get_html_file_name(file, config).unwrap();
 
-            std::fs::create_dir_all(dist)?;
             let html_path = format!("{}/{}", &dist, file_name);
 
             let mut html_file = File::create(html_path)?;
