@@ -34,6 +34,7 @@ pub struct OrandaConfig {
     pub additional_pages: Option<Vec<String>>,
     pub social: Option<Social>,
     pub logo: Option<String>,
+    pub favicon: Option<String>,
 }
 
 impl OrandaConfig {
