@@ -34,13 +34,15 @@ pub fn create_social_cards(config: &Config) -> Vec<Box<meta<String>>> {
 }
 
 pub fn get_favicon(favicon: String, dist_dir: String) -> Result<Box<link<String>>> {
-    let favicon_future = axoasset::load(&favicon);
-
-    let favicon = tokio::runtime::Handle::current().block_on(favicon_future)?;
-    let copy_result_future = axoasset::copy("", &dist_dir[..]);
+    let copy_result_future = axoasset::copy(&favicon, &dist_dir[..]);
     let copy_result = tokio::runtime::Handle::current().block_on(copy_result_future)?;
-    
-    Ok(html!(<link rel="icon" href=copy_result.to_string_lossy() />))
+
+    let path_as_string = match copy_result.strip_prefix(dist_dir) {
+        Ok(path) => Ok(path.to_string_lossy()),
+        Err(e) => Err(OrandaError::Other(e.to_string())),
+    }?;
+
+    Ok(html!(<link rel="icon" href=path_as_string />))
 }
 
 pub fn create_meta_tags(config: &Config) -> Vec<Box<meta<String>>> {

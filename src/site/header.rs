@@ -17,10 +17,10 @@ async fn fetch_logo(
 ) -> Result<Box<img<String>>> {
     let copy_result = axoasset::copy(&origin_path, dist_dir).await?;
 
-    let path_as_string = copy_result
-        .strip_prefix(dist_dir)
-        .unwrap()
-        .to_string_lossy();
+    let path_as_string = match copy_result.strip_prefix(dist_dir) {
+        Ok(path) => Ok(path.to_string_lossy()),
+        Err(e) => Err(OrandaError::Other(e.to_string())),
+    }?;
 
     Ok(html!(<img src=path_as_string alt=name class="logo" />))
 }
