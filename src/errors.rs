@@ -11,6 +11,9 @@ pub enum OrandaError {
     Toml(#[from] toml::de::Error),
 
     #[error(transparent)]
+    StripPrefixError(#[from] std::path::StripPrefixError),
+
+    #[error(transparent)]
     Json(#[from] serde_json::Error),
 
     #[error(transparent)]

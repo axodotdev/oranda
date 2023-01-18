@@ -37,10 +37,7 @@ pub fn get_favicon(favicon: String, dist_dir: String) -> Result<Box<link<String>
     let copy_result_future = axoasset::copy(&favicon, &dist_dir[..]);
     let copy_result = tokio::runtime::Handle::current().block_on(copy_result_future)?;
 
-    let path_as_string = match copy_result.strip_prefix(dist_dir) {
-        Ok(path) => Ok(path.to_string_lossy()),
-        Err(e) => Err(OrandaError::Other(e.to_string())),
-    }?;
+    let path_as_string = copy_result.strip_prefix(dist_dir)?.to_string_lossy();
 
     Ok(html!(<link rel="icon" href=path_as_string />))
 }
