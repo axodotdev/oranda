@@ -10,7 +10,6 @@ pub mod markdown;
 #[cfg(test)]
 use crate::config::theme::Theme;
 use crate::config::Config;
-use crate::create_runtime_tokio;
 
 #[derive(Debug)]
 pub struct Site {
@@ -83,33 +82,29 @@ fn config() -> Config {
     }
 }
 
-#[test]
-fn it_builds_the_site() {
-    let _guard = create_runtime_tokio().enter();
+#[tokio::test]
+async fn it_builds_the_site() {
     let site = Site::build(&config(), &config().readme_path).unwrap();
     assert!(site.html.contains("<h1>axo</h1>"));
     assert!(site.html.contains("axo-oranda.css"));
 }
 
-#[test]
-fn reads_description() {
-    let _guard = create_runtime_tokio().enter();
+#[tokio::test]
+async fn reads_description() {
     let site = Site::build(&config(), &config().readme_path).unwrap();
     println!("{:?}", site.html);
     assert!(site.html.contains("you axolotl questions"));
     assert!(site.html.contains("My Axo project"))
 }
 
-#[test]
-fn reads_theme() {
-    let _guard = create_runtime_tokio().enter();
+#[tokio::test]
+async fn reads_theme() {
     let site = Site::build(&config(), &config().readme_path).unwrap();
     assert!(site.html.contains("html class=\"dark\""));
 }
 
-#[test]
-fn creates_nav() {
-    let _guard = create_runtime_tokio().enter();
+#[tokio::test]
+async fn creates_nav() {
     let site = Site::build(&config(), &config().readme_path).unwrap();
 
     assert!(site.html.contains("<nav class=\"nav\"><ul><li><a href=\"/\">Home</a></li><li><a href=\"/readme\">readme</a></li></ul></nav>"));
