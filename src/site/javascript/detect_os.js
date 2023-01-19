@@ -4,15 +4,43 @@
 
 let options = {
   windows: {
-    default: "windows",
-    64: "windows-64",
-    arm: "windows-arm",
+    default: {
+      platform: "windows",
+      device: "pc",
+      type: "32",
+    },
+    64: {
+      platform: "windows",
+      device: "pc",
+      type: "64",
+    },
+    arm: {
+      platform: "windows",
+      device: "pc",
+      type: "arm",
+    },
   },
   mac: {
-    default: "macos",
-    ppc: "macos-PPC",
-    32: "macos-32",
-    silicon: "macos-apple-silicon",
+    default: {
+      platform: "macos",
+      device: "apple",
+      type: "intel",
+    },
+    ppc: {
+      platform: "macos",
+      device: "apple",
+      type: "PPC",
+    },
+    32: {
+      platform: "macos",
+      device: "apple",
+      type: "32",
+    },
+    silicon: {
+      platform: "macos",
+      device: "apple",
+      type: "silicon",
+    },
   },
   linux: {
     default: "linux",
@@ -136,4 +164,9 @@ function getOS() {
   return OS;
 }
 
-window.os = getOS();
+let os = getOS();
+window.os = os;
+
+Array.from(document.querySelectorAll("a[data-targets]"))
+  .find((a) => a.attributes["data-targets"].value.includes(os.device))
+  .classList.remove("hidden");

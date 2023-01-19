@@ -1,9 +1,9 @@
-use axohtml::elements::{div, script};
+use crate::errors::*;
+use axohtml::elements::{a, div, script};
+use axohtml::types::{Class, SpacedSet};
 use axohtml::{html, text};
 use cargo_dist_schema::{ArtifactKind, DistManifest};
 use serde::Deserialize;
-
-use crate::errors::*;
 
 use super::Config;
 
@@ -40,11 +40,25 @@ pub fn create_artifacts_tabs(config: &Config) -> Result<Option<Box<div<String>>>
     let typed = &resp.json::<DistManifest>()?;
 
     println!("{:?}", typed.releases);
-    let mut html: Vec<Box<div<String>>> = vec![];
+    let mut html: Vec<Box<a<String>>> = vec![];
     for release in typed.releases.iter() {
         for artifact in release.artifacts.iter() {
             if let ArtifactKind::ExecutableZip = artifact.kind {
-                html.extend(html!(<div>{text!(&artifact.name)}</div>));
+                let mut targets = String::new();
+                for targ in artifact.target_triples.iter() {
+                    targets.push_str(format!("{} ", targ).as_str());
+                }
+                let classname: SpacedSet<Class> = "business-button hidden".try_into().unwrap();
+                let url = format!(
+                    "{}/releases/download/v{}/{}",
+                    config.repository.as_ref().unwrap(),
+                    config.version.as_ref().unwrap(),
+                    artifact.name
+                );
+
+                html.extend(
+                    html!(<a href=url class=classname data-targets=targets>{text!("Download")}</a>),
+                );
             }
         }
     }
