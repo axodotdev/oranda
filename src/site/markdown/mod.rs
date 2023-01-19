@@ -70,7 +70,7 @@ pub fn body(readme_path: &Path, syntax_theme: &SyntaxThemes) -> Result<String> {
 
     let unsafe_html = comrak::markdown_to_html_with_plugins(&readme, &options, &plugins);
     let safe_html = Builder::new()
-        .add_generic_attributes(&["style"])
+        .add_generic_attributes(&["style", "class", "id"])
         .clean(&unsafe_html)
         .to_string();
     Ok(safe_html)
