@@ -28,8 +28,11 @@ fn find_syntax<'a>(ps: &'a SyntaxSet, language: &'a str) -> Result<&'a SyntaxRef
     ))
 }
 
-pub fn syntax_highlight(lang: Option<&str>, code: &str) -> Result<String> {
-    let config = Config::build()?;
+pub fn syntax_highlight(
+    lang: Option<&str>,
+    code: &str,
+    syntax_theme: &SyntaxThemes,
+) -> Result<String> {
     let ps = SyntaxSet::load_defaults_newlines();
     let theme_set =
         ThemeSet::load_from_folder("src/site/markdown/syntax_highlight/syntax_themes").unwrap();
@@ -43,13 +46,17 @@ pub fn syntax_highlight(lang: Option<&str>, code: &str) -> Result<String> {
         code,
         &ps,
         syntax,
-        &theme_set.themes[&SyntaxThemes::as_str(&config.syntax_theme)],
+        &theme_set.themes[&syntax_theme.as_str()],
     )?)
 }
 
 #[test]
 fn creates_syntax() {
-    assert!(syntax_highlight(Some("js"), "console.log(5)")
-        .unwrap()
-        .contains("<span style=\"color:#ffcb6b;\">console</span>"));
+    assert!(syntax_highlight(
+        Some("js"),
+        "console.log(5)",
+        &SyntaxThemes::AgilaClassicOceanicNext
+    )
+    .unwrap()
+    .contains("<span style=\"color:#ffcb6b;\">console</span>"));
 }

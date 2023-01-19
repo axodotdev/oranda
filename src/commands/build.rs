@@ -10,11 +10,13 @@ use crate::site::Site;
 pub struct Build {
     #[arg(long, default_value = "./")]
     path: PathBuf,
+    #[arg(long, default_value = "./oranda.json")]
+    config: PathBuf,
 }
 
 impl Build {
     pub fn run(&self) -> Result<()> {
-        let config = Config::build()?;
+        let config = Config::build(&self.config)?;
         Site::write(&config)?;
         Ok(())
     }

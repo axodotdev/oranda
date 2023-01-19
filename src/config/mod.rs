@@ -7,6 +7,7 @@ use self::oranda::{OrandaConfig, Social};
 use crate::errors::*;
 use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxThemes;
 use project::ProjectConfig;
+use std::path::PathBuf;
 
 use theme::Theme;
 
@@ -31,7 +32,7 @@ pub struct Config {
 }
 
 impl Config {
-    pub fn build() -> Result<Config> {
+    pub fn build(config_path: &PathBuf) -> Result<Config> {
         //Users can have multiple types of configuration or no configuration at all
         //
         //- Project configuration comes from a project manifest file. We currently
@@ -43,7 +44,7 @@ impl Config {
         //  you could use this file to override fields in your project manifest.
         //  This file can contain all possible public configuration fields.
         let default = Config::default();
-        let custom = OrandaConfig::load()?;
+        let custom = OrandaConfig::load(config_path)?;
         let project = ProjectConfig::load(None)?;
 
         // if there is no oranda.config file present...
