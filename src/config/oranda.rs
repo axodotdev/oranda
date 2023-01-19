@@ -1,4 +1,3 @@
-use std::fs;
 use std::path::PathBuf;
 
 use serde::Deserialize;
@@ -38,14 +37,11 @@ pub struct OrandaConfig {
 impl OrandaConfig {
     pub fn load(config_path: &PathBuf) -> Result<Option<OrandaConfig>> {
         println!("reading from oranda config...");
-        if config_path.exists() {
-            let oranda_json = fs::read_to_string(config_path)?;
-            println!("read json: {:?}", &oranda_json);
-            let data: OrandaConfig = serde_json::from_str(&oranda_json)?;
-            println!("read data: {:?}", &data);
-            Ok(Some(data))
-        } else {
-            Ok(None)
-        }
+        let config_future = axoasset::load_string(config_path.to_str().unwrap());
+
+        let config = tokio::runtime::Handle::current().block_on(config_future)?;
+        let data: OrandaConfig = serde_json::from_str(config.as_str())?;
+        println!("read data: {:?}", &data);
+        Ok(Some(data))
     }
 }
