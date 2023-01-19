@@ -1,0 +1,11 @@
+{
+  "homepage": "https://oranda.axo.dev",
+  "readme": "dev/README.md",
+  "repository": "https://github.com/axodotdev/oranda",
+  "additional_pages": ["dev/additional.md"],
+  "social": {
+    "image": "https://www.axo.dev/meta_small.jpeg",
+    "image_alt": "axo",
+    "twitter_account": "@axodotdev"
+  }
+}
