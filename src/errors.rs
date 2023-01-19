@@ -22,6 +22,9 @@ pub enum OrandaError {
     #[error(transparent)]
     AxoAsset(#[from] axoasset::AxoassetError),
 
+    #[error(transparent)]
+    Reqwest(#[from] reqwest::Error),
+
     #[error("failed to read {filedesc} at {path}")]
     FileNotFound { filedesc: String, path: String },
 
