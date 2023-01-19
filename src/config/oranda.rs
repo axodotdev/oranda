@@ -1,4 +1,4 @@
-use std::path::PathBuf;
+use std::path::Path;
 
 use serde::Deserialize;
 
@@ -35,7 +35,7 @@ pub struct OrandaConfig {
 }
 
 impl OrandaConfig {
-    pub fn load(config_path: &PathBuf) -> Result<Option<OrandaConfig>> {
+    pub fn load(config_path: &Path) -> Result<Option<OrandaConfig>> {
         println!("reading from oranda config...");
         let config_future = axoasset::load_string(config_path.to_str().unwrap());
 

@@ -7,7 +7,7 @@ use self::oranda::{OrandaConfig, Social};
 use crate::errors::*;
 use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxThemes;
 use project::ProjectConfig;
-use std::path::PathBuf;
+use std::path::Path;
 
 use theme::Theme;
 
@@ -32,7 +32,7 @@ pub struct Config {
 }
 
 impl Config {
-    pub fn build(config_path: &PathBuf) -> Result<Config> {
+    pub fn build(config_path: &Path) -> Result<Config> {
         //Users can have multiple types of configuration or no configuration at all
         //
         //- Project configuration comes from a project manifest file. We currently
