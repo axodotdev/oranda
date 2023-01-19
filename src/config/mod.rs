@@ -3,6 +3,8 @@ mod oranda;
 mod project;
 pub mod theme;
 use self::artifacts::Artifacts;
+pub mod analytics;
+use self::analytics::Analytics;
 use self::oranda::{OrandaConfig, Social};
 use crate::errors::*;
 use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxThemes;
@@ -24,10 +26,13 @@ pub struct Config {
     pub additional_css: String,
     pub repository: Option<String>,
     pub syntax_theme: SyntaxThemes,
+    pub analytics: Option<Analytics>,
     pub additional_pages: Option<Vec<String>>,
     pub social: Option<Social>,
     pub artifacts: Option<Artifacts>,
     pub version: Option<String>,
+    pub logo: Option<String>,
+    pub favicon: Option<String>,
 }
 
 impl Config {
@@ -82,10 +87,13 @@ impl Config {
                     additional_css: custom.additional_css.unwrap_or(default.additional_css),
                     repository: custom.repository,
                     syntax_theme: custom.syntax_theme.unwrap_or(default.syntax_theme),
+                    analytics: custom.analytics,
                     additional_pages: custom.additional_pages,
                     social: custom.social,
                     artifacts: custom.artifacts,
                     version: None,
+                    logo: custom.logo,
+                    favicon: custom.favicon,
                 });
             // otherwise both oranda config and project manifest exists
             } else if let Some(project) = project {
@@ -106,10 +114,13 @@ impl Config {
                             .unwrap_or(project.repository.unwrap_or_default()),
                     ),
                     syntax_theme: custom.syntax_theme.unwrap_or(default.syntax_theme),
+                    analytics: custom.analytics,
                     additional_pages: custom.additional_pages,
                     social: custom.social,
                     artifacts: custom.artifacts,
                     version: Some(project.version.unwrap_or_default()),
+                    logo: custom.logo,
+                    favicon: custom.favicon,
                 });
             }
         }
@@ -148,10 +159,13 @@ impl Default for Config {
             additional_css: String::from(""),
             repository: None,
             syntax_theme: SyntaxThemes::MaterialTheme,
+            analytics: None,
             additional_pages: None,
             social: None,
             artifacts: None,
             version: None,
+            logo: None,
+            favicon: None,
         }
     }
 }

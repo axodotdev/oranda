@@ -3,9 +3,9 @@ use std::path::Path;
 
 use serde::Deserialize;
 
+use crate::config::analytics::Analytics;
 use crate::config::theme::Theme;
 use crate::errors::*;
-
 use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxThemes;
 
 use super::artifacts::Artifacts;
@@ -32,10 +32,13 @@ pub struct OrandaConfig {
     pub additional_css: Option<String>,
     pub repository: Option<String>,
     pub syntax_theme: Option<SyntaxThemes>,
+    pub analytics: Option<Analytics>,
     pub additional_pages: Option<Vec<String>>,
     pub social: Option<Social>,
     pub artifacts: Option<Artifacts>,
     pub version: Option<String>,
+    pub logo: Option<String>,
+    pub favicon: Option<String>,
 }
 
 impl OrandaConfig {

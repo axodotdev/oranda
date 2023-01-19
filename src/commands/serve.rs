@@ -1,11 +1,10 @@
 use std::net::SocketAddr;
 
+use crate::config::Config;
+use crate::errors::*;
 use axum::{http::StatusCode, routing::get_service, Router};
 use clap::Parser;
 use tower_http::services::ServeDir;
-
-use crate::config::Config;
-use crate::errors::*;
 
 #[derive(Debug, Parser)]
 pub struct Serve {

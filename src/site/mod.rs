@@ -3,8 +3,9 @@ use crate::site::css::build;
 use std::fs::File;
 use std::io::Write;
 use std::path::Path;
-
 mod css;
+mod head;
+mod header;
 mod html;
 pub mod markdown;
 
@@ -26,9 +27,11 @@ impl Site {
     }
 
     fn build(config: &Config, file_path: &String) -> Result<Site> {
+        let dist = &config.dist_dir;
+        std::fs::create_dir_all(dist)?;
         let readme_path = Path::new(&file_path);
         let content = markdown::body(readme_path)?;
-        let html = html::build(config, content);
+        let html = html::build(config, content)?;
         let css = Self::css(config)?;
 
         Ok(Site { html, css })
@@ -58,6 +61,7 @@ impl Site {
         let readme_path = &config.readme_path;
         let site = Self::build(config, readme_path)?;
         let dist = &config.dist_dir;
+
         let mut files = vec![readme_path];
         if config.additional_pages.is_some() {
             files.extend(config.additional_pages.as_ref().unwrap())
@@ -67,7 +71,6 @@ impl Site {
             let site = Self::build(config, file)?;
             let file_name = Self::get_html_file_name(file, config).unwrap();
 
-            std::fs::create_dir_all(dist)?;
             let html_path = format!("{}/{}", &dist, file_name);
 
             let mut html_file = File::create(html_path)?;
@@ -88,6 +91,7 @@ fn config() -> Config {
     Config {
         description: String::from("you axolotl questions"),
         readme_path: String::from("./src/site/fixtures/readme.md"),
+        additional_pages: Some(vec![String::from("./src/site/fixtures/readme.md")]),
         additional_css: String::from("./src/site/fixtures/additional.css"),
         theme: Theme::Dark,
         ..Default::default()
@@ -104,7 +108,9 @@ fn it_builds_the_site() {
 #[test]
 fn reads_description() {
     let site = Site::build(&config(), &config().readme_path).unwrap();
+    println!("{:?}", site.html);
     assert!(site.html.contains("you axolotl questions"));
+    assert!(site.html.contains("My Axo project"))
 }
 
 #[test]
@@ -117,4 +123,11 @@ fn reads_theme() {
 fn reads_additional_css() {
     let site = Site::build(&config(), &config().readme_path).unwrap();
     assert!(site.css.contains("background: red"));
+}
+
+#[test]
+fn creates_nav() {
+    let site = Site::build(&config(), &config().readme_path).unwrap();
+
+    assert!(site.html.contains("<nav class=\"nav\"><ul><li><a href=\"/\">Home</a></li><li><a href=\"/readme\">readme</a></li></ul></nav>"));
 }
