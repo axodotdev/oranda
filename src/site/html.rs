@@ -1,5 +1,5 @@
 use crate::config::analytics::{get_analytics, Analytics};
-use crate::config::artifacts::create_artifacts_tabs;
+use crate::config::artifacts::{self, create_artifacts_tabs};
 use crate::config::{theme, Config};
 use crate::errors::*;
 use crate::site::header;
@@ -18,6 +18,10 @@ pub fn build(config: &Config, content: String) -> Result<String> {
     let header = match config.no_header {
         true => None,
         false => Some(header::create(config)?),
+    };
+    let os_script = match config.artifacts {
+        None => None,
+        Some(_) => Some(artifacts::get_os_script(config)?),
     };
     let homepage = config.homepage.as_ref().map(|homepage| {
         html!(
@@ -51,6 +55,7 @@ pub fn build(config: &Config, content: String) -> Result<String> {
         </div>
             {analytics}
             {google_script}
+            {os_script}
         </body>
     </html>
     );

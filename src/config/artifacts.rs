@@ -1,10 +1,7 @@
-use axohtml::elements::div;
+use axohtml::elements::{div, script};
 use axohtml::{html, text};
-use cargo_dist_schema::DistManifest;
-use schemars::JsonSchema;
-use serde::{Deserialize, Serialize};
-
-use std::path::PathBuf;
+use cargo_dist_schema::{ArtifactKind, DistManifest};
+use serde::Deserialize;
 
 use crate::errors::*;
 
@@ -46,11 +43,21 @@ pub fn create_artifacts_tabs(config: &Config) -> Result<Option<Box<div<String>>>
     let mut html: Vec<Box<div<String>>> = vec![];
     for release in typed.releases.iter() {
         for artifact in release.artifacts.iter() {
-            html.extend(html!(<div>{text!(&artifact.name)}</div>));
+            if let ArtifactKind::ExecutableZip = artifact.kind {
+                html.extend(html!(<div>{text!(&artifact.name)}</div>));
+            }
         }
     }
 
     return Ok(Some(
-        html!(<div><h2 class="text-center">{text!("Download for your platform")}</h2>{html}</div>),
+        html!(<div><h3 class="text-center">{text!("Download for your platform")}</h3>{html}</div>),
     ));
+}
+
+pub fn get_os_script(config: &Config) -> Result<Box<script<String>>> {
+    let detect_os_js = axoasset::copy("src/site/javascript/detect_os.js", &config.dist_dir);
+
+    let path = tokio::runtime::Handle::current().block_on(detect_os_js)?;
+    let path_as_string = path.strip_prefix(&config.dist_dir)?.to_string_lossy();
+    Ok(html!(<script src=path_as_string />))
 }
