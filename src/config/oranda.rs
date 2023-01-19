@@ -1,5 +1,4 @@
 use std::fs;
-use std::path::Path;
 use std::path::PathBuf;
 
 use serde::Deserialize;
@@ -15,8 +14,6 @@ pub struct Social {
     pub image_alt: Option<String>,
     pub twitter_account: Option<String>,
 }
-
-static ORANDA_JSON: &str = "./oranda.json";
 
 #[derive(Debug, Deserialize)]
 pub struct OrandaConfig {

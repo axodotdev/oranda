@@ -1,6 +1,5 @@
 pub mod syntax_themes;
 
-use crate::config::Config;
 use crate::errors::*;
 use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxThemes;
 use syntect::highlighting::ThemeSet;
