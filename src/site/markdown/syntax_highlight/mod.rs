@@ -51,11 +51,12 @@ pub fn syntax_highlight(
 
 #[test]
 fn creates_syntax() {
-    assert!(syntax_highlight(
+    let highlight = syntax_highlight(
         Some("js"),
         "console.log(5)",
-        &SyntaxThemes::AgilaClassicOceanicNext
+        &SyntaxThemes::AgilaClassicOceanicNext,
     )
-    .unwrap()
-    .contains("<span style=\"color:#ffcb6b;\">console</span>"));
+    .unwrap();
+
+    assert!(highlight.contains("<span style=\"color:#fac863;\">console</span>"));
 }
