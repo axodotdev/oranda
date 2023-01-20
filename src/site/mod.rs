@@ -8,7 +8,6 @@ mod head;
 mod header;
 mod html;
 pub mod markdown;
-extern crate fs_extra;
 use fs_extra::copy_items;
 use fs_extra::dir;
 
