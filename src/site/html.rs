@@ -41,7 +41,7 @@ pub fn build(config: &Config, content: String) -> Result<String> {
             {homepage}
             {favicon}
             {meta_tags}
-            <link rel="stylesheet" href="https://www.unpkg.com/@axodotdev/fringe/themes/axo-oranda.css"></link>
+            <link rel="stylesheet" href="https://www.unpkg.com/@axodotdev/fringe@0.0.7/themes/axo-oranda.css"></link>
             {additional_css}
         </head>
         <body>
