@@ -32,6 +32,7 @@ pub struct OrandaConfig {
     pub social: Option<Social>,
     pub logo: Option<String>,
     pub favicon: Option<String>,
+    pub path_prefix: Option<String>,
 }
 
 impl OrandaConfig {
