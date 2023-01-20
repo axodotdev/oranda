@@ -1,12 +1,14 @@
-use std::fs;
 use std::path::{Path, PathBuf};
 
 use serde::Deserialize;
 
 #[cfg(test)]
+use crate::config::project::Type;
+#[cfg(test)]
+use crate::initialize_tokio_runtime;
+#[cfg(test)]
 use assert_fs::fixture::{FileWriteStr, PathChild};
 
-use crate::config::project::Type;
 use crate::config::ProjectConfig;
 use crate::errors::*;
 
@@ -38,6 +40,7 @@ impl Rust {
 }
 
 #[test]
+
 fn it_detects_a_rust_project() {
     let tempdir = assert_fs::TempDir::new().expect("failed creating tempdir");
     let cargo_toml = tempdir.child("Cargo.toml");
@@ -62,6 +65,7 @@ description = ">o_o<"
 
 #[test]
 fn it_loads_a_rust_project_config() {
+    let _guard = initialize_tokio_runtime().enter();
     let tempdir = assert_fs::TempDir::new().expect("failed creating tempdir");
     let cargo_toml = tempdir.child("Cargo.toml");
     cargo_toml
