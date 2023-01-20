@@ -1,6 +1,5 @@
 use crate::errors::*;
 use crate::site::css::build;
-use fs_extra;
 use std::fs::File;
 use std::io::Write;
 use std::path::Path;
