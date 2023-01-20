@@ -1,13 +1,18 @@
 > This README contains expected Markdown elements. It is useful for developing themes and testing that changes to Oranda parsing do not have unexpected repercussions. If you run into a bug not captured here, please add it.
 
 # Heading 1
+
 ## Heading 2
+
 ### Heading 3
+
 #### Heading 4
+
 ###### Heading 5
+
 ####### Heading 6
 
-A paragraph can contain **bold**, _italic_ and *italic* text. (Those two are different.) Let's look at some longer text and other features.
+A paragraph can contain **bold**, _italic_ and _italic_ text. (Those two are different.) Let's look at some longer text and other features.
 
 ## A combination of text and headings, plus a blockquote
 
@@ -19,7 +24,7 @@ He is a modern poet, active in the middle of the twentieth century. He worked as
 
 But back to Frank. My favorite poem of his is called ["The Day Lady Died,"](https://www.poetryfoundation.org/poems/42657/the-day-lady-died) and is about the death of Billie Holiday. But my favorite quotation comes from "Meditations in an Emergency":
 
->  However, I have never clogged myself with the praises of pastoral life, nor with nostalgia for an innocent past of perverted acts in pastures. No. One need never leave the confines of New York to get all the greenery one wishes—I can’t even enjoy a blade of grass unless I know there’s a subway handy, or a record store or some other sign that people do not totally regret life. It is more important to affirm the least sincere; the clouds get enough attention as it is and even they continue to pass. Do they know what they’re missing? Uh huh.
+> However, I have never clogged myself with the praises of pastoral life, nor with nostalgia for an innocent past of perverted acts in pastures. No. One need never leave the confines of New York to get all the greenery one wishes—I can’t even enjoy a blade of grass unless I know there’s a subway handy, or a record store or some other sign that people do not totally regret life. It is more important to affirm the least sincere; the clouds get enough attention as it is and even they continue to pass. Do they know what they’re missing? Uh huh.
 
 The above text includes a:
 
@@ -43,25 +48,27 @@ One error we ran into before was in code-blocks with HTML specifically, so let's
 <meta name="description" content="Poets, poets, poets" />
 <meta property="robots" content="robots.txt" />
 ```
+
 ## Complex features: Images, tables, raw html
 
-
 ### Images
-![An image from a vintage video synth](./some_art.png)
+
+![An image from a vintage video synth](./static/some_art.png)
 Here is an image I made.
 
 ### Tables
+
 I couldn't think of a good table example, so I adapted [this styles table from Github](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
 
-| Style | Syntax | Example | Output |
-| --- | --- | --- | --- |
-| Bold | `** **` or `__ __` | `**Frank O'Hara is a bold poet.**` | **Frank O'Hara is a bold poet.** |
-| Italic | `* *` or `_ _`   | `*I feel a little tipsy.*` | *I feel a little tipsy.* |
-| Strikethrough | `~~ ~~` | `~~This task has been completed.~~` | ~~This task has been completed.~~ |
-| Bold and nested italic | `** **` and `_ _` | `**I can be bold and also _tipsy_!**` | **I can be bold and also _tipsy_!** |
-| All bold and italic | `*** ***` | `***Bold. Tipsy. Me.***` | ***Bold. Tipsy. Me.*** |
-| Subscript | `<sub> </sub>` | `<sub>I am small and low.</sub>` | <sub>I am small and low.</sub> |
-| Superscript | `<sup> </sup>` | `<sup>I am small and high.</sup>` | <sup>I am small and high.</sup> |
+| Style                  | Syntax             | Example                               | Output                              |
+| ---------------------- | ------------------ | ------------------------------------- | ----------------------------------- |
+| Bold                   | `** **` or `__ __` | `**Frank O'Hara is a bold poet.**`    | **Frank O'Hara is a bold poet.**    |
+| Italic                 | `* *` or `_ _`     | `*I feel a little tipsy.*`            | _I feel a little tipsy._            |
+| Strikethrough          | `~~ ~~`            | `~~This task has been completed.~~`   | ~~This task has been completed.~~   |
+| Bold and nested italic | `** **` and `_ _`  | `**I can be bold and also _tipsy_!**` | **I can be bold and also _tipsy_!** |
+| All bold and italic    | `*** ***`          | `***Bold. Tipsy. Me.***`              | **_Bold. Tipsy. Me._**              |
+| Subscript              | `<sub> </sub>`     | `<sub>I am small and low.</sub>`      | <sub>I am small and low.</sub>      |
+| Superscript            | `<sup> </sup>`     | `<sup>I am small and high.</sup>`     | <sup>I am small and high.</sup>     |
 
 ### Raw HTML
 

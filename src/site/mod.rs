@@ -8,6 +8,9 @@ mod head;
 mod header;
 mod html;
 pub mod markdown;
+extern crate fs_extra;
+use fs_extra::copy_items;
+use fs_extra::dir;
 
 #[cfg(test)]
 use crate::config::theme::Theme;
@@ -57,10 +60,19 @@ impl Site {
         Ok(file_name)
     }
 
+    pub fn copy_static(dist_path: &String, static_path: &String) -> Result<()> {
+        let mut options = dir::CopyOptions::new();
+        options.overwrite = true;
+        copy_items(&vec![static_path], dist_path, &options)?;
+
+        Ok(())
+    }
+
     pub fn write(config: &Config) -> Result<()> {
         let readme_path = &config.readme_path;
         let site = Self::build(config, readme_path)?;
         let dist = &config.dist_dir;
+        Self::copy_static(dist, &config.static_dir)?;
 
         let mut files = vec![readme_path];
         if config.additional_pages.is_some() {
