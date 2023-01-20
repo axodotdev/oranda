@@ -41,11 +41,7 @@ pub fn create(config: &Config) -> Result<Box<header<String>>> {
                 let mut href = format!("/{}", file_name);
 
                 if let Some(prefix) = &config.path_prefix {
-                    let mut href_vec = format!("/{}", prefix).chars().collect::<Vec<_>>();
-
-                    // if there are consecutive / this will fix it
-                    href_vec.dedup();
-                    href = format!("{}{}", href_vec.into_iter().collect::<String>(), href);
+                    href = format!("/{}{}", prefix, href);
                 }
 
                 html.extend(html!(<li><a href=href>{text!(file_name)}</a></li>));
