@@ -1,5 +1,6 @@
 use crate::errors::*;
 use crate::site::css::build;
+use fs_extra;
 use std::fs::File;
 use std::io::Write;
 use std::path::Path;
@@ -8,8 +9,6 @@ mod head;
 mod header;
 mod html;
 pub mod markdown;
-use fs_extra::copy_items;
-use fs_extra::dir;
 
 #[cfg(test)]
 use crate::config::theme::Theme;
@@ -60,9 +59,9 @@ impl Site {
     }
 
     pub fn copy_static(dist_path: &String, static_path: &String) -> Result<()> {
-        let mut options = dir::CopyOptions::new();
+        let mut options = fs_extra::dir::CopyOptions::new();
         options.overwrite = true;
-        copy_items(&[static_path], dist_path, &options)?;
+        fs_extra::copy_items(&[static_path], dist_path, &options)?;
 
         Ok(())
     }
