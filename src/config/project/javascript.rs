@@ -14,8 +14,9 @@ static PACKAGE_JSON: &str = "./package.json";
 pub struct JavaScript {}
 impl JavaScript {
     pub fn read(&self, project_root: &Option<PathBuf>) -> Result<ProjectConfig> {
-        println!("reading from package.json...");
-        let package_json = fs::read_to_string(JavaScript::config(project_root))?;
+        let path = JavaScript::config(project_root);
+        let package_json_future = axoasset::load_string(path.to_str().unwrap());
+        let package_json = tokio::runtime::Handle::current().block_on(package_json_future)?;
         let data: ProjectConfig = serde_json::from_str(&package_json)?;
         Ok(data)
     }

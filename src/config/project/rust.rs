@@ -21,8 +21,9 @@ struct CargoToml {
 pub struct Rust {}
 impl Rust {
     pub fn read(&self, project_root: &Option<PathBuf>) -> Result<ProjectConfig> {
-        println!("reading from cargo toml...");
-        let cargo_toml = fs::read_to_string(Rust::config(project_root))?;
+        let path = Rust::config(project_root);
+        let cargo_toml_future = axoasset::load_string(path.to_str().unwrap());
+        let cargo_toml = tokio::runtime::Handle::current().block_on(cargo_toml_future)?;
         let data: CargoToml = toml::from_str(&cargo_toml)?;
         Ok(data.package)
     }
