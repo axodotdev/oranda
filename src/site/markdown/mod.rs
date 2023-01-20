@@ -9,10 +9,10 @@ use std::collections::HashMap;
 use std::fs;
 use std::path::Path;
 
-use self::syntax_highlight::syntax_themes::SyntaxThemes;
+use self::syntax_highlight::syntax_themes::SyntaxTheme;
 
 pub struct Adapters<'a> {
-    syntax_theme: &'a SyntaxThemes,
+    syntax_theme: &'a SyntaxTheme,
 }
 impl SyntaxHighlighterAdapter for Adapters<'_> {
     fn highlight(&self, lang: Option<&str>, code: &str) -> String {
@@ -60,7 +60,7 @@ fn load(readme_path: &Path) -> Result<String> {
     }
 }
 
-pub fn body(readme_path: &Path, syntax_theme: &SyntaxThemes) -> Result<String> {
+pub fn body(readme_path: &Path, syntax_theme: &SyntaxTheme) -> Result<String> {
     let readme = load(readme_path)?;
     let options = initialize_comrak_options();
 

@@ -5,7 +5,7 @@ pub mod theme;
 use self::analytics::Analytics;
 use self::oranda::{OrandaConfig, Social};
 use crate::errors::*;
-use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxThemes;
+use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxTheme;
 use project::ProjectConfig;
 use std::path::Path;
 
@@ -23,7 +23,7 @@ pub struct Config {
     pub remote_styles: Vec<String>,
     pub additional_css: String,
     pub repository: Option<String>,
-    pub syntax_theme: SyntaxThemes,
+    pub syntax_theme: SyntaxTheme,
     pub analytics: Option<Analytics>,
     pub additional_pages: Option<Vec<String>>,
     pub social: Option<Social>,
@@ -143,7 +143,7 @@ impl Default for Config {
             remote_styles: vec![],
             additional_css: String::from(""),
             repository: None,
-            syntax_theme: SyntaxThemes::MaterialTheme,
+            syntax_theme: SyntaxTheme::MaterialTheme,
             analytics: None,
             additional_pages: None,
             social: None,

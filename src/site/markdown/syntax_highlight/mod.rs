@@ -1,7 +1,7 @@
 pub mod syntax_themes;
 
 use crate::errors::*;
-use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxThemes;
+use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxTheme;
 use syntect::highlighting::ThemeSet;
 use syntect::html::highlighted_html_for_string;
 use syntect::parsing::{SyntaxReference, SyntaxSet};
@@ -30,7 +30,7 @@ fn find_syntax<'a>(ps: &'a SyntaxSet, language: &'a str) -> Result<&'a SyntaxRef
 pub fn syntax_highlight(
     lang: Option<&str>,
     code: &str,
-    syntax_theme: &SyntaxThemes,
+    syntax_theme: &SyntaxTheme,
 ) -> Result<String> {
     let ps = SyntaxSet::load_defaults_newlines();
     let theme_set =
@@ -54,7 +54,7 @@ fn creates_syntax() {
     let highlight = syntax_highlight(
         Some("js"),
         "console.log(5)",
-        &SyntaxThemes::AgilaClassicOceanicNext,
+        &SyntaxTheme::AgilaClassicOceanicNext,
     )
     .unwrap();
 

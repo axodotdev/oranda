@@ -5,7 +5,7 @@ use serde::Deserialize;
 use crate::config::analytics::Analytics;
 use crate::config::theme::Theme;
 use crate::errors::*;
-use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxThemes;
+use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxTheme;
 
 #[derive(Debug, Deserialize)]
 pub struct Social {
@@ -26,7 +26,7 @@ pub struct OrandaConfig {
     pub remote_styles: Option<Vec<String>>,
     pub additional_css: Option<String>,
     pub repository: Option<String>,
-    pub syntax_theme: Option<SyntaxThemes>,
+    pub syntax_theme: Option<SyntaxTheme>,
     pub analytics: Option<Analytics>,
     pub additional_pages: Option<Vec<String>>,
     pub social: Option<Social>,
