@@ -6,7 +6,7 @@ use axohtml::elements::div;
 
 use axohtml::{dom::DOMTree, html, text, unsafe_text};
 
-use super::head::{create_meta_tags, fetch_additional_css, get_favicon};
+use crate::site::head::{create_meta_tags, fetch_additional_css, get_favicon};
 
 pub fn build(config: &Config, content: String) -> Result<String> {
     let theme = theme::css_class(&config.theme);
