@@ -9,10 +9,14 @@ use std::collections::HashMap;
 use std::fs;
 use std::path::Path;
 
-pub struct Adapters {}
-impl SyntaxHighlighterAdapter for Adapters {
+use self::syntax_highlight::syntax_themes::SyntaxTheme;
+
+pub struct Adapters<'a> {
+    syntax_theme: &'a SyntaxTheme,
+}
+impl SyntaxHighlighterAdapter for Adapters<'_> {
     fn highlight(&self, lang: Option<&str>, code: &str) -> String {
-        let highlighted_code = syntax_highlight(lang, code);
+        let highlighted_code = syntax_highlight(lang, code, self.syntax_theme);
 
         // requires a string to be returned
         match highlighted_code {
@@ -56,17 +60,17 @@ fn load(readme_path: &Path) -> Result<String> {
     }
 }
 
-pub fn body(readme_path: &Path) -> Result<String> {
+pub fn body(readme_path: &Path, syntax_theme: &SyntaxTheme) -> Result<String> {
     let readme = load(readme_path)?;
     let options = initialize_comrak_options();
 
     let mut plugins = ComrakPlugins::default();
-    let adapter = Adapters {};
+    let adapter = Adapters { syntax_theme };
     plugins.render.codefence_syntax_highlighter = Some(&adapter);
 
     let unsafe_html = comrak::markdown_to_html_with_plugins(&readme, &options, &plugins);
     let safe_html = Builder::new()
-        .add_generic_attributes(&["style"])
+        .add_generic_attributes(&["style", "class", "id"])
         .clean(&unsafe_html)
         .to_string();
     Ok(safe_html)

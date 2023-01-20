@@ -21,7 +21,7 @@ impl Site {
         let dist = &config.dist_dir;
         std::fs::create_dir_all(dist)?;
         let readme_path = Path::new(&file_path);
-        let content = markdown::body(readme_path)?;
+        let content = markdown::body(readme_path, &config.syntax_theme)?;
         let html = html::build(config, content)?;
 
         Ok(Site { html })

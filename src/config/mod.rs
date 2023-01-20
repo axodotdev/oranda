@@ -5,8 +5,9 @@ pub mod theme;
 use self::analytics::Analytics;
 use self::oranda::{OrandaConfig, Social};
 use crate::errors::*;
-use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxThemes;
+use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxTheme;
 use project::ProjectConfig;
+use std::path::Path;
 
 use theme::Theme;
 
@@ -21,7 +22,7 @@ pub struct Config {
     pub theme: Theme,
     pub additional_css: Vec<String>,
     pub repository: Option<String>,
-    pub syntax_theme: SyntaxThemes,
+    pub syntax_theme: SyntaxTheme,
     pub analytics: Option<Analytics>,
     pub additional_pages: Option<Vec<String>>,
     pub social: Option<Social>,
@@ -30,7 +31,7 @@ pub struct Config {
 }
 
 impl Config {
-    pub fn build() -> Result<Config> {
+    pub fn build(config_path: &Path) -> Result<Config> {
         //Users can have multiple types of configuration or no configuration at all
         //
         //- Project configuration comes from a project manifest file. We currently
@@ -42,7 +43,7 @@ impl Config {
         //  you could use this file to override fields in your project manifest.
         //  This file can contain all possible public configuration fields.
         let default = Config::default();
-        let custom = OrandaConfig::load()?;
+        let custom = OrandaConfig::load(config_path)?;
         let project = ProjectConfig::load(None)?;
 
         // if there is no oranda.config file present...
@@ -138,7 +139,7 @@ impl Default for Config {
             theme: Theme::Dark,
             additional_css: vec![],
             repository: None,
-            syntax_theme: SyntaxThemes::MaterialTheme,
+            syntax_theme: SyntaxTheme::MaterialTheme,
             analytics: None,
             additional_pages: None,
             social: None,

@@ -1,14 +1,14 @@
-use std::fs;
-use std::path::{Path, PathBuf};
-
-use serde::Deserialize;
-
-#[cfg(test)]
-use assert_fs::fixture::{FileWriteStr, PathChild};
-
-use crate::config::project::Type;
 use crate::config::ProjectConfig;
 use crate::errors::*;
+use serde::Deserialize;
+use std::path::{Path, PathBuf};
+
+#[cfg(test)]
+use crate::config::project::Type;
+#[cfg(test)]
+use crate::initialize_tokio_runtime;
+#[cfg(test)]
+use assert_fs::fixture::{FileWriteStr, PathChild};
 
 static CARGO_TOML: &str = "./Cargo.toml";
 
@@ -21,8 +21,9 @@ struct CargoToml {
 pub struct Rust {}
 impl Rust {
     pub fn read(&self, project_root: &Option<PathBuf>) -> Result<ProjectConfig> {
-        println!("reading from cargo toml...");
-        let cargo_toml = fs::read_to_string(Rust::config(project_root))?;
+        let path = Rust::config(project_root);
+        let cargo_toml_future = axoasset::load_string(path.to_str().unwrap());
+        let cargo_toml = tokio::runtime::Handle::current().block_on(cargo_toml_future)?;
         let data: CargoToml = toml::from_str(&cargo_toml)?;
         Ok(data.package)
     }
@@ -37,6 +38,7 @@ impl Rust {
 }
 
 #[test]
+
 fn it_detects_a_rust_project() {
     let tempdir = assert_fs::TempDir::new().expect("failed creating tempdir");
     let cargo_toml = tempdir.child("Cargo.toml");
@@ -61,6 +63,7 @@ description = ">o_o<"
 
 #[test]
 fn it_loads_a_rust_project_config() {
+    let _guard = initialize_tokio_runtime().enter();
     let tempdir = assert_fs::TempDir::new().expect("failed creating tempdir");
     let cargo_toml = tempdir.child("Cargo.toml");
     cargo_toml
