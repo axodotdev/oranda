@@ -63,7 +63,7 @@ impl Site {
     pub fn copy_static(dist_path: &String, static_path: &String) -> Result<()> {
         let mut options = dir::CopyOptions::new();
         options.overwrite = true;
-        copy_items(&vec![static_path], dist_path, &options)?;
+        copy_items(&[static_path], dist_path, &options)?;
 
         Ok(())
     }
