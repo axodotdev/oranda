@@ -16,6 +16,7 @@ pub struct Config {
     pub description: String,
     pub dist_dir: String,
     pub homepage: Option<String>,
+    pub static_dir: String,
     pub name: String,
     pub no_header: bool,
     pub readme_path: String,
@@ -72,6 +73,7 @@ impl Config {
                 return Ok(Config {
                     description: custom.description.unwrap_or(default.description),
                     dist_dir: custom.dist_dir.unwrap_or(default.dist_dir),
+                    static_dir: custom.static_dir.unwrap_or(default.static_dir),
                     homepage: Self::homepage(custom.homepage, None, default.homepage),
                     name: custom.name.unwrap_or(default.name),
                     no_header: custom.no_header.unwrap_or(default.no_header),
@@ -93,6 +95,7 @@ impl Config {
                 return Ok(Config {
                     description: custom.description.unwrap_or(project.description),
                     dist_dir: custom.dist_dir.unwrap_or(default.dist_dir),
+                    static_dir: custom.static_dir.unwrap_or(default.static_dir),
                     homepage: Self::homepage(custom.homepage, project.homepage, default.homepage),
                     name: custom.name.unwrap_or(project.name),
                     no_header: custom.no_header.unwrap_or(default.no_header),
@@ -149,6 +152,7 @@ impl Default for Config {
             social: None,
             logo: None,
             favicon: None,
+            static_dir: String::from("static"),
         }
     }
 }
