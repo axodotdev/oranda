@@ -1,6 +1,7 @@
-use std::path::{Path, PathBuf};
-
+use crate::config::ProjectConfig;
+use crate::errors::*;
 use serde::Deserialize;
+use std::path::{Path, PathBuf};
 
 #[cfg(test)]
 use crate::config::project::Type;
@@ -8,9 +9,6 @@ use crate::config::project::Type;
 use crate::initialize_tokio_runtime;
 #[cfg(test)]
 use assert_fs::fixture::{FileWriteStr, PathChild};
-
-use crate::config::ProjectConfig;
-use crate::errors::*;
 
 static CARGO_TOML: &str = "./Cargo.toml";
 

@@ -1,3 +1,4 @@
+use crate::config::ProjectConfig;
 use crate::errors::*;
 use std::path::{Path, PathBuf};
 
@@ -6,7 +7,6 @@ use assert_fs::fixture::{FileWriteStr, PathChild};
 
 #[cfg(test)]
 use crate::config::project::Type;
-use crate::config::ProjectConfig;
 
 #[cfg(test)]
 use crate::initialize_tokio_runtime;
