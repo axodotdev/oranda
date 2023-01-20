@@ -30,13 +30,10 @@ impl ProjectConfig {
 
     fn detect(project_root: &Option<PathBuf>) -> Option<Type> {
         if Rust::config(project_root).exists() {
-            println!("detected rust project...");
             Some(Type::Rust(Rust {}))
         } else if JavaScript::config(project_root).exists() {
-            println!("detected javascript project...");
             Some(Type::JavaScript(JavaScript {}))
         } else {
-            println!("could not detect project type...");
             None
         }
     }
