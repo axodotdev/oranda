@@ -23,7 +23,7 @@ pub enum OrandaError {
     AxoAsset(#[from] axoasset::AxoassetError),
 
     #[error(transparent)]
-    MError(#[from] css_minify::optimizations::MError<'static>),
+    FSExtra(#[from] fs_extra::error::Error),
 
     #[error("failed to read {filedesc} at {path}")]
     FileNotFound { filedesc: String, path: String },

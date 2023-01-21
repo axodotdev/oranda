@@ -16,6 +16,7 @@ pub struct Config {
     pub description: String,
     pub dist_dir: String,
     pub homepage: Option<String>,
+    pub static_dir: String,
     pub name: String,
     pub no_header: bool,
     pub readme_path: String,
@@ -28,6 +29,7 @@ pub struct Config {
     pub social: Option<Social>,
     pub logo: Option<String>,
     pub favicon: Option<String>,
+    pub path_prefix: Option<String>,
 }
 
 impl Config {
@@ -71,6 +73,7 @@ impl Config {
                 return Ok(Config {
                     description: custom.description.unwrap_or(default.description),
                     dist_dir: custom.dist_dir.unwrap_or(default.dist_dir),
+                    static_dir: custom.static_dir.unwrap_or(default.static_dir),
                     homepage: Self::homepage(custom.homepage, None, default.homepage),
                     name: custom.name.unwrap_or(default.name),
                     no_header: custom.no_header.unwrap_or(default.no_header),
@@ -84,6 +87,7 @@ impl Config {
                     social: custom.social,
                     logo: custom.logo,
                     favicon: custom.favicon,
+                    path_prefix: custom.path_prefix,
                 });
             // otherwise both oranda config and project manifest exists
             } else if let Some(project) = project {
@@ -91,6 +95,7 @@ impl Config {
                 return Ok(Config {
                     description: custom.description.unwrap_or(project.description),
                     dist_dir: custom.dist_dir.unwrap_or(default.dist_dir),
+                    static_dir: custom.static_dir.unwrap_or(default.static_dir),
                     homepage: Self::homepage(custom.homepage, project.homepage, default.homepage),
                     name: custom.name.unwrap_or(project.name),
                     no_header: custom.no_header.unwrap_or(default.no_header),
@@ -104,6 +109,7 @@ impl Config {
                     social: custom.social,
                     logo: custom.logo,
                     favicon: custom.favicon,
+                    path_prefix: custom.path_prefix,
                 });
             }
         }
@@ -145,6 +151,8 @@ impl Default for Config {
             social: None,
             logo: None,
             favicon: None,
+            path_prefix: None,
+            static_dir: String::from("static"),
         }
     }
 }

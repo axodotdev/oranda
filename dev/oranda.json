@@ -1,6 +1,6 @@
 {
   "homepage": "https://oranda.axo.dev",
-  "readme": "dev/README.md",
+  "readme_path": "dev/README.md",
   "repository": "https://github.com/axodotdev/oranda",
   "additional_pages": ["dev/additional.md"],
   "social": {
