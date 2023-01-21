@@ -8,6 +8,6 @@ Let's say your website is hosted at `https://myorg.github.io/reponame/`, to fix 
 
 ```json
 {
-  "path_prefix": "oranda"
+  "path_prefix": "reponame"
 }
 ```
