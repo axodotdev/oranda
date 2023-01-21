@@ -6,7 +6,7 @@ use axohtml::{html, text};
 // False positive duplicate allocation warning
 // https://github.com/rust-lang/rust-clippy/issues?q=is%3Aissue+redundant_allocation+sort%3Aupdated-desc
 #[allow(clippy::vec_box)]
-pub fn create_social_cards(config: &Config) -> Vec<Box<meta<String>>> {
+fn create_social_cards(config: &Config) -> Vec<Box<meta<String>>> {
     let mut html = vec![];
     match config.social.as_ref() {
         Some(social) => {
@@ -33,7 +33,7 @@ pub fn create_social_cards(config: &Config) -> Vec<Box<meta<String>>> {
     html
 }
 
-pub fn get_favicon(favicon: String, dist_dir: String) -> Result<Box<link<String>>> {
+fn get_favicon(favicon: String, dist_dir: String) -> Result<Box<link<String>>> {
     let copy_result_future = axoasset::copy(&favicon, &dist_dir[..]);
     let copy_result = tokio::runtime::Handle::current().block_on(copy_result_future)?;
 
@@ -45,7 +45,7 @@ pub fn get_favicon(favicon: String, dist_dir: String) -> Result<Box<link<String>
 // False positive duplicate allocation warning
 // https://github.com/rust-lang/rust-clippy/issues?q=is%3Aissue+redundant_allocation+sort%3Aupdated-desc
 #[allow(clippy::vec_box)]
-pub fn create_meta_tags(config: &Config) -> Vec<Box<meta<String>>> {
+fn create_meta_tags(config: &Config) -> Vec<Box<meta<String>>> {
     let mut social_meta = create_social_cards(config);
     let description = &config.description;
     let mut html = vec![

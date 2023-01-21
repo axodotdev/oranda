@@ -4,7 +4,7 @@ use crate::errors::*;
 use crate::site::header;
 use axohtml::elements::div;
 
-use axohtml::{dom::DOMTree, html, text, unsafe_text};
+use axohtml::{dom::DOMTree, html, text};
 
 use super::head::create_head;
 
