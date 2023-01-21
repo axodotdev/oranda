@@ -1,10 +1,10 @@
 # Hosting on Github Pages
 
-So you have set up oranda, set up some links and deployed it to Github pages with CI and now the links won't work?
+When hosting on Github pages, it is often the case that your site will be served from a non-root url such as `myorg.github.io/reponame`.
 
-The issue here is that github pages does not host your site at the root of the domain and we assume that all oranda deploys will be at the root, to fix this we have a option you can pass in your `oranda.json` called `path_prefix` that let's you set up that.
+If you are serving your site from this style of URL, you'll need to add the `reponame` as a path_prefix to your Oranda config. This will allow oranda to properly configure all chlid links (such as images or additional pages) of your page to be properly name spaced."
 
-Let's say your website is hosted at `https://acme.github.io/oranda/`, to fix the links add the following to your `oranda.json`
+Let's say your website is hosted at `https://myorg.github.io/reponame/`, to fix the links add the following to your `oranda.json`
 
 ```json
 {
