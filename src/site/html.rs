@@ -6,7 +6,7 @@ use axohtml::elements::div;
 
 use axohtml::{dom::DOMTree, html, text, unsafe_text};
 
-use super::head::{create_meta_tags, get_favicon};
+use super::head::create_head;
 
 pub fn build(config: &Config, content: String) -> Result<String> {
     let theme = theme::css_class(&config.theme);
@@ -19,29 +19,13 @@ pub fn build(config: &Config, content: String) -> Result<String> {
         true => None,
         false => Some(header::create(config)?),
     };
-    let homepage = config.homepage.as_ref().map(|homepage| {
-        html!(
-          <meta property="og:url" content=homepage/>
-        )
-    });
+
+    let head = create_head(config)?;
     let banner = repo_banner(config);
-    let meta_tags = create_meta_tags(config);
-    let favicon = if let Some(favicon) = config.favicon.clone() {
-        Some(get_favicon(favicon, config.dist_dir.clone())?)
-    } else {
-        None
-    };
 
     let doc: DOMTree<String> = html!(
     <html lang="en" id="oranda" class=theme>
-        <head>
-            <title>{ text!(&config.name) }</title>
-            {homepage}
-            {favicon}
-            {meta_tags}
-            <link rel="stylesheet" href="https://www.unpkg.com/@axodotdev/fringe/themes/axo-oranda.css"></link>
-            <link rel="stylesheet" href="styles.css"></link>
-        </head>
+        {head}
         <body>
         <div class="container">
             {banner}

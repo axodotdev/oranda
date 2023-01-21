@@ -1,7 +1,7 @@
 use crate::config::Config;
 use crate::errors::*;
-use axohtml::elements::{link, meta};
-use axohtml::html;
+use axohtml::elements::{head, link, meta};
+use axohtml::{html, text};
 
 // False positive duplicate allocation warning
 // https://github.com/rust-lang/rust-clippy/issues?q=is%3Aissue+redundant_allocation+sort%3Aupdated-desc
@@ -61,4 +61,31 @@ pub fn create_meta_tags(config: &Config) -> Vec<Box<meta<String>>> {
     html.append(&mut social_meta);
 
     html
+}
+
+// False positive duplicate allocation warning
+// https://github.com/rust-lang/rust-clippy/issues?q=is%3Aissue+redundant_allocation+sort%3Aupdated-desc
+#[allow(clippy::vec_box)]
+pub fn create_head(config: &Config) -> Result<Box<head<String>>> {
+    let homepage = config.homepage.as_ref().map(|homepage| {
+        html!(
+          <meta property="og:url" content=homepage/>
+        )
+    });
+    let meta_tags = create_meta_tags(config);
+    let favicon = if let Some(favicon) = config.favicon.clone() {
+        Some(get_favicon(favicon, config.dist_dir.clone())?)
+    } else {
+        None
+    };
+    Ok(html!(
+    <head>
+        <title>{ text!(&config.name) }</title>
+        {homepage}
+        {favicon}
+        {meta_tags}
+        <link rel="stylesheet" href="https://www.unpkg.com/@axodotdev/fringe/themes/axo-oranda.css"></link>
+        <link rel="stylesheet" href="styles.css"></link>
+    </head>
+    ))
 }
