@@ -97,6 +97,15 @@ fn config() -> Config {
 }
 
 #[test]
+fn it_adds_additional_css() {
+    let _guard = initialize_tokio_runtime().enter();
+    let site = Site::build(&config(), &config().readme_path).unwrap();
+    assert!(site
+        .html
+        .contains("<link rel=\"stylesheet\" href=\"custom.css\"></link>"));
+}
+
+#[test]
 fn it_builds_the_site() {
     let _guard = initialize_tokio_runtime().enter();
     let site = Site::build(&config(), &config().readme_path).unwrap();
