@@ -30,6 +30,7 @@ pub struct Config {
     pub social: Option<Social>,
     pub logo: Option<String>,
     pub favicon: Option<String>,
+    pub path_prefix: Option<String>,
 }
 
 impl Config {
@@ -88,6 +89,7 @@ impl Config {
                     social: custom.social,
                     logo: custom.logo,
                     favicon: custom.favicon,
+                    path_prefix: custom.path_prefix,
                 });
             // otherwise both oranda config and project manifest exists
             } else if let Some(project) = project {
@@ -110,6 +112,7 @@ impl Config {
                     social: custom.social,
                     logo: custom.logo,
                     favicon: custom.favicon,
+                    path_prefix: custom.path_prefix,
                 });
             }
         }
@@ -152,6 +155,7 @@ impl Default for Config {
             social: None,
             logo: None,
             favicon: None,
+            path_prefix: None,
             static_dir: String::from("static"),
         }
     }

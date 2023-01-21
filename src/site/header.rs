@@ -33,13 +33,18 @@ pub fn create(config: &Config) -> Result<Box<header<String>>> {
         Some(pages) => {
             let mut html: Vec<Box<li<String>>> = vec![html!(<li><a href="/">"Home"</a></li>)];
             for page in pages.iter() {
-                let path = Path::new(page);
-                let file_name = path
+                let file_path = Path::new(page);
+                let file_name = file_path
                     .file_stem()
-                    .unwrap_or(path.as_os_str())
+                    .unwrap_or(file_path.as_os_str())
                     .to_string_lossy();
-                let path = format!("/{}", file_name);
-                html.extend(html!(<li><a href=path>{text!(file_name)}</a></li>));
+                let mut href = format!("/{}", file_name);
+
+                if let Some(prefix) = &config.path_prefix {
+                    href = format!("/{}{}", prefix, href);
+                }
+
+                html.extend(html!(<li><a href=href>{text!(file_name)}</a></li>));
             }
             Some(html!(
                 <nav class="nav">
