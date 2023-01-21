@@ -18,6 +18,7 @@ pub struct Social {
 pub struct OrandaConfig {
     pub description: Option<String>,
     pub dist_dir: Option<String>,
+    pub static_dir: Option<String>,
     pub homepage: Option<String>,
     pub name: Option<String>,
     pub no_header: Option<bool>,
