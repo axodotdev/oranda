@@ -6,7 +6,7 @@ use axohtml::elements::div;
 
 use axohtml::{dom::DOMTree, html, text, unsafe_text};
 
-use crate::site::head::{create_meta_tags, fetch_css, get_favicon};
+use crate::site::head::{create_meta_tags, fetch_additional_css, fetch_css, get_favicon};
 
 pub fn build(config: &Config, content: String) -> Result<String> {
     let theme = theme::css_class(&config.theme);
@@ -32,6 +32,7 @@ pub fn build(config: &Config, content: String) -> Result<String> {
         None
     };
 
+    let additional_css = fetch_additional_css(config)?;
     let css = fetch_css(config)?;
 
     let doc: DOMTree<String> = html!(
@@ -42,6 +43,7 @@ pub fn build(config: &Config, content: String) -> Result<String> {
             {favicon}
             {meta_tags}
             {css}
+            {additional_css}
         </head>
         <body>
         <div class="container">
