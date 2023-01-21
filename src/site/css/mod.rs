@@ -47,7 +47,6 @@ pub fn fetch_fringe_css(config: &Config) -> Result<Box<link<String>>> {
 }
 
 pub fn fetch_additional_css(config: &Config) -> Result<Option<Box<link<String>>>> {
-    println!("{:?}", config.additional_css);
     if config.additional_css.is_empty() {
         return Ok(None);
     }
