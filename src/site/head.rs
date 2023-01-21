@@ -6,10 +6,17 @@ use axohtml::html;
 // False positive duplicate allocation warning
 // https://github.com/rust-lang/rust-clippy/issues?q=is%3Aissue+redundant_allocation+sort%3Aupdated-desc
 #[allow(clippy::vec_box)]
-pub fn fetch_additional_css(config: &Config) -> Result<Vec<Box<link<String>>>> {
+pub fn fetch_css(config: &Config) -> Result<Vec<Box<link<String>>>> {
+    const FRINGE_HREF: &str = "https://www.unpkg.com/@axodotdev/fringe@0.0.7/themes/";
     let mut css = vec![];
-    for url in &config.additional_css {
-        let additional_css_future = axoasset::copy(url, &config.dist_dir);
+    let fringe_css = vec![
+        format!("{}/axo-oranda.css", FRINGE_HREF).to_string(),
+        format!("{}/fringe-output.css", FRINGE_HREF).to_string(),
+        format!("{}/theme-output.css", FRINGE_HREF).to_string(),
+    ];
+    let css_links = [&fringe_css[..], &config.additional_css[..]].concat();
+    for url in css_links {
+        let additional_css_future = axoasset::copy(url.as_str(), &config.dist_dir);
 
         let additional_path = tokio::runtime::Handle::current().block_on(additional_css_future)?;
         let path_as_string = additional_path
