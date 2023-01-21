@@ -17,3 +17,5 @@
   - [Additional CSS](./options/additional-css.md)
   - [Social](./options/social.md)
   - [Analytics](./options/analytics.md)
+  - [Path Prefix](./options/path_prefix.md)
+- [Hosting on Github Pages](./gh-pages.md)

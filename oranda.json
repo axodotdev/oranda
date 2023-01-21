@@ -7,6 +7,7 @@
       "domain": "tools.axo.dev/oranda"
     }
   },
+  "path_prefix": "oranda",
   "additional_pages": ["./docs/src/theme/themes.md"],
   "social": {
     "image": "https://www.axo.dev/meta_small.jpeg",
