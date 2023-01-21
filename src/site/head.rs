@@ -6,13 +6,13 @@ use css_minify::optimizations::{Level, Minifier};
 use std::fs::File;
 use std::io::Write;
 
-fn concat_minify_css(iter: Vec<String>) -> Result<String> {
+fn concat_minify_css(css_links: Vec<String>) -> Result<String> {
     let mut css = String::new();
-    for url in iter {
-        let fringe_css_future = axoasset::load_string(url.as_str());
+    for url in css_links {
+        let css_future = axoasset::load_string(url.as_str());
 
-        let fringe_css = tokio::runtime::Handle::current().block_on(fringe_css_future)?;
-        let minified_css = Minifier::default().minify(fringe_css.as_str(), Level::Three)?;
+        let css_unminified = tokio::runtime::Handle::current().block_on(css_future)?;
+        let minified_css = Minifier::default().minify(css_unminified.as_str(), Level::Three)?;
         css = format!(
             "{css}/* {url} */{minified_css}",
             css = css,
