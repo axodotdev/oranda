@@ -1,21 +1,23 @@
 use std::net::SocketAddr;
-
-use axum::{http::StatusCode, routing::get_service, Router};
-use clap::Parser;
-use tower_http::services::ServeDir;
+use std::path::PathBuf;
 
 use crate::config::Config;
 use crate::errors::*;
+use axum::{http::StatusCode, routing::get_service, Router};
+use clap::Parser;
+use tower_http::services::ServeDir;
 
 #[derive(Debug, Parser)]
 pub struct Serve {
     #[arg(long, default_value = "7979")]
     port: u16,
+    #[arg(long, default_value = "./oranda.json")]
+    config: PathBuf,
 }
 
 impl Serve {
     pub fn run(&self) -> Result<()> {
-        let config = Config::build()?;
+        let config = Config::build(&self.config)?;
         self.serve(config)?;
         Ok(())
     }

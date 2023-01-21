@@ -1,13 +1,8 @@
 {
   "homepage": "https://oranda.axo.dev",
+  "readme_path": "dev/README.md",
   "repository": "https://github.com/axodotdev/oranda",
-  "favicon": "https://www.axo.dev/favicon.ico",
-  "analytics": {
-    "plausible": {
-      "domain": "tools.axo.dev/oranda"
-    }
-  },
-  "additional_pages": ["./docs/src/theme/themes.md"],
+  "additional_pages": ["dev/additional.md"],
   "social": {
     "image": "https://www.axo.dev/meta_small.jpeg",
     "image_alt": "axo",

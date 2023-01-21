@@ -1,12 +1,11 @@
-use std::fs;
 use std::path::Path;
 
 use serde::Deserialize;
 
+use crate::config::analytics::Analytics;
 use crate::config::theme::Theme;
 use crate::errors::*;
-
-use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxThemes;
+use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxTheme;
 
 #[derive(Debug, Deserialize)]
 pub struct Social {
@@ -15,12 +14,11 @@ pub struct Social {
     pub twitter_account: Option<String>,
 }
 
-static ORANDA_JSON: &str = "./oranda.json";
-
 #[derive(Debug, Deserialize)]
 pub struct OrandaConfig {
     pub description: Option<String>,
     pub dist_dir: Option<String>,
+    pub static_dir: Option<String>,
     pub homepage: Option<String>,
     pub name: Option<String>,
     pub no_header: Option<bool>,
@@ -29,22 +27,20 @@ pub struct OrandaConfig {
     pub remote_styles: Option<Vec<String>>,
     pub additional_css: Option<String>,
     pub repository: Option<String>,
-    pub syntax_theme: Option<SyntaxThemes>,
+    pub syntax_theme: Option<SyntaxTheme>,
+    pub analytics: Option<Analytics>,
     pub additional_pages: Option<Vec<String>>,
     pub social: Option<Social>,
+    pub logo: Option<String>,
+    pub favicon: Option<String>,
 }
 
 impl OrandaConfig {
-    pub fn load() -> Result<Option<OrandaConfig>> {
-        println!("reading from oranda config...");
-        if Path::new(ORANDA_JSON).exists() {
-            let oranda_json = fs::read_to_string(ORANDA_JSON)?;
-            println!("read json: {:?}", &oranda_json);
-            let data: OrandaConfig = serde_json::from_str(&oranda_json)?;
-            println!("read data: {:?}", &data);
-            Ok(Some(data))
-        } else {
-            Ok(None)
-        }
+    pub fn load(config_path: &Path) -> Result<Option<OrandaConfig>> {
+        let config_future = axoasset::load_string(config_path.to_str().unwrap());
+
+        let config = tokio::runtime::Handle::current().block_on(config_future)?;
+        let data: OrandaConfig = serde_json::from_str(config.as_str())?;
+        Ok(Some(data))
     }
 }

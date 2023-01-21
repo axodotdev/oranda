@@ -2,17 +2,21 @@ pub mod syntax_highlight;
 
 use crate::errors::*;
 use crate::site::markdown::syntax_highlight::syntax_highlight;
-use ammonia::clean;
+use ammonia::Builder;
 use comrak::adapters::SyntaxHighlighterAdapter;
 use comrak::{self, ComrakOptions, ComrakPlugins};
 use std::collections::HashMap;
 use std::fs;
 use std::path::Path;
 
-pub struct Adapters {}
-impl SyntaxHighlighterAdapter for Adapters {
+use self::syntax_highlight::syntax_themes::SyntaxTheme;
+
+pub struct Adapters<'a> {
+    syntax_theme: &'a SyntaxTheme,
+}
+impl SyntaxHighlighterAdapter for Adapters<'_> {
     fn highlight(&self, lang: Option<&str>, code: &str) -> String {
-        let highlighted_code = syntax_highlight(lang, code);
+        let highlighted_code = syntax_highlight(lang, code, self.syntax_theme);
 
         // requires a string to be returned
         match highlighted_code {
@@ -47,8 +51,7 @@ fn initialize_comrak_options() -> ComrakOptions {
 fn load(readme_path: &Path) -> Result<String> {
     if readme_path.exists() {
         let readme = fs::read_to_string(readme_path)?;
-        let safe_html = clean(&readme);
-        Ok(safe_html)
+        Ok(readme)
     } else {
         Err(OrandaError::FileNotFound {
             filedesc: String::from("README"),
@@ -57,15 +60,18 @@ fn load(readme_path: &Path) -> Result<String> {
     }
 }
 
-pub fn body(readme_path: &Path) -> Result<String> {
+pub fn body(readme_path: &Path, syntax_theme: &SyntaxTheme) -> Result<String> {
     let readme = load(readme_path)?;
     let options = initialize_comrak_options();
 
     let mut plugins = ComrakPlugins::default();
-    let adapter = Adapters {};
+    let adapter = Adapters { syntax_theme };
     plugins.render.codefence_syntax_highlighter = Some(&adapter);
 
-    Ok(comrak::markdown_to_html_with_plugins(
-        &readme, &options, &plugins,
-    ))
+    let unsafe_html = comrak::markdown_to_html_with_plugins(&readme, &options, &plugins);
+    let safe_html = Builder::new()
+        .add_generic_attributes(&["style", "class", "id"])
+        .clean(&unsafe_html)
+        .to_string();
+    Ok(safe_html)
 }

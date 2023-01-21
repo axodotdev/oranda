@@ -1,6 +1,6 @@
 use serde::Deserialize;
 #[derive(Debug, Deserialize)]
-pub enum SyntaxThemes {
+pub enum SyntaxTheme {
     AgilaClassicOceanicNext,
     AgilaCobalt,
     AgilaLightSolarized,
@@ -23,7 +23,7 @@ pub enum SyntaxThemes {
     OneDark,
 }
 
-impl SyntaxThemes {
+impl SyntaxTheme {
     pub fn as_str(&self) -> String {
         format!("{:?}", &self)
     }

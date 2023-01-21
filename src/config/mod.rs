@@ -1,10 +1,13 @@
+pub mod analytics;
 mod oranda;
 mod project;
 pub mod theme;
+use self::analytics::Analytics;
 use self::oranda::{OrandaConfig, Social};
 use crate::errors::*;
-use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxThemes;
+use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxTheme;
 use project::ProjectConfig;
+use std::path::Path;
 
 use theme::Theme;
 
@@ -13,6 +16,7 @@ pub struct Config {
     pub description: String,
     pub dist_dir: String,
     pub homepage: Option<String>,
+    pub static_dir: String,
     pub name: String,
     pub no_header: bool,
     pub readme_path: String,
@@ -20,13 +24,16 @@ pub struct Config {
     pub remote_styles: Vec<String>,
     pub additional_css: String,
     pub repository: Option<String>,
-    pub syntax_theme: SyntaxThemes,
+    pub syntax_theme: SyntaxTheme,
+    pub analytics: Option<Analytics>,
     pub additional_pages: Option<Vec<String>>,
     pub social: Option<Social>,
+    pub logo: Option<String>,
+    pub favicon: Option<String>,
 }
 
 impl Config {
-    pub fn build() -> Result<Config> {
+    pub fn build(config_path: &Path) -> Result<Config> {
         //Users can have multiple types of configuration or no configuration at all
         //
         //- Project configuration comes from a project manifest file. We currently
@@ -38,7 +45,7 @@ impl Config {
         //  you could use this file to override fields in your project manifest.
         //  This file can contain all possible public configuration fields.
         let default = Config::default();
-        let custom = OrandaConfig::load()?;
+        let custom = OrandaConfig::load(config_path)?;
         let project = ProjectConfig::load(None)?;
 
         // if there is no oranda.config file present...
@@ -66,6 +73,7 @@ impl Config {
                 return Ok(Config {
                     description: custom.description.unwrap_or(default.description),
                     dist_dir: custom.dist_dir.unwrap_or(default.dist_dir),
+                    static_dir: custom.static_dir.unwrap_or(default.static_dir),
                     homepage: Self::homepage(custom.homepage, None, default.homepage),
                     name: custom.name.unwrap_or(default.name),
                     no_header: custom.no_header.unwrap_or(default.no_header),
@@ -75,8 +83,11 @@ impl Config {
                     additional_css: custom.additional_css.unwrap_or(default.additional_css),
                     repository: custom.repository,
                     syntax_theme: custom.syntax_theme.unwrap_or(default.syntax_theme),
+                    analytics: custom.analytics,
                     additional_pages: custom.additional_pages,
                     social: custom.social,
+                    logo: custom.logo,
+                    favicon: custom.favicon,
                 });
             // otherwise both oranda config and project manifest exists
             } else if let Some(project) = project {
@@ -84,6 +95,7 @@ impl Config {
                 return Ok(Config {
                     description: custom.description.unwrap_or(project.description),
                     dist_dir: custom.dist_dir.unwrap_or(default.dist_dir),
+                    static_dir: custom.static_dir.unwrap_or(default.static_dir),
                     homepage: Self::homepage(custom.homepage, project.homepage, default.homepage),
                     name: custom.name.unwrap_or(project.name),
                     no_header: custom.no_header.unwrap_or(default.no_header),
@@ -93,8 +105,11 @@ impl Config {
                     additional_css: custom.additional_css.unwrap_or(default.additional_css),
                     repository: custom.repository,
                     syntax_theme: custom.syntax_theme.unwrap_or(default.syntax_theme),
+                    analytics: custom.analytics,
                     additional_pages: custom.additional_pages,
                     social: custom.social,
+                    logo: custom.logo,
+                    favicon: custom.favicon,
                 });
             }
         }
@@ -127,13 +142,17 @@ impl Default for Config {
             name: String::from("My Axo project"),
             no_header: false,
             readme_path: String::from("README.md"),
-            theme: Theme::AxoDark,
+            theme: Theme::Dark,
             remote_styles: vec![],
             additional_css: String::from(""),
             repository: None,
-            syntax_theme: SyntaxThemes::MaterialTheme,
+            syntax_theme: SyntaxTheme::MaterialTheme,
+            analytics: None,
             additional_pages: None,
             social: None,
+            logo: None,
+            favicon: None,
+            static_dir: String::from("static"),
         }
     }
 }

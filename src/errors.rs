@@ -11,13 +11,19 @@ pub enum OrandaError {
     Toml(#[from] toml::de::Error),
 
     #[error(transparent)]
+    StripPrefixError(#[from] std::path::StripPrefixError),
+
+    #[error(transparent)]
     Json(#[from] serde_json::Error),
 
     #[error(transparent)]
     Syntect(#[from] syntect::Error),
 
     #[error(transparent)]
-    Grass(#[from] Box<grass::Error>),
+    AxoAsset(#[from] axoasset::AxoassetError),
+
+    #[error(transparent)]
+    FSExtra(#[from] fs_extra::error::Error),
 
     #[error("failed to read {filedesc} at {path}")]
     FileNotFound { filedesc: String, path: String },
