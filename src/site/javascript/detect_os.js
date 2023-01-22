@@ -3,59 +3,27 @@
  */
 
 let options = {
-  windows: {
-    default: {
-      platform: "windows",
-      device: "pc",
-      type: "32",
-    },
-    64: {
-      platform: "windows",
-      device: "pc",
-      type: "64",
-    },
-    arm: {
-      platform: "windows",
-      device: "pc",
-      type: "arm",
-    },
-  },
-  mac: {
-    default: {
-      platform: "macos",
-      device: "apple",
-      type: "intel",
-    },
-    ppc: {
-      platform: "macos",
-      device: "apple",
-      type: "PPC",
-    },
-    32: {
-      platform: "macos",
-      device: "apple",
-      type: "32",
-    },
-    silicon: {
-      platform: "macos",
-      device: "apple",
-      type: "silicon",
-    },
-  },
-  linux: {
-    default: "linux",
-    ubuntu: "linux-ubuntu",
-    debian: "linux-debian",
-    mandriva: "linux-mandriva",
-    redhat: "linux-redhat",
-    fedora: "linux-fedora",
-    suse: "linux-suse",
-    gentoo: "linux-gentoo",
-  },
-  phone: {
-    ios: "ios",
-    android: "linux-android",
-  },
+  windows: "pc-windows",
+  windows64: "64-windows-pc",
+  windowsArm: "arm-windows-pc",
+
+  mac: "apple-darwin",
+  macPc: "apple-ppc",
+  mac32: "apple-32",
+  macSilicon: "apple-silicon",
+
+  linux: "unknown-linux",
+  linuxUbuntu: "linux-ubuntu",
+  linuxDebian: "linux-debian",
+  linuxMandriva: "linux-mandriva",
+  linuxRedhat: "linux-redhat",
+  linuxFedora: "linux-fedora",
+  linuxSuse: "linux-suse",
+  linuxGentoo: "linux-gentoo",
+
+  ios: "ios",
+  android: "linux-android",
+
   freebsd: "freebsd",
 };
 
@@ -94,7 +62,7 @@ function getOS() {
         userAgent.indexOf("AMD64") > -1 ||
         userAgent.indexOf("WOW64") > -1)
     ) {
-      OS = options.windows[64];
+      OS = options.windows64;
     } else {
       if (
         window.external &&
@@ -103,7 +71,7 @@ function getOS() {
           .getHostEnvironmentValue("os-architecture")
           .includes("ARM64")
       ) {
-        OS = options.windows.arm;
+        OS = options.windowsArm;
       } else {
         try {
           var canvas = document.createElement("canvas");
@@ -111,7 +79,7 @@ function getOS() {
 
           var debugInfo = gl.getExtension("WEBGL_debug_renderer_info");
           var renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
-          if (renderer.includes("Qualcomm")) OS = options.windows.arm;
+          if (renderer.includes("Qualcomm")) OS = options.windowsArm;
         } catch (e) {}
       }
     }
@@ -120,18 +88,18 @@ function getOS() {
   //MacOS, MacOS X, macOS
   if (navigator.appVersion.includes("Mac")) {
     if (platform.includes("MacPPC") || platform.includes("PowerPC")) {
-      OS = options.mac.ppc;
+      OS = options.macPpc;
     } else if (
       navigator.userAgent.includes("OS X 10.5") ||
       navigator.userAgent.includes("OS X 10.6")
     ) {
-      OS = options.mac[32];
+      OS = options.mac32;
     } else {
-      OS = options.mac.default;
+      OS = options.mac;
 
       const isSilicon = isAppleSilicon();
       if (isSilicon) {
-        OS = options.mac.silicon;
+        OS = options.macSilicon;
       }
     }
   }
@@ -139,15 +107,15 @@ function getOS() {
   // linux
   if (platform.includes("Linux")) {
     if (navigator.userAgent.toLocaleLowerCase().includes("ubuntu"))
-      OS = options.linux.ubuntu;
-    else if (userAgent.includes("Debian")) OS = options.linux.debian;
-    else if (userAgent.includes("Android")) OS = options.phone.android;
-    else if (userAgent.includes("Mandriva")) OS = options.linux.mandriva;
-    else if (userAgent.includes("Red Hat")) OS = options.linux.redhat;
-    else if (userAgent.includes("Fedora")) OS = options.linux.fedora;
-    else if (userAgent.includes("SUSE")) OS = options.linux.suse;
-    else if (userAgent.includes("Gentoo")) OS = options.linux.gentoo;
-    else OS = options.linux.default;
+      OS = options.linux_ubuntu;
+    else if (userAgent.includes("Debian")) OS = options.linuxDebian;
+    else if (userAgent.includes("Android")) OS = options.android;
+    else if (userAgent.includes("Mandriva")) OS = options.linuxMandriva;
+    else if (userAgent.includes("Red Hat")) OS = options.linuxRedhat;
+    else if (userAgent.includes("Fedora")) OS = options.linuxFedora;
+    else if (userAgent.includes("SUSE")) OS = options.linuxSuse;
+    else if (userAgent.includes("Gentoo")) OS = options.linuxGentoo;
+    else OS = options.linux;
   }
 
   if (
@@ -155,7 +123,7 @@ function getOS() {
     userAgent.includes("iPhone") ||
     userAgent.includes("iPod")
   ) {
-    OS = options.phone.ios;
+    OS = options.ios;
   }
   if (platform.toLocaleLowerCase().includes("freebsd")) {
     OS = options.freebsd;
@@ -167,6 +135,9 @@ function getOS() {
 let os = getOS();
 window.os = os;
 
-Array.from(document.querySelectorAll("a[data-targets]"))
-  .find((a) => a.attributes["data-targets"].value.includes(os.device))
-  .classList.remove("hidden");
+let hit = Array.from(document.querySelectorAll("a[data-targets]")).find((a) =>
+  a.attributes["data-targets"].value.includes(os)
+);
+if (hit) {
+  hit.classList.remove("hidden");
+}

@@ -4,9 +4,9 @@ use std::fs::File;
 use std::io::Write;
 use std::path::Path;
 mod css;
-mod head;
-mod header;
-mod html;
+pub mod head;
+pub mod header;
+pub mod html;
 pub mod markdown;
 
 #[cfg(test)]

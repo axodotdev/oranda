@@ -7,8 +7,9 @@ use axohtml::elements::div;
 use axohtml::{dom::DOMTree, html, text, unsafe_text};
 
 use super::head::{create_meta_tags, get_favicon};
+use super::header::repo_banner;
 
-pub fn build(config: &Config, content: String) -> Result<String> {
+pub fn build_common_html(config: &Config, content: Box<div<String>>) -> Result<String> {
     let theme = theme::css_class(&config.theme);
     let analytics = get_analytics(config);
     let google_script = match &config.analytics {
@@ -35,8 +36,6 @@ pub fn build(config: &Config, content: String) -> Result<String> {
     } else {
         None
     };
-    let artifacts_tabs = create_artifacts_tabs(config).unwrap();
-
     let doc: DOMTree<String> = html!(
     <html lang="en" id="oranda" class=theme>
         <head>
@@ -51,7 +50,7 @@ pub fn build(config: &Config, content: String) -> Result<String> {
         <div class="container">
             {banner}
             <main>{header}
-            {artifacts_tabs}{ unsafe_text!(content) }</main>
+            {content}</main>
         </div>
             {analytics}
             {google_script}
@@ -59,18 +58,16 @@ pub fn build(config: &Config, content: String) -> Result<String> {
         </body>
     </html>
     );
+
     Ok(doc.to_string())
 }
 
-fn repo_banner(config: &Config) -> Option<Box<div<String>>> {
-    config.repository.as_ref().map(|repository| {
-        html!(
-        <div class="repo_banner">
-            <a href=repository>
-                <div class="icon" aria-hidden="true"/>
-                {text!("Check out our GitHub")}
-            </a>
-        </div>
-        )
-    })
+pub fn build(config: &Config, content: String) -> Result<String> {
+    let artifacts_tabs = create_artifacts_tabs(config).unwrap();
+
+    let home_content = html!(<div>{artifacts_tabs}{ unsafe_text!(content) }
+    </div>);
+
+    let doc = build_common_html(config, home_content)?;
+    Ok(doc)
 }

@@ -1,11 +1,40 @@
+use crate::config::Config;
 use crate::errors::*;
+use crate::site::html::build_common_html;
 use axohtml::elements::{a, div, script};
 use axohtml::types::{Class, SpacedSet};
 use axohtml::{html, text};
 use cargo_dist_schema::{ArtifactKind, DistManifest};
 use serde::Deserialize;
+use std::fs::File;
+use std::io::Write;
 
-use super::Config;
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "lowercase")]
+enum ArtifactSystem {
+    Windows,
+    Windows64,
+    WindowsArm,
+
+    Mac,
+    MacPpc,
+    Mac32,
+    MacSilicon,
+
+    Linux,
+    LinuxUbuntu,
+    LinuxDebian,
+    LinuxMandriva,
+    LinuxRedhat,
+    LinuxFedora,
+    LinuxSuse,
+    LinuxGentoo,
+
+    Ios,
+    Android,
+
+    Freebsd,
+}
 
 #[derive(Debug, Deserialize)]
 pub struct Artifacts {
@@ -39,7 +68,6 @@ pub fn create_artifacts_tabs(config: &Config) -> Result<Option<Box<div<String>>>
 
     let typed = &resp.json::<DistManifest>()?;
 
-    println!("{:?}", typed.releases);
     let mut html: Vec<Box<a<String>>> = vec![];
     for release in typed.releases.iter() {
         for artifact in release.artifacts.iter() {
@@ -63,9 +91,13 @@ pub fn create_artifacts_tabs(config: &Config) -> Result<Option<Box<div<String>>>
         }
     }
 
-    return Ok(Some(
-        html!(<div><h3 class="text-center">{text!("Download for your platform")}</h3>{html}</div>),
-    ));
+    build_artifacts_html(config)?;
+    return Ok(Some(html!(
+    <div class="artifacts">
+        <h3 class="text-center">{text!("Download for your platform")}</h3>{html}
+        <a href="/artifacts.html">{text!("View all downloads")}</a>
+    </div>
+    )));
 }
 
 pub fn get_os_script(config: &Config) -> Result<Box<script<String>>> {
@@ -74,4 +106,18 @@ pub fn get_os_script(config: &Config) -> Result<Box<script<String>>> {
     let path = tokio::runtime::Handle::current().block_on(detect_os_js)?;
     let path_as_string = path.strip_prefix(&config.dist_dir)?.to_string_lossy();
     Ok(html!(<script src=path_as_string />))
+}
+
+pub fn build_artifacts_html(config: &Config) -> Result<()> {
+    let content = html!(
+        <div>
+            <h1>{text!("All downloads")}</h1>
+        </div>
+    );
+    let doc = build_common_html(config, content)?;
+    let html_path = format!("{}/artifacts.html", &config.dist_dir);
+
+    let mut html_file = File::create(html_path)?;
+    html_file.write_all(doc.as_bytes())?;
+    Ok(())
 }
