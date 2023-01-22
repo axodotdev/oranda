@@ -25,6 +25,9 @@ pub enum OrandaError {
     #[error(transparent)]
     Reqwest(#[from] reqwest::Error),
 
+    #[error(transparent)]
+    FSExtra(#[from] fs_extra::error::Error),
+
     #[error("failed to read {filedesc} at {path}")]
     FileNotFound { filedesc: String, path: String },
 

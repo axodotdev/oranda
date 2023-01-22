@@ -1,8 +1,7 @@
 pub mod syntax_themes;
 
-use crate::config::Config;
 use crate::errors::*;
-use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxThemes;
+use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxTheme;
 use syntect::highlighting::ThemeSet;
 use syntect::html::highlighted_html_for_string;
 use syntect::parsing::{SyntaxReference, SyntaxSet};
@@ -28,8 +27,11 @@ fn find_syntax<'a>(ps: &'a SyntaxSet, language: &'a str) -> Result<&'a SyntaxRef
     ))
 }
 
-pub fn syntax_highlight(lang: Option<&str>, code: &str) -> Result<String> {
-    let config = Config::build()?;
+pub fn syntax_highlight(
+    lang: Option<&str>,
+    code: &str,
+    syntax_theme: &SyntaxTheme,
+) -> Result<String> {
     let ps = SyntaxSet::load_defaults_newlines();
     let theme_set =
         ThemeSet::load_from_folder("src/site/markdown/syntax_highlight/syntax_themes").unwrap();
@@ -43,13 +45,18 @@ pub fn syntax_highlight(lang: Option<&str>, code: &str) -> Result<String> {
         code,
         &ps,
         syntax,
-        &theme_set.themes[&SyntaxThemes::as_str(&config.syntax_theme)],
+        &theme_set.themes[&syntax_theme.as_str()],
     )?)
 }
 
 #[test]
 fn creates_syntax() {
-    assert!(syntax_highlight(Some("js"), "console.log(5)")
-        .unwrap()
-        .contains("<span style=\"color:#ffcb6b;\">console</span>"));
+    let highlight = syntax_highlight(
+        Some("js"),
+        "console.log(5)",
+        &SyntaxTheme::AgilaClassicOceanicNext,
+    )
+    .unwrap();
+
+    assert!(highlight.contains("<span style=\"color:#fac863;\">console</span>"));
 }

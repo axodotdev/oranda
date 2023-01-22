@@ -1,0 +1,14 @@
+{
+  "homepage": "https://oranda.axo.dev",
+  "readme_path": "dev/README.md",
+  "repository": "https://github.com/axodotdev/cargo-dist",
+  "artifacts": {
+    "cargo_dist": true
+  },
+  "additional_pages": ["dev/additional.md"],
+  "social": {
+    "image": "https://www.axo.dev/meta_small.jpeg",
+    "image_alt": "axo",
+    "twitter_account": "@axodotdev"
+  }
+}

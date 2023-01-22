@@ -1,6 +1,5 @@
 {
   "homepage": "https://oranda.axo.dev",
-  "repository": "https://github.com/axodotdev/cargo-dist",
   "favicon": "https://www.axo.dev/favicon.ico",
   "analytics": {
     "plausible": {
@@ -8,12 +7,10 @@
     }
   },
   "additional_pages": ["./docs/src/options/themes/themes.md"],
+  "path_prefix": "oranda",
   "social": {
     "image": "https://www.axo.dev/meta_small.jpeg",
     "image_alt": "axo",
     "twitter_account": "@axodotdev"
-  },
-  "artifacts": {
-    "cargo_dist": true
   }
 }

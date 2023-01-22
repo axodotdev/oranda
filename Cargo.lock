@@ -107,7 +107,7 @@ checksum = "d468802bab17cbc0cc575e9b053f41e72aa36bfa6b7f55e3529ffa43161b97fa"
 [[package]]
 name = "axoasset"
 version = "0.1.0"
-source = "git+https://github.com/axodotdev/axoasset?branch=main#c3624c58c74e53397836713af11f8ad2bd4cb159"
+source = "git+https://github.com/axodotdev/axoasset?branch=main#72720d76e30c033ccf500bc4384e3b6e7ac529e3"
 dependencies = [
  "image",
  "mime",
@@ -198,6 +198,12 @@ name = "base64"
 version = "0.13.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9e1b586273c5702936fe7b7d6896644d8be71e6314cfe09d3167c95f712589e8"
+
+[[package]]
+name = "base64"
+version = "0.21.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a4a4ddaa51a5bc52a6948f74c06d20aaaddb71924eab79b8c97a8c556e942d6a"
 
 [[package]]
 name = "bincode"
@@ -700,6 +706,12 @@ checksum = "a9c384f161156f5260c24a097c56119f9be8c798586aecc13afbcbe7b7e26bf8"
 dependencies = [
  "percent-encoding",
 ]
+
+[[package]]
+name = "fs_extra"
+version = "1.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2022715d62ab30faffd124d40b76f4134a550a87792276512b18d63272333394"
 
 [[package]]
 name = "futf"
@@ -1451,6 +1463,7 @@ dependencies = [
  "cargo-dist-schema",
  "clap 4.1.1",
  "comrak",
+ "fs_extra",
  "reqwest",
  "schemars",
  "serde",
@@ -1639,7 +1652,7 @@ version = "1.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5329b8f106a176ab0dce4aae5da86bfcb139bb74fb00882859e03745011f3635"
 dependencies = [
- "base64",
+ "base64 0.13.1",
  "indexmap",
  "line-wrap",
  "quick-xml",
@@ -1861,11 +1874,11 @@ dependencies = [
 
 [[package]]
 name = "reqwest"
-version = "0.11.13"
+version = "0.11.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "68cc60575865c7831548863cc02356512e3f1dc2f3f82cb837d7fc4cc8f3c97c"
+checksum = "21eed90ec8570952d53b772ecf8f206aa1ec9a3d76b2521c56c42973f2d91ee9"
 dependencies = [
- "base64",
+ "base64 0.21.0",
  "bytes",
  "encoding_rs",
  "futures-core",
