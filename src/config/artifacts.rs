@@ -76,7 +76,7 @@ pub fn create_artifacts_tabs(config: &Config) -> Result<Option<Box<div<String>>>
                 for targ in artifact.target_triples.iter() {
                     targets.push_str(format!("{} ", targ).as_str());
                 }
-                let classname: SpacedSet<Class> = "business-button hidden".try_into().unwrap();
+                let classname: SpacedSet<Class> = "block hidden".try_into().unwrap();
                 let url = format!(
                     "{}/releases/download/v{}/{}",
                     config.repository.as_ref().unwrap(),
@@ -85,7 +85,7 @@ pub fn create_artifacts_tabs(config: &Config) -> Result<Option<Box<div<String>>>
                 );
 
                 html.extend(
-                    html!(<a href=url class=classname data-targets=targets>{text!("Download")}</a>),
+                    html!(<a href=url class=classname data-targets=targets><button class="business-button primary">{text!("Download")}</button></a>),
                 );
             }
         }
@@ -95,7 +95,7 @@ pub fn create_artifacts_tabs(config: &Config) -> Result<Option<Box<div<String>>>
     return Ok(Some(html!(
     <div class="artifacts">
         <h3 class="text-center">{text!("Download for your platform")}</h3>{html}
-        <a href="/artifacts.html">{text!("View all downloads")}</a>
+        <a href="/artifacts.html" class="download-all">{text!("View all downloads")}</a>
     </div>
     )));
 }
