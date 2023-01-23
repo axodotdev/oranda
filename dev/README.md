@@ -47,7 +47,7 @@ One error we ran into before was in code-blocks with HTML specifically, so let's
 
 
 ### Images
-![An image from a vintage video synth](./some_art.png)
+![An image from a vintage video synth](./static/some_art.png)
 Here is an image I made.
 
 ### Tables
