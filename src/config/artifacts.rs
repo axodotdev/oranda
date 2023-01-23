@@ -1,7 +1,7 @@
 use crate::config::Config;
 use crate::errors::*;
 use crate::site::html::build_common_html;
-use axohtml::elements::{a, div, script};
+use axohtml::elements::{a, div, script, tr};
 use axohtml::types::{Class, SpacedSet};
 use axohtml::{html, text};
 use cargo_dist_schema::{ArtifactKind, DistManifest};
@@ -41,6 +41,15 @@ pub struct Artifacts {
     pub cargo_dist: bool,
 }
 
+fn create_download_link(config: &Config, name: String) -> String {
+    format!(
+        "{}/releases/download/v{}/{}",
+        config.repository.as_ref().unwrap(),
+        config.version.as_ref().unwrap(),
+        name
+    )
+}
+
 pub fn create_artifacts_tabs(config: &Config) -> Result<Option<Box<div<String>>>> {
     let Some(Artifacts { cargo_dist: true }) = &config.artifacts else {
         return Ok(None);
@@ -52,11 +61,7 @@ pub fn create_artifacts_tabs(config: &Config) -> Result<Option<Box<div<String>>>
         )));
     }
 
-    let url = format!(
-        "{}/releases/download/v{}/dist-manifest.json",
-        config.repository.as_ref().unwrap(),
-        config.version.as_ref().unwrap()
-    );
+    let url = create_download_link(config, String::from("dist-manifest.json"));
 
     let resp = reqwest::blocking::get(url);
 
@@ -77,12 +82,7 @@ pub fn create_artifacts_tabs(config: &Config) -> Result<Option<Box<div<String>>>
                     targets.push_str(format!("{} ", targ).as_str());
                 }
                 let classname: SpacedSet<Class> = "block hidden".try_into().unwrap();
-                let url = format!(
-                    "{}/releases/download/v{}/{}",
-                    config.repository.as_ref().unwrap(),
-                    config.version.as_ref().unwrap(),
-                    artifact.name
-                );
+                let url = create_download_link(config, artifact.name);
 
                 html.extend(
                     html!(<a href=url class=classname data-targets=targets><button class="business-button primary">{text!("Download")}</button></a>),
@@ -91,10 +91,10 @@ pub fn create_artifacts_tabs(config: &Config) -> Result<Option<Box<div<String>>>
         }
     }
 
-    build_artifacts_html(config)?;
+    build_artifacts_html(config, typed)?;
     return Ok(Some(html!(
     <div class="artifacts">
-        <h3 class="text-center">{text!("Download for your platform")}</h3>{html}
+        {html}
         <a href="/artifacts.html" class="download-all">{text!("View all downloads")}</a>
     </div>
     )));
@@ -108,13 +108,38 @@ pub fn get_os_script(config: &Config) -> Result<Box<script<String>>> {
     Ok(html!(<script src=path_as_string />))
 }
 
-pub fn build_artifacts_html(config: &Config) -> Result<()> {
-    let content = html!(
+pub fn build_artifacts_html(config: &Config, manifest: &DistManifest) -> Result<()> {
+    fn create_content(table: Vec<Box<tr<String>>>) -> Box<div<String>> {
+        html!(
         <div>
             <h1>{text!("All downloads")}</h1>
+            <table>
+                <tr>
+                    <th>{text!("Name")}</th>
+                    <th>{text!("Kind")}</th>
+                    <th>{text!("Download")}</th>
+                </tr>
+                <tbody>
+                    {table}
+                </tbody>
+            </table>
         </div>
-    );
-    let doc = build_common_html(config, content)?;
+        )
+    }
+    let mut table = vec![];
+    for release in manifest.releases.iter() {
+        for artifact in release.artifacts.iter() {
+            let url = create_download_link(config, artifact.name);
+            table.extend(html!(
+            <tr>
+                <td>{artifact.name}</td>
+                <td>{artifact.kind}</td>
+                <td><a href=url>{text!("Download")}</a></td>
+            </tr>
+            ));
+        }
+    }
+    let doc = build_common_html(config, create_content(table))?;
     let html_path = format!("{}/artifacts.html", &config.dist_dir);
 
     let mut html_file = File::create(html_path)?;
