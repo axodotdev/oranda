@@ -2,31 +2,31 @@ use crate::config::Config;
 use axohtml::elements::script;
 
 use axohtml::{html, unsafe_text};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GoogleTracking {
     pub tracking_id: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct FathomTracking {
     pub site: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PlausibleTracking {
     pub domain: String,
     pub script_url: Option<String>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct UnamiTracking {
     pub website: String,
     pub script_url: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum Analytics {
     Google(GoogleTracking),

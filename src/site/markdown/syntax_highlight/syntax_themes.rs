@@ -1,5 +1,5 @@
-use serde::Deserialize;
-#[derive(Debug, Deserialize)]
+use serde::{Deserialize, Serialize};
+#[derive(Debug, Deserialize, Serialize)]
 pub enum SyntaxThemes {
     AgilaClassicOceanicNext,
     AgilaCobalt,

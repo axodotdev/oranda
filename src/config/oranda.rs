@@ -1,7 +1,7 @@
 use std::fs;
 use std::path::Path;
 
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 use crate::config::analytics::Analytics;
 use crate::config::theme::Theme;
@@ -9,7 +9,7 @@ use crate::errors::*;
 use crate::message::{self, MessageType};
 use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxThemes;
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Social {
     pub image: Option<String>,
     pub image_alt: Option<String>,

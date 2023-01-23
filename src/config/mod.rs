@@ -1,16 +1,23 @@
-pub mod analytics;
-mod oranda;
-mod project;
-pub mod theme;
-use self::analytics::Analytics;
-use self::oranda::{OrandaConfig, Social};
+use std::fmt;
+
+use serde::Serialize;
+
 use crate::errors::*;
 use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxThemes;
+
+mod oranda;
+use oranda::{OrandaConfig, Social};
+
+pub mod analytics;
+use analytics::Analytics;
+
+mod project;
 use project::ProjectConfig;
 
+pub mod theme;
 use theme::Theme;
 
-#[derive(Debug)]
+#[derive(Debug, Serialize)]
 pub struct Config {
     pub description: String,
     pub dist_dir: String,
@@ -28,6 +35,13 @@ pub struct Config {
     pub social: Option<Social>,
     pub logo: Option<String>,
     pub favicon: Option<String>,
+}
+
+impl fmt::Display for Config {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let config = serde_json::to_string(self).expect("could not serialize configuration");
+        write!(f, "{}", config)
+    }
 }
 
 impl Config {
@@ -145,7 +159,7 @@ impl Default for Config {
             syntax_theme: SyntaxThemes::MaterialTheme,
             analytics: None,
             additional_pages: None,
-            social: None,
+            social: None::<Social>,
             logo: None,
             favicon: None,
         }

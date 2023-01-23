@@ -17,6 +17,10 @@ impl Build {
     pub fn run(&self) -> Result<()> {
         println!("{}", message::build(MessageType::Info, "Running build..."));
         let config = Config::build()?;
+        println!(
+            "{:?}",
+            message::build(MessageType::Debug, &config.to_string())
+        );
         Site::write(&config)?;
         Ok(())
     }
