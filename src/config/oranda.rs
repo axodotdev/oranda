@@ -40,20 +40,13 @@ pub struct OrandaConfig {
 
 impl OrandaConfig {
     pub fn load() -> Result<Option<OrandaConfig>> {
-        println!(
-            "{}",
-            message::build(MessageType::Info, "Found oranda config...")
-        );
         if Path::new(ORANDA_JSON).exists() {
-            let oranda_json = fs::read_to_string(ORANDA_JSON)?;
-            let data: OrandaConfig = serde_json::from_str(&oranda_json)?;
             println!(
                 "{}",
-                message::build(
-                    MessageType::Debug,
-                    &format!("oranda config: {}", &oranda_json)
-                )
+                message::build(MessageType::Info, "Found oranda config...")
             );
+            let oranda_json = fs::read_to_string(ORANDA_JSON)?;
+            let data: OrandaConfig = serde_json::from_str(&oranda_json)?;
             Ok(Some(data))
         } else {
             Ok(None)

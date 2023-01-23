@@ -39,7 +39,7 @@ pub struct Config {
 
 impl fmt::Display for Config {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let config = serde_json::to_string(self).expect("could not serialize configuration");
+        let config = serde_json::to_string_pretty(self).expect("could not serialize configuration");
         write!(f, "{}", config)
     }
 }
