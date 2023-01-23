@@ -41,7 +41,7 @@ pub fn create(config: &Config) -> Result<Box<header<String>>> {
                 let mut href = format!("/{}", file_name);
 
                 if let Some(prefix) = &config.path_prefix {
-                    href = format!("/{}{}", prefix, href);
+                    href = format!("/{}{}.html", prefix, href);
                 }
 
                 html.extend(html!(<li><a href=href>{text!(file_name)}</a></li>));

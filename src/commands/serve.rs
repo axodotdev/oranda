@@ -1,10 +1,10 @@
-use std::net::SocketAddr;
-use std::path::PathBuf;
-
 use crate::config::Config;
 use crate::errors::*;
 use axum::{http::StatusCode, routing::get_service, Router};
+use axum_extra::routing::SpaRouter;
 use clap::Parser;
+use std::net::SocketAddr;
+use std::path::PathBuf;
 use tower_http::services::ServeDir;
 
 #[derive(Debug, Parser)]
@@ -24,19 +24,25 @@ impl Serve {
 
     #[tokio::main]
     async fn serve(&self, config: Config) -> Result<()> {
-        let static_files_service = get_service(ServeDir::new(config.dist_dir)).handle_error(
-            |error: std::io::Error| async move {
-                (
-                    StatusCode::INTERNAL_SERVER_ERROR,
-                    format!("Unhandled internal error: {}", error),
-                )
-            },
+        let route = if let Some(path_prefix) = config.path_prefix {
+            format!("/{}", path_prefix)
+        } else {
+            String::from("/")
+        };
+
+        let app = Router::new().merge(
+            SpaRouter::new(route.as_str(), config.dist_dir)
+                .index_file("index.html")
+                .handle_error(|error: std::io::Error| async move {
+                    (
+                        StatusCode::INTERNAL_SERVER_ERROR,
+                        format!("Unhandled internal error: {}", error),
+                    )
+                }),
         );
 
-        let app = Router::new().fallback(static_files_service);
-
         let addr = SocketAddr::from(([127, 0, 0, 1], self.port));
-        println!("listening on {}", addr);
+        println!("listening on http://{}{}", addr, route);
         axum::Server::bind(&addr)
             .serve(app.into_make_service())
             .await

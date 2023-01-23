@@ -11,7 +11,8 @@ name = "oranda"
 [dependencies]
 axohtml = "0.4.1"
 ammonia = "3"
-axum = "0.5.17"
+axum = "0.6.2"
+axum-extra = {version = "0.4.2", features= ["spa"]}
 clap = { version = "4", features = ["derive", "help", "usage", "error-context", "wrap_help"] }
 comrak = "0.14"
 serde = { version = "1.0.144", features = ["derive"] }
