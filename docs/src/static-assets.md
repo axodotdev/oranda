@@ -1,14 +1,14 @@
 # Adding static assets
 
-If in your website you would like to point to any sort of static assets may those be images, binaries or anything in between you can put these assets in the `static` directory and this whole directory will then be copied over to the built website.
+If you reference static assets in your markdown, you'll need to place them all inside a directory at the root of your project called `static`.
 
-A example of an image link on markdown is:
+In your markdown, you'll need to refer to the assets in this directory. For example:
 
 ```md
 ![An image from my amazing project](./static/project.png)
 ```
 
-If you wish to use another folder instead you can customize the folder used in the `oranda.json`, like so:
+If you wish to use a custom-named directory you can configure this in your `oranda.json`, like so:
 
 ```json
 {
@@ -16,4 +16,4 @@ If you wish to use another folder instead you can customize the folder used in t
 }
 ```
 
-In this case the `assets` folder will be used.
+In this case the `assets` directory will be used instead of the default `static` directory.
