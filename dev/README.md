@@ -1,11 +1,13 @@
+<!-- This is a comment and doesn't appear -->
+
 > This README contains expected Markdown elements. It is useful for developing themes and testing that changes to Oranda parsing do not have unexpected repercussions. If you run into a bug not captured here, please add it.
 
 # Heading 1
 ## Heading 2
 ### Heading 3
 #### Heading 4
-###### Heading 5
-####### Heading 6
+##### Heading 5
+###### Heading 6
 
 A paragraph can contain **bold**, _italic_ and *italic* text. (Those two are different.) Let's look at some longer text and other features.
 
@@ -47,8 +49,11 @@ One error we ran into before was in code-blocks with HTML specifically, so let's
 
 
 ### Images
-![An image from a vintage video synth](./some_art.png)
+![An image from a vintage video synth](./static/some_art.png)
 Here is an image I made.
+
+Here is one with an external link
+![](https://sarahghp.com/vids/noodling/noodl06)
 
 ### Tables
 I couldn't think of a good table example, so I adapted [this styles table from Github](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
@@ -67,4 +72,32 @@ I couldn't think of a good table example, so I adapted [this styles table from G
 
 Don't forget that Markdown also accepts raw html (as we can see in the last few rows of the table above.)
 
-<div class="title">For instance, this is a plain div with a class attached to style it in the title style. <sup>Wow, is it big.</sup>
+<div class="title">For instance, this is a plain div with a class attached to style it in the title style.<sup>Wow.</sup></div>
+
+## Nesting
+
+### Lists
+
+#### Unordered
++ We can go
+    + Down
+        + Down
+- Using
+    + Different
+        * Prefixes
+
+
+#### Ordered
+1. The prefixes
+    1. are ordered
+        1. and subdivide
+    1. down and then up
+1. Once more
+
+
+## Footnotes
+Add a note with a number[^1].
+Or a name [^psst].
+
+[^1]: Number 1.
+[^psst]: A secret.
