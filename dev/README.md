@@ -17,7 +17,7 @@ Do you know the poet Frank O'Hara?
 
 He's one of my favorites!
 
-He is a modern poet, active in the middle of the twentieth century. He worked as a guard at the Museum of Modern Art in New York as his day job. He was close friends with Abstract Expressionist painter Helen Frankenthaler, who is famous for her ethereal works made by soaking canvases in paint. The canvases were laid on the floor, rather than stood up, and she often built little gangways over them in order to work. If you like Frankenthaler's art, you might also enjoy the works of Sam Gilliam.
+He is a modern poet, active in the middle of the twentieth century. He worked as a guard at the Museum of Modern Art in New York as his day job. He was close friends with Abstract Expressionist painter Grace Hartigan. I thought it was Helen Frankenthaler but I found out I was incorrect. Both are wonderful painters and colorists.
 
 But back to Frank. My favorite poem of his is called ["The Day Lady Died,"](https://www.poetryfoundation.org/poems/42657/the-day-lady-died) and is about the death of Billie Holiday. But my favorite quotation comes from "Meditations in an Emergency":
 
@@ -53,7 +53,7 @@ One error we ran into before was in code-blocks with HTML specifically, so let's
 Here is an image I made.
 
 Here is one with an external link
-![](https://sarahghp.com/vids/noodling/noodl06)
+![](https://images.pexels.com/photos/14900787/pexels-photo-14900787.jpeg)
 
 ### Tables
 I couldn't think of a good table example, so I adapted [this styles table from Github](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
