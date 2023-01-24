@@ -120,7 +120,6 @@ fn reads_description() {
     let runtime = initialize_tokio_runtime();
     let _guard = runtime.enter();
     let site = Site::build(&config(), &config().readme_path).unwrap();
-    println!("{:?}", site.html);
     assert!(site.html.contains("you axolotl questions"));
     assert!(site.html.contains("My Axo project"))
 }
