@@ -1,4 +1,9 @@
+use std::fs;
+use std::path::Path;
+
 use clap::{Parser, Subcommand};
+use tracing::Level;
+use tracing_subscriber::FmtSubscriber;
 
 mod commands;
 mod config;
@@ -30,7 +35,17 @@ fn main() {
         .build()
         .expect("Initializing tokio runtime failed");
     let _guard = runtime.enter();
+
     let cli = Cli::parse();
+
+    // Build a subscriber and appender for printing messages to the screen and file on error
+    let appender = tracing_appender::rolling::never("./", "oranda-debug.log");
+    let (non_blocking, _guard) = tracing_appender::non_blocking(appender);
+    let subscriber = FmtSubscriber::builder()
+        .with_max_level(Level::INFO)
+        .with_writer(non_blocking)
+        .finish();
+    tracing::subscriber::set_global_default(subscriber).expect("setting default subscriber failed");
 
     let oranda_output = match &cli.command {
         Command::Build(cmd) => cmd.run(),
@@ -38,7 +53,13 @@ fn main() {
     };
 
     let to_term = match oranda_output {
-        Ok(_) => message::build(MessageType::Success, "Completed successfully."),
+        Ok(_) => {
+            if Path::new("./oranda-debug.log").exists() {
+                fs::remove_file("./oranda-debug.log")
+                    .expect("Encountered an error removing debug log file.");
+            }
+            message::build(MessageType::Success, "Completed successfully.")
+        }
         Err(e) => message::build(MessageType::Error, &e.to_string()),
     };
 

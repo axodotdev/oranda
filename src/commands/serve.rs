@@ -6,6 +6,7 @@ use crate::message::{self, MessageType};
 use axum::{http::StatusCode, routing::get_service, Router};
 use clap::Parser;
 use tower_http::services::ServeDir;
+use tracing;
 
 #[derive(Debug, Parser)]
 pub struct Serve {
@@ -15,7 +16,7 @@ pub struct Serve {
 
 impl Serve {
     pub fn run(&self) -> Result<()> {
-        println!("{}", message::build(MessageType::Info, "Running serve..."));
+        tracing::info!("{}", message::build(MessageType::Info, "Running serve..."));
         let config = Config::build()?;
         self.serve(config)?;
         Ok(())
@@ -35,7 +36,8 @@ impl Serve {
         let app = Router::new().fallback(static_files_service);
 
         let addr = SocketAddr::from(([127, 0, 0, 1], self.port));
-        println!("listening on {}", addr);
+        let msg = format!("Listening on {}...", addr);
+        tracing::info!("{}", message::build(MessageType::Info, &msg));
         axum::Server::bind(&addr)
             .serve(app.into_make_service())
             .await

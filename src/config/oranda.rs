@@ -41,7 +41,7 @@ pub struct OrandaConfig {
 impl OrandaConfig {
     pub fn load() -> Result<Option<OrandaConfig>> {
         if Path::new(ORANDA_JSON).exists() {
-            println!(
+            tracing::info!(
                 "{}",
                 message::build(MessageType::Info, "Found oranda config...")
             );

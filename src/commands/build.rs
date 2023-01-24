@@ -17,7 +17,7 @@ impl Build {
     pub fn run(&self) -> Result<()> {
         println!("{}", message::build(MessageType::Info, "Running build..."));
         let config = Config::build()?;
-        println!(
+        tracing::debug!(
             "{}",
             message::build(MessageType::Debug, &config.to_string())
         );
