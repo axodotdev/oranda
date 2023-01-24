@@ -98,24 +98,27 @@ fn config() -> Config {
 
 #[test]
 fn it_adds_additional_css() {
-    let _guard = initialize_tokio_runtime().enter();
+    let runtime = initialize_tokio_runtime();
+    let _guard = runtime.enter();
     let site = Site::build(&config(), &config().readme_path).unwrap();
     assert!(site
         .html
-        .contains("<link rel=\"stylesheet\" href=\"custom.css\"></link>"));
+        .contains("<link href=\"custom.css\" rel=\"stylesheet\"/>"));
 }
 
 #[test]
 fn it_builds_the_site() {
-    let _guard = initialize_tokio_runtime().enter();
+    let runtime = initialize_tokio_runtime();
+    let _guard = runtime.enter();
     let site = Site::build(&config(), &config().readme_path).unwrap();
     assert!(site.html.contains("<h1>axo</h1>"));
-    assert!(site.html.contains("axo-oranda.css"));
+    assert!(site.html.contains("custom.css"));
 }
 
 #[test]
 fn reads_description() {
-    let _guard = initialize_tokio_runtime().enter();
+    let runtime = initialize_tokio_runtime();
+    let _guard = runtime.enter();
     let site = Site::build(&config(), &config().readme_path).unwrap();
     println!("{:?}", site.html);
     assert!(site.html.contains("you axolotl questions"));
@@ -124,14 +127,16 @@ fn reads_description() {
 
 #[test]
 fn reads_theme() {
-    let _guard = initialize_tokio_runtime().enter();
+    let runtime = initialize_tokio_runtime();
+    let _guard = runtime.enter();
     let site = Site::build(&config(), &config().readme_path).unwrap();
     assert!(site.html.contains("html class=\"dark\""));
 }
 
 #[test]
 fn creates_nav() {
-    let _guard = initialize_tokio_runtime().enter();
+    let runtime = initialize_tokio_runtime();
+    let _guard = runtime.enter();
     let site = Site::build(&config(), &config().readme_path).unwrap();
 
     assert!(site.html.contains("<nav class=\"nav\"><ul><li><a href=\"/\">Home</a></li><li><a href=\"/readme\">readme</a></li></ul></nav>"));
