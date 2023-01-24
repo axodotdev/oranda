@@ -17,7 +17,7 @@ fn concat_minify_css(css_links: Vec<String>) -> Result<String> {
             "{css}/* {url} */{minified_css}",
             css = css,
             url = url,
-            minified_css = minified_css.to_string()
+            minified_css = minified_css
         );
     }
 
