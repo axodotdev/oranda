@@ -2,7 +2,6 @@ use crate::config::Config;
 use crate::errors::*;
 use crate::site::html::build_common_html;
 use axohtml::elements::{a, div, script, tr};
-use axohtml::types::{Class, SpacedSet};
 use axohtml::{html, text};
 use cargo_dist_schema::{ArtifactKind, DistManifest};
 use serde::Deserialize;
@@ -41,7 +40,7 @@ pub struct Artifacts {
     pub cargo_dist: bool,
 }
 
-fn create_download_link(config: &Config, name: String) -> String {
+fn create_download_link(config: &Config, name: &String) -> String {
     format!(
         "{}/releases/download/v{}/{}",
         config.repository.as_ref().unwrap(),
@@ -61,7 +60,7 @@ pub fn create_artifacts_tabs(config: &Config) -> Result<Option<Box<div<String>>>
         )));
     }
 
-    let url = create_download_link(config, String::from("dist-manifest.json"));
+    let url = create_download_link(config, &String::from("dist-manifest.json"));
 
     let resp = reqwest::blocking::get(url);
 
@@ -81,11 +80,10 @@ pub fn create_artifacts_tabs(config: &Config) -> Result<Option<Box<div<String>>>
                 for targ in artifact.target_triples.iter() {
                     targets.push_str(format!("{} ", targ).as_str());
                 }
-                let classname: SpacedSet<Class> = "block hidden".try_into().unwrap();
-                let url = create_download_link(config, artifact.name);
+                let url = create_download_link(config, &artifact.name);
 
                 html.extend(
-                    html!(<a href=url class=classname data-targets=targets><button class="business-button primary">{text!("Download")}</button></a>),
+                    html!(<a href=url class="block hidden" data-targets=targets><button class="business-button primary">{text!("Download")}</button></a>),
                 );
             }
         }
@@ -129,11 +127,12 @@ pub fn build_artifacts_html(config: &Config, manifest: &DistManifest) -> Result<
     let mut table = vec![];
     for release in manifest.releases.iter() {
         for artifact in release.artifacts.iter() {
-            let url = create_download_link(config, artifact.name);
-            table.extend(html!(
+            let name = &artifact.name;
+            let url = create_download_link(config, name);
+            table.push(html!(
             <tr>
-                <td>{artifact.name}</td>
-                <td>{artifact.kind}</td>
+                // <td>{name}</td>
+                // <td>{artifact.kind}</td>
                 <td><a href=url>{text!("Download")}</a></td>
             </tr>
             ));

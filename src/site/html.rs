@@ -43,7 +43,7 @@ pub fn build_common_html(config: &Config, content: Box<div<String>>) -> Result<S
             {homepage}
             {favicon}
             {meta_tags}
-            <link rel="stylesheet" href="http://localhost:64548/axo-oranda.css"></link>
+            <link rel="stylesheet" href="https://www.unpkg.com/@axodotdev/fringe/themes/axo-oranda.css"></link>
             <link rel="stylesheet" href="styles.css"></link>
         </head>
         <body>

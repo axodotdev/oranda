@@ -294,8 +294,9 @@ checksum = "c77df041dc383319cc661b428b6961a005db4d6808d5e12536931b1ca9556055"
 
 [[package]]
 name = "cargo-dist-schema"
-version = "0.2.2-prerelease8"
-source = "git+https://github.com/axodotdev/cargo-dist#514083471c875ed67cace7cff9bc51ccf55365fb"
+version = "0.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bc97d812f7dfef5211f9c87a4a88d1dcecadd7d5fe230537404668e4a5c36fb5"
 dependencies = [
  "camino",
  "schemars",
@@ -1452,7 +1453,7 @@ dependencies = [
 
 [[package]]
 name = "oranda"
-version = "0.0.1-prerelease1"
+version = "0.0.1"
 dependencies = [
  "ammonia",
  "assert_cmd",
