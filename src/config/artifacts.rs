@@ -40,15 +40,20 @@ pub struct Artifacts {
     pub cargo_dist: bool,
 }
 
+fn get_kind_string(kind: &ArtifactKind) -> String {
+    match kind {
+        ArtifactKind::ExecutableZip => String::from("Executable Zip"),
+        ArtifactKind::Symbols => String::from("Symbols"),
+        ArtifactKind::Installer => String::from("Installer"),
+        _ => String::from("Unknown"),
+    }
+}
+
 fn create_download_link(config: &Config, name: &String) -> String {
-    if let Some(repo) = &config.repository {
-        if let Some(version) = &config.version {
-            format!("{}/releases/download/v{}/{}", repo, version, name)
-        } else {
-            String::from("")
-        }
+    if let (Some(repo), Some(version)) = (&config.repository, &config.version) {
+        format!("{}/releases/download/v{}/{}", repo, version, name)
     } else {
-        String::from("")
+        String::new()
     }
 }
 
@@ -136,10 +141,11 @@ pub fn build_artifacts_html(config: &Config, manifest: &DistManifest) -> Result<
         for artifact in release.artifacts.iter() {
             let name = &artifact.name;
             let url = create_download_link(config, name);
+            let _kind = get_kind_string(&artifact.kind);
             table.push(html!(
             <tr>
-                // <td>{name}</td>
-                // <td>{artifact.kind}</td>
+                //<td>{name}</td>
+                //<td>{kind}</td>
                 <td><a href=url>{text!("Download")}</a></td>
             </tr>
             ));

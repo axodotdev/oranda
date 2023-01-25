@@ -114,17 +114,13 @@ impl Config {
                     theme: custom.theme.unwrap_or(default.theme),
                     remote_styles: custom.remote_styles.unwrap_or(default.remote_styles),
                     additional_css: custom.additional_css.unwrap_or(default.additional_css),
-                    repository: Some(
-                        custom
-                            .repository
-                            .unwrap_or_else(|| project.repository.unwrap_or_default()),
-                    ),
+                    repository: custom.repository.or(project.repository),
                     syntax_theme: custom.syntax_theme.unwrap_or(default.syntax_theme),
                     analytics: custom.analytics,
                     additional_pages: custom.additional_pages,
                     social: custom.social,
                     artifacts: custom.artifacts,
-                    version: Some(project.version.unwrap_or_default()),
+                    version: custom.version.or(project.version),
                     logo: custom.logo,
                     favicon: custom.favicon,
                     path_prefix: custom.path_prefix,

@@ -63,7 +63,7 @@ pub fn build_common_html(config: &Config, content: Box<div<String>>) -> Result<S
 }
 
 pub fn build(config: &Config, content: String) -> Result<String> {
-    let artifacts_tabs = create_artifacts_tabs(config).unwrap();
+    let artifacts_tabs = create_artifacts_tabs(config)?;
 
     let home_content = html!(<div>{artifacts_tabs}{ unsafe_text!(content) }
     </div>);
