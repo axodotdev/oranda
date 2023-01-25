@@ -17,6 +17,7 @@ pub struct Site {
 
 impl Site {
     pub fn build(config: &Config, file_path: &String) -> Result<Site> {
+        Self::create_dist_dir(&config.dist_dir)?;
         let readme_path = Path::new(&file_path);
         let content = markdown::body(readme_path, &config.syntax_theme)?;
         let html = html::build(config, content)?;
@@ -45,6 +46,7 @@ impl Site {
     }
 
     pub fn copy_static(dist_path: &String, static_path: &String) -> Result<()> {
+        Self::create_dist_dir(dist_path)?;
         let mut options = fs_extra::dir::CopyOptions::new();
         options.overwrite = true;
         fs_extra::copy_items(&[static_path], dist_path, &options)?;
@@ -53,9 +55,8 @@ impl Site {
     }
 
     pub fn write(config: &Config) -> Result<()> {
-        let readme_path = &config.readme_path;
         let dist = &config.dist_dir;
-        std::fs::create_dir_all(dist)?;
+        let readme_path = &config.readme_path;
         Self::copy_static(dist, &config.static_dir)?;
 
         let mut files = vec![readme_path];
@@ -72,6 +73,14 @@ impl Site {
             let mut html_file = File::create(html_path)?;
             html_file.write_all(site.html.as_bytes())?;
         }
+
+        Ok(())
+    }
+
+    fn create_dist_dir(dist_path: &String) -> Result<()> {
+        if !Path::new(dist_path).exists() {
+            std::fs::create_dir_all(dist_path)?;
+        };
 
         Ok(())
     }
