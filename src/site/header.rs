@@ -1,6 +1,6 @@
 use crate::config::Config;
 use crate::errors::*;
-use axohtml::elements::{header, img, li};
+use axohtml::elements::{header, img, li, nav};
 use axohtml::{html, text};
 use std::path::Path;
 
@@ -22,6 +22,32 @@ async fn fetch_logo(
     Ok(html!(<img src=path_as_string alt=name class="logo" />))
 }
 
+fn nav(pages: &[String], path_prefix: &Option<String>) -> Result<Box<nav<String>>> {
+    let mut html: Vec<Box<li<String>>> = vec![html!(<li><a href="/">"Home"</a></li>)];
+    for page in pages.iter() {
+        let file_path = Path::new(page);
+        let file_name = file_path
+            .file_stem()
+            .unwrap_or(file_path.as_os_str())
+            .to_string_lossy();
+
+        let href = if let Some(prefix) = &path_prefix {
+            format!("/{}/{}.html", prefix, file_name)
+        } else {
+            format!("/{}.html", file_name)
+        };
+
+        html.extend(html!(<li><a href=href>{text!(file_name)}</a></li>));
+    }
+    Ok(html!(
+        <nav class="nav">
+            <ul>
+                {html}
+            </ul>
+        </nav>
+    ))
+}
+
 pub fn create(config: &Config) -> Result<Box<header<String>>> {
     let logo = if let Some(logo) = config.logo.clone() {
         Some(get_logo(logo, config)?)
@@ -29,35 +55,11 @@ pub fn create(config: &Config) -> Result<Box<header<String>>> {
         None
     };
 
-    let nav = match config.additional_pages.as_ref() {
-        Some(pages) => {
-            let mut html: Vec<Box<li<String>>> = vec![html!(<li><a href="/">"Home"</a></li>)];
-            for page in pages.iter() {
-                let file_path = Path::new(page);
-                let file_name = file_path
-                    .file_stem()
-                    .unwrap_or(file_path.as_os_str())
-                    .to_string_lossy();
-
-                let href = if let Some(prefix) = &config.path_prefix {
-                    format!("/{}/{}.html", prefix, file_name)
-                } else {
-                    format!("/{}.html", file_name)
-                };
-
-                html.extend(html!(<li><a href=href>{text!(file_name)}</a></li>));
-            }
-            Some(html!(
-                <nav class="nav">
-                    <ul>
-                        {html}
-                    </ul>
-                </nav>
-            ))
-        }
-        None => None,
+    let nav = if let Some(additional_pages) = &config.additional_pages {
+        Some(nav(additional_pages, &config.path_prefix)?)
+    } else {
+        None
     };
-
     Ok(html!(
         <header>
             {logo}
