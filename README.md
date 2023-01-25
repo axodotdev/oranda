@@ -4,7 +4,7 @@
 [![crates.io](https://img.shields.io/crates/v/oranda.svg)](https://crates.io/crates/oranda)
 [![CI](https://github.com/axodotdev/oranda/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/axodotdev/oranda/actions/workflows/ci.yml)
 [![release](https://github.com/axodotdev/oranda/actions/workflows/release.yml/badge.svg?branch=main)](https://github.com/axodotdev/oranda/actions/workflows/release.yml)
-[![docs](https://github.com/axodotdev/oranda/workflows/actions/web.yml/badge.svg?branch=main)](https://github.com/axodotdev/oranda/actions/workflows/web.yml)
+[![web](https://github.com/axodotdev/oranda/workflows/actions/web.yml/badge.svg?branch=main)](https://github.com/axodotdev/oranda/actions/workflows/web.yml)
 
 `oranda` is an opinionated static-site generator that is designed for developers
 who are publishing projects and would like a website but don't want to build
