@@ -10,19 +10,13 @@ mod html;
 pub mod markdown;
 use crate::config::Config;
 
-#[cfg(test)]
-use crate::config::theme::Theme;
-
-#[cfg(test)]
-use crate::initialize_tokio_runtime;
-
 #[derive(Debug)]
 pub struct Site {
     pub html: String,
 }
 
 impl Site {
-    fn build(config: &Config, file_path: &String) -> Result<Site> {
+    pub fn build(config: &Config, file_path: &String) -> Result<Site> {
         let dist = &config.dist_dir;
         std::fs::create_dir_all(dist)?;
         let readme_path = Path::new(&file_path);
@@ -82,61 +76,4 @@ impl Site {
 
         Ok(())
     }
-}
-
-#[cfg(test)]
-fn config() -> Config {
-    Config {
-        description: String::from("you axolotl questions"),
-        readme_path: String::from("./src/site/fixtures/readme.md"),
-        additional_pages: Some(vec![String::from("./src/site/fixtures/readme.md")]),
-        additional_css: vec![String::from("./src/site/fixtures/additional.css")],
-        theme: Theme::Dark,
-        ..Default::default()
-    }
-}
-
-#[test]
-fn it_adds_additional_css() {
-    let runtime = initialize_tokio_runtime();
-    let _guard = runtime.enter();
-    let site = Site::build(&config(), &config().readme_path).unwrap();
-    assert!(site
-        .html
-        .contains("<link href=\"custom.css\" rel=\"stylesheet\"/>"));
-}
-
-#[test]
-fn it_builds_the_site() {
-    let runtime = initialize_tokio_runtime();
-    let _guard = runtime.enter();
-    let site = Site::build(&config(), &config().readme_path).unwrap();
-    assert!(site.html.contains("<h1>axo</h1>"));
-    assert!(site.html.contains("custom.css"));
-}
-
-#[test]
-fn reads_description() {
-    let runtime = initialize_tokio_runtime();
-    let _guard = runtime.enter();
-    let site = Site::build(&config(), &config().readme_path).unwrap();
-    assert!(site.html.contains("you axolotl questions"));
-    assert!(site.html.contains("My Axo project"))
-}
-
-#[test]
-fn reads_theme() {
-    let runtime = initialize_tokio_runtime();
-    let _guard = runtime.enter();
-    let site = Site::build(&config(), &config().readme_path).unwrap();
-    assert!(site.html.contains("html class=\"dark\""));
-}
-
-#[test]
-fn creates_nav() {
-    let runtime = initialize_tokio_runtime();
-    let _guard = runtime.enter();
-    let site = Site::build(&config(), &config().readme_path).unwrap();
-
-    assert!(site.html.contains("<nav class=\"nav\"><ul><li><a href=\"/\">Home</a></li><li><a href=\"/readme\">readme</a></li></ul></nav>"));
 }

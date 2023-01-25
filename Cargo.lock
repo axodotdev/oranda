@@ -1445,6 +1445,7 @@ dependencies = [
  "clap 4.1.1",
  "comrak",
  "fs_extra",
+ "lazy_static",
  "minifier",
  "reqwest",
  "serde",

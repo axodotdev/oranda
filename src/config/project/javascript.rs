@@ -9,7 +9,7 @@ use assert_fs::fixture::{FileWriteStr, PathChild};
 use crate::config::project::Type;
 
 #[cfg(test)]
-use crate::initialize_tokio_runtime;
+use crate::tests::TEST_RUNTIME;
 
 static PACKAGE_JSON: &str = "./package.json";
 
@@ -59,7 +59,7 @@ fn it_detects_a_js_project() {
 
 #[test]
 fn it_loads_a_js_project_config() {
-    let _guard = initialize_tokio_runtime().enter();
+    let _guard = TEST_RUNTIME.enter();
     let tempdir = assert_fs::TempDir::new().expect("failed creating tempdir");
     let package_json = tempdir.child("package.json");
     package_json
