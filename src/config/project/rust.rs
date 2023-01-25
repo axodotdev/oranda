@@ -6,7 +6,7 @@ use std::path::{Path, PathBuf};
 #[cfg(test)]
 use crate::config::project::Type;
 #[cfg(test)]
-use crate::initialize_tokio_runtime;
+use crate::tests::TEST_RUNTIME;
 #[cfg(test)]
 use assert_fs::fixture::{FileWriteStr, PathChild};
 
@@ -63,7 +63,7 @@ description = ">o_o<"
 
 #[test]
 fn it_loads_a_rust_project_config() {
-    let _guard = initialize_tokio_runtime().enter();
+    let _guard = TEST_RUNTIME.enter();
     let tempdir = assert_fs::TempDir::new().expect("failed creating tempdir");
     let cargo_toml = tempdir.child("Cargo.toml");
     cargo_toml

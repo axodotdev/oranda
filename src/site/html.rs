@@ -2,12 +2,11 @@ use crate::config::analytics::{get_analytics, Analytics};
 use crate::config::artifacts::{self, create_artifacts_tabs};
 use crate::config::{theme, Config};
 use crate::errors::*;
+use crate::site::css;
+use crate::site::head;
 use crate::site::header;
 use axohtml::elements::div;
 use axohtml::{dom::DOMTree, html, text, unsafe_text};
-
-use super::head::{create_meta_tags, get_favicon};
-use super::header::repo_banner;
 
 pub fn build_common_html(config: &Config, content: Box<div<String>>) -> Result<String> {
     let theme = theme::css_class(&config.theme);
@@ -29,13 +28,17 @@ pub fn build_common_html(config: &Config, content: Box<div<String>>) -> Result<S
           <meta property="og:url" content=homepage/>
         )
     });
-    let banner = repo_banner(config);
-    let meta_tags = create_meta_tags(config);
+    let banner = header::repo_banner(config);
+    let meta_tags = head::create_meta_tags(config);
     let favicon = if let Some(favicon) = config.favicon.clone() {
-        Some(get_favicon(favicon, config.dist_dir.clone())?)
+        Some(head::get_favicon(favicon, config.dist_dir.clone())?)
     } else {
         None
     };
+
+    let additional_css = css::fetch_additional_css(config)?;
+    let fringe_css = css::fetch_fringe_css(config)?;
+
     let doc: DOMTree<String> = html!(
     <html lang="en" id="oranda" class=theme>
         <head>
@@ -43,8 +46,8 @@ pub fn build_common_html(config: &Config, content: Box<div<String>>) -> Result<S
             {homepage}
             {favicon}
             {meta_tags}
-            <link rel="stylesheet" href="https://www.unpkg.com/@axodotdev/fringe/themes/axo-oranda.css"></link>
-            <link rel="stylesheet" href="styles.css"></link>
+            {fringe_css}
+            {additional_css}
         </head>
         <body>
         <div class="container">
