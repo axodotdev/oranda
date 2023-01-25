@@ -23,7 +23,12 @@ async fn fetch_logo(
 }
 
 fn nav(pages: &[String], path_prefix: &Option<String>) -> Result<Box<nav<String>>> {
-    let mut html: Vec<Box<li<String>>> = vec![html!(<li><a href="/">"Home"</a></li>)];
+    let mut html: Vec<Box<li<String>>> = if let Some(prefix) = &path_prefix {
+        let href = format!("/{}", prefix);
+        vec![html!(<li><a href=href>"Home"</a></li>)]
+    } else {
+        vec![html!(<li><a href="/">"Home"</a></li>)]
+    };
     for page in pages.iter() {
         let file_path = Path::new(page);
         let file_name = file_path
