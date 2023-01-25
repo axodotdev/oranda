@@ -6,7 +6,8 @@ use axohtml::elements::div;
 
 use axohtml::{dom::DOMTree, html, text, unsafe_text};
 
-use super::head::{create_meta_tags, get_favicon};
+use crate::site::css::{fetch_additional_css, fetch_fringe_css};
+use crate::site::head::{create_meta_tags, get_favicon};
 
 pub fn build(config: &Config, content: String) -> Result<String> {
     let theme = theme::css_class(&config.theme);
@@ -32,6 +33,9 @@ pub fn build(config: &Config, content: String) -> Result<String> {
         None
     };
 
+    let additional_css = fetch_additional_css(config)?;
+    let fringe_css = fetch_fringe_css(config)?;
+
     let doc: DOMTree<String> = html!(
     <html lang="en" id="oranda" class=theme>
         <head>
@@ -39,8 +43,8 @@ pub fn build(config: &Config, content: String) -> Result<String> {
             {homepage}
             {favicon}
             {meta_tags}
-            <link rel="stylesheet" href="https://www.unpkg.com/@axodotdev/fringe/themes/axo-oranda.css"></link>
-            <link rel="stylesheet" href="styles.css"></link>
+            {fringe_css}
+            {additional_css}
         </head>
         <body>
         <div class="container">
