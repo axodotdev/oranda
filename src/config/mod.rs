@@ -1,6 +1,6 @@
 pub mod analytics;
 mod oranda;
-mod project;
+pub mod project;
 pub mod theme;
 use self::analytics::Analytics;
 use self::oranda::{OrandaConfig, Social};

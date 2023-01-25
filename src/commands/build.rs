@@ -2,9 +2,9 @@ use std::path::PathBuf;
 
 use clap::Parser;
 
-use crate::config::Config;
-use crate::errors::*;
-use crate::site::Site;
+use oranda::config::Config;
+use oranda::errors::*;
+use oranda::site::Site;
 
 #[derive(Debug, Parser)]
 pub struct Build {

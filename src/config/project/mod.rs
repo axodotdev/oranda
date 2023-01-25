@@ -6,8 +6,8 @@ mod javascript;
 mod rust;
 
 use crate::errors::*;
-use javascript::JavaScript;
-use rust::Rust;
+pub use javascript::JavaScript;
+pub use rust::Rust;
 
 #[derive(Debug, Deserialize, Eq, PartialEq)]
 pub struct ProjectConfig {
@@ -28,7 +28,7 @@ impl ProjectConfig {
         }
     }
 
-    fn detect(project_root: &Option<PathBuf>) -> Option<Type> {
+    pub fn detect(project_root: &Option<PathBuf>) -> Option<Type> {
         if Rust::config(project_root).exists() {
             Some(Type::Rust(Rust {}))
         } else if JavaScript::config(project_root).exists() {

@@ -3,13 +3,6 @@ use crate::errors::*;
 use serde::Deserialize;
 use std::path::{Path, PathBuf};
 
-#[cfg(test)]
-use crate::config::project::Type;
-#[cfg(test)]
-use crate::tests::TEST_RUNTIME;
-#[cfg(test)]
-use assert_fs::fixture::{FileWriteStr, PathChild};
-
 static CARGO_TOML: &str = "./Cargo.toml";
 
 #[derive(Debug, Deserialize)]
@@ -35,52 +28,4 @@ impl Rust {
             Path::new(CARGO_TOML).to_path_buf()
         }
     }
-}
-
-#[test]
-
-fn it_detects_a_rust_project() {
-    let tempdir = assert_fs::TempDir::new().expect("failed creating tempdir");
-    let cargo_toml = tempdir.child("Cargo.toml");
-    cargo_toml
-        .write_str(
-            r#"
-[package]
-name = "axo"
-description = ">o_o<"
-    "#,
-        )
-        .expect("failed to write package_json");
-
-    assert_eq!(
-        ProjectConfig::detect(&Some(tempdir.path().to_path_buf())),
-        Some(Type::Rust(Rust {}))
-    );
-    tempdir
-        .close()
-        .expect("could not successfully delete temporary directory");
-}
-
-#[test]
-fn it_loads_a_rust_project_config() {
-    let _guard = TEST_RUNTIME.enter();
-    let tempdir = assert_fs::TempDir::new().expect("failed creating tempdir");
-    let cargo_toml = tempdir.child("Cargo.toml");
-    cargo_toml
-        .write_str(
-            r#"
-[package]
-name = "axo"
-description = ">o_o<"
-    "#,
-        )
-        .expect("failed to write package_json");
-    let config = ProjectConfig::load(Some(tempdir.path().to_path_buf()))
-        .expect("failed to load Cargo.toml")
-        .unwrap();
-
-    assert_eq!(config.name, "axo");
-    tempdir
-        .close()
-        .expect("could not successfully delete temporary directory");
 }

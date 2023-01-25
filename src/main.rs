@@ -1,13 +1,10 @@
 use clap::{Parser, Subcommand};
 
-mod commands;
-mod config;
-mod errors;
-mod site;
-pub mod tests;
+use oranda::errors::*;
 
+mod commands;
 use commands::{Build, Serve};
-use errors::*;
+
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 struct Cli {
