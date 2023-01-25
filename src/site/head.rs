@@ -56,6 +56,7 @@ pub fn create_meta_tags(config: &Config) -> Vec<Box<meta<String>>> {
         html!(<meta property="og:description" content=description/>),
         html!(<meta property="og:type" content="website" />),
         html!(<meta property="og:title" content=&config.name />),
+        html!(<meta http-equiv="Permissions-Policy" content="interest-cohort=()"/>),
     ];
 
     html.append(&mut social_meta);
