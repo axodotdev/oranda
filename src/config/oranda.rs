@@ -7,7 +7,7 @@ use crate::config::theme::Theme;
 use crate::errors::*;
 use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxTheme;
 
-use super::artifacts::Artifacts;
+use crate::config::artifacts::Artifacts;
 
 #[derive(Debug, Deserialize)]
 pub struct Social {

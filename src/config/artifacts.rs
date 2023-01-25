@@ -93,12 +93,12 @@ pub fn create_artifacts_tabs(config: &Config) -> Result<Option<Box<div<String>>>
     }
 
     build_artifacts_html(config, typed)?;
-    return Ok(Some(html!(
+    Ok(Some(html!(
     <div class="artifacts">
         {html}
         <a href="/artifacts.html" class="download-all">{text!("View all downloads")}</a>
     </div>
-    )));
+    )))
 }
 
 pub fn get_os_script(config: &Config) -> Result<Box<script<String>>> {
@@ -109,24 +109,28 @@ pub fn get_os_script(config: &Config) -> Result<Box<script<String>>> {
     Ok(html!(<script src=path_as_string />))
 }
 
+// False positive duplicate allocation warning
+// https://github.com/rust-lang/rust-clippy/issues?q=is%3Aissue+redundant_allocation+sort%3Aupdated-desc
+#[allow(clippy::vec_box)]
+fn create_content(table: Vec<Box<tr<String>>>) -> Box<div<String>> {
+    html!(
+    <div>
+        <h1>{text!("All downloads")}</h1>
+        <table>
+            <tr>
+                <th>{text!("Name")}</th>
+                <th>{text!("Kind")}</th>
+                <th>{text!("Download")}</th>
+            </tr>
+            <tbody>
+                {table}
+            </tbody>
+        </table>
+    </div>
+    )
+}
+
 pub fn build_artifacts_html(config: &Config, manifest: &DistManifest) -> Result<()> {
-    fn create_content(table: Vec<Box<tr<String>>>) -> Box<div<String>> {
-        html!(
-        <div>
-            <h1>{text!("All downloads")}</h1>
-            <table>
-                <tr>
-                    <th>{text!("Name")}</th>
-                    <th>{text!("Kind")}</th>
-                    <th>{text!("Download")}</th>
-                </tr>
-                <tbody>
-                    {table}
-                </tbody>
-            </table>
-        </div>
-        )
-    }
     let mut table = vec![];
     for release in manifest.releases.iter() {
         for artifact in release.artifacts.iter() {

@@ -117,7 +117,7 @@ impl Config {
                     repository: Some(
                         custom
                             .repository
-                            .unwrap_or(project.repository.unwrap_or_default()),
+                            .unwrap_or_else(|| project.repository.unwrap_or_default()),
                     ),
                     syntax_theme: custom.syntax_theme.unwrap_or(default.syntax_theme),
                     analytics: custom.analytics,

@@ -4,8 +4,8 @@ use std::fs::File;
 use std::io::Write;
 use std::path::Path;
 mod css;
-pub mod head;
-pub mod header;
+mod head;
+mod header;
 pub mod html;
 pub mod markdown;
 
