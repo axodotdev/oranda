@@ -38,11 +38,12 @@ pub fn create(config: &Config) -> Result<Box<header<String>>> {
                     .file_stem()
                     .unwrap_or(file_path.as_os_str())
                     .to_string_lossy();
-                let mut href = format!("/{}", file_name);
 
-                if let Some(prefix) = &config.path_prefix {
-                    href = format!("/{}{}.html", prefix, href);
-                }
+                let href = if let Some(prefix) = &config.path_prefix {
+                    format!("/{}/{}.html", prefix, file_name)
+                } else {
+                    format!("/{}.html", file_name)
+                };
 
                 html.extend(html!(<li><a href=href>{text!(file_name)}</a></li>));
             }
