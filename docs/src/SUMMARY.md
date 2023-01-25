@@ -8,6 +8,7 @@
   - [Theme](./options/theme.md)
   - [Homepage](./options/homepage.md)
   - [Dist dir](./options/dist-dir.md)
+  - [Static dir](./options/static-dir.md)
   - [Readme path](./options/readme-path.md)
   - [Syntax theme](./options/syntax-theme.md)
     - [Available themes](./options/themes/themes.md)
@@ -18,4 +19,5 @@
   - [Social](./options/social.md)
   - [Analytics](./options/analytics.md)
   - [Path Prefix](./options/path_prefix.md)
+- [Adding static assets](./static-assets.md)
 - [Hosting on Github Pages](./gh-pages.md)

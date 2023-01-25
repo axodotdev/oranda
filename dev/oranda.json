@@ -1,10 +1,15 @@
 {
   "homepage": "https://oranda.axo.dev",
   "readme_path": "dev/README.md",
+<<<<<<< HEAD
   "repository": "https://github.com/axodotdev/cargo-dist",
   "artifacts": {
     "cargo_dist": true
   },
+=======
+  "theme": "light",
+  "repository": "https://github.com/axodotdev/oranda",
+>>>>>>> d07e08006aef1775a4a4fc6dfa521f829d888d5c
   "additional_pages": ["dev/additional.md"],
   "social": {
     "image": "https://www.axo.dev/meta_small.jpeg",

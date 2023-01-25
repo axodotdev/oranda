@@ -119,9 +119,9 @@ dependencies = [
 
 [[package]]
 name = "axohtml"
-version = "0.3.0"
+version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f3ea0f7de9bc9c63e749dbc6adc0cf2000dcd59d7de8327ec26ee23bd5a6a542"
+checksum = "53b9c23173b389981ed2b86a22b62dd52f143b36daedae867555453d0a829e92"
 dependencies = [
  "axohtml-macros",
  "htmlescape",
@@ -134,9 +134,9 @@ dependencies = [
 
 [[package]]
 name = "axohtml-macros"
-version = "0.3.0"
+version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c732c1b161c0b230df7b4887d56a44543ead609fa42edec28ef7177a65720bca"
+checksum = "502fa4afcc70e8493bd8a4f66b9b455cd9ae6adfa8a7dfd71ad637c01c59c40b"
 dependencies = [
  "ansi_term",
  "lalrpop",
@@ -1465,7 +1465,6 @@ dependencies = [
  "comrak",
  "fs_extra",
  "reqwest",
- "schemars",
  "serde",
  "serde_json",
  "syntect 5.0.0",
