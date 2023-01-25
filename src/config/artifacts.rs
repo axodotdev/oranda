@@ -41,12 +41,15 @@ pub struct Artifacts {
 }
 
 fn create_download_link(config: &Config, name: &String) -> String {
-    format!(
-        "{}/releases/download/v{}/{}",
-        config.repository.as_ref().unwrap(),
-        config.version.as_ref().unwrap(),
-        name
-    )
+    if let Some(repo) = &config.repository {
+        if let Some(version) = &config.version {
+            format!("{}/releases/download/v{}/{}", repo, version, name)
+        } else {
+            String::from("")
+        }
+    } else {
+        String::from("")
+    }
 }
 
 pub fn create_artifacts_tabs(config: &Config) -> Result<Option<Box<div<String>>>> {
