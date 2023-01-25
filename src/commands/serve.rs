@@ -1,48 +1,64 @@
 use crate::config::Config;
 use crate::errors::*;
 use axum::{http::StatusCode, routing::get_service, Router};
-use axum_extra::routing::SpaRouter;
 use clap::Parser;
 use std::net::SocketAddr;
-use std::path::PathBuf;
+use std::path::Path;
 use tower_http::services::ServeDir;
 
 #[derive(Debug, Parser)]
 pub struct Serve {
     #[arg(long, default_value = "7979")]
     port: u16,
-    #[arg(long, default_value = "./oranda.json")]
-    config: PathBuf,
 }
 
 impl Serve {
     pub fn run(&self) -> Result<()> {
-        let config = Config::build(&self.config)?;
-        self.serve(config)?;
+        let config = Config::build(Path::new("./oranda.json"))?;
+        if let Some(prefix) = config.path_prefix {
+            self.serve_prefix(&config.dist_dir, &prefix)?;
+        } else {
+            self.serve(&config.dist_dir)?;
+        }
         Ok(())
     }
 
     #[tokio::main]
-    async fn serve(&self, config: Config) -> Result<()> {
-        let route = if let Some(path_prefix) = config.path_prefix {
-            format!("/{}", path_prefix)
-        } else {
-            String::from("/")
-        };
+    async fn serve(&self, dist_dir: &str) -> Result<()> {
+        let serve_dir =
+            get_service(ServeDir::new(dist_dir)).handle_error(|error: std::io::Error| async move {
+                (
+                    StatusCode::INTERNAL_SERVER_ERROR,
+                    format!("Unhandled internal error: {}", error),
+                )
+            });
 
-        let app = Router::new().merge(
-            SpaRouter::new(route.as_str(), config.dist_dir)
-                .index_file("index.html")
-                .handle_error(|error: std::io::Error| async move {
-                    (
-                        StatusCode::INTERNAL_SERVER_ERROR,
-                        format!("Unhandled internal error: {}", error),
-                    )
-                }),
-        );
+        let app = Router::new().nest_service("/", serve_dir);
 
         let addr = SocketAddr::from(([127, 0, 0, 1], self.port));
-        println!("listening on http://{}{}", addr, route);
+        println!("listening on http://{}", addr);
+        axum::Server::bind(&addr)
+            .serve(app.into_make_service())
+            .await
+            .expect("failed to start server");
+        Ok(())
+    }
+
+    #[tokio::main]
+    async fn serve_prefix(&self, dist_dir: &str, prefix: &str) -> Result<()> {
+        let serve_dir =
+            get_service(ServeDir::new(dist_dir)).handle_error(|error: std::io::Error| async move {
+                (
+                    StatusCode::INTERNAL_SERVER_ERROR,
+                    format!("Unhandled internal error: {}", error),
+                )
+            });
+
+        let prefix_route = format!("/{}", prefix);
+        let app = Router::new().nest_service(&prefix_route, serve_dir);
+
+        let addr = SocketAddr::from(([127, 0, 0, 1], self.port));
+        println!("listening on http://{}/{}", addr, prefix);
         axum::Server::bind(&addr)
             .serve(app.into_make_service())
             .await
