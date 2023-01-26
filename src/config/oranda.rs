@@ -5,6 +5,7 @@ use serde::Deserialize;
 use crate::config::analytics::Analytics;
 use crate::config::theme::Theme;
 use crate::errors::*;
+use crate::message::{Message, MessageType};
 use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxTheme;
 
 #[derive(Debug, Deserialize)]
@@ -37,10 +38,15 @@ pub struct OrandaConfig {
 
 impl OrandaConfig {
     pub fn load(config_path: &Path) -> Result<Option<OrandaConfig>> {
-        let config_future = axoasset::load_string(config_path.to_str().unwrap());
+        let config_path = config_path.to_string_lossy();
+        let msg = format!("Loading config at {}", config_path);
+        Message::new(MessageType::Info, &msg).print();
+        tracing::info!("{}", &msg);
+        let config_future = axoasset::load_string(&config_path);
 
         let config = tokio::runtime::Handle::current().block_on(config_future)?;
         let data: OrandaConfig = serde_json::from_str(config.as_str())?;
+        tracing::debug!("{:?}", data);
         Ok(Some(data))
     }
 }

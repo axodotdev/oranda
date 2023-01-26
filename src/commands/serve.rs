@@ -1,6 +1,7 @@
 use std::net::SocketAddr;
 use std::path::Path;
 
+use crate::message::{Message, MessageType};
 use oranda::config::Config;
 use oranda::errors::*;
 
@@ -10,6 +11,7 @@ use axum::{
     routing::{get, get_service},
     Router,
 };
+
 use clap::Parser;
 use tower_http::services::ServeDir;
 
@@ -21,13 +23,24 @@ pub struct Serve {
 
 impl Serve {
     pub fn run(&self) -> Result<()> {
+        Message::new(MessageType::Info, "Running serve...").print();
+        tracing::info!("Running serve...");
         let config = Config::build(Path::new("./oranda.json"))?;
-        if let Some(prefix) = config.path_prefix {
-            self.serve_prefix(&config.dist_dir, &prefix)?;
+        if Path::new(&config.dist_dir).is_dir() {
+            let msg = format!("Found build in {} directory...", &config.dist_dir);
+            Message::new(MessageType::Info, &msg).print();
+            if let Some(prefix) = config.path_prefix {
+                tracing::debug!("`path_prefix` configured: {}", &prefix);
+                self.serve_prefix(&config.dist_dir, &prefix)?;
+            } else {
+                self.serve(&config.dist_dir)?;
+            }
+            Ok(())
         } else {
-            self.serve(&config.dist_dir)?;
+            Err(OrandaError::BuildNotFound {
+                dist_dir: config.dist_dir.to_string(),
+            })
         }
-        Ok(())
     }
 
     #[tokio::main]
@@ -43,7 +56,8 @@ impl Serve {
         let app = Router::new().nest_service("/", serve_dir);
 
         let addr = SocketAddr::from(([127, 0, 0, 1], self.port));
-        println!("listening on http://{}", addr);
+        let msg = format!("Your project is available at: http://{}", addr);
+        Message::new(MessageType::Success, &msg).print();
         axum::Server::bind(&addr)
             .serve(app.into_make_service())
             .await
@@ -72,7 +86,8 @@ impl Serve {
         );
 
         let addr = SocketAddr::from(([127, 0, 0, 1], self.port));
-        println!("listening on http://{}/{}", addr, prefix);
+        let msg = format!("Your project is available at: http://{}/{}", addr, prefix);
+        Message::new(MessageType::Success, &msg).print();
         axum::Server::bind(&addr)
             .serve(app.into_make_service())
             .await
