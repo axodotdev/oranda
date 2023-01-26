@@ -1,6 +1,6 @@
 pub mod artifacts;
 mod oranda;
-mod project;
+pub mod project;
 pub mod theme;
 use self::artifacts::Artifacts;
 pub mod analytics;

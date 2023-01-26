@@ -74,6 +74,12 @@ Don't forget that Markdown also accepts raw html (as we can see in the last few 
 
 <div class="title">For instance, this is a plain div with a class attached to style it in the title style.<sup>Wow.</sup></div>
 
+You can also have things in your markdown that will not show on oranda by adding the class `oranda-hide`.
+
+<div class="oranda-hide">
+    you can't see this
+</div>
+
 ## Nesting
 
 ### Lists
