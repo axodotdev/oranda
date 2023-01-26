@@ -28,7 +28,7 @@ fn concat_minify_css(css_links: Vec<String>) -> Result<String> {
 // https://github.com/rust-lang/rust-clippy/issues?q=is%3Aissue+redundant_allocation+sort%3Aupdated-desc
 #[allow(clippy::vec_box)]
 pub fn fetch_fringe_css(config: &Config) -> Result<Box<link<String>>> {
-    const FRINGE_VERSION: &str = "0.0.7";
+    const FRINGE_VERSION: &str = "0.0.8";
     let fringe_href = format!(
         "https://www.unpkg.com/@axodotdev/fringe@{}/themes/",
         FRINGE_VERSION
