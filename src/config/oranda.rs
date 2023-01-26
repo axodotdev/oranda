@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 use crate::config::analytics::Analytics;
 use crate::config::theme::Theme;
 use crate::errors::*;
-use crate::message::{self, MessageType};
+use crate::message::{Message, MessageType};
 use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxThemes;
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -41,10 +41,7 @@ pub struct OrandaConfig {
 impl OrandaConfig {
     pub fn load() -> Result<Option<OrandaConfig>> {
         if Path::new(ORANDA_JSON).exists() {
-            tracing::info!(
-                "{}",
-                message::build(MessageType::Info, "Found oranda config...")
-            );
+            Message::new(MessageType::Info, "Found oranda config...").print_and_log();
             let oranda_json = fs::read_to_string(ORANDA_JSON)?;
             let data: OrandaConfig = serde_json::from_str(&oranda_json)?;
             Ok(Some(data))

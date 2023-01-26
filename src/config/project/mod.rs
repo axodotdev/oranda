@@ -6,7 +6,7 @@ mod javascript;
 mod rust;
 
 use crate::errors::*;
-use crate::message::{self, MessageType};
+use crate::message::{Message, MessageType};
 use javascript::JavaScript;
 use rust::Rust;
 
@@ -31,22 +31,13 @@ impl ProjectConfig {
 
     fn detect(project_root: &Option<PathBuf>) -> Option<ProjectType> {
         if Rust::config(project_root).exists() {
-            tracing::info!(
-                "{}",
-                message::build(MessageType::Info, "Detected Rust project...")
-            );
+            Message::new(MessageType::Info, "Detected Rust project...").print_and_log();
             Some(ProjectType::Rust(Rust {}))
         } else if JavaScript::config(project_root).exists() {
-            tracing::info!(
-                "{}",
-                message::build(MessageType::Info, "Detected JavaScript project...")
-            );
+            Message::new(MessageType::Info, "Detected JavaScript project...").print_and_log();
             Some(ProjectType::JavaScript(JavaScript {}))
         } else {
-            println!(
-                "{}",
-                message::build(MessageType::Warning, "Could not detect project type.")
-            );
+            Message::new(MessageType::Warning, "Could not detect project type.").print_and_log();
             None
         }
     }

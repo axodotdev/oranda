@@ -12,7 +12,7 @@ mod message;
 mod site;
 
 use commands::{Build, Serve};
-use message::MessageType;
+use message::{Message, MessageType};
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
@@ -52,16 +52,14 @@ fn main() {
         Command::Serve(cmd) => cmd.run(),
     };
 
-    let to_term = match oranda_output {
+    match oranda_output {
         Ok(_) => {
             if Path::new("./oranda-debug.log").exists() {
                 fs::remove_file("./oranda-debug.log")
                     .expect("Encountered an error removing debug log file.");
             }
-            message::build(MessageType::Success, "Completed successfully.")
+            Message::new(MessageType::Success, "Completed successfully.").print();
         }
-        Err(e) => message::build(MessageType::Error, &e.to_string()),
+        Err(e) => Message::new(MessageType::Error, &e.to_string()).print_and_log(),
     };
-
-    println!("{}", to_term);
 }
