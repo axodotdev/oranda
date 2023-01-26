@@ -1,14 +1,20 @@
-pub mod analytics;
-mod oranda;
-pub mod project;
-pub mod theme;
-use self::analytics::Analytics;
-use self::oranda::{OrandaConfig, Social};
+use std::fs;
+use std::path::Path;
+use std::path::PathBuf;
+
 use crate::errors::*;
 use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxTheme;
-use project::ProjectConfig;
-use std::path::Path;
 
+pub mod analytics;
+use analytics::Analytics;
+
+mod oranda;
+use oranda::{OrandaConfig, Social};
+
+pub mod project;
+use project::ProjectConfig;
+
+pub mod theme;
 use theme::Theme;
 
 #[derive(Debug)]
@@ -30,6 +36,7 @@ pub struct Config {
     pub logo: Option<String>,
     pub favicon: Option<String>,
     pub path_prefix: Option<String>,
+    project_root: PathBuf,
 }
 
 impl Config {
@@ -47,6 +54,7 @@ impl Config {
         let default = Config::default();
         let custom = OrandaConfig::load(config_path)?;
         let project = ProjectConfig::load(None)?;
+        let project_root = fs::canonicalize(config_path)?;
 
         // if there is no oranda.config file present...
         if custom.is_none() {
@@ -57,6 +65,7 @@ impl Config {
                     description: project.description,
                     homepage: project.homepage,
                     name: project.name,
+                    project_root,
                     ..Default::default()
                 });
             } else {
@@ -88,6 +97,7 @@ impl Config {
                     logo: custom.logo,
                     favicon: custom.favicon,
                     path_prefix: custom.path_prefix,
+                    project_root,
                 });
             // otherwise both oranda config and project manifest exists
             } else if let Some(project) = project {
@@ -110,6 +120,7 @@ impl Config {
                     logo: custom.logo,
                     favicon: custom.favicon,
                     path_prefix: custom.path_prefix,
+                    project_root,
                 });
             }
         }
@@ -153,6 +164,7 @@ impl Default for Config {
             favicon: None,
             path_prefix: None,
             static_dir: String::from("static"),
+            project_root: PathBuf::new(),
         }
     }
 }
