@@ -93,20 +93,21 @@ pub fn create_artifacts_header(config: &Config) -> Result<Option<Box<div<String>
 }
 
 pub fn get_install_hint(
-    artifacts: &Vec<Artifact>,
-    target_triples: &Vec<String>,
+    artifacts: &[Artifact],
+    target_triples: &[String],
     syntax_theme: &SyntaxTheme,
 ) -> String {
-    let hint = artifacts.iter().find(|a| {
-        a.install_hint.is_some()
-            && a.target_triples
+    let hint = artifacts.iter().find(|artifact| {
+        artifact.install_hint.is_some()
+            && artifact
+                .target_triples
                 .iter()
                 .any(|h| target_triples.iter().any(|item| item == h))
     });
 
     if let Some(current_hint) = hint {
         if let Some(install_hint) = &current_hint.install_hint {
-            let highlighted_code = syntax_highlight(Some("sh"), install_hint, &syntax_theme);
+            let highlighted_code = syntax_highlight(Some("sh"), install_hint, syntax_theme);
             return match highlighted_code {
                 Ok(code) => code,
                 Err(_) => format!(
