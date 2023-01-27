@@ -1,4 +1,7 @@
+<div class="oranda-hide">
 # oranda
+</div>
+
 > 🎁 generate beautiful landing pages for your projects
 
 [![crates.io](https://img.shields.io/crates/v/oranda.svg)](https://crates.io/crates/oranda)
