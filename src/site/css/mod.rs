@@ -40,8 +40,11 @@ pub fn fetch_fringe_css(config: &Config) -> Result<Box<link<String>>> {
     let css_file_name = format!("fringe@{}.css", FRINGE_VERSION);
     let css_path = format!("{}/{}", &config.dist_dir, css_file_name);
 
-    let mut css_file = File::create(css_path)?;
-    css_file.write_all(minified_css.as_bytes())?;
+    let mut css_file = match File::create(css_path) {
+        Ok(file) => Ok(file),
+        Err(e) => Err(OrandaError::FileCreateError { filename: css_path.to_string(), details: e.to_string()}),
+    };
+    css_file?.write_all(minified_css.as_bytes())?;
 
     Ok(html!(<link rel="stylesheet" href=css_file_name></link>))
 }
@@ -54,8 +57,11 @@ pub fn fetch_additional_css(config: &Config) -> Result<Option<Box<link<String>>>
     let minified_css = concat_minify_css(config.additional_css.clone())?;
     let css_path = format!("{}/custom.css", &config.dist_dir);
 
-    let mut css_file = File::create(css_path)?;
-    css_file.write_all(minified_css.as_bytes())?;
+    let mut css_file = match File::create(css_path) {
+        Ok(file) => Ok(file),
+        Err(e) => Err(OrandaError::FileCreateError { filename: css_path.to_string(), details: e.to_string()}),
+    };
+    css_file?.write_all(minified_css.as_bytes())?;
 
     Ok(Some(
         html!(<link rel="stylesheet" href="custom.css"></link>),
