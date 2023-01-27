@@ -31,6 +31,9 @@ pub enum OrandaError {
     #[error("failed to read {filedesc} at {path}")]
     FileNotFound { filedesc: String, path: String },
 
+    #[error("Could not find a build in {dist_dir}. Did you remember to run `oranda build`?")]
+    BuildNotFound { dist_dir: String },
+
     #[error("{0}")]
     Other(String),
 }

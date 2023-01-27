@@ -2,7 +2,7 @@ use crate::config::Config;
 use crate::errors::*;
 use crate::site::html::build_common_html;
 use axohtml::elements::{a, div, script, tr};
-use axohtml::{html, text};
+use axohtml::{html, text, unsafe_text};
 use cargo_dist_schema::{ArtifactKind, DistManifest};
 use serde::Deserialize;
 use std::fs::File;
@@ -142,13 +142,13 @@ pub fn build_artifacts_html(config: &Config, manifest: &DistManifest) -> Result<
             let name = &artifact.name;
             let url = create_download_link(config, name);
             let _kind = get_kind_string(&artifact.kind);
-            table.push(html!(
-            <tr>
-                //<td>{name}</td>
-                //<td>{kind}</td>
-                <td><a href=url>{text!("Download")}</a></td>
-            </tr>
-            ));
+            table.push(html!({
+                unsafe_text!(
+                    "  <tr><td>{name}</td>
+                <td>{kind}</td>
+                <td><a href=url>Download</a></td>         </tr>"
+                )
+            }));
         }
     }
     let doc = build_common_html(config, create_content(table))?;

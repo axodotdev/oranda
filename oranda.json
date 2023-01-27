@@ -1,16 +1,16 @@
 {
-  "homepage": "https://oranda.axo.dev",
   "favicon": "https://www.axo.dev/favicon.ico",
-  "analytics": {
-    "plausible": {
-      "domain": "tools.axo.dev/oranda"
-    }
-  },
-  "additional_pages": ["./docs/src/options/themes/themes.md"],
   "path_prefix": "oranda",
+  "additional_pages": [
+    "./docs/configuration.md",
+    "./docs/themes.md",
+    "./docs/assets.md",
+    "./docs/hosting.md"
+  ],
   "social": {
     "image": "https://www.axo.dev/meta_small.jpeg",
     "image_alt": "axo",
     "twitter_account": "@axodotdev"
-  }
+  },
+  "homepage": "https://oranda.axo.dev"
 }

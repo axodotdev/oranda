@@ -43,7 +43,7 @@ impl Config {
         //
         //- Project configuration comes from a project manifest file. We currently
         //  support `Cargo.toml` and `package.json`, but could support any manifest
-        //  that provided a `name`, `description`, and `homepage` field.
+        //  that provided a `name`, `description`, `repository` and `homepage` field.
         //
         //- Custom configuration comes from a `oranda.config.json` file. If this
         //  file exists, it has precedence over project configuration, which means
@@ -81,13 +81,13 @@ impl Config {
                     description: custom.description.unwrap_or(default.description),
                     dist_dir: custom.dist_dir.unwrap_or(default.dist_dir),
                     static_dir: custom.static_dir.unwrap_or(default.static_dir),
-                    homepage: Self::homepage(custom.homepage, None, default.homepage),
+                    homepage: Self::project_override(custom.homepage, None, default.homepage),
                     name: custom.name.unwrap_or(default.name),
                     no_header: custom.no_header.unwrap_or(default.no_header),
                     readme_path: custom.readme_path.unwrap_or(default.readme_path),
                     theme: custom.theme.unwrap_or(default.theme),
                     additional_css: custom.additional_css.unwrap_or(default.additional_css),
-                    repository: custom.repository,
+                    repository: Self::project_override(custom.repository, None, default.repository),
                     syntax_theme: custom.syntax_theme.unwrap_or(default.syntax_theme),
                     analytics: custom.analytics,
                     additional_pages: custom.additional_pages,
@@ -105,13 +105,21 @@ impl Config {
                     description: custom.description.unwrap_or(project.description),
                     dist_dir: custom.dist_dir.unwrap_or(default.dist_dir),
                     static_dir: custom.static_dir.unwrap_or(default.static_dir),
-                    homepage: Self::homepage(custom.homepage, project.homepage, default.homepage),
+                    homepage: Self::project_override(
+                        custom.homepage,
+                        project.homepage,
+                        default.homepage,
+                    ),
                     name: custom.name.unwrap_or(project.name),
                     no_header: custom.no_header.unwrap_or(default.no_header),
                     readme_path: custom.readme_path.unwrap_or(default.readme_path),
                     theme: custom.theme.unwrap_or(default.theme),
                     additional_css: custom.additional_css.unwrap_or(default.additional_css),
-                    repository: custom.repository.or(project.repository),
+                    repository: Self::project_override(
+                        custom.repository,
+                        project.repository,
+                        default.repository,
+                    ),
                     syntax_theme: custom.syntax_theme.unwrap_or(default.syntax_theme),
                     analytics: custom.analytics,
                     additional_pages: custom.additional_pages,
@@ -130,7 +138,7 @@ impl Config {
         )))
     }
 
-    pub fn homepage(
+    pub fn project_override(
         custom: Option<String>,
         project: Option<String>,
         default: Option<String>,
