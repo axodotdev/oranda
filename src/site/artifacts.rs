@@ -88,6 +88,7 @@ pub fn create_artifacts_header(config: &Config) -> Result<Option<Box<div<String>
     Ok(Some(html!(
     <div class="artifacts">
         {html}
+        <a href="/artifacts.html" class="hidden backup-download business-button primary">{text!("View installation options")}</a>
     </div>
     )))
 }

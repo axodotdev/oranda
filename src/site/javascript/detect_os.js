@@ -140,4 +140,6 @@ let hit = Array.from(document.querySelectorAll(".target[data-targets]")).find((a
 );
 if (hit) {
   hit.classList.remove("hidden");
+} else {
+  document.querySelector(".backup-download").classList.remove("hidden")
 }
