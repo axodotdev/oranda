@@ -26,10 +26,10 @@ pub fn create_footer(config: &Config) -> Box<footer<String>> {
         license = license_text
     );
 
-    return html!(
+    html!(
         <footer class="axo-gradient text-slate-50 flex w-full justify-between px-4 py-2 text-xs items-center">
             {repository}
             <span>{text!(text)}</span>
         </footer>
-    );
+    )
 }
