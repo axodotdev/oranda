@@ -38,6 +38,8 @@ pub struct OrandaConfig {
     pub logo: Option<String>,
     pub favicon: Option<String>,
     pub path_prefix: Option<String>,
+    pub license: Option<String>,
+    pub authors: Option<Vec<String>>,
 }
 
 impl OrandaConfig {
