@@ -48,10 +48,8 @@ pub fn build_common_html(config: &Config, content: Box<div<String>>) -> Result<S
             {homepage}
             {favicon}
             {meta_tags}
-            // {fringe_css}
+            {fringe_css}
             {additional_css}
-            <link rel="stylesheet" href="http://localhost:1234/axo-oranda.css"></link>
-
         </head>
         <body>
         <div class="container">
