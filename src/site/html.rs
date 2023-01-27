@@ -1,7 +1,7 @@
 use crate::config::analytics::{get_analytics, Analytics};
-use crate::config::artifacts::{self, create_artifacts_tabs};
 use crate::config::{theme, Config};
 use crate::errors::*;
+use crate::site::artifacts::{self, create_artifacts_header};
 use crate::site::css;
 use crate::site::head;
 use crate::site::header;
@@ -67,7 +67,7 @@ pub fn build_common_html(config: &Config, content: Box<div<String>>) -> Result<S
 }
 
 pub fn build(config: &Config, content: String) -> Result<String> {
-    let artifacts_tabs = create_artifacts_tabs(config)?;
+    let artifacts_tabs = create_artifacts_header(config)?;
 
     let home_content = html!(<div>{artifacts_tabs}{ unsafe_text!(content) }
     </div>);
