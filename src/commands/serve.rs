@@ -65,7 +65,10 @@ impl Serve {
         let fringe_route = format!("/{}/fringe@0.0.8.css", prefix);
         let app = Router::new().nest_service(&prefix_route, serve_dir).route(
             "/fringe@0.0.8.css",
-            get(move || async { Redirect::permanent(&fringe_route) }),
+            get(move || async {
+                let fringe_route = fringe_route;
+                Redirect::permanent(&fringe_route)
+            }),
         );
 
         let addr = SocketAddr::from(([127, 0, 0, 1], self.port));
