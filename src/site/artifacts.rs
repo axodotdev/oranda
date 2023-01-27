@@ -2,10 +2,12 @@ use crate::config::artifacts::Artifacts;
 use crate::config::Config;
 use crate::errors::*;
 use crate::site::html::build_common_html;
-use axohtml::elements::{code, div, script, span};
-use axohtml::{html, text};
+use axohtml::elements::{div, script, span};
+use axohtml::{html, text, unsafe_text};
 use cargo_dist_schema::{Artifact, ArtifactKind, DistManifest};
 
+use crate::site::markdown::syntax_highlight::syntax_highlight;
+use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxTheme;
 use std::fs::File;
 use std::io::Write;
 
@@ -59,16 +61,22 @@ pub fn create_artifacts_header(config: &Config) -> Result<Option<Box<div<String>
                 }
                 let url = create_download_link(config, &artifact.name);
                 let text = format!("Download v{}", &release.app_version);
-                let details = get_install_hint(&release.artifacts, &artifact.target_triples);
+                let install_code = get_install_hint(
+                    &release.artifacts,
+                    &artifact.target_triples,
+                    &config.syntax_theme,
+                );
 
                 html.extend(html!(
-                    <div class="hidden target" data-targets=targets>
-                        <a href=url class="block text-center">
-                            <button class="business-button primary">
+                    <div class="hidden target artifact-header" data-targets=targets>
+                        <h4 class="text-center">{text!("Quick install")}</h4>
+                        {unsafe_text!(install_code)}
+                        <div>
+                            <a href=url class="text-center">
                                 {text!(text)}
-                            </button>
-                        </a>
-                        {details}
+                            </a>
+                            <a href="/artifacts.html" class="download-all">{text!("View all downloads")}</a>
+                        </div>
                     </div>
                 ));
             }
@@ -80,7 +88,6 @@ pub fn create_artifacts_header(config: &Config) -> Result<Option<Box<div<String>
     Ok(Some(html!(
     <div class="artifacts">
         {html}
-        <a href="/artifacts.html" class="download-all">{text!("View all downloads")}</a>
     </div>
     )))
 }
@@ -88,7 +95,8 @@ pub fn create_artifacts_header(config: &Config) -> Result<Option<Box<div<String>
 pub fn get_install_hint(
     artifacts: &Vec<Artifact>,
     target_triples: &Vec<String>,
-) -> Option<Box<code<String>>> {
+    syntax_theme: &SyntaxTheme,
+) -> String {
     let hint = artifacts.iter().find(|a| {
         a.install_hint.is_some()
             && a.target_triples
@@ -98,13 +106,18 @@ pub fn get_install_hint(
 
     if let Some(current_hint) = hint {
         if let Some(install_hint) = &current_hint.install_hint {
-            return Some(html!(
-                <code class="text-center break-all">{text!(install_hint)}</code>
-            ));
+            let highlighted_code = syntax_highlight(Some("sh"), install_hint, &syntax_theme);
+            return match highlighted_code {
+                Ok(code) => code,
+                Err(_) => format!(
+                    "<code class='text-center break-all'>{}</code>",
+                    install_hint
+                ),
+            };
         }
     }
 
-    None
+    String::new()
 }
 
 pub fn get_os_script(config: &Config) -> Result<Box<script<String>>> {
