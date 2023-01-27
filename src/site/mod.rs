@@ -18,8 +18,9 @@ pub struct Site {
 impl Site {
     pub fn build(config: &Config, file_path: &String) -> Result<Site> {
         Self::create_dist_dir(&config.dist_dir)?;
-        let readme_path = Path::new(&file_path);
-        let content = markdown::body(readme_path, &config.syntax_theme)?;
+        let markdown_path = Path::new(&file_path);
+        let is_main_readme = file_path == &config.readme_path;
+        let content = markdown::body(markdown_path, &config.syntax_theme, is_main_readme)?;
         let html = html::build(config, content)?;
 
         Ok(Site { html })
@@ -80,7 +81,7 @@ impl Site {
     fn create_dist_dir(dist_path: &String) -> Result<()> {
         if !Path::new(dist_path).exists() {
             std::fs::create_dir_all(dist_path)?;
-        };
+        }
 
         Ok(())
     }
