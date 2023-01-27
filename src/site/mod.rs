@@ -58,8 +58,9 @@ impl Site {
     pub fn write(config: &Config) -> Result<()> {
         let dist = &config.dist_dir;
         let readme_path = &config.readme_path;
-        Self::copy_static(dist, &config.static_dir)?;
-
+        if Path::new(&config.static_dir).exists() {
+            Self::copy_static(dist, &config.static_dir)?;
+        }
         let mut files = vec![readme_path];
         if config.additional_pages.is_some() {
             files.extend(config.additional_pages.as_ref().unwrap())
