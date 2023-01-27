@@ -1,8 +1,8 @@
 use crate::config::Config;
 use crate::errors::*;
 use crate::site::html::build_common_html;
-use axohtml::elements::{a, div, script, span};
-use axohtml::{html, text};
+use axohtml::elements::{div, script, span};
+use axohtml::{html, text, unsafe_text};
 use cargo_dist_schema::{ArtifactKind, DistManifest};
 use serde::Deserialize;
 use std::fs::File;
@@ -80,7 +80,7 @@ pub fn create_artifacts_tabs(config: &Config) -> Result<Option<Box<div<String>>>
 
     let typed = &resp.json::<DistManifest>()?;
 
-    let mut html: Vec<Box<a<String>>> = vec![];
+    let mut html: Vec<Box<div<String>>> = vec![];
     for release in typed.releases.iter() {
         for artifact in release.artifacts.iter() {
             if let ArtifactKind::ExecutableZip = artifact.kind {
@@ -89,15 +89,33 @@ pub fn create_artifacts_tabs(config: &Config) -> Result<Option<Box<div<String>>>
                     targets.push_str(format!("{} ", targ).as_str());
                 }
                 let url = create_download_link(config, &artifact.name);
+                let text = format!("Download v{}", &release.app_version);
+                let hint = release.artifacts.iter().find(|a| {
+                    a.install_hint.is_some()
+                        && a.target_triples
+                            .iter()
+                            .any(|h| artifact.target_triples.iter().any(|item| item == h))
+                });
+                let mut details = unsafe_text!("");
+
+                if let Some(current_hint) = hint {
+                    if let Some(install_hint) = &current_hint.install_hint {
+                        details = unsafe_text!(format!(
+                            "<details class='mt-4'><summary class='text-center'>Install Hint</summary><code class='text-center break-all'>{}</code></details>",
+                            install_hint
+                        ));
+                    }
+                }
 
                 html.extend(
-                    html!(<a href=url class="block hidden" data-targets=targets><button class="business-button primary">{text!("Download")}</button></a>),
+                    html!(<div class="hidden target" data-targets=targets><a href=url class="block text-center" ><button class="business-button primary">{text!(text)}</button></a>{details}</div>),
                 );
             }
         }
     }
 
     build_artifacts_html(config, typed)?;
+
     Ok(Some(html!(
     <div class="artifacts">
         {html}

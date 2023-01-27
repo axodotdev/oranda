@@ -135,7 +135,7 @@ function getOS() {
 let os = getOS();
 window.os = os;
 
-let hit = Array.from(document.querySelectorAll("a[data-targets]")).find((a) =>
+let hit = Array.from(document.querySelectorAll(".target[data-targets]")).find((a) =>
   a.attributes["data-targets"].value.includes(os)
 );
 if (hit) {
