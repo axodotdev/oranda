@@ -160,7 +160,7 @@ impl Config {
 impl Default for Config {
     fn default() -> Self {
         Config {
-            description: String::from(""),
+            description: String::new(),
             dist_dir: String::from("public"),
             homepage: None,
             name: String::from("My Axo project"),

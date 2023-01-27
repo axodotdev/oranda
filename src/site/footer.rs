@@ -15,12 +15,12 @@ pub fn create_footer(config: &Config) -> Box<footer<String>> {
     let current_date = chrono::Utc::now();
     let year = current_date.year();
     let license_text = if let Some(license) = &config.license {
-        format!("{} license.", license)
+        format!(", {} license.", license)
     } else {
         String::new()
     };
     let text = format!(
-        "© {year} {name}, {license}",
+        "{year}, {name}{license}",
         year = year,
         name = &config.name,
         license = license_text

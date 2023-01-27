@@ -175,3 +175,13 @@ fn creates_nav() {
 
     assert!(site.html.contains("<nav class=\"nav\"><ul><li><a href=\"/\">Home</a></li><li><a href=\"/readme.html\">readme</a></li></ul></nav>"));
 }
+
+#[test]
+fn creates_footer() {
+    let _guard = TEST_RUNTIME.enter();
+    let site = Site::build(&config(), &config().readme_path).unwrap();
+
+    println!("{:?}", site.html);
+
+    assert!(site.html.contains("<footer class=\"axo-gradient flex items-center justify-between px-4 py-2 text-slate-50 text-xs w-full\"><span>2023, My Axo project</span></footer>"));
+}

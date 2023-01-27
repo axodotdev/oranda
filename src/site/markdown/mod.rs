@@ -21,16 +21,16 @@ impl SyntaxHighlighterAdapter for Adapters<'_> {
         // requires a string to be returned
         match highlighted_code {
             Ok(code) => code,
-            Err(_) => String::from(""),
+            Err(_) => String::new(),
         }
     }
 
     fn build_pre_tag(&self, _attributes: &HashMap<String, String>) -> String {
-        String::from("")
+        String::new()
     }
 
     fn build_code_tag(&self, _attributes: &HashMap<String, String>) -> String {
-        String::from("")
+        String::new()
     }
 }
 
