@@ -35,6 +35,7 @@ pub struct Config {
     pub logo: Option<String>,
     pub favicon: Option<String>,
     pub path_prefix: Option<String>,
+    pub license: Option<String>,
 }
 
 impl Config {
@@ -64,6 +65,7 @@ impl Config {
                     name: project.name,
                     repository: project.repository,
                     version: project.version,
+                    license: project.license,
                     ..Default::default()
                 });
             } else {
@@ -94,6 +96,7 @@ impl Config {
                     social: custom.social,
                     artifacts: custom.artifacts,
                     version: None,
+                    license: None,
                     logo: custom.logo,
                     favicon: custom.favicon,
                     path_prefix: custom.path_prefix,
@@ -126,6 +129,7 @@ impl Config {
                     social: custom.social,
                     artifacts: custom.artifacts,
                     version: custom.version.or(project.version),
+                    license: custom.license.or(project.license),
                     logo: custom.logo,
                     favicon: custom.favicon,
                     path_prefix: custom.path_prefix,
@@ -156,7 +160,7 @@ impl Config {
 impl Default for Config {
     fn default() -> Self {
         Config {
-            description: String::from(""),
+            description: String::new(),
             dist_dir: String::from("public"),
             homepage: None,
             name: String::from("My Axo project"),
@@ -171,6 +175,7 @@ impl Default for Config {
             social: None,
             artifacts: None,
             version: None,
+            license: None,
             logo: None,
             favicon: None,
             path_prefix: None,

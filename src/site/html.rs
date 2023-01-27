@@ -3,6 +3,7 @@ use crate::config::{theme, Config};
 use crate::errors::*;
 use crate::site::artifacts::{self, create_artifacts_header};
 use crate::site::css;
+use crate::site::footer::create_footer;
 use crate::site::head;
 use crate::site::header;
 use axohtml::elements::div;
@@ -35,6 +36,7 @@ pub fn build_common_html(config: &Config, content: Box<div<String>>) -> Result<S
     } else {
         None
     };
+    let footer = create_footer(config);
 
     let additional_css = css::fetch_additional_css(config)?;
     let fringe_css = css::fetch_fringe_css(config)?;
@@ -52,8 +54,11 @@ pub fn build_common_html(config: &Config, content: Box<div<String>>) -> Result<S
         <body>
         <div class="container">
             {banner}
-            <main>{header}
-            {content}</main>
+            <main>
+                {header}
+                {content}
+            </main>
+            {footer}
         </div>
             {analytics}
             {google_script}

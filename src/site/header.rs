@@ -79,7 +79,7 @@ pub fn repo_banner(config: &Config) -> Option<Box<div<String>>> {
     Some(html!(
     <div class="repo_banner">
         <a href=repository>
-            <div class="icon" aria-hidden="true"/>
+            <div class="github-icon" aria-hidden="true"/>
             {text!("Check out our GitHub")}
         </a>
     </div>
