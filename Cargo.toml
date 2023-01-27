@@ -12,7 +12,6 @@ name = "oranda"
 
 [dependencies]
 minifier = "0.2.2"
-chrono = "0.4.23"
 axohtml = "0.4.1"
 ammonia = "3"
 cargo-dist-schema = "0.0.1"

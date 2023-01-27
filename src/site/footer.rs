@@ -1,7 +1,6 @@
 use crate::config::Config;
 use axohtml::elements::footer;
 use axohtml::{html, text};
-use chrono::Datelike;
 
 pub fn create_footer(config: &Config) -> Box<footer<String>> {
     let mut repository = None;
@@ -12,16 +11,13 @@ pub fn create_footer(config: &Config) -> Box<footer<String>> {
             </a>
         ));
     }
-    let current_date = chrono::Utc::now();
-    let year = current_date.year();
     let license_text = if let Some(license) = &config.license {
         format!(", {} license.", license)
     } else {
         String::new()
     };
     let text = format!(
-        "{year}, {name}{license}",
-        year = year,
+        "{name}{license}",
         name = &config.name,
         license = license_text
     );

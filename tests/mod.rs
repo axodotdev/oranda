@@ -183,5 +183,5 @@ fn creates_footer() {
 
     println!("{:?}", site.html);
 
-    assert!(site.html.contains("<footer class=\"axo-gradient flex items-center justify-between px-4 py-2 text-slate-50 text-xs w-full\"><span>2023, My Axo project</span></footer>"));
+    assert!(site.html.contains("<footer class=\"axo-gradient flex items-center justify-between px-4 py-2 text-slate-50 text-xs w-full\"><span>My Axo project</span></footer>"));
 }
