@@ -1,7 +1,6 @@
 {
   "homepage": "https://oranda.axo.dev",
   "readme_path": "dev/README.md",
-  "repository": "https://github.com/axodotdev/cargo-dist",
   "artifacts": {
     "cargo_dist": true
   },
