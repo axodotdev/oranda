@@ -3,10 +3,11 @@ use crate::errors::*;
 use std::fs::File;
 use std::io::Write;
 use std::path::Path;
+pub mod artifacts;
 mod css;
 mod head;
 mod header;
-mod html;
+pub mod html;
 pub mod markdown;
 use crate::config::Config;
 

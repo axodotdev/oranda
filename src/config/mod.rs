@@ -1,7 +1,9 @@
-pub mod analytics;
+pub mod artifacts;
 mod oranda;
 pub mod project;
 pub mod theme;
+use self::artifacts::Artifacts;
+pub mod analytics;
 use self::analytics::Analytics;
 use self::oranda::{OrandaConfig, Social};
 use crate::errors::*;
@@ -12,6 +14,7 @@ use std::path::Path;
 use theme::Theme;
 
 #[derive(Debug)]
+
 pub struct Config {
     pub description: String,
     pub dist_dir: String,
@@ -27,6 +30,8 @@ pub struct Config {
     pub analytics: Option<Analytics>,
     pub additional_pages: Option<Vec<String>>,
     pub social: Option<Social>,
+    pub artifacts: Option<Artifacts>,
+    pub version: Option<String>,
     pub logo: Option<String>,
     pub favicon: Option<String>,
     pub path_prefix: Option<String>,
@@ -58,6 +63,7 @@ impl Config {
                     homepage: project.homepage,
                     name: project.name,
                     repository: project.repository,
+                    version: project.version,
                     ..Default::default()
                 });
             } else {
@@ -86,6 +92,8 @@ impl Config {
                     analytics: custom.analytics,
                     additional_pages: custom.additional_pages,
                     social: custom.social,
+                    artifacts: custom.artifacts,
+                    version: None,
                     logo: custom.logo,
                     favicon: custom.favicon,
                     path_prefix: custom.path_prefix,
@@ -116,12 +124,15 @@ impl Config {
                     analytics: custom.analytics,
                     additional_pages: custom.additional_pages,
                     social: custom.social,
+                    artifacts: custom.artifacts,
+                    version: custom.version.or(project.version),
                     logo: custom.logo,
                     favicon: custom.favicon,
                     path_prefix: custom.path_prefix,
                 });
             }
         }
+
         Err(OrandaError::Other(String::from(
             "Your config is a bag of bees. Not today, Satan",
         )))
@@ -158,6 +169,8 @@ impl Default for Config {
             analytics: None,
             additional_pages: None,
             social: None,
+            artifacts: None,
+            version: None,
             logo: None,
             favicon: None,
             path_prefix: None,

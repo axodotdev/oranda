@@ -23,6 +23,9 @@ pub enum OrandaError {
     AxoAsset(#[from] axoasset::AxoassetError),
 
     #[error(transparent)]
+    Reqwest(#[from] reqwest::Error),
+
+    #[error(transparent)]
     FSExtra(#[from] fs_extra::error::Error),
 
     #[error("failed to read {filedesc} at {path}")]

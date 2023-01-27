@@ -8,6 +8,8 @@ use crate::errors::*;
 use crate::message::{Message, MessageType};
 use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxTheme;
 
+use crate::config::artifacts::Artifacts;
+
 #[derive(Debug, Deserialize)]
 pub struct Social {
     pub image: Option<String>,
@@ -31,6 +33,8 @@ pub struct OrandaConfig {
     pub analytics: Option<Analytics>,
     pub additional_pages: Option<Vec<String>>,
     pub social: Option<Social>,
+    pub artifacts: Option<Artifacts>,
+    pub version: Option<String>,
     pub logo: Option<String>,
     pub favicon: Option<String>,
     pub path_prefix: Option<String>,

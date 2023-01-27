@@ -1,6 +1,6 @@
 use crate::config::Config;
 use crate::errors::*;
-use axohtml::elements::{header, img, li, nav};
+use axohtml::elements::{div, header, img, li, nav};
 use axohtml::{html, text};
 use std::path::Path;
 
@@ -71,5 +71,17 @@ pub fn create(config: &Config) -> Result<Box<header<String>>> {
             <h1 class="title">{text!(&config.name)}</h1>
             {nav}
         </header>
+    ))
+}
+
+pub fn repo_banner(config: &Config) -> Option<Box<div<String>>> {
+    let repository = config.repository.as_ref()?;
+    Some(html!(
+    <div class="repo_banner">
+        <a href=repository>
+            <div class="icon" aria-hidden="true"/>
+            {text!("Check out our GitHub")}
+        </a>
+    </div>
     ))
 }
