@@ -4,7 +4,12 @@ use std::path::Path;
 use oranda::config::Config;
 use oranda::errors::*;
 
-use axum::{http::StatusCode, routing::get_service, Router};
+use axum::response::Redirect;
+use axum::{
+    http::StatusCode,
+    routing::{get, get_service},
+    Router,
+};
 use clap::Parser;
 use tower_http::services::ServeDir;
 
@@ -57,7 +62,14 @@ impl Serve {
             });
 
         let prefix_route = format!("/{}", prefix);
-        let app = Router::new().nest_service(&prefix_route, serve_dir);
+        let fringe_route = format!("/{}/fringe@0.0.8.css", prefix);
+        let app = Router::new().nest_service(&prefix_route, serve_dir).route(
+            "/fringe@0.0.8.css",
+            get(move || async {
+                let fringe_route = fringe_route;
+                Redirect::permanent(&fringe_route)
+            }),
+        );
 
         let addr = SocketAddr::from(([127, 0, 0, 1], self.port));
         println!("listening on http://{}/{}", addr, prefix);
