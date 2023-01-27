@@ -1,12 +1,5 @@
 {
-  "homepage": "https://oranda.axo.dev",
-  "repository": "https://github.com/axodotdev/oranda",
   "favicon": "https://www.axo.dev/favicon.ico",
-  "analytics": {
-    "plausible": {
-      "domain": "tools.axo.dev/oranda"
-    }
-  },
   "path_prefix": "oranda",
   "additional_pages": [
     "./docs/configuration.md",
