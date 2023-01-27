@@ -63,6 +63,7 @@ fn it_loads_a_js_project_config() {
             r#"
 {
     "name": "axo",
+    "version": "0.1.0",
     "description": ">o_o<"
 }
     "#,
