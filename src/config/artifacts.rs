@@ -1,8 +1,8 @@
 use crate::config::Config;
 use crate::errors::*;
 use crate::site::html::build_common_html;
-use axohtml::elements::{a, div, script, tr};
-use axohtml::{html, text, unsafe_text};
+use axohtml::elements::{a, div, script, span};
+use axohtml::{html, text};
 use cargo_dist_schema::{ArtifactKind, DistManifest};
 use serde::Deserialize;
 use std::fs::File;
@@ -117,22 +117,27 @@ pub fn get_os_script(config: &Config) -> Result<Box<script<String>>> {
 // False positive duplicate allocation warning
 // https://github.com/rust-lang/rust-clippy/issues?q=is%3Aissue+redundant_allocation+sort%3Aupdated-desc
 #[allow(clippy::vec_box)]
-fn create_content(table: Vec<Box<tr<String>>>) -> Box<div<String>> {
+fn create_content(table: Vec<Box<span<String>>>) -> Box<div<String>> {
     html!(
-    <div>
-        <h1>{text!("All downloads")}</h1>
-        <table>
-            <tr>
-                <th>{text!("Name")}</th>
-                <th>{text!("Kind")}</th>
-                <th>{text!("Download")}</th>
-            </tr>
-            <tbody>
-                {table}
-            </tbody>
-        </table>
-    </div>
-    )
+        <div>
+            <h1>{text!("All downloads")}</h1>
+            <div class="table">
+        <span class="th">
+            {text!("Name")}
+        </span>
+        <span class="th">
+            {text!("Kind")}
+        </span>
+        <span  class="th">
+        {text!("Target")}
+    </span>
+        <span  class="th">
+            {text!("Download")}
+        </span>
+        {table}
+        </div>
+        </div>
+        )
 }
 
 pub fn build_artifacts_html(config: &Config, manifest: &DistManifest) -> Result<()> {
@@ -141,14 +146,14 @@ pub fn build_artifacts_html(config: &Config, manifest: &DistManifest) -> Result<
         for artifact in release.artifacts.iter() {
             let name = &artifact.name;
             let url = create_download_link(config, name);
-            let _kind = get_kind_string(&artifact.kind);
-            table.push(html!({
-                unsafe_text!(
-                    "  <tr><td>{name}</td>
-                <td>{kind}</td>
-                <td><a href=url>Download</a></td>         </tr>"
-                )
-            }));
+            let kind = get_kind_string(&artifact.kind);
+            let targets: &String = &artifact.target_triples.clone().into_iter().collect();
+            table.extend(vec![
+                html!(<span>{text!(name)}</span>),
+                html!(<span>{text!(kind)}</span>),
+                html!(<span>{text!(targets)}</span>),
+                html!(<span><a href=url>{text!("Download")}</a></span>),
+            ]);
         }
     }
     let doc = build_common_html(config, create_content(table))?;

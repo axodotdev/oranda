@@ -1,9 +1,9 @@
 [package]
 name = "oranda"
 description = ">o_o<"
-version = "0.0.1"
+version = "0.0.1-prerelease1"
 edition = "2021"
-repository = "https://github.com/axodotdev/cargo-dist/"
+repository = "https://github.com/axodotdev/oranda/"
 
 [[bin]]
 name = "oranda"

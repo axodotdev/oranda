@@ -12,5 +12,8 @@
     "image_alt": "axo",
     "twitter_account": "@axodotdev"
   },
+  "artifacts": {
+    "cargo_dist": true
+  },
   "homepage": "https://oranda.axo.dev"
 }
