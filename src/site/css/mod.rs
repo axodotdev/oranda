@@ -38,17 +38,12 @@ pub fn fetch_fringe_css(config: &Config) -> Result<Box<link<String>>> {
         format!("{}/theme-output.css", fringe_href),
     ])?;
     let css_file_name = format!("fringe@{}.css", FRINGE_VERSION);
-    let css_url = if let Some(prefix) = &config.path_prefix {
-        format!("{}/fringe@{}.css", prefix, FRINGE_VERSION)
-    } else {
-        format!("fringe@{}.css", FRINGE_VERSION)
-    };
     let css_path = format!("{}/{}", &config.dist_dir, css_file_name);
 
     let mut css_file = File::create(css_path)?;
     css_file.write_all(minified_css.as_bytes())?;
 
-    Ok(html!(<link rel="stylesheet" href=css_url></link>))
+    Ok(html!(<link rel="stylesheet" href=css_file_name></link>))
 }
 
 pub fn fetch_additional_css(config: &Config) -> Result<Option<Box<link<String>>>> {
