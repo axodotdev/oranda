@@ -1,5 +1,7 @@
 <div class="oranda-hide">
-<h1>oranda</h1>
+
+# oranda
+
 </div>
 
 > 🎁 generate beautiful landing pages for your projects
@@ -42,7 +44,7 @@ If you'd like to configure `oranda`, place an `oranda.json` file in the root of
 your project and fill it with the configuration you'd like. Check out the [docs]
 to learn more about your configuration options!
 
-[docs]: TBD
+[docs]: https://axodotdev.github.io/oranda/configuration
 
 ## Installers: integrating with `cargo-dist`
 
