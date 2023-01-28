@@ -1,10 +1,9 @@
 use crate::config::Config;
 use crate::errors::*;
+
 use axohtml::elements::link;
 use axohtml::html;
 use minifier::css::minify;
-use std::fs::File;
-use std::io::Write;
 
 fn concat_minify_css(css_links: Vec<String>) -> Result<String> {
     let mut css = String::new();
@@ -27,7 +26,7 @@ fn concat_minify_css(css_links: Vec<String>) -> Result<String> {
 // False positive duplicate allocation warning
 // https://github.com/rust-lang/rust-clippy/issues?q=is%3Aissue+redundant_allocation+sort%3Aupdated-desc
 #[allow(clippy::vec_box)]
-pub fn fetch_fringe_css(config: &Config) -> Result<Box<link<String>>> {
+pub async fn fetch_fringe(config: &Config) -> Result<Box<link<String>>> {
     const FRINGE_VERSION: &str = "0.0.8";
     let fringe_href = format!(
         "https://www.unpkg.com/@axodotdev/fringe@{}/themes/",
@@ -37,16 +36,16 @@ pub fn fetch_fringe_css(config: &Config) -> Result<Box<link<String>>> {
         format!("{}/fringe-output.css", fringe_href),
         format!("{}/theme-output.css", fringe_href),
     ])?;
-    let css_file_name = format!("fringe@{}.css", FRINGE_VERSION);
-    let css_path = format!("{}/{}", &config.dist_dir, css_file_name);
+    let css_filename = format!("fringe@{}.css", FRINGE_VERSION);
+    let css_path = format!("{}/{}", config.dist_dir, css_filename);
 
-    let mut css_file = File::create(css_path)?;
-    css_file.write_all(minified_css.as_bytes())?;
+    let asset = axoasset::new(&css_path, minified_css.into())?;
+    axoasset::write(asset, &config.dist_dir).await?;
 
-    Ok(html!(<link rel="stylesheet" href=css_file_name></link>))
+    Ok(html!(<link rel="stylesheet" href=css_filename></link>))
 }
 
-pub fn fetch_additional_css(config: &Config) -> Result<Option<Box<link<String>>>> {
+pub fn fetch_additional(config: &Config) -> Result<Option<Box<link<String>>>> {
     if config.additional_css.is_empty() {
         return Ok(None);
     }
@@ -54,8 +53,8 @@ pub fn fetch_additional_css(config: &Config) -> Result<Option<Box<link<String>>>
     let minified_css = concat_minify_css(config.additional_css.clone())?;
     let css_path = format!("{}/custom.css", &config.dist_dir);
 
-    let mut css_file = File::create(css_path)?;
-    css_file.write_all(minified_css.as_bytes())?;
+    let asset = axoasset::new(&css_path, minified_css.into())?;
+    axoasset::write(asset, &config.dist_dir).await?;
 
     Ok(Some(
         html!(<link rel="stylesheet" href="custom.css"></link>),

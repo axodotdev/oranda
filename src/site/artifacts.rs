@@ -1,15 +1,12 @@
 use crate::config::artifacts::Artifacts;
 use crate::config::Config;
 use crate::errors::*;
-use crate::site::html::build_common_html;
+use crate::site::page::markdown::syntax_highlight::{self, SyntaxTheme};
+use crate::site::page::Page;
+
 use axohtml::elements::{div, script, span};
 use axohtml::{html, text, unsafe_text};
 use cargo_dist_schema::{Artifact, ArtifactKind, DistManifest};
-
-use crate::site::markdown::syntax_highlight::syntax_highlight;
-use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxTheme;
-use std::fs::File;
-use std::io::Write;
 
 fn get_kind_string(kind: &ArtifactKind) -> String {
     match kind {
@@ -20,7 +17,7 @@ fn get_kind_string(kind: &ArtifactKind) -> String {
     }
 }
 
-fn create_download_link(config: &Config, name: &String) -> String {
+fn build_downloadlink(config: &Config, name: &str) -> String {
     if let (Some(repo), Some(version)) = (&config.repository, &config.version) {
         format!("{}/releases/download/v{}/{}", repo, version, name)
     } else {
@@ -28,7 +25,7 @@ fn create_download_link(config: &Config, name: &String) -> String {
     }
 }
 
-pub fn create_artifacts_header(config: &Config) -> Result<Option<Box<div<String>>>> {
+pub fn build_section(config: &Config) -> Result<Option<Box<div<String>>>> {
     let Some(Artifacts { cargo_dist: true }) = &config.artifacts else {
         return Ok(None);
       };
@@ -39,7 +36,7 @@ pub fn create_artifacts_header(config: &Config) -> Result<Option<Box<div<String>
         )));
     }
 
-    let url = create_download_link(config, &String::from("dist-manifest.json"));
+    let url = build_downloadlink(config, "dist-manifest.json");
 
     let resp = reqwest::blocking::get(url);
 
@@ -59,7 +56,7 @@ pub fn create_artifacts_header(config: &Config) -> Result<Option<Box<div<String>
                 for targ in artifact.target_triples.iter() {
                     targets.push_str(format!("{} ", targ).as_str());
                 }
-                let url = create_download_link(config, &artifact.name);
+                let url = build_downloadlink(config, &artifact.name);
                 let text = format!("Download v{}", &release.app_version);
                 let install_code = get_install_hint(
                     &release.artifacts,
@@ -83,7 +80,7 @@ pub fn create_artifacts_header(config: &Config) -> Result<Option<Box<div<String>
         }
     }
 
-    build_artifacts_html(config, typed)?;
+    build_page(config, typed)?;
 
     Ok(Some(html!(
     <div class="artifacts">
@@ -108,7 +105,7 @@ pub fn get_install_hint(
 
     if let Some(current_hint) = hint {
         if let Some(install_hint) = &current_hint.install_hint {
-            let highlighted_code = syntax_highlight(Some("sh"), install_hint, syntax_theme);
+            let highlighted_code = syntax_highlight::build(Some("sh"), install_hint, syntax_theme);
             return match highlighted_code {
                 Ok(code) => code,
                 Err(_) => format!(
@@ -118,7 +115,6 @@ pub fn get_install_hint(
             };
         }
     }
-
     String::new()
 }
 
@@ -133,7 +129,7 @@ pub fn get_os_script(config: &Config) -> Result<Box<script<String>>> {
 // False positive duplicate allocation warning
 // https://github.com/rust-lang/rust-clippy/issues?q=is%3Aissue+redundant_allocation+sort%3Aupdated-desc
 #[allow(clippy::vec_box)]
-fn create_content(table: Vec<Box<span<String>>>) -> Box<div<String>> {
+fn build_table(table: Vec<Box<span<String>>>) -> Box<div<String>> {
     html!(
     <div>
         <h1>{text!("All downloads")}</h1>
@@ -156,15 +152,15 @@ fn create_content(table: Vec<Box<span<String>>>) -> Box<div<String>> {
     )
 }
 
-pub fn build_artifacts_html(config: &Config, manifest: &DistManifest) -> Result<()> {
-    let mut table = vec![];
+pub fn build_page(config: &Config, manifest: &DistManifest) -> Result<Page> {
+    let mut artifacts = vec![];
     for release in manifest.releases.iter() {
         for artifact in release.artifacts.iter() {
             let name = &artifact.name;
-            let url = create_download_link(config, name);
+            let url = build_downloadlink(config, name);
             let kind = get_kind_string(&artifact.kind);
-            let targets: &String = &artifact.target_triples.clone().into_iter().collect();
-            table.extend(vec![
+            let targets: String = artifact.target_triples.clone().into_iter().collect();
+            artifacts.extend(vec![
                 html!(<span>{text!(name)}</span>),
                 html!(<span>{text!(kind)}</span>),
                 html!(<span>{text!(targets)}</span>),
@@ -172,10 +168,10 @@ pub fn build_artifacts_html(config: &Config, manifest: &DistManifest) -> Result<
             ]);
         }
     }
-    let doc = build_common_html(config, create_content(table))?;
-    let html_path = format!("{}/artifacts.html", &config.dist_dir);
-
-    let mut html_file = File::create(html_path)?;
-    html_file.write_all(doc.as_bytes())?;
-    Ok(())
+    let contents = build_table(artifacts).to_string();
+    Ok(Page::new_from_contents(
+        config,
+        contents,
+        "artifacts.html".to_string(),
+    ))
 }

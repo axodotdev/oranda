@@ -1,22 +1,23 @@
 use crate::config::artifacts::Artifacts;
 use crate::config::Config;
 use crate::errors::*;
+use crate::site::Site;
+
 use axohtml::elements::{div, header, img, li, nav};
 use axohtml::{html, text};
-use std::path::Path;
 
 fn get_logo(logo: String, config: &Config) -> Result<Box<img<String>>> {
-    let fetched_logo = fetch_logo(&config.dist_dir, logo, &config.name);
+    let fetched_logo = fetch_logo(config.dist_dir, logo, &config.name);
 
     tokio::runtime::Handle::current().block_on(fetched_logo)
 }
 
 async fn fetch_logo(
-    dist_dir: &str,
+    dist_dir: String,
     origin_path: String,
     name: &String,
 ) -> Result<Box<img<String>>> {
-    let copy_result = axoasset::copy(&origin_path, dist_dir).await?;
+    let copy_result = axoasset::copy(&origin_path, &dist_dir).await?;
 
     let path_as_string = copy_result.strip_prefix(dist_dir)?.to_string_lossy();
 
@@ -24,7 +25,7 @@ async fn fetch_logo(
 }
 
 fn nav(
-    pages: &[String],
+    site: Site,
     path_prefix: &Option<String>,
     artifacts: &Option<Artifacts>,
 ) -> Result<Box<nav<String>>> {
@@ -34,16 +35,10 @@ fn nav(
     } else {
         vec![html!(<li><a href="/">"Home"</a></li>)]
     };
-    for page in pages.iter() {
-        let file_path = Path::new(page);
-        let file_name = file_path
-            .file_stem()
-            .unwrap_or(file_path.as_os_str())
-            .to_string_lossy();
+    for page in site.pages {
+        let href = generate_prefix_link(path_prefix, page.filename);
 
-        let href = generate_prefix_link(path_prefix, file_name.to_string());
-
-        html.extend(html!(<li><a href=href>{text!(file_name)}</a></li>));
+        html.extend(html!(<li><a href=href>{text!(page.filename)}</a></li>));
     }
 
     if let Some(Artifacts { cargo_dist: true }) = artifacts {
@@ -59,7 +54,7 @@ fn nav(
     ))
 }
 
-pub fn create(config: &Config) -> Result<Box<header<String>>> {
+pub fn build(config: &Config) -> Result<Box<header<String>>> {
     let logo = if let Some(logo) = config.logo.clone() {
         Some(get_logo(logo, config)?)
     } else {

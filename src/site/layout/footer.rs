@@ -2,7 +2,7 @@ use crate::config::Config;
 use axohtml::elements::footer;
 use axohtml::{html, text};
 
-pub fn create_footer(config: &Config) -> Box<footer<String>> {
+pub fn build(config: &Config) -> Box<footer<String>> {
     let mut repository = None;
     if let Some(repo) = &config.repository {
         repository = Some(html!(

@@ -47,7 +47,7 @@ impl GoogleTracking {
     }
 }
 
-pub fn get_analytics(config: &Config) -> Option<Box<script<String>>> {
+pub fn build(config: &Config) -> Option<Box<script<String>>> {
     let analytics = config.analytics.as_ref();
 
     match analytics {

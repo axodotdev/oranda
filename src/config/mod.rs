@@ -1,20 +1,24 @@
-pub mod artifacts;
-mod oranda;
-pub mod project;
-pub mod theme;
-use self::artifacts::Artifacts;
-pub mod analytics;
-use self::analytics::Analytics;
-use self::oranda::{OrandaConfig, Social};
-use crate::errors::*;
-use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxTheme;
-use project::ProjectConfig;
 use std::path::Path;
 
+pub mod analytics;
+use analytics::Analytics;
+
+pub mod artifacts;
+use artifacts::Artifacts;
+
+mod oranda;
+use oranda::{OrandaConfig, Social};
+
+pub mod project;
+use project::ProjectConfig;
+
+pub mod theme;
 use theme::Theme;
 
-#[derive(Debug)]
+use crate::errors::*;
+use crate::site::page::markdown::syntax_highlight::SyntaxTheme;
 
+#[derive(Debug)]
 pub struct Config {
     pub description: String,
     pub dist_dir: String,
@@ -51,7 +55,7 @@ impl Config {
         //  you could use this file to override fields in your project manifest.
         //  This file can contain all possible public configuration fields.
         let default = Config::default();
-        let custom = OrandaConfig::load(config_path)?;
+        let custom = OrandaConfig::load(config_path.display().to_string())?;
         let project = ProjectConfig::load(None)?;
 
         // if there is no oranda.config file present...

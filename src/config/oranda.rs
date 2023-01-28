@@ -1,12 +1,10 @@
-use std::path::Path;
-
 use serde::Deserialize;
 
 use crate::config::analytics::Analytics;
 use crate::config::theme::Theme;
 use crate::errors::*;
 use crate::message::{Message, MessageType};
-use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxTheme;
+use crate::site::page::markdown::syntax_highlight::SyntaxTheme;
 
 use crate::config::artifacts::Artifacts;
 
@@ -42,8 +40,7 @@ pub struct OrandaConfig {
 }
 
 impl OrandaConfig {
-    pub fn load(config_path: &Path) -> Result<Option<OrandaConfig>> {
-        let config_path = config_path.to_string_lossy();
+    pub fn load(config_path: String) -> Result<Option<OrandaConfig>> {
         let msg = format!("Loading config at {}", config_path);
         Message::new(MessageType::Info, &msg).print();
         tracing::info!("{}", &msg);
