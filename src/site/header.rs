@@ -41,13 +41,13 @@ fn nav(
             .unwrap_or(file_path.as_os_str())
             .to_string_lossy();
 
-        let href = generate_prefix_link(&path_prefix, file_name.to_string());
+        let href = generate_prefix_link(path_prefix, file_name.to_string());
 
         html.extend(html!(<li><a href=href>{text!(file_name)}</a></li>));
     }
 
     if let Some(Artifacts { cargo_dist: true }) = artifacts {
-        let href = generate_prefix_link(&path_prefix, String::from("artifacts"));
+        let href = generate_prefix_link(path_prefix, String::from("artifacts"));
         html.extend(html!(<li><a href=href>{text!("Downloads")}</a></li>));
     };
     Ok(html!(
