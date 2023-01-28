@@ -9,7 +9,7 @@ use axohtml::{dom::DOMTree, html, text, unsafe_text};
 use crate::site::css::{fetch_additional_css, fetch_fringe_css};
 use crate::site::head::{create_meta_tags, get_favicon};
 
-pub fn build(config: &Config, content: String) -> Result<String> {
+pub async fn build(config: &Config, content: String) -> Result<String> {
     let theme = theme::css_class(&config.theme);
     let analytics = get_analytics(config);
     let google_script = match &config.analytics {
@@ -33,7 +33,7 @@ pub fn build(config: &Config, content: String) -> Result<String> {
         None
     };
 
-    let additional_css = fetch_additional_css(config)?;
+    let additional_css = fetch_additional_css(config).await?;
     let fringe_css = fetch_fringe_css(config)?;
 
     let doc: DOMTree<String> = html!(

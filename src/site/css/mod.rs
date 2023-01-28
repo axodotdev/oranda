@@ -42,26 +42,27 @@ pub fn fetch_fringe_css(config: &Config) -> Result<Box<link<String>>> {
 
     let mut css_file = match File::create(css_path) {
         Ok(file) => Ok(file),
-        Err(e) => Err(OrandaError::FileCreateError { filename: css_path.to_string(), details: e.to_string()}),
+        Err(e) => Err(OrandaError::FileCreateError {
+            filename: css_path.to_string(),
+            details: e.to_string(),
+        }),
     };
     css_file?.write_all(minified_css.as_bytes())?;
 
     Ok(html!(<link rel="stylesheet" href=css_file_name></link>))
 }
 
-pub fn fetch_additional_css(config: &Config) -> Result<Option<Box<link<String>>>> {
+pub async fn fetch_additional_css(config: &Config) -> Result<Option<Box<link<String>>>> {
     if config.additional_css.is_empty() {
         return Ok(None);
     }
 
     let minified_css = concat_minify_css(config.additional_css.clone())?;
-    let css_path = format!("{}/custom.css", &config.dist_dir);
-
-    let mut css_file = match File::create(css_path) {
-        Ok(file) => Ok(file),
-        Err(e) => Err(OrandaError::FileCreateError { filename: css_path.to_string(), details: e.to_string()}),
-    };
-    css_file?.write_all(minified_css.as_bytes())?;
+    axoasset::write(
+        axoasset::new("custom.css", minified_css.into())?,
+        &config.dist_dir,
+    )
+    .await?;
 
     Ok(Some(
         html!(<link rel="stylesheet" href="custom.css"></link>),

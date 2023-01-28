@@ -16,12 +16,12 @@ pub struct Site {
 }
 
 impl Site {
-    pub fn build(config: &Config, file_path: &String) -> Result<Site> {
+    pub async fn build(config: &Config, file_path: &String) -> Result<Site> {
         Self::create_dist_dir(&config.dist_dir)?;
         let markdown_path = Path::new(&file_path);
         let is_main_readme = file_path == &config.readme_path;
         let content = markdown::body(markdown_path, &config.syntax_theme, is_main_readme)?;
-        let html = html::build(config, content)?;
+        let html = html::build(config, content).await?;
 
         Ok(Site { html })
     }
@@ -55,7 +55,7 @@ impl Site {
         Ok(())
     }
 
-    pub fn write(config: &Config) -> Result<()> {
+    pub async fn write(config: &Config) -> Result<()> {
         let dist = &config.dist_dir;
         let readme_path = &config.readme_path;
         if Path::new(&config.static_dir).exists() {
@@ -67,7 +67,7 @@ impl Site {
         }
 
         for file in files {
-            let site = Self::build(config, file)?;
+            let site = Self::build(config, file).await?;
             let file_name = Self::get_html_file_name(file, config).unwrap();
 
             let html_path = format!("{}/{}", &dist, file_name);
