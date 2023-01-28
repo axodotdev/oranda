@@ -23,7 +23,7 @@ impl Site {
         let markdown_path = Path::new(&file_path);
         let is_main_readme = file_path == &config.readme_path;
         let content = markdown::body(markdown_path, &config.syntax_theme, is_main_readme)?;
-        let html = html::build(config, content)?;
+        let html = html::build(config, content, is_main_readme)?;
 
         Ok(Site { html })
     }
