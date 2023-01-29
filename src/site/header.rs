@@ -52,7 +52,7 @@ fn nav(
         html.extend(html!(<li><a href=href>{text!("Downloads")}</a></li>));
     };
 
-    if let Some(_) = md_book {
+    if md_book.is_some() {
         let href = if let Some(prefix) = &path_prefix {
             format!("/{}/{}/", prefix, "book")
         } else {
