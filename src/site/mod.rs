@@ -25,7 +25,19 @@ impl Site {
         let content = markdown::body(markdown_path, &config.syntax_theme, is_main_readme)?;
         let html = html::build(config, content, is_main_readme)?;
 
+        if let Some(book_path) = &config.md_book {
+            Self::copy_mdbook(&config.dist_dir, book_path)?;
+        }
+
         Ok(Site { html })
+    }
+
+    fn copy_mdbook(dist_path: &String, book_path: &String) -> Result<()> {
+        let mut options = fs_extra::dir::CopyOptions::new();
+        options.overwrite = true;
+        fs_extra::copy_items(&[book_path], dist_path, &options)?;
+
+        Ok(())
     }
 
     fn get_html_file_name(file: &String, config: &Config) -> Result<String> {

@@ -27,6 +27,7 @@ fn nav(
     pages: &[String],
     path_prefix: &Option<String>,
     artifacts: &Option<Artifacts>,
+    md_book: &Option<String>,
 ) -> Result<Box<nav<String>>> {
     let mut html: Vec<Box<li<String>>> = if let Some(prefix) = &path_prefix {
         let href = format!("/{}", prefix);
@@ -50,6 +51,16 @@ fn nav(
         let href = generate_prefix_link(path_prefix, String::from("artifacts"));
         html.extend(html!(<li><a href=href>{text!("Downloads")}</a></li>));
     };
+
+    if let Some(_) = md_book {
+        let href = if let Some(prefix) = &path_prefix {
+            format!("/{}/{}/", prefix, "book")
+        } else {
+            format!("/{}/", "book")
+        };
+        html.extend(html!(<li><a href=href>{text!("Docs")}</a></li>));
+    };
+
     Ok(html!(
         <nav class="nav">
             <ul>
@@ -71,6 +82,7 @@ pub fn create(config: &Config) -> Result<Box<header<String>>> {
             additional_pages,
             &config.path_prefix,
             &config.artifacts,
+            &config.md_book,
         )?)
     } else {
         None
