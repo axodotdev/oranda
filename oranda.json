@@ -13,7 +13,11 @@
     "twitter_account": "@axodotdev"
   },
   "artifacts": {
-    "cargo_dist": true
+    "cargo_dist": true,
+    "package_managers": {
+      "npm": "npm install oranda",
+      "yarn": "yarn add oranda"
+    }
   },
   "homepage": "https://oranda.axo.dev",
   "md_book": "docs/book"

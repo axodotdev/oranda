@@ -47,9 +47,11 @@ fn nav(
         html.extend(html!(<li><a href=href>{text!(file_name)}</a></li>));
     }
 
-    if let Some(Artifacts { cargo_dist: true }) = artifacts {
-        let href = generate_prefix_link(path_prefix, String::from("artifacts"));
-        html.extend(html!(<li><a href=href>{text!("Downloads")}</a></li>));
+    if let Some(artifact) = artifacts {
+        if artifact.cargo_dist.is_some() {
+            let href = generate_prefix_link(path_prefix, String::from("artifacts"));
+            html.extend(html!(<li><a href=href>{text!("Downloads")}</a></li>));
+        }
     };
 
     if md_book.is_some() {
