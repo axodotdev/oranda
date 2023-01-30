@@ -123,12 +123,12 @@ pub fn get_install_hint(
     String::new()
 }
 
-pub fn get_os_script(config: &Config) -> Result<Box<script<String>>> {
+pub fn get_os_script(dist_dir: &String) -> Result<Box<script<String>>> {
     const FILE_NAME: &str = "detect_os.js";
-    let script_path = format!("{}/{}", &config.dist_dir, FILE_NAME);
+    let script_path = format!("{}/{}", dist_dir, FILE_NAME);
+    let asset = axoasset::new(&script_path, javascript::detect_os::OS_SCRIPT.into())?;
 
-    let mut script_file = File::create(script_path)?;
-    script_file.write_all(javascript::detect_os::OS_SCRIPT.as_bytes())?;
+    tokio::runtime::Handle::current().block_on(axoasset::write(asset, dist_dir.as_str()))?;
     Ok(html!(<script src=FILE_NAME />))
 }
 

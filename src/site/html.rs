@@ -28,7 +28,7 @@ pub fn build_common_html(
         None => None,
         Some(_) => {
             if is_main_readme {
-                Some(artifacts::get_os_script(config)?)
+                Some(artifacts::get_os_script(&config.dist_dir)?)
             } else {
                 None
             }
