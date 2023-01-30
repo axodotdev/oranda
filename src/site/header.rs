@@ -1,6 +1,7 @@
+use crate::config::artifacts::Artifacts;
 use crate::config::Config;
 use crate::errors::*;
-use axohtml::elements::{header, img, li, nav};
+use axohtml::elements::{div, header, img, li, nav};
 use axohtml::{html, text};
 use std::path::Path;
 
@@ -22,7 +23,11 @@ async fn fetch_logo(
     Ok(html!(<img src=path_as_string alt=name class="logo" />))
 }
 
-fn nav(pages: &[String], path_prefix: &Option<String>) -> Result<Box<nav<String>>> {
+fn nav(
+    pages: &[String],
+    path_prefix: &Option<String>,
+    artifacts: &Option<Artifacts>,
+) -> Result<Box<nav<String>>> {
     let mut html: Vec<Box<li<String>>> = if let Some(prefix) = &path_prefix {
         let href = format!("/{}", prefix);
         vec![html!(<li><a href=href>"Home"</a></li>)]
@@ -36,14 +41,15 @@ fn nav(pages: &[String], path_prefix: &Option<String>) -> Result<Box<nav<String>
             .unwrap_or(file_path.as_os_str())
             .to_string_lossy();
 
-        let href = if let Some(prefix) = &path_prefix {
-            format!("/{}/{}.html", prefix, file_name)
-        } else {
-            format!("/{}.html", file_name)
-        };
+        let href = generate_prefix_link(path_prefix, file_name.to_string());
 
         html.extend(html!(<li><a href=href>{text!(file_name)}</a></li>));
     }
+
+    if let Some(Artifacts { cargo_dist: true }) = artifacts {
+        let href = generate_prefix_link(path_prefix, String::from("artifacts"));
+        html.extend(html!(<li><a href=href>{text!("Downloads")}</a></li>));
+    };
     Ok(html!(
         <nav class="nav">
             <ul>
@@ -61,7 +67,11 @@ pub fn create(config: &Config) -> Result<Box<header<String>>> {
     };
 
     let nav = if let Some(additional_pages) = &config.additional_pages {
-        Some(nav(additional_pages, &config.path_prefix)?)
+        Some(nav(
+            additional_pages,
+            &config.path_prefix,
+            &config.artifacts,
+        )?)
     } else {
         None
     };
@@ -72,4 +82,24 @@ pub fn create(config: &Config) -> Result<Box<header<String>>> {
             {nav}
         </header>
     ))
+}
+
+pub fn repo_banner(config: &Config) -> Option<Box<div<String>>> {
+    let repository = config.repository.as_ref()?;
+    Some(html!(
+    <div class="repo_banner">
+        <a href=repository>
+            <div class="github-icon" aria-hidden="true"/>
+            {text!("Check out our GitHub")}
+        </a>
+    </div>
+    ))
+}
+
+fn generate_prefix_link(path_prefix: &Option<String>, file_name: String) -> String {
+    if let Some(prefix) = &path_prefix {
+        format!("/{}/{}.html", prefix, file_name)
+    } else {
+        format!("/{}.html", file_name)
+    }
 }

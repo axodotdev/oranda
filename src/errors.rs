@@ -23,10 +23,16 @@ pub enum OrandaError {
     AxoAsset(#[from] axoasset::AxoassetError),
 
     #[error(transparent)]
+    Reqwest(#[from] reqwest::Error),
+
+    #[error(transparent)]
     FSExtra(#[from] fs_extra::error::Error),
 
     #[error("failed to read {filedesc} at {path}")]
     FileNotFound { filedesc: String, path: String },
+
+    #[error("Could not find a build in {dist_dir}. Did you remember to run `oranda build`?")]
+    BuildNotFound { dist_dir: String },
 
     #[error("{0}")]
     Other(String),

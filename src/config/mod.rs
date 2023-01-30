@@ -1,7 +1,9 @@
-pub mod analytics;
+pub mod artifacts;
 mod oranda;
-mod project;
+pub mod project;
 pub mod theme;
+use self::artifacts::Artifacts;
+pub mod analytics;
 use self::analytics::Analytics;
 use self::oranda::{OrandaConfig, Social};
 use crate::errors::*;
@@ -12,6 +14,7 @@ use std::path::Path;
 use theme::Theme;
 
 #[derive(Debug)]
+
 pub struct Config {
     pub description: String,
     pub dist_dir: String,
@@ -27,9 +30,12 @@ pub struct Config {
     pub analytics: Option<Analytics>,
     pub additional_pages: Option<Vec<String>>,
     pub social: Option<Social>,
+    pub artifacts: Option<Artifacts>,
+    pub version: Option<String>,
     pub logo: Option<String>,
     pub favicon: Option<String>,
     pub path_prefix: Option<String>,
+    pub license: Option<String>,
 }
 
 impl Config {
@@ -38,7 +44,7 @@ impl Config {
         //
         //- Project configuration comes from a project manifest file. We currently
         //  support `Cargo.toml` and `package.json`, but could support any manifest
-        //  that provided a `name`, `description`, and `homepage` field.
+        //  that provided a `name`, `description`, `repository` and `homepage` field.
         //
         //- Custom configuration comes from a `oranda.config.json` file. If this
         //  file exists, it has precedence over project configuration, which means
@@ -57,6 +63,9 @@ impl Config {
                     description: project.description,
                     homepage: project.homepage,
                     name: project.name,
+                    repository: project.repository,
+                    version: project.version,
+                    license: project.license,
                     ..Default::default()
                 });
             } else {
@@ -74,17 +83,20 @@ impl Config {
                     description: custom.description.unwrap_or(default.description),
                     dist_dir: custom.dist_dir.unwrap_or(default.dist_dir),
                     static_dir: custom.static_dir.unwrap_or(default.static_dir),
-                    homepage: Self::homepage(custom.homepage, None, default.homepage),
+                    homepage: Self::project_override(custom.homepage, None, default.homepage),
                     name: custom.name.unwrap_or(default.name),
                     no_header: custom.no_header.unwrap_or(default.no_header),
                     readme_path: custom.readme_path.unwrap_or(default.readme_path),
                     theme: custom.theme.unwrap_or(default.theme),
                     additional_css: custom.additional_css.unwrap_or(default.additional_css),
-                    repository: custom.repository,
+                    repository: Self::project_override(custom.repository, None, default.repository),
                     syntax_theme: custom.syntax_theme.unwrap_or(default.syntax_theme),
                     analytics: custom.analytics,
                     additional_pages: custom.additional_pages,
                     social: custom.social,
+                    artifacts: custom.artifacts,
+                    version: None,
+                    license: None,
                     logo: custom.logo,
                     favicon: custom.favicon,
                     path_prefix: custom.path_prefix,
@@ -96,29 +108,41 @@ impl Config {
                     description: custom.description.unwrap_or(project.description),
                     dist_dir: custom.dist_dir.unwrap_or(default.dist_dir),
                     static_dir: custom.static_dir.unwrap_or(default.static_dir),
-                    homepage: Self::homepage(custom.homepage, project.homepage, default.homepage),
+                    homepage: Self::project_override(
+                        custom.homepage,
+                        project.homepage,
+                        default.homepage,
+                    ),
                     name: custom.name.unwrap_or(project.name),
                     no_header: custom.no_header.unwrap_or(default.no_header),
                     readme_path: custom.readme_path.unwrap_or(default.readme_path),
                     theme: custom.theme.unwrap_or(default.theme),
                     additional_css: custom.additional_css.unwrap_or(default.additional_css),
-                    repository: custom.repository,
+                    repository: Self::project_override(
+                        custom.repository,
+                        project.repository,
+                        default.repository,
+                    ),
                     syntax_theme: custom.syntax_theme.unwrap_or(default.syntax_theme),
                     analytics: custom.analytics,
                     additional_pages: custom.additional_pages,
                     social: custom.social,
+                    artifacts: custom.artifacts,
+                    version: custom.version.or(project.version),
+                    license: custom.license.or(project.license),
                     logo: custom.logo,
                     favicon: custom.favicon,
                     path_prefix: custom.path_prefix,
                 });
             }
         }
+
         Err(OrandaError::Other(String::from(
             "Your config is a bag of bees. Not today, Satan",
         )))
     }
 
-    pub fn homepage(
+    pub fn project_override(
         custom: Option<String>,
         project: Option<String>,
         default: Option<String>,
@@ -136,7 +160,7 @@ impl Config {
 impl Default for Config {
     fn default() -> Self {
         Config {
-            description: String::from(""),
+            description: String::new(),
             dist_dir: String::from("public"),
             homepage: None,
             name: String::from("My Axo project"),
@@ -149,6 +173,9 @@ impl Default for Config {
             analytics: None,
             additional_pages: None,
             social: None,
+            artifacts: None,
+            version: None,
+            license: None,
             logo: None,
             favicon: None,
             path_prefix: None,

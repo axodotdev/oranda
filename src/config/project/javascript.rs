@@ -1,17 +1,48 @@
+use serde::Deserialize;
+
 use crate::config::ProjectConfig;
 use crate::errors::*;
 use std::path::{Path, PathBuf};
 
-#[cfg(test)]
-use assert_fs::fixture::{FileWriteStr, PathChild};
-
-#[cfg(test)]
-use crate::config::project::Type;
-
-#[cfg(test)]
-use crate::tests::TEST_RUNTIME;
-
 static PACKAGE_JSON: &str = "./package.json";
+
+/// A package.json file
+#[derive(Debug, Deserialize, Eq, PartialEq)]
+pub struct PackageJson {
+    /// Name of the package
+    pub name: String,
+    /// Version of the package
+    pub version: Option<String>,
+    /// Description of the package
+    pub description: String,
+    /// Link to the homepage
+    pub homepage: Option<String>,
+    /// Link to the repository
+    pub repository: Option<Repository>,
+    /// License of the package
+    pub license: Option<String>,
+}
+
+/// A link to a repository
+#[derive(Debug, Deserialize, Eq, PartialEq)]
+#[serde(untagged)]
+pub enum Repository {
+    /// Shorthand syntax
+    Short(String),
+    /// Long form
+    Long(LongRepository),
+}
+
+/// A link to a repository
+#[derive(Debug, Deserialize, Eq, PartialEq)]
+pub struct LongRepository {
+    /// The type of link it is
+    pub r#type: String,
+    /// The url
+    pub url: String,
+    /// The subdirectory to find the project at
+    pub directory: Option<String>,
+}
 
 #[derive(Debug, Eq, PartialEq)]
 pub struct JavaScript {}
@@ -20,8 +51,32 @@ impl JavaScript {
         let path = JavaScript::config(project_root);
         let package_json_future = axoasset::load_string(path.to_str().unwrap());
         let package_json = tokio::runtime::Handle::current().block_on(package_json_future)?;
-        let data: ProjectConfig = serde_json::from_str(&package_json)?;
-        Ok(data)
+        let data: PackageJson = serde_json::from_str(&package_json)?;
+
+        let repository = data.repository.map(|repo| match repo {
+            // TODO: process this into a proper URL?
+            //
+            // It can be things like:
+            //
+            // * "npm/npm"
+            // * "github:user/repo"
+            // * "gist:11081aaa281"
+            // * "bitbucket:user/repo"
+            // * "gitlab:user/repo"
+            //
+            // Using the same syntax as https://docs.npmjs.com/cli/v7/commands/npm-install
+            Repository::Short(repo) => repo,
+            Repository::Long(repo) => repo.url,
+        });
+
+        Ok(ProjectConfig {
+            name: data.name,
+            description: data.description,
+            homepage: data.homepage,
+            repository,
+            version: data.version,
+            license: data.license,
+        })
     }
 
     pub fn config(project_root: &Option<PathBuf>) -> PathBuf {
@@ -31,56 +86,4 @@ impl JavaScript {
             Path::new(PACKAGE_JSON).to_path_buf()
         }
     }
-}
-
-#[test]
-fn it_detects_a_js_project() {
-    let tempdir = assert_fs::TempDir::new().expect("failed creating tempdir");
-    let package_json = tempdir.child("package.json");
-    package_json
-        .write_str(
-            r#"
-{
-    "name": "axo",
-    "description": ">o_o<"
-}
-    "#,
-        )
-        .expect("failed to write package_json");
-
-    assert_eq!(
-        ProjectConfig::detect(&Some(tempdir.path().to_path_buf())),
-        Some(Type::JavaScript(JavaScript {}))
-    );
-    tempdir
-        .close()
-        .expect("could not successfully delete temporary directory");
-}
-
-#[test]
-fn it_loads_a_js_project_config() {
-    let _guard = TEST_RUNTIME.enter();
-    let tempdir = assert_fs::TempDir::new().expect("failed creating tempdir");
-    let package_json = tempdir.child("package.json");
-    package_json
-        .write_str(
-            r#"
-{
-    "name": "axo",
-    "description": ">o_o<"
-}
-    "#,
-        )
-        .expect("failed to write package_json");
-
-    let config = ProjectConfig::load(Some(tempdir.path().to_path_buf()))
-        .expect("failed to load package.json")
-        .unwrap();
-
-    assert_eq!(config.name, "axo");
-    assert_eq!(config.description, ">o_o<");
-    assert_eq!(config.homepage, None);
-    tempdir
-        .close()
-        .expect("could not successfully delete temporary directory");
 }

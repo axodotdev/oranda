@@ -6,14 +6,19 @@ mod javascript;
 mod rust;
 
 use crate::errors::*;
-use javascript::JavaScript;
-use rust::Rust;
+use crate::message::{Message, MessageType};
+
+pub use javascript::JavaScript;
+pub use rust::Rust;
 
 #[derive(Debug, Deserialize, Eq, PartialEq)]
 pub struct ProjectConfig {
     pub name: String,
     pub description: String,
     pub homepage: Option<String>,
+    pub repository: Option<String>,
+    pub version: Option<String>,
+    pub license: Option<String>,
 }
 
 impl ProjectConfig {
@@ -28,12 +33,18 @@ impl ProjectConfig {
         }
     }
 
-    fn detect(project_root: &Option<PathBuf>) -> Option<Type> {
+    pub fn detect(project_root: &Option<PathBuf>) -> Option<Type> {
         if Rust::config(project_root).exists() {
+            Message::new(MessageType::Info, "Detected Rust project...").print();
+            tracing::info!("Detected Rust project...");
             Some(Type::Rust(Rust {}))
         } else if JavaScript::config(project_root).exists() {
+            Message::new(MessageType::Info, "Detected JavaScript project...").print();
+            tracing::info!("Detected JavaScript project.");
             Some(Type::JavaScript(JavaScript {}))
         } else {
+            Message::new(MessageType::Warning, "Could not identify project type...").print();
+            tracing::warn!("Could not identify project type...");
             None
         }
     }

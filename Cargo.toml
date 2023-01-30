@@ -1,9 +1,11 @@
 [package]
 name = "oranda"
 description = ">o_o<"
-version = "0.0.0"
+repository = "https://github.com/axodotdev/oranda"
+version = "0.0.1-prerelease1"
 edition = "2021"
-license = "MPL-2.0"
+authors = ["Axo Developer Co. <hello@axo.dev>"]
+license = "MIT"
 
 [[bin]]
 name = "oranda"
@@ -12,6 +14,7 @@ name = "oranda"
 minifier = "0.2.2"
 axohtml = "0.4.1"
 ammonia = "3"
+cargo-dist-schema = "0.0.1"
 lazy_static = "1.4.0"
 axum = "0.6.2"
 clap = { version = "4", features = ["derive", "help", "usage", "error-context", "wrap_help"] }
@@ -26,6 +29,10 @@ toml = "0.5.9"
 tower-http = { version = "0.3.0", features = ["fs", "trace"] }
 axoasset = { git="https://github.com/axodotdev/axoasset", branch = "main" }
 fs_extra = "1.2.0"
+console = "0.15.5"
+tracing = "0.1"
+tracing-appender = "0.2"
+tracing-subscriber = "0.3"
 
 [dev-dependencies]
 assert_cmd="2"

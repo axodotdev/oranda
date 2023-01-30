@@ -21,16 +21,16 @@ impl SyntaxHighlighterAdapter for Adapters<'_> {
         // requires a string to be returned
         match highlighted_code {
             Ok(code) => code,
-            Err(_) => String::from(""),
+            Err(_) => String::new(),
         }
     }
 
     fn build_pre_tag(&self, _attributes: &HashMap<String, String>) -> String {
-        String::from("")
+        String::new()
     }
 
     fn build_code_tag(&self, _attributes: &HashMap<String, String>) -> String {
-        String::from("")
+        String::new()
     }
 }
 
@@ -48,20 +48,25 @@ fn initialize_comrak_options() -> ComrakOptions {
     options
 }
 
-fn load(readme_path: &Path) -> Result<String> {
-    if readme_path.exists() {
-        let readme = fs::read_to_string(readme_path)?;
-        Ok(readme)
+fn load(file_path: &Path, is_main_readme: bool) -> Result<String> {
+    if file_path.exists() {
+        let file = fs::read_to_string(file_path)?;
+        Ok(file)
     } else {
+        let filedesc = if is_main_readme {
+            String::from("README")
+        } else {
+            String::from("additional file")
+        };
         Err(OrandaError::FileNotFound {
-            filedesc: String::from("README"),
-            path: readme_path.display().to_string(),
+            filedesc,
+            path: file_path.display().to_string(),
         })
     }
 }
 
-pub fn body(readme_path: &Path, syntax_theme: &SyntaxTheme) -> Result<String> {
-    let readme = load(readme_path)?;
+pub fn body(file_path: &Path, syntax_theme: &SyntaxTheme, is_main_readme: bool) -> Result<String> {
+    let readme = load(file_path, is_main_readme)?;
     let options = initialize_comrak_options();
 
     let mut plugins = ComrakPlugins::default();
