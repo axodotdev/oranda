@@ -46,7 +46,7 @@ pub fn fetch_fringe(config: &Config) -> Result<Box<link<String>>> {
     let mut css_file = File::create(css_path)?;
     css_file.write_all(minified_css.as_bytes())?;
 
-    Ok(html!(<link rel="stylesheet" href="http://localhost:64679/axo-oranda.css"></link>))
+    Ok(html!(<link rel="stylesheet" href=css_file_name></link>))
 }
 
 pub fn fetch_additional(config: &Config) -> Result<Option<Box<link<String>>>> {
