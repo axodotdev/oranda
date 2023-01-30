@@ -45,8 +45,8 @@ pub fn build(config: &Config, content: Box<div<String>>, is_index: bool) -> Resu
     };
     let footer = footer::create_footer(config);
 
-    let additional_css = css::fetch_additional_css(config)?;
-    let fringe_css = css::fetch_fringe_css(config)?;
+    let additional_css = css::fetch_additional(config)?;
+    let fringe_css = css::fetch_fringe(config)?;
 
     let doc: DOMTree<String> = html!(
     <html lang="en" id="oranda" class=theme>
