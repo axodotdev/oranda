@@ -186,13 +186,51 @@ fn create_content(table: Vec<Box<span<String>>>) -> Box<div<String>> {
 
 pub fn build_artifacts_html(config: &Config) -> Result<()> {
     let mut html = vec![];
+    let manifest = fetch_manifest(&config)?;
+
+    if let Some(Artifacts {
+        package_managers: Some(managers),
+        ..
+    }) = &config.artifacts
+    {
+        let mut list = vec![];
+
+        if let Some(Artifacts {
+            cargo_dist: Some(true),
+            ..
+        }) = &config.artifacts
+        {
+            for release in manifest.releases.iter() {
+                for artifact in release.artifacts.iter() {
+                    if let ArtifactKind::ExecutableZip = artifact.kind {
+                        let mut targets = String::new();
+                        for targ in artifact.target_triples.iter() {
+                            targets.push_str(format!("{} ", targ).as_str());
+                        }
+                        let install_code = get_install_hint(
+                            &release.artifacts,
+                            &artifact.target_triples,
+                            &config.syntax_theme,
+                        );
+                        list.extend(html!(<li class="list-none"><h5>{text!(targets)}</h5> {unsafe_text!(install_code)}</li>))
+                    }
+                }
+            }
+        }
+        for (manager, install_code) in managers.iter() {
+            list.extend(html!(<li class="list-none"><h5>{text!(manager)}</h5> {unsafe_text!(create_package_install_code(install_code, &config.syntax_theme))}</li>))
+        }
+
+        html.extend(
+            html!(<div class="package-managers-downloads"><h3>{text!("Install methods")}</h3><ul>{list}</ul></div>),
+        );
+    };
 
     if let Some(Artifacts {
         cargo_dist: Some(true),
         ..
     }) = &config.artifacts
     {
-        let manifest = fetch_manifest(&config)?;
         let mut table = vec![];
         for release in manifest.releases.iter() {
             for artifact in release.artifacts.iter() {
@@ -210,21 +248,6 @@ pub fn build_artifacts_html(config: &Config) -> Result<()> {
         }
 
         html.extend(create_content(table));
-    };
-
-    if let Some(Artifacts {
-        package_managers: Some(managers),
-        ..
-    }) = &config.artifacts
-    {
-        let mut list = vec![];
-        for (manager, install_code) in managers.iter() {
-            list.extend(html!(<li class="list-none"><h5>{text!(manager)}</h5> {unsafe_text!(create_package_install_code(install_code, &config.syntax_theme))}</li>))
-        }
-
-        html.extend(
-            html!(<div class="package-managers-downloads"><h3>{text!("Install methods")}</h3><ul>{list}</ul></div>),
-        );
     };
 
     let doc = layout::build(config, html!(<div>{html}</div>), false)?;
