@@ -127,7 +127,7 @@ pub fn get_os_script(config: &Config) -> Result<Box<script<String>>> {
     const FILE_NAME: &str = "detect_os.js";
     let script_path = format!("{}/{}", &config.dist_dir, FILE_NAME);
 
-    let mut script_file = File::create(&script_path)?;
+    let mut script_file = File::create(script_path)?;
     script_file.write_all(javascript::detect_os::OS_SCRIPT.as_bytes())?;
     Ok(html!(<script src=FILE_NAME />))
 }
