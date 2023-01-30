@@ -6,7 +6,7 @@ use crate::site::artifacts::package_managers;
 use crate::site::layout;
 use axohtml::{html, text};
 
-pub fn build_page(config: &Config) -> Result<()> {
+pub fn build(config: &Config) -> Result<()> {
     let mut html = vec![];
     let manifest = cargo_dist::fetch_manifest(config)?;
 
