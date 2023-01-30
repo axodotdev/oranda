@@ -9,8 +9,6 @@ use cargo_dist_schema::{Artifact, ArtifactKind, DistManifest};
 use crate::site::javascript;
 use crate::site::markdown::syntax_highlight::syntax_highlight;
 use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxTheme;
-use std::fs::File;
-use std::io::Write;
 
 fn get_kind_string(kind: &ArtifactKind) -> String {
     match kind {
@@ -126,9 +124,10 @@ pub fn get_install_hint(
 pub fn get_os_script(dist_dir: &String) -> Result<Box<script<String>>> {
     const FILE_NAME: &str = "detect_os.js";
     let script_path = format!("{}/{}", dist_dir, FILE_NAME);
-    let asset = axoasset::new(&script_path, javascript::detect_os::OS_SCRIPT.into())?;
+    let asset =
+        axoasset::local::LocalAsset::new(&script_path, javascript::detect_os::OS_SCRIPT.into());
 
-    tokio::runtime::Handle::current().block_on(axoasset::write(asset, dist_dir.as_str()))?;
+    axoasset::local::LocalAsset::write(&asset, dist_dir.as_str())?;
     Ok(html!(<script src=FILE_NAME />))
 }
 
@@ -176,8 +175,7 @@ pub fn build_artifacts_html(config: &Config, manifest: &DistManifest) -> Result<
     }
     let doc = build_common_html(config, create_content(table), false)?;
     let html_path = format!("{}/artifacts.html", &config.dist_dir);
-
-    let mut html_file = File::create(html_path)?;
-    html_file.write_all(doc.as_bytes())?;
+    let asset = axoasset::local::LocalAsset::new(&html_path, doc.into());
+    axoasset::local::LocalAsset::write(&asset, &config.dist_dir)?;
     Ok(())
 }
