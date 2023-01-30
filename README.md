@@ -54,7 +54,7 @@ using `cargo-dist` you can add this to your `oranda.json`:
 
 ```json
 "artifacts": {
-    "cargo-dist": true
+    "cargo_dist": true
 }
 ```
 
