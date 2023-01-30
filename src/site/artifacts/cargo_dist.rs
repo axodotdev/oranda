@@ -154,7 +154,9 @@ fn create_table_content(table: Vec<Box<span<String>>>) -> Box<div<String>> {
     </div>
     )
 }
-
+// False positive duplicate allocation warning
+// https://github.com/rust-lang/rust-clippy/issues?q=is%3Aissue+redundant_allocation+sort%3Aupdated-desc
+#[allow(clippy::vec_box)]
 pub fn build_list(manifest: &DistManifest, syntax_theme: &SyntaxTheme) -> Vec<Box<li<String>>> {
     let mut list = vec![];
     for release in manifest.releases.iter() {
@@ -165,8 +167,13 @@ pub fn build_list(manifest: &DistManifest, syntax_theme: &SyntaxTheme) -> Vec<Bo
                     targets.push_str(format!("{} ", targ).as_str());
                 }
                 let install_code =
-                    get_install_hint(&release.artifacts, &artifact.target_triples, &syntax_theme);
-                list.extend(html!(<li class="list-none"><h5>{text!(targets)}</h5> {unsafe_text!(install_code)}</li>))
+                    get_install_hint(&release.artifacts, &artifact.target_triples, syntax_theme);
+                list.extend(html!(
+                    <li class="list-none">
+                        <h5>{text!(targets)}</h5>
+                        {unsafe_text!(install_code)}
+                    </li>
+                ))
             }
         }
     }

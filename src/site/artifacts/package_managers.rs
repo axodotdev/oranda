@@ -15,6 +15,9 @@ fn create_package_install_code(code: &str, syntax_theme: &SyntaxTheme) -> String
     }
 }
 
+// False positive duplicate allocation warning
+// https://github.com/rust-lang/rust-clippy/issues?q=is%3Aissue+redundant_allocation+sort%3Aupdated-desc
+#[allow(clippy::vec_box)]
 pub fn build_list(
     managers: &LinkedHashMap<String, String>,
     config: &Config,
