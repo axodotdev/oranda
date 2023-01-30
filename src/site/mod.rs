@@ -9,6 +9,7 @@ mod footer;
 mod head;
 mod header;
 pub mod html;
+mod javascript;
 pub mod markdown;
 use crate::config::Config;
 

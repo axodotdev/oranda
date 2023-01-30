@@ -6,6 +6,7 @@ use axohtml::elements::{div, script, span};
 use axohtml::{html, text, unsafe_text};
 use cargo_dist_schema::{Artifact, ArtifactKind, DistManifest};
 
+use crate::site::javascript;
 use crate::site::markdown::syntax_highlight::syntax_highlight;
 use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxTheme;
 use std::fs::File;
@@ -123,11 +124,12 @@ pub fn get_install_hint(
 }
 
 pub fn get_os_script(config: &Config) -> Result<Box<script<String>>> {
-    let detect_os_js = axoasset::copy("src/site/javascript/detect_os.js", &config.dist_dir);
+    const FILE_NAME: &str = "detect_os.js";
+    let script_path = format!("{}/{}", &config.dist_dir, FILE_NAME);
 
-    let path = tokio::runtime::Handle::current().block_on(detect_os_js)?;
-    let path_as_string = path.strip_prefix(&config.dist_dir)?.to_string_lossy();
-    Ok(html!(<script src=path_as_string />))
+    let mut script_file = File::create(&script_path)?;
+    script_file.write_all(javascript::detect_os::OS_SCRIPT.as_bytes())?;
+    Ok(html!(<script src=FILE_NAME />))
 }
 
 // False positive duplicate allocation warning
@@ -172,7 +174,7 @@ pub fn build_artifacts_html(config: &Config, manifest: &DistManifest) -> Result<
             ]);
         }
     }
-    let doc = build_common_html(config, create_content(table))?;
+    let doc = build_common_html(config, create_content(table), false)?;
     let html_path = format!("{}/artifacts.html", &config.dist_dir);
 
     let mut html_file = File::create(html_path)?;

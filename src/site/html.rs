@@ -9,7 +9,11 @@ use crate::site::header;
 use axohtml::elements::div;
 use axohtml::{dom::DOMTree, html, text, unsafe_text};
 
-pub fn build_common_html(config: &Config, content: Box<div<String>>) -> Result<String> {
+pub fn build_common_html(
+    config: &Config,
+    content: Box<div<String>>,
+    is_main_readme: bool,
+) -> Result<String> {
     let theme = theme::css_class(&config.theme);
     let analytics = get_analytics(config);
     let google_script = match &config.analytics {
@@ -22,7 +26,13 @@ pub fn build_common_html(config: &Config, content: Box<div<String>>) -> Result<S
     };
     let os_script = match config.artifacts {
         None => None,
-        Some(_) => Some(artifacts::get_os_script(config)?),
+        Some(_) => {
+            if is_main_readme {
+                Some(artifacts::get_os_script(config)?)
+            } else {
+                None
+            }
+        }
     };
     let homepage = config.homepage.as_ref().map(|homepage| {
         html!(
@@ -78,6 +88,6 @@ pub fn build(config: &Config, content: String, is_main_readme: bool) -> Result<S
         html!(<div>{unsafe_text!(content)}</div>)
     };
 
-    let doc = build_common_html(config, home_content)?;
+    let doc = build_common_html(config, home_content, is_main_readme)?;
     Ok(doc)
 }
