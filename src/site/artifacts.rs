@@ -2,11 +2,10 @@ use crate::config::artifacts::Artifacts;
 use crate::config::Config;
 use crate::errors::*;
 use crate::site::html::build_common_html;
-use axohtml::elements::{div, script, span};
+use axohtml::elements::{div, span};
 use axohtml::{html, text, unsafe_text};
 use cargo_dist_schema::{Artifact, ArtifactKind, DistManifest};
 
-use crate::site::javascript;
 use crate::site::markdown::syntax_highlight::syntax_highlight;
 use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxTheme;
 
@@ -27,7 +26,7 @@ fn create_download_link(config: &Config, name: &String) -> String {
     }
 }
 
-pub fn create_artifacts_header(config: &Config) -> Result<Option<Box<div<String>>>> {
+pub fn create_header(config: &Config) -> Result<Option<Box<div<String>>>> {
     let Some(Artifacts { cargo_dist: true }) = &config.artifacts else {
         return Ok(None);
       };
@@ -119,16 +118,6 @@ pub fn get_install_hint(
     }
 
     String::new()
-}
-
-pub fn get_os_script(dist_dir: &String) -> Result<Box<script<String>>> {
-    const FILE_NAME: &str = "detect_os.js";
-    let script_path = format!("{}/{}", dist_dir, FILE_NAME);
-    let asset =
-        axoasset::local::LocalAsset::new(&script_path, javascript::detect_os::OS_SCRIPT.into());
-
-    axoasset::local::LocalAsset::write(&asset, dist_dir.as_str())?;
-    Ok(html!(<script src=FILE_NAME />))
 }
 
 // False positive duplicate allocation warning

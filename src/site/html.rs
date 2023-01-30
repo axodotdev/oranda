@@ -1,11 +1,12 @@
 use crate::config::analytics::{get_analytics, Analytics};
 use crate::config::{theme, Config};
 use crate::errors::*;
-use crate::site::artifacts::{self, create_artifacts_header};
+use crate::site::artifacts;
 use crate::site::css;
 use crate::site::footer::create_footer;
 use crate::site::head;
 use crate::site::header;
+use crate::site::javascript;
 use axohtml::elements::div;
 use axohtml::{dom::DOMTree, html, text, unsafe_text};
 
@@ -28,7 +29,7 @@ pub fn build_common_html(
         None => None,
         Some(_) => {
             if is_main_readme {
-                Some(artifacts::get_os_script(&config.dist_dir)?)
+                Some(javascript::get_os_script(&config.dist_dir)?)
             } else {
                 None
             }
@@ -81,7 +82,7 @@ pub fn build_common_html(
 }
 
 pub fn build(config: &Config, content: String, is_main_readme: bool) -> Result<String> {
-    let artifacts_tabs = create_artifacts_header(config)?;
+    let artifacts_tabs = artifacts::create_header(config)?;
     let home_content = if is_main_readme {
         html!(<div>{artifacts_tabs}{unsafe_text!(content)}</div>)
     } else {
