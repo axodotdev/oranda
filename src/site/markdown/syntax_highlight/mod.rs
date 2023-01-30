@@ -1,8 +1,10 @@
 pub mod syntax_themes;
 
+use std::collections::BTreeMap;
+
 use crate::errors::*;
 use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxTheme;
-use syntect::highlighting::ThemeSet;
+use syntect::highlighting::{Theme, ThemeSet};
 use syntect::html::highlighted_html_for_string;
 use syntect::parsing::{SyntaxReference, SyntaxSet};
 
@@ -27,14 +29,96 @@ fn find_syntax<'a>(ps: &'a SyntaxSet, language: &'a str) -> Result<&'a SyntaxRef
     ))
 }
 
+const THEMES: &[(&str, &str)] = &[
+    (
+        "AgilaClassicOceanicNext",
+        include_str!("syntax_themes/AgilaClassicOceanicNext.tmTheme"),
+    ),
+    (
+        "AgilaCobalt",
+        include_str!("syntax_themes/AgilaCobalt.tmTheme"),
+    ),
+    (
+        "AgilaLightSolarized",
+        include_str!("syntax_themes/AgilaLightSolarized.tmTheme"),
+    ),
+    (
+        "AgilaMonokaiExtended",
+        include_str!("syntax_themes/AgilaMonokaiExtended.tmTheme"),
+    ),
+    (
+        "AgilaNeonMonocyanide",
+        include_str!("syntax_themes/AgilaNeonMonocyanide.tmTheme"),
+    ),
+    (
+        "AgilaOceanicNext",
+        include_str!("syntax_themes/AgilaOceanicNext.tmTheme"),
+    ),
+    (
+        "AgilaOriginOceanicNext",
+        include_str!("syntax_themes/AgilaOriginOceanicNext.tmTheme"),
+    ),
+    (
+        "Base16EightiesDark",
+        include_str!("syntax_themes/Base16EightiesDark.tmTheme"),
+    ),
+    (
+        "Base16MochaDark",
+        include_str!("syntax_themes/Base16MochaDark.tmTheme"),
+    ),
+    (
+        "Base16OceanDark",
+        include_str!("syntax_themes/Base16OceanDark.tmTheme"),
+    ),
+    (
+        "Base16OceanLight",
+        include_str!("syntax_themes/Base16OceanLight.tmTheme"),
+    ),
+    (
+        "Darkmatter",
+        include_str!("syntax_themes/Darkmatter.tmTheme"),
+    ),
+    ("Dracula", include_str!("syntax_themes/Dracula.tmTheme")),
+    (
+        "GitHubLight",
+        include_str!("syntax_themes/GitHubLight.tmTheme"),
+    ),
+    (
+        "MaterialTheme",
+        include_str!("syntax_themes/MaterialTheme.tmTheme"),
+    ),
+    (
+        "MaterialThemeDarker",
+        include_str!("syntax_themes/MaterialThemeDarker.tmTheme"),
+    ),
+    (
+        "MaterialThemeLighter",
+        include_str!("syntax_themes/MaterialThemeLighter.tmTheme"),
+    ),
+    (
+        "MaterialThemePalenight",
+        include_str!("syntax_themes/MaterialThemePalenight.tmTheme"),
+    ),
+    ("NightOwl", include_str!("syntax_themes/NightOwl.tmTheme")),
+    ("OneDark", include_str!("syntax_themes/OneDark.tmTheme")),
+];
+
 pub fn syntax_highlight(
     lang: Option<&str>,
     code: &str,
     syntax_theme: &SyntaxTheme,
 ) -> Result<String> {
     let ps = SyntaxSet::load_defaults_newlines();
-    let theme_set =
-        ThemeSet::load_from_folder("src/site/markdown/syntax_highlight/syntax_themes").unwrap();
+    let themes = THEMES
+        .iter()
+        .map(|(name, body)| {
+            use std::io::Cursor;
+            let mut buff = Cursor::new(body);
+            let theme = ThemeSet::load_from_reader(&mut buff).unwrap();
+            Ok((name.to_string(), theme))
+        })
+        .collect::<Result<BTreeMap<String, Theme>>>()?;
+    let theme_set = ThemeSet { themes };
     let language = match lang {
         None | Some("") => "rs",
         Some(l) => l,
