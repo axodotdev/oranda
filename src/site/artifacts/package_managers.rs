@@ -8,7 +8,7 @@ use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxTheme;
 use linked_hash_map::LinkedHashMap;
 
 pub fn create_package_install_code(code: &str, syntax_theme: &SyntaxTheme) -> String {
-    let highlighted_code = syntax_highlight(Some("sh"), code, &syntax_theme);
+    let highlighted_code = syntax_highlight(Some("sh"), code, syntax_theme);
     match highlighted_code {
         Ok(code) => code,
         Err(_) => format!("<code class='text-center break-all'>{}</code>", code),

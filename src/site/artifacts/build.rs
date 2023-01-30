@@ -11,7 +11,7 @@ use crate::site::artifacts::package_managers;
 
 pub fn build_page(config: &Config) -> Result<()> {
     let mut html = vec![];
-    let manifest = fetch_manifest(&config)?;
+    let manifest = fetch_manifest(config)?;
 
     if let Some(Artifacts {
         package_managers: Some(managers),
@@ -56,7 +56,7 @@ pub fn build_page(config: &Config) -> Result<()> {
         ..
     }) = &config.artifacts
     {
-        html.extend(cargo_dist::build_table(manifest, &config));
+        html.extend(cargo_dist::build_table(manifest, config));
     };
 
     let doc = layout::build(config, html!(<div>{html}</div>), false)?;

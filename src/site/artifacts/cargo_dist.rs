@@ -87,7 +87,7 @@ pub fn build(config: &Config) -> Result<Box<div<String>>> {
         )));
     }
 
-    let typed = fetch_manifest(&config)?;
+    let typed = fetch_manifest(config)?;
 
     let mut html: Vec<Box<div<String>>> = vec![];
     for release in typed.releases.iter() {
