@@ -36,6 +36,7 @@ pub struct Config {
     pub favicon: Option<String>,
     pub path_prefix: Option<String>,
     pub license: Option<String>,
+    pub md_book: Option<String>,
 }
 
 impl Config {
@@ -100,6 +101,7 @@ impl Config {
                     logo: custom.logo,
                     favicon: custom.favicon,
                     path_prefix: custom.path_prefix,
+                    md_book: custom.md_book,
                 });
             // otherwise both oranda config and project manifest exists
             } else if let Some(project) = project {
@@ -133,6 +135,7 @@ impl Config {
                     logo: custom.logo,
                     favicon: custom.favicon,
                     path_prefix: custom.path_prefix,
+                    md_book: custom.md_book,
                 });
             }
         }
@@ -180,6 +183,7 @@ impl Default for Config {
             favicon: None,
             path_prefix: None,
             static_dir: String::from("static"),
+            md_book: None,
         }
     }
 }

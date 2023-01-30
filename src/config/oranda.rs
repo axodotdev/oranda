@@ -39,6 +39,7 @@ pub struct OrandaConfig {
     pub favicon: Option<String>,
     pub path_prefix: Option<String>,
     pub license: Option<String>,
+    pub md_book: Option<String>,
 }
 
 impl OrandaConfig {
@@ -57,11 +58,7 @@ impl OrandaConfig {
                 Ok(Some(data))
             }
             Err(_) => {
-                Message::new(
-                    MessageType::Warning,
-                    "No config found, using default values",
-                )
-                .print();
+                Message::new(MessageType::Info, "No config found, using default values").print();
                 Ok(None)
             }
         }

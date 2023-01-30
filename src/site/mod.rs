@@ -10,6 +10,7 @@ mod head;
 mod header;
 pub mod html;
 mod javascript;
+mod layout;
 pub mod markdown;
 use crate::config::Config;
 
@@ -25,6 +26,10 @@ impl Site {
         let is_main_readme = file_path == &config.readme_path;
         let content = markdown::body(markdown_path, &config.syntax_theme, is_main_readme)?;
         let html = html::build(config, content, is_main_readme)?;
+
+        if let Some(book_path) = &config.md_book {
+            Self::copy_static(&config.dist_dir, book_path)?;
+        }
 
         Ok(Site { html })
     }

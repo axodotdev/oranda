@@ -1,7 +1,7 @@
 use crate::config::artifacts::Artifacts;
 use crate::config::Config;
 use crate::errors::*;
-use crate::site::html::build_common_html;
+use crate::site::layout;
 use axohtml::elements::{div, span};
 use axohtml::{html, text, unsafe_text};
 use cargo_dist_schema::{Artifact, ArtifactKind, DistManifest};
@@ -162,7 +162,7 @@ pub fn build_artifacts_html(config: &Config, manifest: &DistManifest) -> Result<
             ]);
         }
     }
-    let doc = build_common_html(config, create_content(table), false)?;
+    let doc = layout::build(config, create_content(table), false)?;
     let html_path = format!("{}/artifacts.html", &config.dist_dir);
     let asset = axoasset::local::LocalAsset::new(&html_path, doc.into());
     axoasset::local::LocalAsset::write(&asset, &config.dist_dir)?;
