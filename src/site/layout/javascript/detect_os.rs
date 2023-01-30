@@ -1,4 +1,4 @@
-pub const OS_SCRIPT: &str = r#"
+pub const SCRIPT: &str = r#"
 /* Code modified from the blender website
  * https://www.blender.org/wp-content/themes/bthree/assets/js/get_os.js?x82196
  */

@@ -1,11 +1,11 @@
+mod css;
+mod footer;
+mod head;
+mod header;
+mod javascript;
+
 use crate::config::{analytics, theme, Config};
 use crate::errors::*;
-use crate::site::css;
-use crate::site::footer;
-use crate::site::head;
-use crate::site::header;
-
-use crate::site::javascript;
 use axohtml::dom::DOMTree;
 use axohtml::elements::div;
 use axohtml::{html, text};
