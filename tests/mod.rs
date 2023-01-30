@@ -63,7 +63,12 @@ fn it_loads_a_js_project_config() {
             r#"
 {
     "name": "axo",
-    "description": ">o_o<"
+    "version": "0.1.0",
+    "description": ">o_o<",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/axodotdev/not-a-real-project"
+    }
 }
     "#,
         )
@@ -180,8 +185,6 @@ fn creates_nav() {
 fn creates_footer() {
     let _guard = TEST_RUNTIME.enter();
     let site = Site::build(&config(), &config().readme_path).unwrap();
-
-    println!("{:?}", site.html);
 
     assert!(site.html.contains("<footer class=\"axo-gradient flex items-center justify-between px-4 py-2 text-slate-50 text-xs w-full\"><span>My Axo project</span></footer>"));
 }

@@ -70,11 +70,13 @@ pub fn build_common_html(config: &Config, content: Box<div<String>>) -> Result<S
     Ok(doc.to_string())
 }
 
-pub fn build(config: &Config, content: String) -> Result<String> {
+pub fn build(config: &Config, content: String, is_main_readme: bool) -> Result<String> {
     let artifacts_tabs = create_artifacts_header(config)?;
-
-    let home_content = html!(<div>{artifacts_tabs}{ unsafe_text!(content) }
-    </div>);
+    let home_content = if is_main_readme {
+        html!(<div>{artifacts_tabs}{unsafe_text!(content)}</div>)
+    } else {
+        html!(<div>{unsafe_text!(content)}</div>)
+    };
 
     let doc = build_common_html(config, home_content)?;
     Ok(doc)

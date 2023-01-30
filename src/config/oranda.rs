@@ -48,10 +48,22 @@ impl OrandaConfig {
         Message::new(MessageType::Info, &msg).print();
         tracing::info!("{}", &msg);
         let config_future = axoasset::load_string(&config_path);
+        let config_result = tokio::runtime::Handle::current().block_on(config_future);
 
-        let config = tokio::runtime::Handle::current().block_on(config_future)?;
-        let data: OrandaConfig = serde_json::from_str(config.as_str())?;
-        tracing::debug!("{:?}", data);
-        Ok(Some(data))
+        match config_result {
+            Ok(config) => {
+                let data: OrandaConfig = serde_json::from_str(config.as_str())?;
+                tracing::debug!("{:?}", data);
+                Ok(Some(data))
+            }
+            Err(_) => {
+                Message::new(
+                    MessageType::Warning,
+                    "No config found, using default values",
+                )
+                .print();
+                Ok(None)
+            }
+        }
     }
 }
