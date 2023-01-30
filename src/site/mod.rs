@@ -25,6 +25,10 @@ impl Site {
         let content = markdown::body(markdown_path, &config.syntax_theme, is_main_readme)?;
         let html = html::build(config, content, is_main_readme)?;
 
+        if let Some(book_path) = &config.md_book {
+            Self::copy_static(&config.dist_dir, book_path)?;
+        }
+
         Ok(Site { html })
     }
 
