@@ -1,3 +1,4 @@
+pub const OS_SCRIPT: &str = r#"
 /* Code modified from the blender website
  * https://www.blender.org/wp-content/themes/bthree/assets/js/get_os.js?x82196
  */
@@ -143,3 +144,4 @@ if (hit) {
 } else {
   document.querySelector(".backup-download").classList.remove("hidden")
 }
+"#;

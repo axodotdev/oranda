@@ -2,14 +2,12 @@ use crate::config::artifacts::Artifacts;
 use crate::config::Config;
 use crate::errors::*;
 use crate::site::layout;
-use axohtml::elements::{div, script, span};
+use axohtml::elements::{div, span};
 use axohtml::{html, text, unsafe_text};
 use cargo_dist_schema::{Artifact, ArtifactKind, DistManifest};
 
 use crate::site::markdown::syntax_highlight::syntax_highlight;
 use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxTheme;
-use std::fs::File;
-use std::io::Write;
 
 fn get_kind_string(kind: &ArtifactKind) -> String {
     match kind {
@@ -28,7 +26,7 @@ fn create_download_link(config: &Config, name: &String) -> String {
     }
 }
 
-pub fn create_artifacts_header(config: &Config) -> Result<Option<Box<div<String>>>> {
+pub fn create_header(config: &Config) -> Result<Option<Box<div<String>>>> {
     let Some(Artifacts { cargo_dist: true }) = &config.artifacts else {
         return Ok(None);
       };
@@ -122,14 +120,6 @@ pub fn get_install_hint(
     String::new()
 }
 
-pub fn get_os_script(config: &Config) -> Result<Box<script<String>>> {
-    let detect_os_js = axoasset::copy("src/site/javascript/detect_os.js", &config.dist_dir);
-
-    let path = tokio::runtime::Handle::current().block_on(detect_os_js)?;
-    let path_as_string = path.strip_prefix(&config.dist_dir)?.to_string_lossy();
-    Ok(html!(<script src=path_as_string />))
-}
-
 // False positive duplicate allocation warning
 // https://github.com/rust-lang/rust-clippy/issues?q=is%3Aissue+redundant_allocation+sort%3Aupdated-desc
 #[allow(clippy::vec_box)]
@@ -172,10 +162,9 @@ pub fn build_artifacts_html(config: &Config, manifest: &DistManifest) -> Result<
             ]);
         }
     }
-    let doc = layout::build(config, create_content(table))?;
+    let doc = layout::build(config, create_content(table), false)?;
     let html_path = format!("{}/artifacts.html", &config.dist_dir);
-
-    let mut html_file = File::create(html_path)?;
-    html_file.write_all(doc.as_bytes())?;
+    let asset = axoasset::local::LocalAsset::new(&html_path, doc.into());
+    axoasset::local::LocalAsset::write(&asset, &config.dist_dir)?;
     Ok(())
 }

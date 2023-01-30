@@ -1,16 +1,16 @@
 use crate::config::{analytics, theme, Config};
 use crate::errors::*;
-use crate::site::artifacts;
 use crate::site::css;
 use crate::site::footer;
 use crate::site::head;
 use crate::site::header;
 
+use crate::site::javascript;
 use axohtml::dom::DOMTree;
 use axohtml::elements::div;
 use axohtml::{html, text};
 
-pub fn build(config: &Config, content: Box<div<String>>) -> Result<String> {
+pub fn build(config: &Config, content: Box<div<String>>, is_index: bool) -> Result<String> {
     let theme = theme::css_class(&config.theme);
     let analytics = analytics::get_analytics(config);
     let google_script = match &config.analytics {
@@ -23,7 +23,13 @@ pub fn build(config: &Config, content: Box<div<String>>) -> Result<String> {
     };
     let os_script = match config.artifacts {
         None => None,
-        Some(_) => Some(artifacts::get_os_script(config)?),
+        Some(_) => {
+            if is_index {
+                Some(javascript::get_os_script(&config.dist_dir)?)
+            } else {
+                None
+            }
+        }
     };
     let homepage = config.homepage.as_ref().map(|homepage| {
         html!(
