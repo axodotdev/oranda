@@ -1,12 +1,18 @@
 use crate::config::Config;
 use crate::errors::*;
-use axohtml::elements::{div, span};
+use crate::site::markdown::syntax_highlight::syntax_highlight;
+use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxTheme;
+use axohtml::elements::{div, li, span};
 use axohtml::{html, text, unsafe_text};
 use cargo_dist_schema::{Artifact, ArtifactKind, DistManifest};
 
-use super::fetch_manifest;
-use crate::site::markdown::syntax_highlight::syntax_highlight;
-use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxTheme;
+pub fn fetch_manifest(config: &Config) -> std::result::Result<DistManifest, reqwest::Error> {
+    let url = create_download_link(config, &String::from("dist-manifest.json"));
+
+    let resp = reqwest::blocking::get(url)?;
+
+    resp.json::<DistManifest>()
+}
 
 pub fn get_install_hint(
     artifacts: &[Artifact],
@@ -37,33 +43,7 @@ pub fn get_install_hint(
     String::new()
 }
 
-// False positive duplicate allocation warning
-// https://github.com/rust-lang/rust-clippy/issues?q=is%3Aissue+redundant_allocation+sort%3Aupdated-desc
-#[allow(clippy::vec_box)]
-fn create_content(table: Vec<Box<span<String>>>) -> Box<div<String>> {
-    html!(
-    <div>
-        <h3>{text!("Downloads")}</h3>
-        <div class="table">
-            <span class="th">
-                {text!("Name")}
-            </span>
-            <span class="th">
-                {text!("Kind")}
-            </span>
-            <span class="th">
-            {text!("Target")}
-            </span>
-            <span class="th">
-                {text!("Download")}
-            </span>
-            {table}
-        </div>
-    </div>
-    )
-}
-
-pub fn get_kind_string(kind: &ArtifactKind) -> String {
+fn get_kind_string(kind: &ArtifactKind) -> String {
     match kind {
         ArtifactKind::ExecutableZip => String::from("Executable Zip"),
         ArtifactKind::Symbols => String::from("Symbols"),
@@ -72,7 +52,7 @@ pub fn get_kind_string(kind: &ArtifactKind) -> String {
     }
 }
 
-pub fn create_download_link(config: &Config, name: &String) -> String {
+fn create_download_link(config: &Config, name: &String) -> String {
     if let (Some(repo), Some(version)) = (&config.repository, &config.version) {
         format!("{}/releases/download/v{}/{}", repo, version, name)
     } else {
@@ -146,5 +126,50 @@ pub fn build_table(manifest: DistManifest, config: &Config) -> Box<div<String>> 
         }
     }
 
-    create_content(table)
+    create_table_content(table)
+}
+
+// False positive duplicate allocation warning
+// https://github.com/rust-lang/rust-clippy/issues?q=is%3Aissue+redundant_allocation+sort%3Aupdated-desc
+#[allow(clippy::vec_box)]
+fn create_table_content(table: Vec<Box<span<String>>>) -> Box<div<String>> {
+    html!(
+    <div>
+        <h3>{text!("Downloads")}</h3>
+        <div class="table">
+            <span class="th">
+                {text!("Name")}
+            </span>
+            <span class="th">
+                {text!("Kind")}
+            </span>
+            <span class="th">
+            {text!("Target")}
+            </span>
+            <span class="th">
+                {text!("Download")}
+            </span>
+            {table}
+        </div>
+    </div>
+    )
+}
+
+pub fn build_list(manifest: &DistManifest, syntax_theme: &SyntaxTheme) -> Vec<Box<li<String>>> {
+    let mut list = vec![];
+    for release in manifest.releases.iter() {
+        for artifact in release.artifacts.iter() {
+            if let ArtifactKind::ExecutableZip = artifact.kind {
+                let mut targets = String::new();
+                for targ in artifact.target_triples.iter() {
+                    targets.push_str(format!("{} ", targ).as_str());
+                }
+                let install_code =
+                    get_install_hint(&release.artifacts, &artifact.target_triples, &syntax_theme);
+                list.extend(html!(<li class="list-none"><h5>{text!(targets)}</h5> {unsafe_text!(install_code)}</li>))
+            }
+        }
+    }
+
+    list
 }
