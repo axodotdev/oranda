@@ -63,7 +63,12 @@ fn it_loads_a_js_project_config() {
             r#"
 {
     "name": "axo",
-    "description": ">o_o<"
+    "version": "0.1.0",
+    "description": ">o_o<",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/axodotdev/not-a-real-project"
+    }
 }
     "#,
         )
