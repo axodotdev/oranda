@@ -25,7 +25,10 @@ pub fn build(config: &Config, content: Box<div<String>>, is_index: bool) -> Resu
         None => None,
         Some(_) => {
             if is_index {
-                Some(javascript::get_os_script(&config.dist_dir)?)
+                Some(javascript::get_os_script(
+                    &config.dist_dir,
+                    &config.path_prefix,
+                )?)
             } else {
                 None
             }
@@ -39,7 +42,11 @@ pub fn build(config: &Config, content: Box<div<String>>, is_index: bool) -> Resu
     let banner = header::repo_banner(config);
     let meta_tags = head::create_meta_tags(config);
     let favicon = if let Some(favicon) = config.favicon.clone() {
-        Some(head::get_favicon(favicon, config.dist_dir.clone())?)
+        Some(head::get_favicon(
+            favicon,
+            config.dist_dir.clone(),
+            &config.path_prefix,
+        )?)
     } else {
         None
     };

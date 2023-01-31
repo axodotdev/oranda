@@ -7,6 +7,7 @@ pub mod artifacts;
 pub mod html;
 mod layout;
 pub mod markdown;
+mod path;
 use crate::config::Config;
 
 #[derive(Debug)]

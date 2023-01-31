@@ -2,6 +2,7 @@ use crate::config::Config;
 use crate::errors::*;
 use crate::site::markdown::syntax_highlight::syntax_highlight;
 use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxTheme;
+use crate::site::path;
 use axohtml::elements::{div, li, span};
 use axohtml::{html, text, unsafe_text};
 use cargo_dist_schema::{Artifact, ArtifactKind, DistManifest};
@@ -66,6 +67,8 @@ pub fn build(config: &Config) -> Result<Box<div<String>>> {
             "The repository and version are required for cargo_dist",
         )));
     }
+    let downloads_href =
+        path::generate_prefix_link(&config.path_prefix, String::from("artifacts.html"));
 
     let typed = fetch_manifest(config)?;
 
@@ -93,7 +96,7 @@ pub fn build(config: &Config) -> Result<Box<div<String>>> {
                                 <a href=url class="text-center">
                                     {text!(text)}
                                 </a>
-                                <a href="/artifacts.html" class="download-all">{text!("View all downloads")}</a>
+                                <a href=&downloads_href class="download-all">{text!("View all downloads")}</a>
                             </div>
                         </div>
                     ));
@@ -104,7 +107,7 @@ pub fn build(config: &Config) -> Result<Box<div<String>>> {
     Ok(html!(
     <div class="artifacts">
         {html}
-        <a href="/artifacts.html" class="hidden backup-download business-button primary">{text!("View installation options")}</a>
+        <a href=&downloads_href class="hidden backup-download business-button primary">{text!("View installation options")}</a>
     </div>
     ))
 }
