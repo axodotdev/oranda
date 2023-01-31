@@ -1,13 +1,14 @@
-use crate::errors::*;
-
 use std::fs::File;
 use std::io::Write;
 use std::path::Path;
+
 pub mod artifacts;
-pub mod html;
 mod layout;
 pub mod markdown;
+pub mod page;
+
 use crate::config::Config;
+use crate::errors::*;
 
 #[derive(Debug)]
 pub struct Site {
@@ -20,33 +21,13 @@ impl Site {
         let markdown_path = Path::new(&file_path);
         let is_main_readme = file_path == &config.readme_path;
         let content = markdown::body(markdown_path, &config.syntax_theme, is_main_readme)?;
-        let html = html::build(config, content, is_main_readme)?;
+        let html = page::build(config, content, is_main_readme)?;
 
         if let Some(book_path) = &config.md_book {
             Self::copy_static(&config.dist_dir, book_path)?;
         }
 
         Ok(Site { html })
-    }
-
-    fn get_html_file_name(file: &String, config: &Config) -> Result<String> {
-        let file_name = if file == &config.readme_path {
-            "index.html".to_string()
-        } else {
-            let file_path = Path::new(file).file_stem();
-
-            match file_path {
-                None => {
-                    return Err(OrandaError::FileNotFound {
-                        filedesc: "Additional File".to_string(),
-                        path: file.to_string(),
-                    });
-                }
-                Some(p) => format!("{}.html", p.to_str().unwrap()),
-            }
-        };
-
-        Ok(file_name)
     }
 
     pub fn copy_static(dist_path: &String, static_path: &String) -> Result<()> {
@@ -71,7 +52,7 @@ impl Site {
 
         for file in files {
             let site = Self::build(config, file)?;
-            let file_name = Self::get_html_file_name(file, config).unwrap();
+            let file_name = page::get_html_file_name(file, config)?;
 
             let html_path = format!("{}/{}", &dist, file_name);
 
