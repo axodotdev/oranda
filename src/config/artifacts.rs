@@ -1,3 +1,4 @@
+use linked_hash_map::LinkedHashMap;
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
@@ -29,5 +30,6 @@ enum ArtifactSystem {
 
 #[derive(Debug, Deserialize)]
 pub struct Artifacts {
-    pub cargo_dist: bool,
+    pub cargo_dist: Option<bool>,
+    pub package_managers: Option<LinkedHashMap<String, String>>,
 }

@@ -6,7 +6,7 @@ use crate::site::layout;
 use axohtml::{html, unsafe_text};
 
 pub fn build(config: &Config, content: String, is_index: bool) -> Result<String> {
-    let artifacts_tabs = artifacts::create_header(config)?;
+    let artifacts_tabs = artifacts::build_header(config)?;
     let home_content = if is_index {
         html!(<div>{artifacts_tabs}{unsafe_text!(content)}</div>)
     } else {

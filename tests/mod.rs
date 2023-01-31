@@ -6,6 +6,8 @@ use oranda::config::Config;
 use oranda::site::Site;
 
 use assert_fs::fixture::{FileWriteStr, PathChild};
+use linked_hash_map::LinkedHashMap;
+use oranda::config::artifacts::Artifacts;
 
 lazy_static::lazy_static! {
    pub static ref TEST_RUNTIME: tokio::runtime::Runtime = {
@@ -18,7 +20,7 @@ lazy_static::lazy_static! {
     };
 }
 
-fn config() -> Config {
+fn config_no_artifacts() -> Config {
     Config {
         description: String::from("you axolotl questions"),
         readme_path: String::from("./src/site/fixtures/readme.md"),
@@ -136,7 +138,7 @@ description = ">o_o<"
 #[test]
 fn it_adds_additional_css() {
     let _guard = TEST_RUNTIME.enter();
-    let site = Site::build(&config(), &config().readme_path).unwrap();
+    let site = Site::build(&config_no_artifacts(), &config_no_artifacts().readme_path).unwrap();
     assert!(site
         .html
         .contains("<link href=\"custom.css\" rel=\"stylesheet\"/>"));
@@ -145,7 +147,7 @@ fn it_adds_additional_css() {
 #[test]
 fn it_creates_additional_css_file() {
     let _guard = TEST_RUNTIME.enter();
-    Site::build(&config(), &config().readme_path).unwrap();
+    Site::build(&config_no_artifacts(), &config_no_artifacts().readme_path).unwrap();
     let custom = fs::read_to_string("public/custom.css").unwrap();
     assert!(custom.eq("/* ./src/site/fixtures/additional.css */body{background:red;}"))
 }
@@ -153,7 +155,7 @@ fn it_creates_additional_css_file() {
 #[test]
 fn it_builds_the_site() {
     let _guard = TEST_RUNTIME.enter();
-    let site = Site::build(&config(), &config().readme_path).unwrap();
+    let site = Site::build(&config_no_artifacts(), &config_no_artifacts().readme_path).unwrap();
     assert!(site.html.contains("<h1>axo</h1>"));
     assert!(site.html.contains("custom.css"));
 }
@@ -161,7 +163,7 @@ fn it_builds_the_site() {
 #[test]
 fn reads_description() {
     let _guard = TEST_RUNTIME.enter();
-    let site = Site::build(&config(), &config().readme_path).unwrap();
+    let site = Site::build(&config_no_artifacts(), &config_no_artifacts().readme_path).unwrap();
     assert!(site.html.contains("you axolotl questions"));
     assert!(site.html.contains("My Axo project"))
 }
@@ -169,14 +171,14 @@ fn reads_description() {
 #[test]
 fn reads_theme() {
     let _guard = TEST_RUNTIME.enter();
-    let site = Site::build(&config(), &config().readme_path).unwrap();
+    let site = Site::build(&config_no_artifacts(), &config_no_artifacts().readme_path).unwrap();
     assert!(site.html.contains("html class=\"dark\""));
 }
 
 #[test]
 fn creates_nav() {
     let _guard = TEST_RUNTIME.enter();
-    let site = Site::build(&config(), &config().readme_path).unwrap();
+    let site = Site::build(&config_no_artifacts(), &config_no_artifacts().readme_path).unwrap();
 
     assert!(site.html.contains("<nav class=\"nav\"><ul><li><a href=\"/\">Home</a></li><li><a href=\"/readme.html\">readme</a></li></ul></nav>"));
 }
@@ -184,7 +186,81 @@ fn creates_nav() {
 #[test]
 fn creates_footer() {
     let _guard = TEST_RUNTIME.enter();
-    let site = Site::build(&config(), &config().readme_path).unwrap();
+    let site = Site::build(&config_no_artifacts(), &config_no_artifacts().readme_path).unwrap();
 
     assert!(site.html.contains("<footer class=\"axo-gradient flex items-center justify-between px-4 py-2 text-slate-50 text-xs w-full\"><span>My Axo project</span></footer>"));
+}
+
+fn config_cargo_dist() -> Config {
+    Config {
+        artifacts: Some(Artifacts {
+            cargo_dist: Some(true),
+            package_managers: None,
+        }),
+        repository: Some(String::from("https://github.com/axodotdev/oranda")),
+        version: Some(String::from("0.0.1-prerelease1")),
+        ..Default::default()
+    }
+}
+
+#[test]
+fn creates_nav_item() {
+    let _guard = TEST_RUNTIME.enter();
+    let site = Site::build(&config_cargo_dist(), &config_cargo_dist().readme_path).unwrap();
+    assert!(site
+        .html
+        .contains("<a class=\"download-all\" href=\"/artifacts.html\">View all downloads</a>"));
+}
+
+#[test]
+fn loads_js() {
+    let _guard = TEST_RUNTIME.enter();
+    let site = Site::build(&config_cargo_dist(), &config_cargo_dist().readme_path).unwrap();
+    assert!(site.html.contains("<script src=\"detect_os.js\"></script>"));
+}
+
+#[test]
+fn creates_download_for_mac() {
+    let _guard = TEST_RUNTIME.enter();
+    let site = Site::build(&config_cargo_dist(), &config_cargo_dist().readme_path).unwrap();
+    assert!(site.html.contains("<a class=\"text-center\" href=\"https://github.com/axodotdev/oranda/releases/download/v0.0.1-prerelease1/oranda-v0.0.1-prerelease1-x86_64-apple-darwin.tar.xz\">Download v0.0.1-prerelease1</a><a class=\"download-all\" href=\"/artifacts.html\">View all downloads</a>"));
+}
+
+#[test]
+fn creates_downloads_page() {
+    let _guard = TEST_RUNTIME.enter();
+    Site::build(&config_cargo_dist(), &config_cargo_dist().readme_path).unwrap();
+    let path = "public/artifacts.html";
+    let artifacts_page = fs::read_to_string(path).unwrap();
+    assert!(artifacts_page.contains("<h3>Downloads</h3>"));
+    assert!(artifacts_page.contains("<span>oranda-v0.0.1-prerelease1-x86_64-pc-windows-msvc.zip</span><span>Executable Zip</span><span>x86_64-pc-windows-msvc</span><span><a href=\"https://github.com/axodotdev/oranda/releases/download/v0.0.1-prerelease1/oranda-v0.0.1-prerelease1-x86_64-pc-windows-msvc.zip\">Download</a></span>"));
+    fs::remove_file(path).unwrap();
+}
+
+fn config_package_managers() -> Config {
+    let mut package_managers = LinkedHashMap::new();
+    package_managers.insert(String::from("npm"), String::from("npm install oranda"));
+    package_managers.insert(String::from("yarn"), String::from("yarn add oranda"));
+    Config {
+        artifacts: Some(Artifacts {
+            cargo_dist: None,
+            package_managers: Some(package_managers),
+        }),
+        repository: Some(String::from("https://github.com/axodotdev/oranda")),
+        version: Some(String::from("0.0.1-prerelease1")),
+        ..Default::default()
+    }
+}
+
+#[test]
+fn creates_nav_item_package_managers() {
+    let _guard = TEST_RUNTIME.enter();
+    let site = Site::build(
+        &config_package_managers(),
+        &config_package_managers().readme_path,
+    )
+    .unwrap();
+    assert!(site
+        .html
+        .contains("<a class=\"download-all\" href=\"/artifacts.html\">View all downloads</a>"));
 }
