@@ -6,11 +6,9 @@ mod javascript;
 
 use crate::config::{analytics, theme, Config};
 use crate::errors::*;
-use axohtml::dom::DOMTree;
-use axohtml::elements::div;
-use axohtml::{html, text};
+use axohtml::{html, text, unsafe_text};
 
-pub fn build(config: &Config, content: Box<div<String>>, is_index: bool) -> Result<String> {
+pub fn build(config: &Config, content: String, is_index: bool) -> Result<String> {
     let theme = theme::css_class(&config.theme);
     let analytics = analytics::get_analytics(config);
     let google_script = match &config.analytics {
@@ -48,7 +46,7 @@ pub fn build(config: &Config, content: Box<div<String>>, is_index: bool) -> Resu
     let additional_css = css::fetch_additional(config)?;
     let fringe_css = css::fetch_fringe(config)?;
 
-    let doc: DOMTree<String> = html!(
+    let doc: String = html!(
     <html lang="en" id="oranda" class=theme>
         <head>
             <title>{ text!(&config.name) }</title>
@@ -63,7 +61,7 @@ pub fn build(config: &Config, content: Box<div<String>>, is_index: bool) -> Resu
             {banner}
             <main>
                 {header}
-                {content}
+                {unsafe_text!(content)}
             </main>
             {footer}
         </div>
@@ -72,7 +70,8 @@ pub fn build(config: &Config, content: Box<div<String>>, is_index: bool) -> Resu
             {os_script}
         </body>
     </html>
-    );
+    )
+    .to_string();
 
-    Ok(doc.to_string())
+    Ok(doc)
 }

@@ -6,13 +6,14 @@ use crate::site::artifacts;
 use crate::site::layout;
 use crate::site::markdown::{self, SyntaxTheme};
 
+use axohtml::elements::div;
 use axohtml::{html, unsafe_text};
 
 #[derive(Debug)]
 pub struct Page {
     pub contents: String,
     pub filename: String,
-    is_index: bool,
+    pub is_index: bool,
 }
 
 impl Page {
@@ -41,9 +42,10 @@ impl Page {
     pub fn build(self, config: &Config) -> Result<String> {
         let page_contents = if self.is_index {
             let artifacts_header = artifacts::build_header(config)?;
-            html!(<div>{artifacts_header}{unsafe_text!(self.contents)}</div>)
+            html!(<div>{artifacts_header}{unsafe_text!(self.contents)}</div>).to_string()
         } else {
-            html!(<div>{unsafe_text!(self.contents)}</div>)
+            let html: Box<div<String>> = html!(<div>{unsafe_text!(self.contents)}</div>);
+            html.to_string()
         };
         layout::build(config, page_contents, self.is_index)
     }

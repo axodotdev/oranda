@@ -1,7 +1,7 @@
 use std::path::Path;
 
 pub mod artifacts;
-mod layout;
+pub mod layout;
 pub mod markdown;
 pub mod page;
 use page::Page;

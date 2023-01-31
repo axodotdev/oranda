@@ -1,9 +1,7 @@
 mod fixtures;
-use fixtures::config;
+use fixtures::{config, page};
 
 use oranda::config::project::{JavaScript, ProjectConfig, Rust, Type};
-use oranda::site::artifacts;
-use oranda::site::page::Page;
 
 use assert_fs::fixture::{FileWriteStr, PathChild};
 
@@ -149,72 +147,68 @@ description = ">o_o<"
 fn it_builds_the_site() {
     let _guard = TEST_RUNTIME.enter();
     let config = &config::no_artifacts();
-    let page = Page::new_from_file(config, &config.readme_path).unwrap();
-    assert!(page.contents.contains("<h1>axo</h1>"));
-    //    assert!(page.contents.contains("custom.css"));
+    let page_html = page::index(config);
+    assert!(page_html.contains("<h1>axo</h1>"));
+    assert!(page_html.contains("custom.css"));
 }
 
-//#[test]
-//fn reads_description() {
-//    let _guard = TEST_RUNTIME.enter();
-//    let config = &config::no_artifacts();
-//    let site = Site::build(config, &config.readme_path).unwrap();
-//    assert!(site.html.contains("you axolotl questions"));
-//    assert!(site.html.contains("My Axo project"))
-//}
+#[test]
+fn reads_description() {
+    let _guard = TEST_RUNTIME.enter();
+    let config = &config::no_artifacts();
+    let page_html = page::index(config);
+    assert!(page_html.contains("you axolotl questions"));
+    assert!(page_html.contains("My Axo project"))
+}
 
-//#[test]
-//fn reads_theme() {
-//    let _guard = TEST_RUNTIME.enter();
-//    let config = &config::no_artifacts();
-//    let site = Site::build(config, &config.readme_path).unwrap();
-//    assert!(site.html.contains("html class=\"dark\""));
-//}
+#[test]
+fn reads_theme() {
+    let _guard = TEST_RUNTIME.enter();
+    let config = &config::no_artifacts();
+    let page_html = page::index(config);
+    assert!(page_html.contains("html class=\"dark\""));
+}
 
-//#[test]
-//fn creates_nav() {
-//    let _guard = TEST_RUNTIME.enter();
-//    let config = &config::no_artifacts();
-//    let site = Site::build(config, &config.readme_path).unwrap();
-//
-//    assert!(site.html.contains("<nav class=\"nav\"><ul><li><a href=\"/\">Home</a></li><li><a href=\"/readme.html\">readme</a></li></ul></nav>"));
-//}
+#[test]
+fn creates_nav() {
+    let _guard = TEST_RUNTIME.enter();
+    let config = &config::no_artifacts();
+    let page_html = page::index(config);
 
-//#[test]
-//fn creates_footer() {
-//    let _guard = TEST_RUNTIME.enter();
-//    let config = &config::no_artifacts();
-//    let site = Site::build(config, &config.readme_path).unwrap();
-//
-//    assert!(site.html.contains("<footer class=\"axo-gradient flex items-center justify-between px-4 py-2 text-slate-50 text-xs w-full\"><span>My Axo project</span></footer>"));
-//}
+    assert!(page_html.contains("<nav class=\"nav\"><ul><li><a href=\"/\">Home</a></li><li><a href=\"/readme.html\">readme</a></li></ul></nav>"));
+}
 
-//#[test]
-//fn creates_nav_item() {
-//    let _guard = TEST_RUNTIME.enter();
-//    let config = &config::cargo_dist();
-//    let site = Site::build(config, &config.readme_path).unwrap();
-//    assert!(site
-//        .html
-//        .contains("<a class=\"download-all\" href=\"/artifacts.html\">View all downloads</a>"));
-//}
+#[test]
+fn creates_footer() {
+    let _guard = TEST_RUNTIME.enter();
+    let config = &config::no_artifacts();
+    let page_html = page::index(config);
 
-//#[test]
-//fn loads_js() {
-//    let _guard = TEST_RUNTIME.enter();
-//    let config = &config::cargo_dist();
-//    let site = Site::build(config, &config.readme_path).unwrap();
-//    assert!(site.html.contains("<script src=\"detect_os.js\"></script>"));
-//}
+    assert!(page_html.contains("<footer class=\"axo-gradient flex items-center justify-between px-4 py-2 text-slate-50 text-xs w-full\"><span>My Axo project</span></footer>"));
+}
+
+#[test]
+fn creates_nav_item() {
+    let _guard = TEST_RUNTIME.enter();
+    let config = &config::cargo_dist();
+    let page_html = page::index(config);
+    assert!(page_html
+        .contains("<a class=\"download-all\" href=\"/artifacts.html\">View all downloads</a>"));
+}
+
+#[test]
+fn loads_js() {
+    let _guard = TEST_RUNTIME.enter();
+    let config = &config::cargo_dist();
+    let page_html = page::index(config);
+    assert!(page_html.contains("<script src=\"detect_os.js\"></script>"));
+}
 
 #[test]
 fn creates_download_for_mac() {
     let _guard = TEST_RUNTIME.enter();
     let config = &config::cargo_dist();
-    let page_html = Page::new_from_file(config, &config.readme_path)
-        .unwrap()
-        .build(config)
-        .unwrap();
+    let page_html = page::index(config);
     assert!(page_html.contains("<a class=\"text-center\" href=\"https://github.com/axodotdev/oranda/releases/download/v0.0.1-prerelease1/oranda-v0.0.1-prerelease1-x86_64-apple-darwin.tar.xz\">Download v0.0.1-prerelease1</a><a class=\"download-all\" href=\"/artifacts.html\">View all downloads</a>"));
 }
 
@@ -222,10 +216,7 @@ fn creates_download_for_mac() {
 fn creates_downloads_page() {
     let _guard = TEST_RUNTIME.enter();
     let config = &config::cargo_dist();
-    let artifacts_content = artifacts::page::build(config).unwrap();
-    let artifacts_page = Page::new_from_contents(artifacts_content, "artifacts.html")
-        .build(config)
-        .unwrap();
+    let artifacts_page = page::artifacts(config);
     assert!(artifacts_page.contains("<h3>Downloads</h3>"));
     assert!(artifacts_page.contains("<span>oranda-v0.0.1-prerelease1-x86_64-pc-windows-msvc.zip</span><span>Executable Zip</span><span>x86_64-pc-windows-msvc</span><span><a href=\"https://github.com/axodotdev/oranda/releases/download/v0.0.1-prerelease1/oranda-v0.0.1-prerelease1-x86_64-pc-windows-msvc.zip\">Download</a></span>"));
 }
@@ -234,10 +225,7 @@ fn creates_downloads_page() {
 fn creates_nav_item_package_managers() {
     let _guard = TEST_RUNTIME.enter();
     let config = &config::package_managers();
-    let page_html = Page::new_from_file(config, &config.readme_path)
-        .unwrap()
-        .build(config)
-        .unwrap();
+    let page_html = page::index(config);
     assert!(page_html
         .contains("<a class=\"download-all\" href=\"/artifacts.html\">View all downloads</a>"));
 }
