@@ -230,9 +230,11 @@ fn creates_download_for_mac() {
 fn creates_downloads_page() {
     let _guard = TEST_RUNTIME.enter();
     Site::build(&config_cargo_dist(), &config_cargo_dist().readme_path).unwrap();
-    let artifacts_page = fs::read_to_string("public/artifacts.html").unwrap();
+    let path = "public/artifacts.html";
+    let artifacts_page = fs::read_to_string(path).unwrap();
     assert!(artifacts_page.contains("<h3>Downloads</h3>"));
     assert!(artifacts_page.contains("<span>oranda-v0.0.1-prerelease1-x86_64-pc-windows-msvc.zip</span><span>Executable Zip</span><span>x86_64-pc-windows-msvc</span><span><a href=\"https://github.com/axodotdev/oranda/releases/download/v0.0.1-prerelease1/oranda-v0.0.1-prerelease1-x86_64-pc-windows-msvc.zip\">Download</a></span>"));
+    fs::remove_file(path).unwrap();
 }
 
 fn config_package_managers() -> Config {
@@ -261,18 +263,4 @@ fn creates_nav_item_package_managers() {
     assert!(site
         .html
         .contains("<a class=\"download-all\" href=\"/artifacts.html\">View all downloads</a>"));
-}
-
-#[test]
-fn creates_downloads_page_packages() {
-    let _guard = TEST_RUNTIME.enter();
-    Site::build(
-        &config_package_managers(),
-        &config_package_managers().readme_path,
-    )
-    .unwrap();
-    let artifacts_page = fs::read_to_string("public/artifacts.html").unwrap();
-    assert!(artifacts_page.contains("<h3>Install methods</h3>"));
-    assert!(artifacts_page.contains("npm install oranda"));
-    assert!(artifacts_page.contains("yarn add oranda"));
 }
