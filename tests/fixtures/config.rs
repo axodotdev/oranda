@@ -7,9 +7,9 @@ use linked_hash_map::LinkedHashMap;
 pub fn no_artifacts() -> Config {
     Config {
         description: String::from("you axolotl questions"),
-        readme_path: String::from("./src/site/fixtures/readme.md"),
-        additional_pages: Some(vec![String::from("./src/site/fixtures/readme.md")]),
-        additional_css: vec![String::from("./src/site/fixtures/additional.css")],
+        readme_path: String::from("./tests/fixtures/readme.md"),
+        additional_pages: Some(vec![String::from("./tests/fixtures/readme.md")]),
+        additional_css: vec![String::from("./tests/fixtures/additional.css")],
         theme: Theme::Dark,
         ..Default::default()
     }
