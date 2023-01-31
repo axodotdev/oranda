@@ -45,8 +45,7 @@ impl Page {
         } else {
             html!(<div>{unsafe_text!(self.contents)}</div>)
         };
-        let doc = layout::build(config, page_contents, self.is_index)?;
-        Ok(doc)
+        layout::build(config, page_contents, self.is_index)
     }
 
     pub fn filename(source: &str, is_index: bool) -> String {
