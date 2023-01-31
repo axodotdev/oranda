@@ -6,7 +6,7 @@ use crate::config::analytics::Analytics;
 use crate::config::theme::Theme;
 use crate::errors::*;
 use crate::message::{Message, MessageType};
-use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxTheme;
+use crate::site::markdown::SyntaxTheme;
 
 use crate::config::artifacts::Artifacts;
 

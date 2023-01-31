@@ -1,7 +1,6 @@
 use crate::config::Config;
 use crate::errors::*;
-use crate::site::markdown::syntax_highlight::syntax_highlight;
-use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxTheme;
+use crate::site::markdown::{syntax_highlight, SyntaxTheme};
 use axohtml::elements::{div, li, span};
 use axohtml::{html, text, unsafe_text};
 use cargo_dist_schema::{Artifact, ArtifactKind, DistManifest};

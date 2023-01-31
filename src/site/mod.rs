@@ -1,33 +1,31 @@
-use std::fs::File;
-use std::io::Write;
 use std::path::Path;
 
 pub mod artifacts;
 mod layout;
 pub mod markdown;
 pub mod page;
+use page::Page;
 
 use crate::config::Config;
 use crate::errors::*;
 
 #[derive(Debug)]
 pub struct Site {
-    pub html: String,
+    pages: Vec<Page>,
 }
 
 impl Site {
-    pub fn build(config: &Config, file_path: &String) -> Result<Site> {
-        Self::create_dist_dir(&config.dist_dir)?;
-        let markdown_path = Path::new(&file_path);
-        let is_main_readme = file_path == &config.readme_path;
-        let content = markdown::body(markdown_path, &config.syntax_theme, is_main_readme)?;
-        let html = page::build(config, content, is_main_readme)?;
-
-        if let Some(book_path) = &config.md_book {
-            Self::copy_static(&config.dist_dir, book_path)?;
+    pub fn build(config: &Config) -> Result<Site> {
+        let index = Page::new_from_file(config, &config.readme_path)?;
+        let mut pages = vec![index];
+        if let Some(files) = &config.additional_pages {
+            for file in files {
+                let additional_page = Page::new_from_file(config, file)?;
+                pages.push(additional_page)
+            }
         }
 
-        Ok(Site { html })
+        Ok(Site { pages })
     }
 
     pub fn copy_static(dist_path: &String, static_path: &String) -> Result<()> {
@@ -39,25 +37,21 @@ impl Site {
         Ok(())
     }
 
-    pub fn write(config: &Config) -> Result<()> {
+    pub fn write(self, config: &Config) -> Result<()> {
         let dist = &config.dist_dir;
-        let readme_path = &config.readme_path;
+        Self::create_dist_dir(dist)?;
+        for page in self.pages {
+            let asset = axoasset::local::LocalAsset::new(
+                &page.filename.clone(),
+                page.build(config)?.into(),
+            );
+            axoasset::local::LocalAsset::write(&asset, dist)?;
+        }
+        if let Some(book_path) = &config.md_book {
+            Self::copy_static(dist, book_path)?;
+        }
         if Path::new(&config.static_dir).exists() {
             Self::copy_static(dist, &config.static_dir)?;
-        }
-        let mut files = vec![readme_path];
-        if config.additional_pages.is_some() {
-            files.extend(config.additional_pages.as_ref().unwrap())
-        }
-
-        for file in files {
-            let site = Self::build(config, file)?;
-            let file_name = page::get_html_file_name(file, config)?;
-
-            let html_path = format!("{}/{}", &dist, file_name);
-
-            let mut html_file = File::create(html_path)?;
-            html_file.write_all(site.html.as_bytes())?;
         }
 
         Ok(())
