@@ -3,7 +3,6 @@ use crate::config::Config;
 use crate::errors::*;
 use crate::site::artifacts::cargo_dist;
 use crate::site::artifacts::package_managers;
-use crate::site::layout;
 use axohtml::{html, text};
 
 pub fn build(config: &Config) -> Result<String> {
@@ -42,7 +41,6 @@ pub fn build(config: &Config) -> Result<String> {
     }) = &config.artifacts
     {
         html.extend(cargo_dist::build_table(manifest, config));
-    };
-
-    layout::build(config, html!(<div>{html}</div>), false)
+    }
+    Ok(html!(<div>{html}</div>).to_string())
 }
