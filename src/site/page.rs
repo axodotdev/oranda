@@ -17,7 +17,7 @@ pub struct Page {
 
 impl Page {
     pub fn new_from_file(config: &Config, source: &str) -> Result<Self> {
-        let is_index = source == &config.readme_path;
+        let is_index = source == config.readme_path;
         Ok(Page {
             contents: Self::load_and_render_contents(source, &config.syntax_theme)?,
             filename: Self::filename(source, is_index),
@@ -25,10 +25,10 @@ impl Page {
         })
     }
 
-    pub fn new_from_contents(contents: String, filename: String) -> Self {
+    pub fn new_from_contents(contents: String, filename: &str) -> Self {
         Page {
             contents,
-            filename,
+            filename: filename.to_string(),
             is_index: false,
         }
     }

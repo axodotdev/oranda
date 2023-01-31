@@ -1,6 +1,6 @@
 mod cargo_dist;
 mod package_managers;
-mod page;
+pub mod page;
 
 use crate::config::Config;
 use crate::errors::*;

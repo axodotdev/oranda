@@ -24,6 +24,11 @@ impl Site {
                 pages.push(additional_page)
             }
         }
+        if config.artifacts.is_some() {
+            let artifacts_html = artifacts::page::build(config)?;
+            let artifacts_page = Page::new_from_contents(artifacts_html, "artifacts.html");
+            pages.push(artifacts_page)
+        }
 
         Ok(Site { pages })
     }

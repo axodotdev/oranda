@@ -6,7 +6,7 @@ use crate::site::artifacts::package_managers;
 use crate::site::layout;
 use axohtml::{html, text};
 
-pub fn build(config: &Config) -> Result<()> {
+pub fn build(config: &Config) -> Result<String> {
     let mut html = vec![];
     let manifest = cargo_dist::fetch_manifest(config)?;
 
@@ -44,9 +44,5 @@ pub fn build(config: &Config) -> Result<()> {
         html.extend(cargo_dist::build_table(manifest, config));
     };
 
-    let doc = layout::build(config, html!(<div>{html}</div>), false)?;
-    let html_path = format!("{}/artifacts.html", &config.dist_dir);
-    let asset = axoasset::local::LocalAsset::new(&html_path, doc.into());
-    axoasset::local::LocalAsset::write(&asset, &config.dist_dir)?;
-    Ok(())
+    layout::build(config, html!(<div>{html}</div>), false)
 }
