@@ -7,9 +7,15 @@ use linked_hash_map::LinkedHashMap;
 pub fn no_artifacts() -> Config {
     Config {
         description: String::from("you axolotl questions"),
-        readme_path: String::from("./tests/fixtures/readme.md"),
-        additional_pages: Some(vec![String::from("./tests/fixtures/readme.md")]),
-        additional_css: vec![String::from("./tests/fixtures/additional.css")],
+        readme_path: String::from(
+            "https://raw.githubusercontent.com/axodotdev/oranda/main/README.md",
+        ),
+        additional_pages: Some(vec![String::from(
+            "https://raw.githubusercontent.com/axodotdev/oranda/main/README.md",
+        )]),
+        additional_css: vec![String::from(
+            "https://raw.githubusercontent.com/axodotdev/axii/main/css/main.css",
+        )],
         theme: Theme::Dark,
         ..Default::default()
     }
