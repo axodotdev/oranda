@@ -3,10 +3,9 @@ use crate::config::Config;
 use crate::errors::*;
 use crate::site::artifacts::cargo_dist;
 use crate::site::artifacts::package_managers;
-use crate::site::layout;
 use axohtml::{html, text};
 
-pub fn build(config: &Config) -> Result<()> {
+pub fn build(config: &Config) -> Result<String> {
     let mut html = vec![];
     let manifest = cargo_dist::fetch_manifest(config)?;
 
@@ -42,11 +41,6 @@ pub fn build(config: &Config) -> Result<()> {
     }) = &config.artifacts
     {
         html.extend(cargo_dist::build_table(manifest, config));
-    };
-
-    let doc = layout::build(config, html!(<div>{html}</div>), false)?;
-    let html_path = format!("{}/artifacts.html", &config.dist_dir);
-    let asset = axoasset::local::LocalAsset::new(&html_path, doc.into());
-    axoasset::local::LocalAsset::write(&asset, &config.dist_dir)?;
-    Ok(())
+    }
+    Ok(html!(<div>{html}</div>).to_string())
 }

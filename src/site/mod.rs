@@ -1,52 +1,37 @@
-use crate::errors::*;
-
-use std::fs::File;
-use std::io::Write;
 use std::path::Path;
+
 pub mod artifacts;
-pub mod html;
-mod layout;
+pub mod layout;
+use layout::{css, javascript};
 pub mod markdown;
+pub mod page;
+use page::Page;
+
 use crate::config::Config;
+use crate::errors::*;
 
 #[derive(Debug)]
 pub struct Site {
-    pub html: String,
+    pages: Vec<Page>,
 }
 
 impl Site {
-    pub fn build(config: &Config, file_path: &String) -> Result<Site> {
-        Self::create_dist_dir(&config.dist_dir)?;
-        let markdown_path = Path::new(&file_path);
-        let is_main_readme = file_path == &config.readme_path;
-        let content = markdown::body(markdown_path, &config.syntax_theme, is_main_readme)?;
-        let html = html::build(config, content, is_main_readme)?;
-
-        if let Some(book_path) = &config.md_book {
-            Self::copy_static(&config.dist_dir, book_path)?;
+    pub fn build(config: &Config) -> Result<Site> {
+        let index = Page::new_from_file(config, &config.readme_path)?;
+        let mut pages = vec![index];
+        if let Some(files) = &config.additional_pages {
+            for file in files {
+                let additional_page = Page::new_from_file(config, file)?;
+                pages.push(additional_page)
+            }
+        }
+        if config.artifacts.is_some() {
+            let artifacts_html = artifacts::page::build(config)?;
+            let artifacts_page = Page::new_from_contents(artifacts_html, "artifacts.html");
+            pages.push(artifacts_page)
         }
 
-        Ok(Site { html })
-    }
-
-    fn get_html_file_name(file: &String, config: &Config) -> Result<String> {
-        let file_name = if file == &config.readme_path {
-            "index.html".to_string()
-        } else {
-            let file_path = Path::new(file).file_stem();
-
-            match file_path {
-                None => {
-                    return Err(OrandaError::FileNotFound {
-                        filedesc: "Additional File".to_string(),
-                        path: file.to_string(),
-                    });
-                }
-                Some(p) => format!("{}.html", p.to_str().unwrap()),
-            }
-        };
-
-        Ok(file_name)
+        Ok(Site { pages })
     }
 
     pub fn copy_static(dist_path: &String, static_path: &String) -> Result<()> {
@@ -58,25 +43,26 @@ impl Site {
         Ok(())
     }
 
-    pub fn write(config: &Config) -> Result<()> {
+    pub fn write(self, config: &Config) -> Result<()> {
         let dist = &config.dist_dir;
-        let readme_path = &config.readme_path;
+        Self::create_dist_dir(dist)?;
+        for page in self.pages {
+            let asset = axoasset::local::LocalAsset::new(
+                &page.filename.clone(),
+                page.build(config)?.into(),
+            );
+            axoasset::local::LocalAsset::write(&asset, dist)?;
+        }
+        if let Some(book_path) = &config.md_book {
+            Self::copy_static(dist, book_path)?;
+        }
         if Path::new(&config.static_dir).exists() {
             Self::copy_static(dist, &config.static_dir)?;
         }
-        let mut files = vec![readme_path];
-        if config.additional_pages.is_some() {
-            files.extend(config.additional_pages.as_ref().unwrap())
-        }
-
-        for file in files {
-            let site = Self::build(config, file)?;
-            let file_name = Self::get_html_file_name(file, config).unwrap();
-
-            let html_path = format!("{}/{}", &dist, file_name);
-
-            let mut html_file = File::create(html_path)?;
-            html_file.write_all(site.html.as_bytes())?;
+        javascript::write_os_script(&config.dist_dir)?;
+        css::write_fringe(&config.dist_dir)?;
+        if !config.additional_css.is_empty() {
+            css::write_additional(&config.additional_css, &config.dist_dir)?;
         }
 
         Ok(())

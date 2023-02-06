@@ -15,6 +15,5 @@
   "artifacts": {
     "cargo_dist": true
   },
-  "homepage": "https://oranda.axo.dev",
-  "md_book": "docs/book"
+  "homepage": "https://oranda.axo.dev"
 }

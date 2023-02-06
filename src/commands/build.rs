@@ -20,7 +20,7 @@ impl Build {
         Message::new(MessageType::Info, "Running build...").print();
         tracing::info!("Running build...");
         let config = Config::build(&self.config_path)?;
-        Site::write(&config)?;
+        Site::build(&config)?.write(&config)?;
         let msg = format!(
             "Successfully built your site in the `{}` directory. To view, run `oranda serve`.",
             { config.dist_dir }

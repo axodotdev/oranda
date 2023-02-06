@@ -7,7 +7,7 @@ pub mod analytics;
 use self::analytics::Analytics;
 use self::oranda::{OrandaConfig, Social};
 use crate::errors::*;
-use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxTheme;
+use crate::site::markdown::SyntaxTheme;
 use project::ProjectConfig;
 use std::path::Path;
 

@@ -1,15 +1,14 @@
-pub mod syntax_highlight;
+use std::collections::HashMap;
+
+mod syntax_highlight;
+pub use syntax_highlight::syntax_highlight;
+pub use syntax_highlight::syntax_themes::SyntaxTheme;
 
 use crate::errors::*;
-use crate::site::markdown::syntax_highlight::syntax_highlight;
+
 use ammonia::Builder;
 use comrak::adapters::SyntaxHighlighterAdapter;
 use comrak::{self, ComrakOptions, ComrakPlugins};
-use std::collections::HashMap;
-use std::fs;
-use std::path::Path;
-
-use self::syntax_highlight::syntax_themes::SyntaxTheme;
 
 pub struct Adapters<'a> {
     syntax_theme: &'a SyntaxTheme,
@@ -48,32 +47,14 @@ fn initialize_comrak_options() -> ComrakOptions {
     options
 }
 
-fn load(file_path: &Path, is_main_readme: bool) -> Result<String> {
-    if file_path.exists() {
-        let file = fs::read_to_string(file_path)?;
-        Ok(file)
-    } else {
-        let filedesc = if is_main_readme {
-            String::from("README")
-        } else {
-            String::from("additional file")
-        };
-        Err(OrandaError::FileNotFound {
-            filedesc,
-            path: file_path.display().to_string(),
-        })
-    }
-}
-
-pub fn body(file_path: &Path, syntax_theme: &SyntaxTheme, is_main_readme: bool) -> Result<String> {
-    let readme = load(file_path, is_main_readme)?;
+pub fn to_html(markdown: String, syntax_theme: &SyntaxTheme) -> Result<String> {
     let options = initialize_comrak_options();
 
     let mut plugins = ComrakPlugins::default();
     let adapter = Adapters { syntax_theme };
     plugins.render.codefence_syntax_highlighter = Some(&adapter);
 
-    let unsafe_html = comrak::markdown_to_html_with_plugins(&readme, &options, &plugins);
+    let unsafe_html = comrak::markdown_to_html_with_plugins(&markdown, &options, &plugins);
     let safe_html = Builder::new()
         .add_generic_attributes(&["style", "class", "id"])
         .clean(&unsafe_html)
