@@ -2,7 +2,7 @@ use std::path::Path;
 
 pub mod artifacts;
 pub mod layout;
-use layout::javascript;
+use layout::{css, javascript};
 pub mod markdown;
 pub mod page;
 use page::Page;
@@ -60,6 +60,10 @@ impl Site {
             Self::copy_static(dist, &config.static_dir)?;
         }
         javascript::write_os_script(&config.dist_dir)?;
+        css::write_fringe(&config.dist_dir)?;
+        if !config.additional_css.is_empty() {
+            css::write_additional(&config.additional_css, &config.dist_dir)?;
+        }
 
         Ok(())
     }
