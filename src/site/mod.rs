@@ -2,6 +2,7 @@ use std::path::Path;
 
 pub mod artifacts;
 pub mod layout;
+use layout::javascript;
 pub mod markdown;
 pub mod page;
 use page::Page;
@@ -58,6 +59,7 @@ impl Site {
         if Path::new(&config.static_dir).exists() {
             Self::copy_static(dist, &config.static_dir)?;
         }
+        javascript::write_os_script(&config.dist_dir)?;
 
         Ok(())
     }

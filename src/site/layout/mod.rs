@@ -2,7 +2,7 @@ mod css;
 mod footer;
 mod head;
 mod header;
-mod javascript;
+pub mod javascript;
 
 use crate::config::{analytics, theme, Config};
 use crate::errors::*;
@@ -23,7 +23,7 @@ pub fn build(config: &Config, content: String, is_index: bool) -> Result<String>
         None => None,
         Some(_) => {
             if is_index {
-                Some(javascript::get_os_script(&config.dist_dir)?)
+                Some(javascript::build_os_script()?)
             } else {
                 None
             }
