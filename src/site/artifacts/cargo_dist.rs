@@ -66,7 +66,7 @@ pub fn build(config: &Config) -> Result<Box<div<String>>> {
             "The repository and version are required for cargo_dist",
         )));
     }
-    let downloads_href = link::generate_link(&config.path_prefix, String::from("artifacts.html"));
+    let downloads_href = link::generate(&config.path_prefix, String::from("artifacts.html"));
     let typed = fetch_manifest(config)?;
 
     let mut html: Vec<Box<div<String>>> = vec![];
