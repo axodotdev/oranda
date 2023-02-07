@@ -6,9 +6,18 @@ use axohtml::elements::{div, li, span};
 use axohtml::{html, text, unsafe_text};
 use cargo_dist_schema::{Artifact, ArtifactKind, DistManifest};
 
+pub fn get_os(name: &str) -> &str {
+    match name {
+        "x86_64-unknown-linux-gnu " => "linux",
+        "x86_64-apple-darwin " => "mac",
+        "x86_64-apple-sillicon " => "mac",
+        "x86_64-pc-windows-msvc " => "windows",
+        &_ => "",
+    }
+}
+
 pub fn fetch_manifest(config: &Config) -> std::result::Result<DistManifest, reqwest::Error> {
     let url = create_download_link(config, &String::from("dist-manifest.json"));
-
     let resp = reqwest::blocking::get(url)?;
 
     resp.json::<DistManifest>()
@@ -77,26 +86,25 @@ pub fn build(config: &Config) -> Result<Box<div<String>>> {
                 for targ in artifact.target_triples.iter() {
                     targets.push_str(format!("{} ", targ).as_str());
                 }
-                let url = create_download_link(config, &artifact.name);
-                let text = format!("Download v{}", &release.app_version);
                 let install_code = get_install_hint(
                     &release.artifacts,
                     &artifact.target_triples,
                     &config.syntax_theme,
                 );
+                println!("{}", targets);
 
                 html.extend(html!(
-                        <div class="hidden target artifact-header" data-targets=targets>
-                            <h4 class="text-center">{text!("Quick install")}</h4>
-                            {unsafe_text!(install_code)}
-                            <div>
-                                <a href=url class="text-center">
-                                    {text!(text)}
-                                </a>
-                                <a href=&downloads_href class="download-all">{text!("View all downloads")}</a>
-                            </div>
+                    <div class="hidden target artifact-header" data-targets=&targets>
+                        <h4 class="text-center">{text!("Install")}</h4>
+                        {unsafe_text!(install_code)}
+                        <div>
+                            <span class="text-center detect">
+                                {text!(format!("We have detected you are on {}, are we wrong?", get_os(&targets.as_str())))}
+                            </span>
+                            <a href=&downloads_href>{text!("View all installation options")}</a>
                         </div>
-                    ));
+                    </div>
+                ));
             }
         }
     }
