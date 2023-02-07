@@ -21,6 +21,22 @@ pub fn no_artifacts() -> Config {
     }
 }
 
+pub fn path_prefix() -> Config {
+    Config {
+        path_prefix: Some(String::from("axo")),
+        artifacts: Some(Artifacts {
+            cargo_dist: Some(true),
+            package_managers: None,
+        }),
+        additional_css: vec![String::from(
+            "https://raw.githubusercontent.com/axodotdev/axii/main/css/main.css",
+        )],
+        repository: Some(String::from("https://github.com/axodotdev/oranda")),
+        version: Some(String::from("0.0.1-prerelease1")),
+        ..Default::default()
+    }
+}
+
 pub fn cargo_dist() -> Config {
     Config {
         artifacts: Some(Artifacts {
