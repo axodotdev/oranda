@@ -102,7 +102,6 @@ fn adds_prefix() {
     let _guard = TEST_RUNTIME.enter();
     let config = &&oranda_config::path_prefix();
     let page_html = page::index(config);
-    println!("{:?}", page_html);
     assert!(page_html.contains("<script src=\"/axo/detect_os.js\">"));
     assert!(page_html
         .contains("<a class=\"download-all\" href=\"/axo/artifacts.html\">View all downloads</a>"))
