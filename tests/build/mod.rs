@@ -68,7 +68,7 @@ fn loads_js() {
     let _guard = TEST_RUNTIME.enter();
     let config = &oranda_config::cargo_dist();
     let page_html = page::index(config);
-    assert!(page_html.contains("<script src=\"detect_os.js\"></script>"));
+    assert!(page_html.contains("<script src=\"/detect_os.js\">"));
 }
 
 #[test]

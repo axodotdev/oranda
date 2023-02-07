@@ -43,8 +43,7 @@ fn nav(
             .unwrap_or(file_path.as_os_str())
             .to_string_lossy();
 
-        let href =
-            path::generate_prefix_link(path_prefix, format!("{}.html", file_name.to_string()));
+        let href = path::generate_prefix_link(path_prefix, format!("{}.html", file_name));
 
         html.extend(html!(<li><a href=href>{text!(file_name)}</a></li>));
     }
