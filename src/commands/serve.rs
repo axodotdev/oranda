@@ -74,11 +74,11 @@ impl Serve {
                     format!("Unhandled internal error: {}", error),
                 )
             });
-
+        const FRINGE_VERSION: &str = "0.0.9";
         let prefix_route = format!("/{}", prefix);
-        let fringe_route = format!("/{}/fringe@0.0.8.css", prefix);
+        let fringe_route = format!("/{}/fringe@{}.css", prefix, FRINGE_VERSION);
         let app = Router::new().nest_service(&prefix_route, serve_dir).route(
-            "/fringe@0.0.8.css",
+            format!("/fringe@{}.css", FRINGE_VERSION).as_str(),
             get(move || async {
                 let fringe_route = fringe_route;
                 Redirect::permanent(&fringe_route)
