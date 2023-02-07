@@ -23,7 +23,7 @@ pub fn build(config: &Config, content: String, is_index: bool) -> Result<String>
         None => None,
         Some(_) => {
             if is_index {
-                Some(javascript::build_os_script()?)
+                Some(javascript::build_os_script(&config.path_prefix)?)
             } else {
                 None
             }
@@ -37,7 +37,11 @@ pub fn build(config: &Config, content: String, is_index: bool) -> Result<String>
     let banner = header::repo_banner(config);
     let meta_tags = head::create_meta_tags(config);
     let favicon = if let Some(favicon) = config.favicon.clone() {
-        Some(head::get_favicon(favicon, config.dist_dir.clone())?)
+        Some(head::get_favicon(
+            favicon,
+            config.dist_dir.clone(),
+            &config.path_prefix,
+        )?)
     } else {
         None
     };

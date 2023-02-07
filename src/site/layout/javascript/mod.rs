@@ -1,12 +1,14 @@
 mod detect_os;
 
 use crate::errors::*;
+use crate::site::path;
 use axohtml::elements::script;
 use axohtml::html;
 
-pub fn build_os_script() -> Result<Box<script<String>>> {
+pub fn build_os_script(path_prefix: &Option<String>) -> Result<Box<script<String>>> {
     const FILE_NAME: &str = "detect_os.js";
-    Ok(html!(<script src=FILE_NAME />))
+    let script_url = path::generate_prefix_link(path_prefix, FILE_NAME.to_string());
+    Ok(html!(<script src=script_url />))
 }
 
 pub fn write_os_script(dist_dir: &String) -> Result<()> {
