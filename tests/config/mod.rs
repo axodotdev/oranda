@@ -1,5 +1,6 @@
 mod fixtures;
-use fixtures::{project_config, tokio_utils::TEST_RUNTIME};
+use super::utils::tokio_utils::TEST_RUNTIME;
+use fixtures::project_config;
 
 use oranda::config::project::{JavaScript, ProjectConfig, Rust, Type};
 

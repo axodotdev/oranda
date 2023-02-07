@@ -1,5 +1,6 @@
 mod fixtures;
-use fixtures::{oranda_config, page, tokio_utils::TEST_RUNTIME};
+use super::utils::tokio_utils::TEST_RUNTIME;
+use fixtures::{oranda_config, page};
 
 #[test]
 fn it_adds_additional_css() {
