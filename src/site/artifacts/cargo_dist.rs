@@ -1,7 +1,7 @@
 use crate::config::Config;
 use crate::errors::*;
+use crate::site::link;
 use crate::site::markdown::{syntax_highlight, SyntaxTheme};
-use crate::site::path;
 use axohtml::elements::{div, li, span};
 use axohtml::{html, text, unsafe_text};
 use cargo_dist_schema::{Artifact, ArtifactKind, DistManifest};
@@ -66,8 +66,7 @@ pub fn build(config: &Config) -> Result<Box<div<String>>> {
             "The repository and version are required for cargo_dist",
         )));
     }
-    let downloads_href =
-        path::generate_prefix_link(&config.path_prefix, String::from("artifacts.html"));
+    let downloads_href = link::generate_link(&config.path_prefix, String::from("artifacts.html"));
     let typed = fetch_manifest(config)?;
 
     let mut html: Vec<Box<div<String>>> = vec![];

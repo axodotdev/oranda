@@ -1,7 +1,7 @@
 use crate::config::artifacts::Artifacts;
 use crate::config::Config;
 use crate::errors::*;
-use crate::site::path;
+use crate::site::link;
 use axohtml::elements::{div, header, img, li, nav};
 use axohtml::{html, text};
 use std::path::Path;
@@ -43,14 +43,14 @@ fn nav(
             .unwrap_or(file_path.as_os_str())
             .to_string_lossy();
 
-        let href = path::generate_prefix_link(path_prefix, format!("{}.html", file_name));
+        let href = link::generate_link(path_prefix, format!("{}.html", file_name));
 
         html.extend(html!(<li><a href=href>{text!(file_name)}</a></li>));
     }
 
     if let Some(artifact) = artifacts {
         if artifact.cargo_dist.is_some() {
-            let href = path::generate_prefix_link(path_prefix, String::from("artifacts.html"));
+            let href = link::generate_link(path_prefix, String::from("artifacts.html"));
             html.extend(html!(<li><a href=href>{text!("Install")}</a></li>));
         }
     };

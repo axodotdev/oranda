@@ -2,7 +2,7 @@ use std::path::Path;
 
 pub mod artifacts;
 pub mod layout;
-mod path;
+mod link;
 use layout::{css, javascript};
 pub mod markdown;
 pub mod page;
