@@ -1,5 +1,5 @@
-mod utils;
-use utils::TEST_RUNTIME;
+mod tokio_utils;
+use tokio_utils::TEST_RUNTIME;
 
 mod fixtures;
 use fixtures::cargo_toml;

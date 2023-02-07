@@ -1,8 +1,8 @@
 mod fixtures;
 use fixtures::{config, page};
 
-mod utils;
-use utils::TEST_RUNTIME;
+mod tokio_utils;
+use tokio_utils::TEST_RUNTIME;
 
 #[test]
 fn it_adds_additional_css() {
