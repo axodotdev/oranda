@@ -68,7 +68,7 @@ fn loads_js() {
     let _guard = TEST_RUNTIME.enter();
     let config = &oranda_config::cargo_dist();
     let page_html = page::index(config);
-    assert!(page_html.contains("<script src=\"detect_os.js\"></script>"));
+    assert!(page_html.contains("<script src=\"/detect_os.js\">"));
 }
 
 #[test]
@@ -95,4 +95,14 @@ fn creates_nav_item_package_managers() {
     let page_html = page::index(config);
     assert!(page_html
         .contains("<a class=\"download-all\" href=\"/artifacts.html\">View all downloads</a>"));
+}
+
+#[test]
+fn adds_prefix() {
+    let _guard = TEST_RUNTIME.enter();
+    let config = &&oranda_config::path_prefix();
+    let page_html = page::index(config);
+    assert!(page_html.contains("<script src=\"/axo/detect_os.js\">"));
+    assert!(page_html
+        .contains("<a class=\"download-all\" href=\"/axo/artifacts.html\">View all downloads</a>"))
 }

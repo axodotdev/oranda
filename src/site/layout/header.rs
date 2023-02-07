@@ -1,6 +1,7 @@
 use crate::config::artifacts::Artifacts;
 use crate::config::Config;
 use crate::errors::*;
+use crate::site::link;
 use axohtml::elements::{div, header, img, li, nav};
 use axohtml::{html, text};
 use std::path::Path;
@@ -42,15 +43,15 @@ fn nav(
             .unwrap_or(file_path.as_os_str())
             .to_string_lossy();
 
-        let href = generate_prefix_link(path_prefix, file_name.to_string());
+        let href = link::generate(path_prefix, format!("{}.html", file_name));
 
         html.extend(html!(<li><a href=href>{text!(file_name)}</a></li>));
     }
 
     if let Some(artifact) = artifacts {
         if artifact.cargo_dist.is_some() {
-            let href = generate_prefix_link(path_prefix, String::from("artifacts"));
-            html.extend(html!(<li><a href=href>{text!("Downloads")}</a></li>));
+            let href = link::generate(path_prefix, String::from("artifacts.html"));
+            html.extend(html!(<li><a href=href>{text!("Install")}</a></li>));
         }
     };
 
@@ -108,12 +109,4 @@ pub fn repo_banner(config: &Config) -> Option<Box<div<String>>> {
         </a>
     </div>
     ))
-}
-
-fn generate_prefix_link(path_prefix: &Option<String>, file_name: String) -> String {
-    if let Some(prefix) = &path_prefix {
-        format!("/{}/{}.html", prefix, file_name)
-    } else {
-        format!("/{}.html", file_name)
-    }
 }

@@ -1,6 +1,7 @@
 use crate::config::Config;
 use crate::errors::*;
-use axohtml::elements::{link, meta};
+use crate::site::link;
+use axohtml::elements::meta;
 use axohtml::html;
 
 // False positive duplicate allocation warning
@@ -33,13 +34,19 @@ pub fn create_social_cards(config: &Config) -> Vec<Box<meta<String>>> {
     html
 }
 
-pub fn get_favicon(favicon: String, dist_dir: String) -> Result<Box<link<String>>> {
+pub fn get_favicon(
+    favicon: String,
+    dist_dir: String,
+    path_prefix: &Option<String>,
+) -> Result<Box<axohtml::elements::link<String>>> {
     let copy_result_future = axoasset::copy(&favicon, &dist_dir[..]);
     let copy_result = tokio::runtime::Handle::current().block_on(copy_result_future)?;
 
     let path_as_string = copy_result.strip_prefix(dist_dir)?.to_string_lossy();
 
-    Ok(html!(<link rel="icon" href=path_as_string />))
+    let favicon_url = link::generate(path_prefix, path_as_string.to_string());
+
+    Ok(html!(<link rel="icon" href=favicon_url />))
 }
 
 // False positive duplicate allocation warning
