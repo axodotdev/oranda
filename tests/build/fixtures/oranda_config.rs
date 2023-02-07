@@ -43,6 +43,9 @@ pub fn cargo_dist() -> Config {
             cargo_dist: Some(true),
             package_managers: None,
         }),
+        additional_pages: Some(vec![String::from(
+            "https://raw.githubusercontent.com/axodotdev/oranda/main/README.md",
+        )]),
         repository: Some(String::from("https://github.com/axodotdev/oranda")),
         version: Some(String::from("0.0.1-prerelease1")),
         ..Default::default()
