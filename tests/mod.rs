@@ -120,28 +120,13 @@ description = ">o_o<"
         .expect("could not successfully delete temporary directory");
 }
 
-//#[test]
-//fn it_adds_additional_css() {
-//    let _guard = TEST_RUNTIME.enter();
-//    let config = &config::no_artifacts();
-//    let page = Page::new_from_file(config, &config.readme_path).unwrap();
-//    assert!(page
-//        .contents
-//        .contains("<link href=\"custom.css\" rel=\"stylesheet\"/>"));
-//}
-
-//#[test]
-//fn it_creates_additional_css_file() {
-//    let _guard = TEST_RUNTIME.enter();
-//    let config = config::no_artifacts();
-//    let site = Site::build(&config::no_artifacts()).unwrap();
-//    site.write(&config_no_artifacts())
-//        .expect("failed to write site to filesystem");
-//    let custom_css = "public/custom.css";
-//    assert!(Path::new(custom_css).exists());
-//    let custom = fs::read_to_string(custom_css).unwrap();
-//    assert!(custom.eq("/* ./src/site/fixtures/additional.css */body{background:red;}"))
-//}
+#[test]
+fn it_adds_additional_css() {
+    let _guard = TEST_RUNTIME.enter();
+    let config = &config::no_artifacts();
+    let page_html = page::index(config);
+    assert!(page_html.contains("<link href=\"custom.css\" rel=\"stylesheet\"/>"));
+}
 
 #[test]
 fn it_builds_the_site() {
