@@ -10,7 +10,7 @@ pub fn get_os(name: &str) -> &str {
     match name {
         "x86_64-unknown-linux-gnu " => "linux",
         "x86_64-apple-darwin " => "mac",
-        "x86_64-apple-sillicon " => "mac",
+        "x86_64-apple-silicon " => "mac",
         "x86_64-pc-windows-msvc " => "windows",
         &_ => "",
     }
