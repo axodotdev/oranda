@@ -51,7 +51,7 @@ fn nav(
     if let Some(artifact) = artifacts {
         if artifact.cargo_dist.is_some() {
             let href = path::generate_prefix_link(path_prefix, String::from("artifacts.html"));
-            html.extend(html!(<li><a href=href>{text!("Downloads")}</a></li>));
+            html.extend(html!(<li><a href=href>{text!("Install")}</a></li>));
         }
     };
 
