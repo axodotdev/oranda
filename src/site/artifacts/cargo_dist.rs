@@ -99,7 +99,7 @@ pub fn build(config: &Config) -> Result<Box<div<String>>> {
                         {unsafe_text!(install_code)}
                         <div>
                             <span class="text-center detect">
-                                {text!(format!("We have detected you are on {}, are we wrong?", get_os(&targets.as_str())))}
+                                {text!(format!("We have detected you are on {}, are we wrong?", get_os(targets.as_str())))}
                             </span>
                             <a href=&downloads_href>{text!("View all installation options")}</a>
                         </div>
