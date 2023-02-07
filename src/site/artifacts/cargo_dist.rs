@@ -6,13 +6,13 @@ use axohtml::elements::{div, li, span};
 use axohtml::{html, text, unsafe_text};
 use cargo_dist_schema::{Artifact, ArtifactKind, DistManifest};
 
-pub fn get_os(name: &str) -> &str {
-    match name {
-        "x86_64-unknown-linux-gnu " => "linux",
-        "x86_64-apple-darwin " => "mac",
-        "x86_64-apple-silicon " => "mac",
-        "x86_64-pc-windows-msvc " => "windows",
-        &_ => "",
+pub fn get_os(name: &str) -> Option<&str> {
+    match name.trim() {
+        "x86_64-unknown-linux-gnu" => Some("linux"),
+        "x86_64-apple-darwin" => Some("mac"),
+        "x86_64-apple-silicon" => Some("mac"),
+        "x86_64-pc-windows-msvc" => Some("windows"),
+        &_ => None,
     }
 }
 
@@ -91,7 +91,10 @@ pub fn build(config: &Config) -> Result<Box<div<String>>> {
                     &artifact.target_triples,
                     &config.syntax_theme,
                 );
-                println!("{}", targets);
+                let detect_text = match get_os(&targets.as_str()) {
+                    Some(os) => format!("We have detected you are on {}, are we wrong?", os),
+                    None => String::from("We couldn't detect the system you are using."),
+                };
 
                 html.extend(html!(
                     <div class="hidden target artifact-header" data-targets=&targets>
@@ -99,7 +102,7 @@ pub fn build(config: &Config) -> Result<Box<div<String>>> {
                         {unsafe_text!(install_code)}
                         <div>
                             <span class="text-center detect">
-                                {text!(format!("We have detected you are on {}, are we wrong?", get_os(targets.as_str())))}
+                                {text!(detect_text)}
                             </span>
                             <a href=&downloads_href>{text!("View all installation options")}</a>
                         </div>
