@@ -91,7 +91,7 @@ pub fn build(config: &Config) -> Result<Box<div<String>>> {
                     &artifact.target_triples,
                     &config.syntax_theme,
                 );
-                let detect_text = match get_os(&targets.as_str()) {
+                let detect_text = match get_os(targets.as_str()) {
                     Some(os) => format!("We have detected you are on {}, are we wrong?", os),
                     None => String::from("We couldn't detect the system you are using."),
                 };

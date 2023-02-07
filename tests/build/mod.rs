@@ -59,8 +59,7 @@ fn creates_nav_item() {
     let _guard = TEST_RUNTIME.enter();
     let config = &oranda_config::cargo_dist();
     let page_html = page::index(config);
-    assert!(page_html
-        .contains("<a class=\"download-all\" href=\"/artifacts.html\">View all downloads</a>"));
+    assert!(page_html.contains("<li><a href=\"/artifacts.html\">Install</a></li>"));
 }
 
 #[test]
@@ -76,7 +75,7 @@ fn creates_download_for_mac() {
     let _guard = TEST_RUNTIME.enter();
     let config = &oranda_config::cargo_dist();
     let page_html = page::index(config);
-    assert!(page_html.contains("<a class=\"text-center\" href=\"https://github.com/axodotdev/oranda/releases/download/v0.0.1-prerelease1/oranda-v0.0.1-prerelease1-x86_64-apple-darwin.tar.xz\">Download v0.0.1-prerelease1</a><a class=\"download-all\" href=\"/artifacts.html\">View all downloads</a>"));
+    assert!(page_html.contains("<span class=\"detect text-center\">We have detected you are on mac, are we wrong?</span><a href=\"/artifacts.html\">View all installation options</a>"));
 }
 
 #[test]
@@ -103,6 +102,5 @@ fn adds_prefix() {
     let config = &&oranda_config::path_prefix();
     let page_html = page::index(config);
     assert!(page_html.contains("<script src=\"/axo/detect_os.js\">"));
-    assert!(page_html
-        .contains("<a class=\"download-all\" href=\"/axo/artifacts.html\">View all downloads</a>"))
+    assert!(page_html.contains("<a href=\"/axo/artifacts.html\">View all installation options</a>"))
 }
