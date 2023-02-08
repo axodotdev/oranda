@@ -1,5 +1,3 @@
-use std::path::PathBuf;
-
 use crate::config::Config;
 use crate::errors::*;
 use crate::site::link;
@@ -27,7 +25,7 @@ pub fn fetch_manifest(config: &Config) -> std::result::Result<DistManifest, reqw
 }
 
 fn get_installer_path(config: &Config, name: &String) -> Result<String> {
-    let download_link = create_download_link(config, &name);
+    let download_link = create_download_link(config, name);
     let file_string_future = axoasset::load_string(download_link.as_str());
     let file_string = tokio::runtime::Handle::current().block_on(file_string_future)?;
     let file_path = format!("{}.txt", &name);
@@ -57,7 +55,7 @@ fn get_install_hint(
 
     if let Some(current_hint) = hint {
         if let Some(install_hint) = &current_hint.install_hint {
-            let file_path = get_installer_path(&config, &current_hint.name)?;
+            let file_path = get_installer_path(config, &current_hint.name)?;
             Ok((String::from(install_hint), file_path))
         } else {
             Err(no_hint_error)
