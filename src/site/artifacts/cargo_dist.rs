@@ -1,3 +1,5 @@
+use std::path::PathBuf;
+
 use crate::config::Config;
 use crate::errors::*;
 use crate::site::link;
@@ -24,11 +26,27 @@ pub fn fetch_manifest(config: &Config) -> std::result::Result<DistManifest, reqw
     resp.json::<DistManifest>()
 }
 
+fn get_installer_path(config: &Config, name: &String) -> Result<String> {
+    let download_link = create_download_link(config, &name);
+    let file_string_future = axoasset::load_string(download_link.as_str());
+    let file_string = tokio::runtime::Handle::current().block_on(file_string_future)?;
+    let file_path = format!("{}.txt", &name);
+    let asset = axoasset::local::LocalAsset::new(
+        format!("{}/{}", &config.dist_dir, &file_path).as_str(),
+        file_string.as_bytes().to_vec(),
+    );
+    asset.write(&config.dist_dir)?;
+    Ok(file_path)
+}
+
 fn get_install_hint(
     artifacts: &[Artifact],
     target_triples: &[String],
     config: &Config,
-) -> Option<(String, String)> {
+) -> Result<(String, String)> {
+    let no_hint_error = OrandaError::Other(
+        "There has been an issue getting your install hint, are you using cargo dist?".to_string(),
+    );
     let hint = artifacts.iter().find(|artifact| {
         artifact.install_hint.is_some()
             && artifact
@@ -39,23 +57,13 @@ fn get_install_hint(
 
     if let Some(current_hint) = hint {
         if let Some(install_hint) = &current_hint.install_hint {
-            let download_link = create_download_link(config, &current_hint.name);
-            let file_string_future = axoasset::load_string(download_link.as_str());
-            let file_string = tokio::runtime::Handle::current()
-                .block_on(file_string_future)
-                .unwrap();
-            let file_path = format!("{}.txt", &current_hint.name);
-            let asset = axoasset::local::LocalAsset::new(
-                format!("{}/{}", &config.dist_dir, &file_path).as_str(),
-                file_string.as_bytes().to_vec(),
-            );
-            asset.write(&config.dist_dir).unwrap();
-            Some((String::from(install_hint), file_path))
+            let file_path = get_installer_path(&config, &current_hint.name)?;
+            Ok((String::from(install_hint), file_path))
         } else {
-            None
+            Err(no_hint_error)
         }
     } else {
-        None
+        Err(no_hint_error)
     }
 }
 
@@ -63,18 +71,18 @@ pub fn get_install_hint_code(
     artifacts: &[Artifact],
     target_triples: &[String],
     config: &Config,
-) -> String {
-    let install_hint = get_install_hint(artifacts, target_triples, config).unwrap();
+) -> Result<String> {
+    let install_hint = get_install_hint(artifacts, target_triples, config)?;
 
     let highlighted_code =
         syntax_highlight(Some("sh"), install_hint.0.as_str(), &config.syntax_theme);
-    return match highlighted_code {
-        Ok(code) => code,
-        Err(_) => format!(
+    match highlighted_code {
+        Ok(code) => Ok(code),
+        Err(_) => Ok(format!(
             "<code class='text-center break-all'>{}</code>",
             install_hint.0
-        ),
-    };
+        )),
+    }
 }
 
 fn get_kind_string(kind: &ArtifactKind) -> String {
@@ -112,7 +120,7 @@ pub fn build(config: &Config) -> Result<Box<div<String>>> {
                     targets.push_str(format!("{} ", targ).as_str());
                 }
                 let install_code =
-                    get_install_hint_code(&release.artifacts, &artifact.target_triples, config);
+                    get_install_hint_code(&release.artifacts, &artifact.target_triples, config)?;
                 let detect_text = match get_os(targets.as_str()) {
                     Some(os) => format!("We have detected you are on {}, are we wrong?", os),
                     None => String::from("We couldn't detect the system you are using."),
@@ -120,8 +128,7 @@ pub fn build(config: &Config) -> Result<Box<div<String>>> {
 
                 // axohtml does not support SVG for now
                 let copy_icon:  Box<UnsafeTextNode<String>> = unsafe_text!("<svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 20 20' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M8 2a1 1 0 000 2h2a1 1 0 100-2H8z'></path><path d='M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z'></path></svg>");
-                let hint =
-                    get_install_hint(&release.artifacts, &artifact.target_triples, config).unwrap();
+                let hint = get_install_hint(&release.artifacts, &artifact.target_triples, config)?;
 
                 html.extend(html!(
                     <div class="hidden target artifact-header" data-targets=&targets>
@@ -201,7 +208,7 @@ fn create_table_content(table: Vec<Box<span<String>>>) -> Box<div<String>> {
 // False positive duplicate allocation warning
 // https://github.com/rust-lang/rust-clippy/issues?q=is%3Aissue+redundant_allocation+sort%3Aupdated-desc
 #[allow(clippy::vec_box)]
-pub fn build_list(manifest: &DistManifest, config: &Config) -> Vec<Box<li<String>>> {
+pub fn build_list(manifest: &DistManifest, config: &Config) -> Result<Vec<Box<li<String>>>> {
     let mut list = vec![];
     for release in manifest.releases.iter() {
         for artifact in release.artifacts.iter() {
@@ -211,7 +218,7 @@ pub fn build_list(manifest: &DistManifest, config: &Config) -> Vec<Box<li<String
                     targets.push_str(format!("{} ", targ).as_str());
                 }
                 let install_code =
-                    get_install_hint_code(&release.artifacts, &artifact.target_triples, config);
+                    get_install_hint_code(&release.artifacts, &artifact.target_triples, config)?;
                 list.extend(html!(
                     <li class="list-none">
                         <h5>{text!(targets)}</h5>
@@ -222,5 +229,5 @@ pub fn build_list(manifest: &DistManifest, config: &Config) -> Vec<Box<li<String
         }
     }
 
-    list
+    Ok(list)
 }

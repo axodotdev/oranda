@@ -20,7 +20,7 @@ pub fn build(config: &Config) -> Result<String> {
             ..
         }) = &config.artifacts
         {
-            list.extend(cargo_dist::build_list(&manifest, config));
+            list.extend(cargo_dist::build_list(&manifest, config)?);
         }
 
         list.extend(package_managers::build_list(managers, config));
