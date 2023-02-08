@@ -3,7 +3,7 @@ use crate::errors::*;
 use crate::site::link;
 use crate::site::markdown::syntax_highlight;
 use axohtml::dom::UnsafeTextNode;
-use axohtml::elements::{div, li, span};
+use axohtml::elements::{div, span};
 use axohtml::{html, text, unsafe_text};
 use cargo_dist_schema::{Artifact, ArtifactKind, DistManifest};
 
@@ -54,8 +54,8 @@ fn get_install_hint(
     });
 
     if let Some(current_hint) = hint {
-        if let Some(install_hint) = &current_hint.install_hint {
-            let file_path = get_installer_path(config, &current_hint.name)?;
+        if let (Some(install_hint), Some(name)) = (&current_hint.install_hint, &current_hint.name) {
+            let file_path = get_installer_path(config, name)?;
             Ok((String::from(install_hint), file_path))
         } else {
             Err(no_hint_error)
@@ -162,16 +162,17 @@ pub fn build_table(manifest: DistManifest, config: &Config) -> Box<div<String>> 
     let mut table = vec![];
     for release in manifest.releases.iter() {
         for artifact in release.artifacts.iter() {
-            let name = &artifact.name;
-            let url = create_download_link(config, name);
-            let kind = get_kind_string(&artifact.kind);
-            let targets: &String = &artifact.target_triples.clone().into_iter().collect();
-            table.extend(vec![
-                html!(<span>{text!(name)}</span>),
-                html!(<span>{text!(kind)}</span>),
-                html!(<span>{text!(targets)}</span>),
-                html!(<span><a href=url>{text!("Download")}</a></span>),
-            ]);
+            if let Some(name) = artifact.name.clone() {
+                let url = create_download_link(config, &name);
+                let kind = get_kind_string(&artifact.kind);
+                let targets: &String = &artifact.target_triples.clone().into_iter().collect();
+                table.extend(vec![
+                    html!(<span>{text!(name)}</span>),
+                    html!(<span>{text!(kind)}</span>),
+                    html!(<span>{text!(targets)}</span>),
+                    html!(<span><a href=url>{text!("Download")}</a></span>),
+                ]);
+            }
         }
     }
 
@@ -206,7 +207,7 @@ fn create_table_content(table: Vec<Box<span<String>>>) -> Box<div<String>> {
 // False positive duplicate allocation warning
 // https://github.com/rust-lang/rust-clippy/issues?q=is%3Aissue+redundant_allocation+sort%3Aupdated-desc
 #[allow(clippy::vec_box)]
-pub fn build_list(manifest: &DistManifest, config: &Config) -> Result<Vec<Box<li<String>>>> {
+pub fn build_list(manifest: &DistManifest, config: &Config) -> Result<Box<div<String>>> {
     let mut list = vec![];
     for release in manifest.releases.iter() {
         for artifact in release.artifacts.iter() {
@@ -217,9 +218,17 @@ pub fn build_list(manifest: &DistManifest, config: &Config) -> Result<Vec<Box<li
                 }
                 let install_code =
                     get_install_hint_code(&release.artifacts, &artifact.target_triples, config)?;
+
+                let title = match artifact.description.clone() {
+                    Some(desc) => desc,
+                    None => match get_os(targets.as_str()) {
+                        Some(os) => String::from(os),
+                        None => targets,
+                    },
+                };
                 list.extend(html!(
                     <li class="list-none">
-                        <h5>{text!(targets)}</h5>
+                        <h5 class="capitalize">{text!(title)}</h5>
                         {unsafe_text!(install_code)}
                     </li>
                 ))
@@ -227,5 +236,12 @@ pub fn build_list(manifest: &DistManifest, config: &Config) -> Result<Vec<Box<li
         }
     }
 
-    Ok(list)
+    Ok(html!(
+    <div>
+        <h3>{text!("Install via script")}</h3>
+        <ul>
+            {list}
+        </ul>
+    </div>
+    ))
 }

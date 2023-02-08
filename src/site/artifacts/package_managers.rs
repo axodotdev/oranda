@@ -3,7 +3,7 @@ use crate::errors::*;
 use crate::site::markdown::{syntax_highlight, SyntaxTheme};
 use linked_hash_map::LinkedHashMap;
 
-use axohtml::elements::{div, li};
+use axohtml::elements::div;
 use axohtml::{html, text, unsafe_text};
 
 fn create_package_install_code(code: &str, syntax_theme: &SyntaxTheme) -> String {
@@ -17,16 +17,20 @@ fn create_package_install_code(code: &str, syntax_theme: &SyntaxTheme) -> String
 // False positive duplicate allocation warning
 // https://github.com/rust-lang/rust-clippy/issues?q=is%3Aissue+redundant_allocation+sort%3Aupdated-desc
 #[allow(clippy::vec_box)]
-pub fn build_list(
-    managers: &LinkedHashMap<String, String>,
-    config: &Config,
-) -> Vec<Box<li<String>>> {
+pub fn build_list(managers: &LinkedHashMap<String, String>, config: &Config) -> Box<div<String>> {
     let mut list = vec![];
     for (manager, install_code) in managers.iter() {
         list.extend(html!(<li class="list-none"><h5>{text!(manager)}</h5> {unsafe_text!(create_package_install_code(install_code, &config.syntax_theme))}</li>))
     }
 
-    list
+    html!(
+    <div>
+        <h3>{text!("Install via package manager")}</h3>
+        <ul>
+            {list}
+        </ul>
+    </div>
+    )
 }
 
 pub fn build(

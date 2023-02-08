@@ -15,7 +15,7 @@ minifier = "0.2.2"
 axohtml = "0.4.1"
 ammonia = "3"
 linked-hash-map = {version="0.5.6", features=["serde_impl"]}
-cargo-dist-schema = "0.0.1"
+cargo-dist-schema = "0.0.2"
 lazy_static = "1.4.0"
 axum = "0.6.2"
 clap = { version = "4", features = ["derive", "help", "usage", "error-context", "wrap_help"] }
