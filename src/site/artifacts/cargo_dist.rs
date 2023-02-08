@@ -1,7 +1,7 @@
 use crate::config::Config;
 use crate::errors::*;
 use crate::site::link;
-use crate::site::markdown::{syntax_highlight, SyntaxTheme};
+use crate::site::markdown::syntax_highlight;
 use axohtml::dom::UnsafeTextNode;
 use axohtml::elements::{div, li, span};
 use axohtml::{html, text, unsafe_text};
@@ -50,7 +50,7 @@ fn get_install_hint(
                 file_string.as_bytes().to_vec(),
             );
             asset.write(&config.dist_dir).unwrap();
-            Some((String::from(install_hint), String::from(file_path)))
+            Some((String::from(install_hint), file_path))
         } else {
             None
         }
@@ -112,7 +112,7 @@ pub fn build(config: &Config) -> Result<Box<div<String>>> {
                     targets.push_str(format!("{} ", targ).as_str());
                 }
                 let install_code =
-                    get_install_hint_code(&release.artifacts, &artifact.target_triples, &config);
+                    get_install_hint_code(&release.artifacts, &artifact.target_triples, config);
                 let detect_text = match get_os(targets.as_str()) {
                     Some(os) => format!("We have detected you are on {}, are we wrong?", os),
                     None => String::from("We couldn't detect the system you are using."),
@@ -120,8 +120,8 @@ pub fn build(config: &Config) -> Result<Box<div<String>>> {
 
                 // axohtml does not support SVG for now
                 let copy_icon:  Box<UnsafeTextNode<String>> = unsafe_text!("<svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 20 20' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M8 2a1 1 0 000 2h2a1 1 0 100-2H8z'></path><path d='M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z'></path></svg>");
-                let hint = get_install_hint(&release.artifacts, &artifact.target_triples, &config)
-                    .unwrap();
+                let hint =
+                    get_install_hint(&release.artifacts, &artifact.target_triples, config).unwrap();
 
                 html.extend(html!(
                     <div class="hidden target artifact-header" data-targets=&targets>
@@ -129,7 +129,7 @@ pub fn build(config: &Config) -> Result<Box<div<String>>> {
                         <div class="install-code-wrapper">
                             {unsafe_text!(install_code)}
                             <button data-copy={hint.0} class="business-button primary copy-clipboard-button button">{copy_icon}</button>
-                            <a class="business-button primary button" href={hint.1}>
+                            <a class="business-button primary button" href=(hint.1)>
                                 {text!("Source")}
                             </a>
                         </div>
