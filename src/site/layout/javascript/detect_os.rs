@@ -136,12 +136,19 @@ function getOS() {
 let os = getOS();
 window.os = os;
 
-let hit = Array.from(document.querySelectorAll(".target[data-targets]")).find((a) =>
-  a.attributes["data-targets"].value.includes(os)
+let hit = Array.from(document.querySelectorAll(".target[data-targets]")).find(
+  (a) => a.attributes["data-targets"].value.includes(os)
 );
 if (hit) {
   hit.classList.remove("hidden");
 } else {
-  document.querySelector(".backup-download").classList.remove("hidden")
+  if (window.os === options.macSilicon) {
+    Array.from(document.querySelectorAll(".target[data-targets]"))
+      .find((a) => a.attributes["data-targets"].value.includes(options.mac))
+      .classList.remove("hidden");
+  } else {
+    document.querySelector(".backup-download").classList.remove("hidden");
+  }
 }
+
 "#;
