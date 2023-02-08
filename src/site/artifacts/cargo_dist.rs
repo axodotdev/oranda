@@ -124,16 +124,17 @@ pub fn build_table(manifest: DistManifest, config: &Config) -> Box<div<String>> 
     let mut table = vec![];
     for release in manifest.releases.iter() {
         for artifact in release.artifacts.iter() {
-            let name = &artifact.name;
-            let url = create_download_link(config, name);
-            let kind = get_kind_string(&artifact.kind);
-            let targets: &String = &artifact.target_triples.clone().into_iter().collect();
-            table.extend(vec![
-                html!(<span>{text!(name)}</span>),
-                html!(<span>{text!(kind)}</span>),
-                html!(<span>{text!(targets)}</span>),
-                html!(<span><a href=url>{text!("Download")}</a></span>),
-            ]);
+            if let Some(name) = artifact.name.clone() {
+                let url = create_download_link(config, &name);
+                let kind = get_kind_string(&artifact.kind);
+                let targets: &String = &artifact.target_triples.clone().into_iter().collect();
+                table.extend(vec![
+                    html!(<span>{text!(name)}</span>),
+                    html!(<span>{text!(kind)}</span>),
+                    html!(<span>{text!(targets)}</span>),
+                    html!(<span><a href=url>{text!("Download")}</a></span>),
+                ]);
+            }
         }
     }
 
@@ -179,13 +180,17 @@ pub fn build_list(manifest: &DistManifest, syntax_theme: &SyntaxTheme) -> Box<di
                 }
                 let install_code =
                     get_install_hint(&release.artifacts, &artifact.target_triples, syntax_theme);
-                let detect_text = match get_os(targets.as_str()) {
-                    Some(os) => os,
-                    None => targets.as_str(),
+
+                let title = match artifact.description.clone() {
+                    Some(desc) => desc,
+                    None => match get_os(targets.as_str()) {
+                        Some(os) => String::from(os),
+                        None => targets,
+                    },
                 };
                 list.extend(html!(
                     <li class="list-none">
-                        <h5 class="capitalize">{text!(detect_text)}</h5>
+                        <h5 class="capitalize">{text!(title)}</h5>
                         {unsafe_text!(install_code)}
                     </li>
                 ))
