@@ -2,7 +2,7 @@ use crate::config::Config;
 use crate::errors::*;
 use crate::site::link;
 use crate::site::markdown::{syntax_highlight, SyntaxTheme};
-use axohtml::elements::{div, li, span};
+use axohtml::elements::{div, span};
 use axohtml::{html, text, unsafe_text};
 use cargo_dist_schema::{Artifact, ArtifactKind, DistManifest};
 
@@ -124,16 +124,17 @@ pub fn build_table(manifest: DistManifest, config: &Config) -> Box<div<String>> 
     let mut table = vec![];
     for release in manifest.releases.iter() {
         for artifact in release.artifacts.iter() {
-            let name = &artifact.name;
-            let url = create_download_link(config, name);
-            let kind = get_kind_string(&artifact.kind);
-            let targets: &String = &artifact.target_triples.clone().into_iter().collect();
-            table.extend(vec![
-                html!(<span>{text!(name)}</span>),
-                html!(<span>{text!(kind)}</span>),
-                html!(<span>{text!(targets)}</span>),
-                html!(<span><a href=url>{text!("Download")}</a></span>),
-            ]);
+            if let Some(name) = artifact.name.clone() {
+                let url = create_download_link(config, &name);
+                let kind = get_kind_string(&artifact.kind);
+                let targets: &String = &artifact.target_triples.clone().into_iter().collect();
+                table.extend(vec![
+                    html!(<span>{text!(name)}</span>),
+                    html!(<span>{text!(kind)}</span>),
+                    html!(<span>{text!(targets)}</span>),
+                    html!(<span><a href=url>{text!("Download")}</a></span>),
+                ]);
+            }
         }
     }
 
@@ -168,7 +169,7 @@ fn create_table_content(table: Vec<Box<span<String>>>) -> Box<div<String>> {
 // False positive duplicate allocation warning
 // https://github.com/rust-lang/rust-clippy/issues?q=is%3Aissue+redundant_allocation+sort%3Aupdated-desc
 #[allow(clippy::vec_box)]
-pub fn build_list(manifest: &DistManifest, syntax_theme: &SyntaxTheme) -> Vec<Box<li<String>>> {
+pub fn build_list(manifest: &DistManifest, syntax_theme: &SyntaxTheme) -> Box<div<String>> {
     let mut list = vec![];
     for release in manifest.releases.iter() {
         for artifact in release.artifacts.iter() {
@@ -179,9 +180,17 @@ pub fn build_list(manifest: &DistManifest, syntax_theme: &SyntaxTheme) -> Vec<Bo
                 }
                 let install_code =
                     get_install_hint(&release.artifacts, &artifact.target_triples, syntax_theme);
+
+                let title = match artifact.description.clone() {
+                    Some(desc) => desc,
+                    None => match get_os(targets.as_str()) {
+                        Some(os) => String::from(os),
+                        None => targets,
+                    },
+                };
                 list.extend(html!(
                     <li class="list-none">
-                        <h5>{text!(targets)}</h5>
+                        <h5 class="capitalize">{text!(title)}</h5>
                         {unsafe_text!(install_code)}
                     </li>
                 ))
@@ -189,5 +198,12 @@ pub fn build_list(manifest: &DistManifest, syntax_theme: &SyntaxTheme) -> Vec<Bo
         }
     }
 
-    list
+    html!(
+    <div>
+        <h3>{text!("Install via script")}</h3>
+        <ul>
+            {list}
+        </ul>
+    </div>
+    )
 }
