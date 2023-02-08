@@ -151,4 +151,10 @@ if (hit) {
   }
 }
 
+Array.from(document.getElementsByClassName("copy-clipboard-button")).forEach(function(element) {
+  element.addEventListener('click', () => {
+    navigator.clipboard.writeText(element.attributes["data-copy"].value);
+  });
+});
+
 "#;
