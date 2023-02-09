@@ -5,8 +5,8 @@ pub const SCRIPT: &str = r#"
 
 let options = {
   windows: "pc-windows",
-  windows64: "64-windows-pc",
-  windowsArm: "arm-windows-pc",
+  windows64: "64-pc-windows",
+  windowsArm: "arm-pc-windows",
 
   mac: "apple-darwin",
   macPc: "apple-ppc",
