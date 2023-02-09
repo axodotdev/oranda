@@ -6,7 +6,7 @@ use linked_hash_map::LinkedHashMap;
 use axohtml::elements::div;
 use axohtml::{html, text, unsafe_text};
 
-use crate::site::artifacts::get_copy_logo;
+use crate::site::artifacts::get_copyicon;
 
 fn create_package_install_code(code: &str, syntax_theme: &SyntaxTheme) -> String {
     let highlighted_code = syntax_highlight(Some("sh"), code, syntax_theme);
@@ -21,7 +21,7 @@ fn create_package_install_code(code: &str, syntax_theme: &SyntaxTheme) -> String
 pub fn build_list(managers: &LinkedHashMap<String, String>, config: &Config) -> Box<div<String>> {
     let mut list = vec![];
     for (manager, install_code) in managers.iter() {
-        let copy_icon = get_copy_logo();
+        let copy_icon = get_copyicon();
         list.extend(html!(<li class="list-none"><h5>{text!(manager)}</h5> 
         <div class="install-code-wrapper">
         {unsafe_text!(create_package_install_code(install_code, &config.syntax_theme))}

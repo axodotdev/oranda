@@ -6,7 +6,7 @@ use axohtml::elements::{div, span};
 use axohtml::{html, text, unsafe_text};
 use cargo_dist_schema::{Artifact, ArtifactKind, DistManifest, Release};
 
-use crate::site::artifacts::get_copy_logo;
+use crate::site::artifacts::get_copyicon;
 
 pub fn get_os(name: &str) -> Option<&str> {
     match name.trim() {
@@ -109,7 +109,7 @@ fn build_install_block(
 ) -> Result<Box<div<String>>> {
     let install_code = get_install_hint_code(&release.artifacts, &artifact.target_triples, config)?;
 
-    let copy_icon = get_copy_logo();
+    let copy_icon = get_copyicon();
     let hint = get_install_hint(&release.artifacts, &artifact.target_triples, config)?;
 
     Ok(html!(
