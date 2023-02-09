@@ -42,7 +42,7 @@ impl Page {
         markdown::to_html(contents, syntax_theme)
     }
 
-    pub fn build(self, config: &Config, needs_js: bool) -> Result<String> {
+    pub fn build(self, config: &Config) -> Result<String> {
         let page_contents = if self.is_index {
             let artifacts_header = artifacts::build_header(config)?;
             html!(<div>{artifacts_header}{unsafe_text!(self.contents)}</div>).to_string()
@@ -50,7 +50,7 @@ impl Page {
             let html: Box<div<String>> = html!(<div>{unsafe_text!(self.contents)}</div>);
             html.to_string()
         };
-        layout::build(config, page_contents, needs_js)
+        layout::build(config, page_contents, self.needs_js)
     }
 
     pub fn filename(source: &str, is_index: bool) -> String {

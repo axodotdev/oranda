@@ -48,10 +48,9 @@ impl Site {
         let dist = &config.dist_dir;
         Self::create_dist_dir(dist)?;
         for page in self.pages {
-            let js = page.needs_js;
             let asset = axoasset::local::LocalAsset::new(
                 &page.filename.clone(),
-                page.build(config, js)?.into(),
+                page.build(config)?.into(),
             );
             axoasset::local::LocalAsset::write(&asset, dist)?;
         }

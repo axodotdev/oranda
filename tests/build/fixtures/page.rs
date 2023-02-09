@@ -22,13 +22,15 @@ pub fn index(config: &Config) -> String {
         is_index: true,
         needs_js: true,
     };
-    let contents = page.build(config, true).unwrap();
-    layout::build(config, contents, true).unwrap()
+    let needs_js = page.needs_js;
+    let contents = page.build(config).unwrap();
+    layout::build(config, contents, needs_js).unwrap()
 }
 
 pub fn artifacts(config: &Config) -> String {
     let artifacts_content = artifacts::page::build(config).unwrap();
     let page = Page::new_from_contents(artifacts_content, "artifacts.html", true);
-    let contents = page.build(config, true).unwrap();
-    layout::build(config, contents, true).unwrap()
+    let needs_js = page.needs_js;
+    let contents = page.build(config).unwrap();
+    layout::build(config, contents, needs_js).unwrap()
 }
