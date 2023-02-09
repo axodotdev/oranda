@@ -1,6 +1,6 @@
 {
   "favicon": "https://www.axo.dev/favicon.ico",
-  
+  "path_prefix": "oranda",
   "additional_pages": [
     "./docs/configuration.md",
     "./docs/themes.md",

@@ -6,7 +6,7 @@ use linked_hash_map::LinkedHashMap;
 use axohtml::elements::div;
 use axohtml::{html, text, unsafe_text};
 
-use super::get_copy_logo;
+use crate::site::artifacts::get_copy_logo;
 
 fn create_package_install_code(code: &str, syntax_theme: &SyntaxTheme) -> String {
     let highlighted_code = syntax_highlight(Some("sh"), code, syntax_theme);

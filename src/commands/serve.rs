@@ -74,7 +74,7 @@ impl Serve {
                     format!("Unhandled internal error: {}", error),
                 )
             });
-        const FRINGE_VERSION: &str = "0.0.9";
+        const FRINGE_VERSION: &str = "0.0.10";
         let prefix_route = format!("/{}", prefix);
         let fringe_route = format!("/{}/fringe@{}.css", prefix, FRINGE_VERSION);
         let app = Router::new().nest_service(&prefix_route, serve_dir).route(

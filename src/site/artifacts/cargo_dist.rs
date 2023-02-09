@@ -6,7 +6,7 @@ use axohtml::elements::{div, span};
 use axohtml::{html, text, unsafe_text};
 use cargo_dist_schema::{Artifact, ArtifactKind, DistManifest, Release};
 
-use super::get_copy_logo;
+use crate::site::artifacts::get_copy_logo;
 
 pub fn get_os(name: &str) -> Option<&str> {
     match name.trim() {
