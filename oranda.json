@@ -13,10 +13,7 @@
     "twitter_account": "@axodotdev"
   },
   "artifacts": {
-    "cargo_dist": true,
-    "package_managers": {
-        "crates.io": "cargo install oranda"
-    }
+    "cargo_dist": true
   },
   "homepage": "https://oranda.axo.dev"
 }

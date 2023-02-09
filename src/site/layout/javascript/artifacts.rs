@@ -151,10 +151,12 @@ if (hit) {
   }
 }
 
-Array.from(document.getElementsByClassName("copy-clipboard-button")).forEach(function(element) {
-  element.addEventListener('click', () => {
-    navigator.clipboard.writeText(element.attributes["data-copy"].value);
-  });
-});
-
+let copyButtons = Array.from(document.getElementsByClassName("copy-clipboard-button"));
+if(copyButtons.length) {
+  copyButtons.forEach(function(element) {
+    element.addEventListener('click', () => {
+      navigator.clipboard.writeText(element.attributes["data-copy"].value);
+    });
+  });  
+}
 "#;
