@@ -55,9 +55,8 @@ pub fn build(config: &Config, content: String) -> Result<String> {
             {homepage}
             {favicon}
             {meta_tags}
-            // {fringe_css}
+            {fringe_css}
             {additional_css}
-            <link href="http://localhost:42673/axo-oranda.css" rel="stylesheet" />
         </head>
         <body>
         <div class="container">
