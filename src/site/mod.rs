@@ -69,7 +69,7 @@ impl Site {
         Ok(())
     }
 
-    fn create_dist_dir(dist_path: &String) -> Result<()> {
+    pub fn create_dist_dir(dist_path: &String) -> Result<()> {
         if !Path::new(dist_path).exists() {
             std::fs::create_dir_all(dist_path)?;
         }

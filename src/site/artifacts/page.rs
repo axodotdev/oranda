@@ -16,7 +16,7 @@ pub fn build(config: &Config) -> Result<String> {
             ..
         }) = &config.artifacts
         {
-            lists.extend(cargo_dist::build_list(&manifest, &config.syntax_theme));
+            lists.extend(cargo_dist::build_list(&manifest, config));
         }
 
         if let Some(Artifacts {

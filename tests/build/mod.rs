@@ -67,7 +67,7 @@ fn loads_js() {
     let _guard = TEST_RUNTIME.enter();
     let config = &oranda_config::cargo_dist();
     let page_html = page::index(config);
-    assert!(page_html.contains("<script src=\"/detect_os.js\">"));
+    assert!(page_html.contains("<script src=\"/artifacts.js\">"));
 }
 
 #[test]
@@ -101,6 +101,6 @@ fn adds_prefix() {
     let _guard = TEST_RUNTIME.enter();
     let config = &&oranda_config::path_prefix();
     let page_html = page::index(config);
-    assert!(page_html.contains("<script src=\"/axo/detect_os.js\">"));
+    assert!(page_html.contains("<script src=\"/axo/artifacts.js\">"));
     assert!(page_html.contains("<a href=\"/axo/artifacts.html\">View all installation options</a>"))
 }
