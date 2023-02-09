@@ -104,8 +104,25 @@ fn creates_copy_to_clipboard_home() {
     let page_html = page::index(config);
     assert!(page_html
         .contains("<button class=\"business-button button copy-clipboard-button primary\" data-copy=\"curl --proto &#39;=https&#39; --tlsv1.2 -L -sSf https://github.com/axodotdev/oranda/releases/download/v0.0.1-prerelease1/installer.sh | sh\">"));
+}
+
+#[test]
+fn creates_installer_view_source() {
+    let _guard = TEST_RUNTIME.enter();
+    let config = &oranda_config::cargo_dist();
+    let page_html = page::index(config);
     assert!(page_html.contains(
-        "<a class=\"business-button button primary\" href=\"installer.sh.txt\">Source</a>"
+        "<a class=\"business-button button primary\" href=\"/installer.sh.txt\">Source</a>"
+    ));
+}
+
+#[test]
+fn creates_installer_view_source_with_prefix() {
+    let _guard = TEST_RUNTIME.enter();
+    let config = &oranda_config::cargo_dist_with_prefix();
+    let page_html = page::index(config);
+    assert!(page_html.contains(
+        "<a class=\"business-button button primary\" href=\"/axo/installer.sh.txt\">Source</a>"
     ));
 }
 

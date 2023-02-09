@@ -52,6 +52,22 @@ pub fn cargo_dist() -> Config {
     }
 }
 
+pub fn cargo_dist_with_prefix() -> Config {
+    Config {
+        artifacts: Some(Artifacts {
+            cargo_dist: Some(true),
+            package_managers: None,
+        }),
+        additional_pages: Some(vec![String::from(
+            "https://raw.githubusercontent.com/axodotdev/oranda/main/README.md",
+        )]),
+        repository: Some(String::from("https://github.com/axodotdev/oranda")),
+        version: Some(String::from("0.0.1-prerelease1")),
+        path_prefix: Some(String::from("axo")),
+        ..Default::default()
+    }
+}
+
 pub fn package_managers() -> Config {
     let mut package_managers = LinkedHashMap::new();
     package_managers.insert(String::from("npm"), String::from("npm install oranda"));

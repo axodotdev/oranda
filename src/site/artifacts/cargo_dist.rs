@@ -1,7 +1,7 @@
 use crate::config::Config;
 use crate::errors::*;
-use crate::site::markdown::syntax_highlight;
 use crate::site::link;
+use crate::site::markdown::syntax_highlight;
 use axohtml::elements::{div, span};
 use axohtml::{html, text, unsafe_text};
 use cargo_dist_schema::{Artifact, ArtifactKind, DistManifest, Release};
@@ -57,7 +57,10 @@ fn get_install_hint(
     if let Some(current_hint) = hint {
         if let (Some(install_hint), Some(name)) = (&current_hint.install_hint, &current_hint.name) {
             let file_path = get_installer_path(config, name)?;
-            Ok((String::from(install_hint), file_path))
+            Ok((
+                String::from(install_hint),
+                link::generate(&config.path_prefix, file_path),
+            ))
         } else {
             Err(no_hint_error)
         }
