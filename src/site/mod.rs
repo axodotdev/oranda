@@ -18,17 +18,17 @@ pub struct Site {
 
 impl Site {
     pub fn build(config: &Config) -> Result<Site> {
-        let index = Page::new_from_file(config, &config.readme_path)?;
+        let index = Page::new_from_file(config, &config.readme_path, true)?;
         let mut pages = vec![index];
         if let Some(files) = &config.additional_pages {
             for file in files {
-                let additional_page = Page::new_from_file(config, file)?;
+                let additional_page = Page::new_from_file(config, file, false)?;
                 pages.push(additional_page)
             }
         }
         if config.artifacts.is_some() {
             let artifacts_html = artifacts::page::build(config)?;
-            let artifacts_page = Page::new_from_contents(artifacts_html, "artifacts.html");
+            let artifacts_page = Page::new_from_contents(artifacts_html, "artifacts.html", true);
             pages.push(artifacts_page)
         }
 

@@ -85,6 +85,7 @@ fn creates_downloads_page() {
     let artifacts_page = page::artifacts(config);
     assert!(artifacts_page.contains("<h3>Downloads</h3>"));
     assert!(artifacts_page.contains("<span>oranda-v0.0.1-prerelease1-x86_64-pc-windows-msvc.zip</span><span>Executable Zip</span><span>x86_64-pc-windows-msvc</span><span><a href=\"https://github.com/axodotdev/oranda/releases/download/v0.0.1-prerelease1/oranda-v0.0.1-prerelease1-x86_64-pc-windows-msvc.zip\">Download</a></span>"));
+    assert!(artifacts_page.contains("<h3>Install via script</h3>"))
 }
 
 #[test]
@@ -94,6 +95,28 @@ fn creates_nav_item_package_managers() {
     let page_html = page::index(config);
     assert!(page_html
         .contains("<a class=\"download-all\" href=\"/artifacts.html\">View all downloads</a>"));
+}
+
+#[test]
+fn creates_copy_to_clipboard_home() {
+    let _guard = TEST_RUNTIME.enter();
+    let config = &oranda_config::cargo_dist();
+    let page_html = page::index(config);
+    assert!(page_html
+        .contains("<button class=\"business-button button copy-clipboard-button primary\" data-copy=\"curl --proto &#39;=https&#39; --tlsv1.2 -L -sSf https://github.com/axodotdev/oranda/releases/download/v0.0.1-prerelease1/installer.sh | sh\">"));
+    assert!(page_html.contains(
+        "<a class=\"business-button button primary\" href=\"installer.sh.txt\">Source</a>"
+    ));
+}
+
+#[test]
+fn creates_copy_to_clipboard_artifacts() {
+    let _guard = TEST_RUNTIME.enter();
+    let config = &oranda_config::package_managers();
+    let page_html = page::artifacts(config);
+    assert!(page_html.contains(
+        "<button class=\"business-button button primary\" data-copy=\"npm install oranda\">"
+    ));
 }
 
 #[test]
