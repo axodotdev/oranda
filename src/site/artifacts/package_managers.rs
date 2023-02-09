@@ -6,6 +6,8 @@ use linked_hash_map::LinkedHashMap;
 use axohtml::elements::div;
 use axohtml::{html, text, unsafe_text};
 
+use super::get_copy_logo;
+
 fn create_package_install_code(code: &str, syntax_theme: &SyntaxTheme) -> String {
     let highlighted_code = syntax_highlight(Some("sh"), code, syntax_theme);
     match highlighted_code {
@@ -13,14 +15,25 @@ fn create_package_install_code(code: &str, syntax_theme: &SyntaxTheme) -> String
         Err(_) => format!("<code class='text-center break-all'>{}</code>", code),
     }
 }
-
 // False positive duplicate allocation warning
 // https://github.com/rust-lang/rust-clippy/issues?q=is%3Aissue+redundant_allocation+sort%3Aupdated-desc
 #[allow(clippy::vec_box)]
 pub fn build_list(managers: &LinkedHashMap<String, String>, config: &Config) -> Box<div<String>> {
     let mut list = vec![];
     for (manager, install_code) in managers.iter() {
-        list.extend(html!(<li class="list-none"><h5>{text!(manager)}</h5> {unsafe_text!(create_package_install_code(install_code, &config.syntax_theme))}</li>))
+        let copy_icon = get_copy_logo();
+        list.extend(html!(<li class="list-none"><h5>{text!(manager)}</h5> 
+        <div class="install-code-wrapper">
+        {unsafe_text!(create_package_install_code(install_code, &config.syntax_theme))}
+        <button
+            data-copy={install_code}
+            class="business-button primary button">
+            {copy_icon}
+        </button>
+    </div>
+        
+        
+        </li>))
     }
 
     html!(

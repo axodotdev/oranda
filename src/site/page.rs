@@ -47,7 +47,7 @@ impl Page {
             let html: Box<div<String>> = html!(<div>{unsafe_text!(self.contents)}</div>);
             html.to_string()
         };
-        layout::build(config, page_contents, self.is_index)
+        layout::build(config, page_contents)
     }
 
     pub fn filename(source: &str, is_index: bool) -> String {

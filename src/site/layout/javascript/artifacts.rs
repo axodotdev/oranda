@@ -139,6 +139,7 @@ window.os = os;
 let hit = Array.from(document.querySelectorAll(".target[data-targets]")).find(
   (a) => a.attributes["data-targets"].value.includes(os)
 );
+let backupButton = document.querySelector(".backup-download");
 if (hit) {
   hit.classList.remove("hidden");
 } else {
@@ -146,12 +147,12 @@ if (hit) {
     Array.from(document.querySelectorAll(".target[data-targets]"))
       .find((a) => a.attributes["data-targets"].value.includes(options.mac))
       .classList.remove("hidden");
-  } else {
-    document.querySelector(".backup-download").classList.remove("hidden");
+  } else if (backupButton){
+    backupButton.classList.remove("hidden");
   }
 }
 
-let copyButtons = Array.from(document.getElementsByClassName("copy-clipboard-button"));
+let copyButtons = Array.from(document.querySelectorAll("[data-copy]"));
 if(copyButtons.length) {
   copyButtons.forEach(function(element) {
     element.addEventListener('click', () => {
