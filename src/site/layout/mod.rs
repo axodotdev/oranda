@@ -8,7 +8,7 @@ use crate::config::{analytics, theme, Config};
 use crate::errors::*;
 use axohtml::{html, text, unsafe_text};
 
-pub fn build(config: &Config, content: String, need_js: bool) -> Result<String> {
+pub fn build(config: &Config, content: String, needs_js: bool) -> Result<String> {
     let theme = theme::css_class(&config.theme);
     let analytics = analytics::get_analytics(config);
     let google_script = match &config.analytics {
@@ -22,7 +22,7 @@ pub fn build(config: &Config, content: String, need_js: bool) -> Result<String> 
     let os_script = match config.artifacts {
         None => None,
         Some(_) => {
-            if need_js {
+            if needs_js {
                 Some(javascript::build_os_script(&config.path_prefix)?)
             } else {
                 None
