@@ -11,6 +11,8 @@ use page::Page;
 use crate::config::Config;
 use crate::errors::*;
 
+use axoasset::LocalAsset;
+
 #[derive(Debug)]
 pub struct Site {
     pages: Vec<Page>,
@@ -48,11 +50,7 @@ impl Site {
         let dist = &config.dist_dir;
         Self::create_dist_dir(dist)?;
         for page in self.pages {
-            let asset = axoasset::local::LocalAsset::new(
-                &page.filename.clone(),
-                page.build(config)?.into(),
-            );
-            axoasset::local::LocalAsset::write(&asset, dist)?;
+            LocalAsset::new(&page.filename.clone(), page.build(config)?.into()).write(dist)?;
         }
         if let Some(book_path) = &config.md_book {
             Self::copy_static(dist, book_path)?;
