@@ -3,7 +3,6 @@
   "path_prefix": "oranda",
   "additional_pages": [
     "./docs/configuration.md",
-    "./docs/themes.md",
     "./docs/assets.md",
     "./docs/hosting.md"
   ],
