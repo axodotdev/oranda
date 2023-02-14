@@ -1,4 +1,6 @@
 use crate::errors::*;
+
+use axoasset::{Asset, LocalAsset};
 use axohtml::elements::link;
 use axohtml::html;
 use minifier::css;
@@ -6,7 +8,7 @@ use minifier::css;
 fn concat_minify(css_files: &[String]) -> Result<String> {
     let mut css = String::new();
     for file in css_files {
-        let future = axoasset::load_string(file);
+        let future = Asset::load_string(file);
 
         let unminified = tokio::runtime::Handle::current().block_on(future)?;
         let minified = match css::minify(&unminified) {
@@ -40,7 +42,7 @@ pub fn write_fringe(dist_dir: &str) -> Result<()> {
 
     let css_path = format!("{}/{}", dist_dir, css_file_name);
 
-    let asset = axoasset::local::LocalAsset::new(&css_path, minified_css.as_bytes().to_vec());
+    let asset = LocalAsset::new(&css_path, minified_css.as_bytes().to_vec());
     asset.write(dist_dir)?;
     Ok(())
 }
@@ -53,7 +55,7 @@ pub fn write_additional(additional_css: &[String], dist_dir: &str) -> Result<()>
     let minified_css = concat_minify(additional_css)?;
     let css_path = format!("{}/custom.css", dist_dir);
 
-    let asset = axoasset::local::LocalAsset::new(&css_path, minified_css.as_bytes().to_vec());
+    let asset = LocalAsset::new(&css_path, minified_css.as_bytes().to_vec());
     asset.write(dist_dir)?;
     Ok(())
 }

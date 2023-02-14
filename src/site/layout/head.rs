@@ -1,6 +1,8 @@
 use crate::config::Config;
 use crate::errors::*;
 use crate::site::link;
+
+use axoasset::Asset;
 use axohtml::elements::meta;
 use axohtml::html;
 
@@ -39,7 +41,7 @@ pub fn get_favicon(
     dist_dir: String,
     path_prefix: &Option<String>,
 ) -> Result<Box<axohtml::elements::link<String>>> {
-    let copy_result_future = axoasset::copy(&favicon, &dist_dir[..]);
+    let copy_result_future = Asset::copy(&favicon, &dist_dir[..]);
     let copy_result = tokio::runtime::Handle::current().block_on(copy_result_future)?;
 
     let path_as_string = copy_result.strip_prefix(dist_dir)?.to_string_lossy();

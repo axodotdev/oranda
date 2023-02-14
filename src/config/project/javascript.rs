@@ -1,3 +1,4 @@
+use axoasset::Asset;
 use serde::Deserialize;
 
 use crate::config::ProjectConfig;
@@ -49,7 +50,7 @@ pub struct JavaScript {}
 impl JavaScript {
     pub fn read(&self, project_root: &Option<PathBuf>) -> Result<ProjectConfig> {
         let path = JavaScript::config(project_root);
-        let package_json_future = axoasset::load_string(path.to_str().unwrap());
+        let package_json_future = Asset::load_string(path.to_str().unwrap());
         let package_json = tokio::runtime::Handle::current().block_on(package_json_future)?;
         let data: PackageJson = serde_json::from_str(&package_json)?;
 

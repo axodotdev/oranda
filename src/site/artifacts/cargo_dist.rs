@@ -1,10 +1,12 @@
+use axoasset::{Asset, LocalAsset};
+use axohtml::elements::{div, span};
+use axohtml::{html, text, unsafe_text};
+use cargo_dist_schema::{Artifact, ArtifactKind, DistManifest, Release};
+
 use crate::config::Config;
 use crate::errors::*;
 use crate::site::markdown::syntax_highlight;
 use crate::site::{link, Site};
-use axohtml::elements::{div, span};
-use axohtml::{html, text, unsafe_text};
-use cargo_dist_schema::{Artifact, ArtifactKind, DistManifest, Release};
 
 use crate::site::artifacts::get_copyicon;
 
@@ -27,11 +29,11 @@ pub fn fetch_manifest(config: &Config) -> std::result::Result<DistManifest, reqw
 
 fn get_installer_path(config: &Config, name: &String) -> Result<String> {
     let download_link = create_download_link(config, name);
-    let file_string_future = axoasset::load_string(download_link.as_str());
+    let file_string_future = Asset::load_string(download_link.as_str());
     let file_string = tokio::runtime::Handle::current().block_on(file_string_future)?;
     let file_path = format!("{}.txt", &name);
     Site::create_dist_dir(&config.dist_dir)?;
-    let asset = axoasset::local::LocalAsset::new(
+    let asset = LocalAsset::new(
         format!("{}/{}", &config.dist_dir, &file_path).as_str(),
         file_string.as_bytes().to_vec(),
     );

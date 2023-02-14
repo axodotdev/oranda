@@ -106,8 +106,9 @@ checksum = "d468802bab17cbc0cc575e9b053f41e72aa36bfa6b7f55e3529ffa43161b97fa"
 
 [[package]]
 name = "axoasset"
-version = "0.1.0"
-source = "git+https://github.com/axodotdev/axoasset?branch=main#3f0efb679d6c9e76f61dd6630931d55f48217243"
+version = "0.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d910f7c1d30f796d88031b1421200c26a4d82a16b81078e538cfd73b520052e4"
 dependencies = [
  "image",
  "mime",

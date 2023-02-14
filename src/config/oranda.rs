@@ -1,5 +1,6 @@
 use std::path::Path;
 
+use axoasset::Asset;
 use serde::Deserialize;
 
 use crate::config::analytics::Analytics;
@@ -48,7 +49,7 @@ impl OrandaConfig {
         let msg = format!("Loading config at {}", config_path);
         Message::new(MessageType::Info, &msg).print();
         tracing::info!("{}", &msg);
-        let config_future = axoasset::load_string(&config_path);
+        let config_future = Asset::load_string(&config_path);
         let config_result = tokio::runtime::Handle::current().block_on(config_future);
 
         match config_result {

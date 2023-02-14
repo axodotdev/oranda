@@ -1,10 +1,13 @@
+use std::path::Path;
+
 use crate::config::artifacts::Artifacts;
 use crate::config::Config;
 use crate::errors::*;
 use crate::site::link;
+
+use axoasset::Asset;
 use axohtml::elements::{div, header, img, li, nav};
 use axohtml::{html, text};
-use std::path::Path;
 
 fn get_logo(logo: String, config: &Config) -> Result<Box<img<String>>> {
     let fetched_logo = fetch_logo(&config.dist_dir, logo, &config.name);
@@ -17,7 +20,7 @@ async fn fetch_logo(
     origin_path: String,
     name: &String,
 ) -> Result<Box<img<String>>> {
-    let copy_result = axoasset::copy(&origin_path, dist_dir).await?;
+    let copy_result = Asset::copy(&origin_path, dist_dir).await?;
 
     let path_as_string = copy_result.strip_prefix(dist_dir)?.to_string_lossy();
 
