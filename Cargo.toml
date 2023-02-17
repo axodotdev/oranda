@@ -21,11 +21,11 @@ comrak = "0.14"
 console = "0.15.5"
 fs_extra = "1.2.0"
 lazy_static = "1.4.0"
-linked-hash-map = {version="0.5.6", features=["serde_impl"]}
+linked-hash-map = { version = "0.5.6", features = ["serde_impl"] }
 minifier = "0.2.2"
 reqwest = { version = "0.11.13", features = ["blocking", "json"] }
 serde = { version = "1.0.144", features = ["derive"] }
-serde_json = { version = "1.0.85"}
+serde_json = { version = "1.0.85" }
 syntect = "5.0"
 thiserror = "1.0.37"
 tokio = { version = "1.20.1", features = ["full"] }
