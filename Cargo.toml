@@ -2,7 +2,7 @@
 name = "oranda"
 description = ">o_o<"
 repository = "https://github.com/axodotdev/oranda"
-version = "0.0.1-prerelease1"
+version = "0.0.1-prerelease2"
 edition = "2021"
 authors = ["Axo Developer Co. <hello@axo.dev>"]
 license = "MIT OR Apache-2.0"
