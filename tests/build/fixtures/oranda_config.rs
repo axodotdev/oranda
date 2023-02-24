@@ -32,7 +32,7 @@ pub fn path_prefix() -> Config {
             "https://raw.githubusercontent.com/axodotdev/axii/main/css/main.css",
         )],
         repository: Some(String::from("https://github.com/axodotdev/oranda")),
-        version: Some(String::from("0.0.1-prerelease1")),
+        version: Some(String::from("0.0.1-prerelease2")),
         ..Default::default()
     }
 }
@@ -47,7 +47,7 @@ pub fn cargo_dist() -> Config {
             "https://raw.githubusercontent.com/axodotdev/oranda/main/README.md",
         )]),
         repository: Some(String::from("https://github.com/axodotdev/oranda")),
-        version: Some(String::from("0.0.1-prerelease1")),
+        version: Some(String::from("0.0.1-prerelease2")),
         ..Default::default()
     }
 }
@@ -62,7 +62,7 @@ pub fn package_managers() -> Config {
             package_managers: Some(package_managers),
         }),
         repository: Some(String::from("https://github.com/axodotdev/oranda")),
-        version: Some(String::from("0.0.1-prerelease1")),
+        version: Some(String::from("0.0.1-prerelease2")),
         ..Default::default()
     }
 }
