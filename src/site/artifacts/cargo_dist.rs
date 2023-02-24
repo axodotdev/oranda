@@ -42,20 +42,24 @@ fn get_installer_path(config: &Config, name: &String) -> Result<String> {
 }
 
 fn get_install_hint(
-    artifacts: &[Artifact],
+    manifest: &DistManifest,
+    artifacts: &[String],
     target_triples: &[String],
     config: &Config,
 ) -> Result<(String, String)> {
     let no_hint_error = OrandaError::Other(
         "There has been an issue getting your install hint, are you using cargo dist?".to_string(),
     );
-    let hint = artifacts.iter().find(|artifact| {
-        artifact.install_hint.is_some()
-            && artifact
-                .target_triples
-                .iter()
-                .any(|h| target_triples.iter().any(|item| item == h))
-    });
+    let hint = artifacts
+        .iter()
+        .map(|artifact_id| &manifest.artifacts[artifact_id])
+        .find(|artifact| {
+            artifact.install_hint.is_some()
+                && artifact
+                    .target_triples
+                    .iter()
+                    .any(|h| target_triples.iter().any(|item| item == h))
+        });
 
     if let Some(current_hint) = hint {
         if let (Some(install_hint), Some(name)) = (&current_hint.install_hint, &current_hint.name) {
@@ -70,11 +74,12 @@ fn get_install_hint(
 }
 
 pub fn get_install_hint_code(
-    artifacts: &[Artifact],
+    manifest: &DistManifest,
+    artifacts: &[String],
     target_triples: &[String],
     config: &Config,
 ) -> Result<String> {
-    let install_hint = get_install_hint(artifacts, target_triples, config)?;
+    let install_hint = get_install_hint(manifest, artifacts, target_triples, config)?;
 
     let highlighted_code =
         syntax_highlight(Some("sh"), install_hint.0.as_str(), &config.syntax_theme);
@@ -106,13 +111,24 @@ fn create_download_link(config: &Config, name: &String) -> String {
 
 fn build_install_block(
     config: &Config,
+    manifest: &DistManifest,
     release: &Release,
     artifact: &Artifact,
 ) -> Result<Box<div<String>>> {
-    let install_code = get_install_hint_code(&release.artifacts, &artifact.target_triples, config)?;
+    let install_code = get_install_hint_code(
+        manifest,
+        &release.artifacts,
+        &artifact.target_triples,
+        config,
+    )?;
 
     let copy_icon = get_copyicon();
-    let hint = get_install_hint(&release.artifacts, &artifact.target_triples, config)?;
+    let hint = get_install_hint(
+        manifest,
+        &release.artifacts,
+        &artifact.target_triples,
+        config,
+    )?;
 
     Ok(html!(
         <div class="install-code-wrapper">
@@ -140,7 +156,8 @@ pub fn build(config: &Config) -> Result<Box<div<String>>> {
 
     let mut html: Vec<Box<div<String>>> = vec![];
     for release in typed.releases.iter() {
-        for artifact in release.artifacts.iter() {
+        for artifact_id in release.artifacts.iter() {
+            let artifact = &typed.artifacts[artifact_id];
             if let ArtifactKind::ExecutableZip = artifact.kind {
                 let mut targets = String::new();
                 for targ in artifact.target_triples.iter() {
@@ -150,7 +167,7 @@ pub fn build(config: &Config) -> Result<Box<div<String>>> {
                     Some(os) => format!("We have detected you are on {}, are we wrong?", os),
                     None => String::from("We couldn't detect the system you are using."),
                 };
-                let install_code_block = build_install_block(config, release, artifact);
+                let install_code_block = build_install_block(config, &typed, release, artifact);
 
                 html.extend(html!(
                     <div class="hidden target artifact-header" data-targets=&targets>
@@ -179,7 +196,8 @@ pub fn build(config: &Config) -> Result<Box<div<String>>> {
 pub fn build_table(manifest: DistManifest, config: &Config) -> Box<div<String>> {
     let mut table = vec![];
     for release in manifest.releases.iter() {
-        for artifact in release.artifacts.iter() {
+        for artifact_id in release.artifacts.iter() {
+            let artifact = &manifest.artifacts[artifact_id];
             if let Some(name) = artifact.name.clone() {
                 let url = create_download_link(config, &name);
                 let kind = get_kind_string(&artifact.kind);
@@ -228,7 +246,8 @@ fn create_table_content(table: Vec<Box<span<String>>>) -> Box<div<String>> {
 pub fn build_list(manifest: &DistManifest, config: &Config) -> Result<Box<div<String>>> {
     let mut list = vec![];
     for release in manifest.releases.iter() {
-        for artifact in release.artifacts.iter() {
+        for artifact_id in release.artifacts.iter() {
+            let artifact = &manifest.artifacts[artifact_id];
             if let ArtifactKind::ExecutableZip = artifact.kind {
                 let mut targets = String::new();
                 for targ in artifact.target_triples.iter() {
@@ -242,7 +261,7 @@ pub fn build_list(manifest: &DistManifest, config: &Config) -> Result<Box<div<St
                         None => targets,
                     },
                 };
-                let install_code_block = build_install_block(config, release, artifact);
+                let install_code_block = build_install_block(config, manifest, release, artifact);
                 list.extend(html!(
                     <li class="list-none">
                         <h5 class="capitalize">{text!(title)}</h5>
