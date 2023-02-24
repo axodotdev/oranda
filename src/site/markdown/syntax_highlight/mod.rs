@@ -29,79 +29,7 @@ fn find_syntax<'a>(ps: &'a SyntaxSet, language: &'a str) -> Result<&'a SyntaxRef
     ))
 }
 
-const THEMES: &[(&str, &str)] = &[
-    (
-        "AgilaClassicOceanicNext",
-        include_str!("syntax_themes/AgilaClassicOceanicNext.tmTheme"),
-    ),
-    (
-        "AgilaCobalt",
-        include_str!("syntax_themes/AgilaCobalt.tmTheme"),
-    ),
-    (
-        "AgilaLightSolarized",
-        include_str!("syntax_themes/AgilaLightSolarized.tmTheme"),
-    ),
-    (
-        "AgilaMonokaiExtended",
-        include_str!("syntax_themes/AgilaMonokaiExtended.tmTheme"),
-    ),
-    (
-        "AgilaNeonMonocyanide",
-        include_str!("syntax_themes/AgilaNeonMonocyanide.tmTheme"),
-    ),
-    (
-        "AgilaOceanicNext",
-        include_str!("syntax_themes/AgilaOceanicNext.tmTheme"),
-    ),
-    (
-        "AgilaOriginOceanicNext",
-        include_str!("syntax_themes/AgilaOriginOceanicNext.tmTheme"),
-    ),
-    (
-        "Base16EightiesDark",
-        include_str!("syntax_themes/Base16EightiesDark.tmTheme"),
-    ),
-    (
-        "Base16MochaDark",
-        include_str!("syntax_themes/Base16MochaDark.tmTheme"),
-    ),
-    (
-        "Base16OceanDark",
-        include_str!("syntax_themes/Base16OceanDark.tmTheme"),
-    ),
-    (
-        "Base16OceanLight",
-        include_str!("syntax_themes/Base16OceanLight.tmTheme"),
-    ),
-    (
-        "Darkmatter",
-        include_str!("syntax_themes/Darkmatter.tmTheme"),
-    ),
-    ("Dracula", include_str!("syntax_themes/Dracula.tmTheme")),
-    (
-        "GitHubLight",
-        include_str!("syntax_themes/GitHubLight.tmTheme"),
-    ),
-    (
-        "MaterialTheme",
-        include_str!("syntax_themes/MaterialTheme.tmTheme"),
-    ),
-    (
-        "MaterialThemeDarker",
-        include_str!("syntax_themes/MaterialThemeDarker.tmTheme"),
-    ),
-    (
-        "MaterialThemeLighter",
-        include_str!("syntax_themes/MaterialThemeLighter.tmTheme"),
-    ),
-    (
-        "MaterialThemePalenight",
-        include_str!("syntax_themes/MaterialThemePalenight.tmTheme"),
-    ),
-    ("NightOwl", include_str!("syntax_themes/NightOwl.tmTheme")),
-    ("OneDark", include_str!("syntax_themes/OneDark.tmTheme")),
-];
+const THEMES: &[(&str, &str)] = &[("MaterialTheme", include_str!("MaterialTheme.tmTheme"))];
 
 pub fn syntax_highlight(
     lang: Option<&str>,
@@ -131,16 +59,4 @@ pub fn syntax_highlight(
         syntax,
         &theme_set.themes[&syntax_theme.as_str()],
     )?)
-}
-
-#[test]
-fn creates_syntax() {
-    let highlight = syntax_highlight(
-        Some("js"),
-        "console.log(5)",
-        &SyntaxTheme::AgilaClassicOceanicNext,
-    )
-    .unwrap();
-
-    assert!(highlight.contains("<span style=\"color:#fac863;\">console</span>"));
 }
