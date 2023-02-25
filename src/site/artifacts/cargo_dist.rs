@@ -20,11 +20,22 @@ pub fn get_os(name: &str) -> Option<&str> {
     }
 }
 
-pub fn fetch_manifest(config: &Config) -> std::result::Result<DistManifest, reqwest::Error> {
+pub fn fetch_manifest(config: &Config) -> Result<DistManifest> {
     let url = create_download_link(config, &String::from("dist-manifest.json"));
-    let resp = reqwest::blocking::get(url)?;
 
-    resp.json::<DistManifest>()
+    match reqwest::blocking::get(&url)?.error_for_status() {
+        Ok(resp) => match resp.json::<DistManifest>() {
+            Ok(manifest) => Ok(manifest),
+            Err(e) => Err(OrandaError::CargoDistManifestParseError {
+                url,
+                details: e.to_string(),
+            }),
+        },
+        Err(e) => Err(OrandaError::CargoDistManifestFetchError {
+            url,
+            status_code: e.status().unwrap_or(reqwest::StatusCode::BAD_REQUEST),
+        }),
+    }
 }
 
 fn get_installer_path(config: &Config, name: &String) -> Result<String> {
