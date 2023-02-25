@@ -46,6 +46,15 @@ fn creates_nav() {
 }
 
 #[test]
+fn creates_nav_no_additional_pages() {
+    let _guard = TEST_RUNTIME.enter();
+    let config = &oranda_config::cargo_dist();
+    let page_html = page::index(config);
+
+    assert!(page_html.contains("<nav class=\"nav\">"));
+}
+
+#[test]
 fn creates_footer() {
     let _guard = TEST_RUNTIME.enter();
     let config = &oranda_config::no_artifacts();
