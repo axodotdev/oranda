@@ -292,9 +292,9 @@ checksum = "6031a462f977dd38968b6f23378356512feeace69cef817e1a4475108093cec3"
 
 [[package]]
 name = "cargo-dist-schema"
-version = "0.0.3-prerelease09"
+version = "0.0.3-prerelease12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ff37e35c9e08b35b785e98e5fcf24351acf62d4310029dbc9a6889637d491fc8"
+checksum = "093e69b05367acecb203840fd7aa6043701ab1409c116b28746441c1b02946cb"
 dependencies = [
  "camino",
  "schemars",
