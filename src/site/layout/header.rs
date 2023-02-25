@@ -28,7 +28,7 @@ async fn fetch_logo(
 }
 
 fn nav(
-    pages: &[String],
+    additional_pages: &Option<Vec<String>>,
     path_prefix: &Option<String>,
     artifacts: &Option<Artifacts>,
     md_book: &Option<String>,
@@ -39,16 +39,19 @@ fn nav(
     } else {
         vec![html!(<li><a href="/">"Home"</a></li>)]
     };
-    for page in pages.iter() {
-        let file_path = Path::new(page);
-        let file_name = file_path
-            .file_stem()
-            .unwrap_or(file_path.as_os_str())
-            .to_string_lossy();
 
-        let href = link::generate(path_prefix, format!("{}.html", file_name));
+    if let Some(pages) = additional_pages {
+        for page in pages.iter() {
+            let file_path = Path::new(page);
+            let file_name = file_path
+                .file_stem()
+                .unwrap_or(file_path.as_os_str())
+                .to_string_lossy();
 
-        html.extend(html!(<li><a href=href>{text!(file_name)}</a></li>));
+            let href = link::generate(path_prefix, format!("{}.html", file_name));
+
+            html.extend(html!(<li><a href=href>{text!(file_name)}</a></li>));
+        }
     }
 
     if let Some(artifact) = artifacts {
@@ -83,9 +86,12 @@ pub fn create(config: &Config) -> Result<Box<header<String>>> {
         None
     };
 
-    let nav = if let Some(additional_pages) = &config.additional_pages {
+    let nav = if config.additional_pages.is_some()
+        || config.artifacts.is_some()
+        || config.md_book.is_some()
+    {
         Some(nav(
-            additional_pages,
+            &config.additional_pages,
             &config.path_prefix,
             &config.artifacts,
             &config.md_book,
