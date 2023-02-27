@@ -1496,7 +1496,7 @@ dependencies = [
 
 [[package]]
 name = "oranda"
-version = "0.0.1"
+version = "0.0.3-prerelease12"
 dependencies = [
  "ammonia",
  "assert_cmd",
@@ -1523,6 +1523,7 @@ dependencies = [
  "tracing",
  "tracing-appender",
  "tracing-subscriber",
+ "url",
 ]
 
 [[package]]
