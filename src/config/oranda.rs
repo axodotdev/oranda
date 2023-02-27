@@ -41,6 +41,7 @@ pub struct OrandaConfig {
     pub path_prefix: Option<String>,
     pub license: Option<String>,
     pub md_book: Option<String>,
+    pub changelog: Option<bool>,
 }
 
 impl OrandaConfig {

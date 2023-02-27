@@ -1,11 +1,11 @@
 {
   "favicon": "https://www.axo.dev/favicon.ico",
-  "path_prefix": "oranda",
   "additional_pages": [
     "./docs/configuration.md",
     "./docs/assets.md",
     "./docs/hosting.md"
   ],
+  "changelog": true,
   "social": {
     "image": "https://www.axo.dev/meta_small.jpeg",
     "image_alt": "axo",
