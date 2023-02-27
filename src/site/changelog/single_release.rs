@@ -3,9 +3,8 @@ use crate::site::markdown::{self, SyntaxTheme};
 use axohtml::dom::UnsafeTextNode;
 use axohtml::elements::section;
 use axohtml::html;
-use axohtml::types::{Id, SpacedSet};
 use axohtml::{text, unsafe_text};
-use chrono::{DateTime, Utc};
+use chrono::DateTime;
 
 use super::types::ReleasesApiResponse;
 
@@ -14,10 +13,10 @@ pub fn build_single_release(
     syntax_theme: &SyntaxTheme,
 ) -> Result<Box<section<String>>> {
     let body = match &release.body {
-        Some(md) => markdown::to_html(md.to_string(), &syntax_theme)?,
+        Some(md) => markdown::to_html(md.to_string(), syntax_theme)?,
         None => String::new(),
     };
-    let id: axohtml::types::Id = axohtml::types::Id::new(release.tag_name.as_str()).into();
+    let id: axohtml::types::Id = axohtml::types::Id::new(release.tag_name.as_str());
     let formatted_date = DateTime::parse_from_rfc3339(&release.published_at)?
         .format("%b %e %Y at %R UTC")
         .to_string();
@@ -27,9 +26,10 @@ pub fn build_single_release(
     } else {
         "release"
     };
+    let link = format!("#{}", &release.tag_name);
     Ok(html!(
     <section class=classnames>
-        <h2 id=id><a href={format!("#{}", &release.tag_name)}>{text!(&release.name)}</a></h2>
+        <h2 id=id><a href=link>{text!(&release.name)}</a></h2>
         <div class="release-info">
             <span class="flex items-center gap-2">
                 {tag_icon()}{text!(&release.tag_name)}

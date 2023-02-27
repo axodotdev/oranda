@@ -2,10 +2,9 @@ mod single_release;
 mod types;
 use std::vec;
 
-use axohtml::dom::UnsafeTextNode;
-use axohtml::elements::{html, li, section};
+use axohtml::elements::{li, section};
 use axohtml::html;
-use axohtml::{text, unsafe_text};
+use axohtml::text;
 use reqwest::header::USER_AGENT;
 
 use crate::config::Config;
