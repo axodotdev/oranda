@@ -160,4 +160,17 @@ if(copyButtons.length) {
     });
   });  
 }
+
+// Toggle for pre releases
+const checkbox = document.getElementById("show-prereleases");
+
+if(checkbox) {
+  checkbox.addEventListener("click", () => {
+    const all = document.getElementsByClassName("pre-release");
+
+    for (var item of all) {
+        item.classList.toggle("hidden");
+    }
+  })
+}
 "#;

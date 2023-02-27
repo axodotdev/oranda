@@ -2,7 +2,7 @@
 name = "oranda"
 description = "🎁 generate beautiful landing pages for your projects"
 repository = "https://github.com/axodotdev/cargo-dist"
-version = "0.0.3-prerelease12"
+version = "0.0.3"
 edition = "2021"
 authors = ["Axo Developer Co. <hello@axo.dev>"]
 license = "MIT OR Apache-2.0"
@@ -15,7 +15,8 @@ ammonia = "3"
 axoasset = "0.0.1"
 axohtml = "0.4.1"
 axum = "0.6.2"
-cargo-dist-schema = "=0.0.3-prerelease12"
+cargo-dist-schema = "=0.0.3"
+chrono = "0.4.23"
 clap = { version = "4", features = ["derive", "help", "usage", "error-context", "wrap_help"] }
 comrak = "0.14"
 console = "0.15.5"

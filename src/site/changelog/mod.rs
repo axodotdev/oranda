@@ -1,7 +1,9 @@
 mod single_release;
 mod types;
+use std::vec;
+
 use axohtml::dom::UnsafeTextNode;
-use axohtml::elements::{html, section};
+use axohtml::elements::{html, li, section};
 use axohtml::html;
 use axohtml::{text, unsafe_text};
 use reqwest::header::USER_AGENT;
@@ -18,6 +20,7 @@ pub fn build_page(config: &Config, repo: &str) -> Result<String> {
     let parts = repo_parsed.path_segments().map(|c| c.collect::<Vec<_>>());
     if let Some(url_parts) = parts {
         let mut releases_html: Vec<Box<section<String>>> = vec![];
+        let mut releases_nav: Vec<Box<li<String>>> = vec![];
         let url = format!(
             "https://api.github.com/repos/{}/{}/releases",
             url_parts[0], url_parts[1]
@@ -31,12 +34,37 @@ pub fn build_page(config: &Config, repo: &str) -> Result<String> {
 
         for release in rsp.iter() {
             releases_html.extend(build_single_release(release, &config.syntax_theme)?);
+            let classnames = if release.prerelease {
+                "pre-release hidden"
+            } else {
+                ""
+            };
+            let link = format!("#{}", &release.tag_name);
+            releases_nav.extend(
+                html!(<li class=classnames><a href=link>{text!(&release.tag_name)}</a></li>),
+            )
         }
 
         Ok(html!(
             <div>
                 <h1>{text!("Releases")}</h1>
-                {releases_html}
+                <div class="prereleases-toggle">
+                <div class="flex h-6 items-center">
+                  <input id="show-prereleases" type="checkbox" />
+                </div>
+                <div class="ml-3">
+                  <label for="show-prereleases">{text!("Show prereleases")}</label>
+                </div>
+              </div>
+                <div class="releases-wrapper">
+                <nav class="releases-nav">
+
+                <ul>
+                    {releases_nav}
+                </ul>
+            </nav>
+            <div>{releases_html}</div>
+                </div>
             </div>
         )
         .to_string())
