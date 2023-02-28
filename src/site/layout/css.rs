@@ -25,7 +25,7 @@ pub fn build_fringe() -> Box<link<String>> {
     const FRINGE_VERSION: &str = "0.0.10";
     let css_file_name = format!("fringe@{}.css", FRINGE_VERSION);
 
-    html!(<link rel="stylesheet" href="http://localhost:38627/axo-oranda.css"></link>)
+    html!(<link rel="stylesheet" href="http://localhost:45709/axo-oranda.css"></link>)
 }
 
 pub fn write_fringe(dist_dir: &str) -> Result<()> {
