@@ -17,5 +17,9 @@
         "crates.io": "cargo install oranda"
     }
   },
-  "homepage": "https://oranda.axo.dev"
+  "analytics": {
+    "plausible": {
+      "domain": "opensource.axo.dev"
+    }
+  }
 }
