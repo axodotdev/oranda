@@ -12,8 +12,13 @@ pub fn build_single_release(
     release: &ReleasesApiResponse,
     syntax_theme: &SyntaxTheme,
 ) -> Result<Box<section<String>>> {
+    let cutoff = "\r\n\r\n## Install ";
     let body = match &release.body {
-        Some(md) => markdown::to_html(md.to_string(), syntax_theme)?,
+        Some(md) => {
+            let cut_body = md.split(cutoff).collect::<Vec<&str>>()[0];
+
+            markdown::to_html(cut_body.to_string(), syntax_theme)?
+        }
         None => String::new(),
     };
     let id: axohtml::types::Id = axohtml::types::Id::new(release.tag_name.as_str());

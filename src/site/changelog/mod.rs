@@ -48,13 +48,13 @@ pub fn build_page(config: &Config, repo: &str) -> Result<String> {
             <div>
                 <h1>{text!("Releases")}</h1>
                 <div class="prereleases-toggle">
-                <div class="flex h-6 items-center">
-                  <input id="show-prereleases" type="checkbox" />
+                    <div class="flex h-6 items-center">
+                        <input id="show-prereleases" type="checkbox" />
+                    </div>
+                    <div class="ml-3">
+                        <label for="show-prereleases">{text!("Show prereleases")}</label>
+                    </div>
                 </div>
-                <div class="ml-3">
-                  <label for="show-prereleases">{text!("Show prereleases")}</label>
-                </div>
-              </div>
                 <div class="releases-wrapper">
                 <nav class="releases-nav">
 
