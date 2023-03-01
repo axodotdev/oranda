@@ -5,6 +5,7 @@ use cargo_dist_schema::{Artifact, ArtifactKind, DistManifest, Release};
 
 use crate::config::Config;
 use crate::errors::*;
+use crate::site::changelog::fetch_releases;
 use crate::site::markdown::syntax_highlight;
 use crate::site::{link, Site};
 
@@ -21,25 +22,40 @@ pub fn get_os(name: &str) -> Option<&str> {
 }
 
 pub fn fetch_manifest(config: &Config) -> Result<DistManifest> {
-    let url = create_download_link(config, &String::from("dist-manifest.json"));
+    if let Some(repo) = &config.repository {
+        let releases = fetch_releases(repo.as_str())?;
+        let first = releases
+            .iter()
+            .find(|release| !release.prerelease)
+            .unwrap_or(&releases[0]);
+        let url = create_download_link(
+            config,
+            &String::from("dist-manifest.json"),
+            Some(first.tag_name.to_owned()),
+        );
 
-    match reqwest::blocking::get(&url)?.error_for_status() {
-        Ok(resp) => match resp.json::<DistManifest>() {
-            Ok(manifest) => Ok(manifest),
-            Err(e) => Err(OrandaError::CargoDistManifestParseError {
+        match reqwest::blocking::get(&url)?.error_for_status() {
+            Ok(resp) => match resp.json::<DistManifest>() {
+                Ok(manifest) => Ok(manifest),
+                Err(e) => Err(OrandaError::CargoDistManifestParseError {
+                    url,
+                    details: e.to_string(),
+                }),
+            },
+            Err(e) => Err(OrandaError::CargoDistManifestFetchError {
                 url,
-                details: e.to_string(),
+                status_code: e.status().unwrap_or(reqwest::StatusCode::BAD_REQUEST),
             }),
-        },
-        Err(e) => Err(OrandaError::CargoDistManifestFetchError {
-            url,
-            status_code: e.status().unwrap_or(reqwest::StatusCode::BAD_REQUEST),
-        }),
+        }
+    } else {
+        Err(OrandaError::Other(
+            "Repository is mandatory for the cargo dist option".to_owned(),
+        ))
     }
 }
 
 fn get_installer_path(config: &Config, name: &String) -> Result<String> {
-    let download_link = create_download_link(config, name);
+    let download_link = create_download_link(config, name, config.version.to_owned());
     let file_string_future = Asset::load_string(download_link.as_str());
     let file_string = tokio::runtime::Handle::current().block_on(file_string_future)?;
     let file_path = format!("{}.txt", &name);
@@ -109,14 +125,6 @@ fn get_kind_string(kind: &ArtifactKind) -> String {
         ArtifactKind::Symbols => String::from("Symbols"),
         ArtifactKind::Installer => String::from("Installer"),
         _ => String::from("Unknown"),
-    }
-}
-
-fn create_download_link(config: &Config, name: &String) -> String {
-    if let (Some(repo), Some(version)) = (&config.repository, &config.version) {
-        format!("{}/releases/download/v{}/{}", repo, version, name)
-    } else {
-        String::new()
     }
 }
 
@@ -210,7 +218,7 @@ pub fn build_table(manifest: DistManifest, config: &Config) -> Box<div<String>> 
         for artifact_id in release.artifacts.iter() {
             let artifact = &manifest.artifacts[artifact_id];
             if let Some(name) = artifact.name.clone() {
-                let url = create_download_link(config, &name);
+                let url = create_download_link(config, &name, config.version.to_owned());
                 let kind = get_kind_string(&artifact.kind);
                 let targets: &String = &artifact.target_triples.clone().into_iter().collect();
                 table.extend(vec![
@@ -291,4 +299,17 @@ pub fn build_list(manifest: &DistManifest, config: &Config) -> Result<Box<div<St
         </ul>
     </div>
     ))
+}
+
+fn create_download_link(config: &Config, name: &String, version: Option<String>) -> String {
+    if let (Some(repo), Some(v)) = (&config.repository, version) {
+        let version_to_use = if v.contains("v") {
+            v.split("v").collect::<Vec<&str>>()[1]
+        } else {
+            v.as_str()
+        };
+        format!("{}/releases/download/v{}/{}", repo, version_to_use, name)
+    } else {
+        String::new()
+    }
 }

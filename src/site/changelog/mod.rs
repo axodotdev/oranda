@@ -32,12 +32,10 @@ fn build_prerelease_toggle(releases: Vec<ReleasesApiResponse>) -> Option<Box<div
     }
 }
 
-pub fn build_page(config: &Config, repo: &str) -> Result<String> {
+pub fn fetch_releases(repo: &str) -> Result<Vec<ReleasesApiResponse>> {
     let repo_parsed = Url::parse(repo)?;
     let parts = repo_parsed.path_segments().map(|c| c.collect::<Vec<_>>());
     if let Some(url_parts) = parts {
-        let mut releases_html: Vec<Box<section<String>>> = vec![];
-        let mut releases_nav: Vec<Box<li<String>>> = vec![];
         let url = format!(
             "https://api.github.com/repos/{}/{}/releases",
             url_parts[0], url_parts[1]
@@ -49,44 +47,50 @@ pub fn build_page(config: &Config, repo: &str) -> Result<String> {
             .send()?
             .json::<Vec<ReleasesApiResponse>>()?;
 
-        for release in releases.iter() {
-            let classnames = if release.prerelease {
-                "pre-release hidden"
-            } else {
-                ""
-            };
-
-            let link = format!("#{}", &release.tag_name);
-
-            releases_html.extend(build_single_release(
-                release,
-                &config.syntax_theme,
-                &config.version,
-                &config.path_prefix,
-            )?);
-            releases_nav.extend(
-                html!(<li class=classnames><a href=link>{text!(&release.tag_name)}</a></li>),
-            )
-        }
-
-        Ok(html!(
-            <div>
-                <h1>{text!("Releases")}</h1>
-                {build_prerelease_toggle(releases)}
-                <div class="releases-wrapper">
-                    <nav class="releases-nav">
-                        <ul>
-                            {releases_nav}
-                        </ul>
-                    </nav>
-                    <div class="releases-list">{releases_html}</div>
-                </div>
-            </div>
-        )
-        .to_string())
+        Ok(releases)
     } else {
         Err(OrandaError::Other(String::from(
             "Your repository url is incorrect, cannot create releases API url",
         )))
     }
+}
+
+pub fn build_page(config: &Config, repo: &str) -> Result<String> {
+    let releases = fetch_releases(repo)?;
+    let mut releases_html: Vec<Box<section<String>>> = vec![];
+    let mut releases_nav: Vec<Box<li<String>>> = vec![];
+    for release in releases.iter() {
+        let classnames = if release.prerelease {
+            "pre-release hidden"
+        } else {
+            ""
+        };
+
+        let link = format!("#{}", &release.tag_name);
+
+        releases_html.extend(build_single_release(
+            release,
+            &config.syntax_theme,
+            &config.version,
+            &config.path_prefix,
+        )?);
+        releases_nav
+            .extend(html!(<li class=classnames><a href=link>{text!(&release.tag_name)}</a></li>))
+    }
+
+    Ok(html!(
+        <div>
+            <h1>{text!("Releases")}</h1>
+            {build_prerelease_toggle(releases)}
+            <div class="releases-wrapper">
+                <nav class="releases-nav">
+                    <ul>
+                        {releases_nav}
+                    </ul>
+                </nav>
+                <div class="releases-list">{releases_html}</div>
+            </div>
+        </div>
+    )
+    .to_string())
 }
