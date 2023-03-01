@@ -42,7 +42,7 @@ pub fn fetch_releases(repo: &str) -> Result<Vec<ReleasesApiResponse>> {
         );
 
         let releases = reqwest::blocking::Client::new()
-            .get(&url)
+            .get(url)
             .header(USER_AGENT, "oranda")
             .send()?
             .json::<Vec<ReleasesApiResponse>>()?;

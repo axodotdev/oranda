@@ -54,8 +54,8 @@ pub fn fetch_manifest(config: &Config) -> Result<DistManifest> {
     }
 }
 
-fn get_installer_path(config: &Config, name: &String) -> Result<String> {
-    let download_link = create_download_link(config, name, config.version.to_owned());
+fn get_installer_path(config: &Config, name: &String, version: String) -> Result<String> {
+    let download_link = create_download_link(config, name, Some(version));
     let file_string_future = Asset::load_string(download_link.as_str());
     let file_string = tokio::runtime::Handle::current().block_on(file_string_future)?;
     let file_path = format!("{}.txt", &name);
@@ -70,14 +70,15 @@ fn get_installer_path(config: &Config, name: &String) -> Result<String> {
 
 fn get_install_hint(
     manifest: &DistManifest,
-    artifacts: &[String],
+    release: &Release,
     target_triples: &[String],
     config: &Config,
 ) -> Result<(String, String)> {
     let no_hint_error = OrandaError::Other(
         "There has been an issue getting your install hint, are you using cargo dist?".to_string(),
     );
-    let hint = artifacts
+    let hint = release
+        .artifacts
         .iter()
         .map(|artifact_id| &manifest.artifacts[artifact_id])
         .find(|artifact| {
@@ -90,7 +91,7 @@ fn get_install_hint(
 
     if let Some(current_hint) = hint {
         if let (Some(install_hint), Some(name)) = (&current_hint.install_hint, &current_hint.name) {
-            let file_path = get_installer_path(config, name)?;
+            let file_path = get_installer_path(config, name, release.app_version.to_owned())?;
             Ok((String::from(install_hint), file_path))
         } else {
             Err(no_hint_error)
@@ -102,11 +103,11 @@ fn get_install_hint(
 
 pub fn get_install_hint_code(
     manifest: &DistManifest,
-    artifacts: &[String],
+    release: &Release,
     target_triples: &[String],
     config: &Config,
 ) -> Result<String> {
-    let install_hint = get_install_hint(manifest, artifacts, target_triples, config)?;
+    let install_hint = get_install_hint(manifest, release, target_triples, config)?;
 
     let highlighted_code =
         syntax_highlight(Some("sh"), install_hint.0.as_str(), &config.syntax_theme);
@@ -134,20 +135,10 @@ fn build_install_block(
     release: &Release,
     artifact: &Artifact,
 ) -> Result<Box<div<String>>> {
-    let install_code = get_install_hint_code(
-        manifest,
-        &release.artifacts,
-        &artifact.target_triples,
-        config,
-    )?;
+    let install_code = get_install_hint_code(manifest, release, &artifact.target_triples, config)?;
 
     let copy_icon = get_copyicon();
-    let hint = get_install_hint(
-        manifest,
-        &release.artifacts,
-        &artifact.target_triples,
-        config,
-    )?;
+    let hint = get_install_hint(manifest, release, &artifact.target_triples, config)?;
 
     Ok(html!(
         <div class="install-code-wrapper">
@@ -218,7 +209,7 @@ pub fn build_table(manifest: DistManifest, config: &Config) -> Box<div<String>> 
         for artifact_id in release.artifacts.iter() {
             let artifact = &manifest.artifacts[artifact_id];
             if let Some(name) = artifact.name.clone() {
-                let url = create_download_link(config, &name, config.version.to_owned());
+                let url = create_download_link(config, &name, Some(release.app_version.to_owned()));
                 let kind = get_kind_string(&artifact.kind);
                 let targets: &String = &artifact.target_triples.clone().into_iter().collect();
                 table.extend(vec![
@@ -303,8 +294,8 @@ pub fn build_list(manifest: &DistManifest, config: &Config) -> Result<Box<div<St
 
 fn create_download_link(config: &Config, name: &String, version: Option<String>) -> String {
     if let (Some(repo), Some(v)) = (&config.repository, version) {
-        let version_to_use = if v.contains("v") {
-            v.split("v").collect::<Vec<&str>>()[1]
+        let version_to_use = if v.contains('v') {
+            v.split('v').collect::<Vec<&str>>()[1]
         } else {
             v.as_str()
         };
