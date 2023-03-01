@@ -2,7 +2,7 @@ mod single_release;
 mod types;
 use std::vec;
 
-use axohtml::elements::{li, section};
+use axohtml::elements::{div, li, section};
 use axohtml::html;
 use axohtml::text;
 use reqwest::header::USER_AGENT;
@@ -13,6 +13,24 @@ use url::Url;
 
 use self::single_release::build_single_release;
 use self::types::ReleasesApiResponse;
+
+fn build_prerelease_toggle(releases: Vec<ReleasesApiResponse>) -> Option<Box<div<String>>> {
+    let has_pre_releases = releases.iter().any(|release| release.prerelease);
+
+    if has_pre_releases {
+        Some(html!(
+    <div class="prereleases-toggle">
+        <div class="flex h-6 items-center">
+            <input id="show-prereleases" type="checkbox" />
+        </div>
+        <div class="ml-3">
+            <label for="show-prereleases">{text!("Show prereleases")}</label>
+        </div>
+    </div>))
+    } else {
+        None
+    }
+}
 
 pub fn build_page(config: &Config, repo: &str) -> Result<String> {
     let repo_parsed = Url::parse(repo)?;
@@ -47,22 +65,14 @@ pub fn build_page(config: &Config, repo: &str) -> Result<String> {
         Ok(html!(
             <div>
                 <h1>{text!("Releases")}</h1>
-                <div class="prereleases-toggle">
-                    <div class="flex h-6 items-center">
-                        <input id="show-prereleases" type="checkbox" />
-                    </div>
-                    <div class="ml-3">
-                        <label for="show-prereleases">{text!("Show prereleases")}</label>
-                    </div>
-                </div>
+                {build_prerelease_toggle(rsp)}
                 <div class="releases-wrapper">
-                <nav class="releases-nav">
-
-                <ul>
-                    {releases_nav}
-                </ul>
-            </nav>
-            <div>{releases_html}</div>
+                    <nav class="releases-nav">
+                        <ul>
+                            {releases_nav}
+                        </ul>
+                    </nav>
+                    <div>{releases_html}</div>
                 </div>
             </div>
         )
