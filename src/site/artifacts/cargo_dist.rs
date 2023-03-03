@@ -5,11 +5,11 @@ use cargo_dist_schema::{Artifact, ArtifactKind, DistManifest, Release};
 
 use crate::config::Config;
 use crate::errors::*;
-use crate::site::changelog::fetch_releases;
-use crate::site::markdown::syntax_highlight;
+use crate::site::changelog;
+use crate::site::markdown;
 use crate::site::{link, Site};
 
-use crate::site::artifacts::get_copyicon;
+use crate::site::artifacts;
 
 pub fn get_os(name: &str) -> Option<&str> {
     match name.trim() {
@@ -23,7 +23,7 @@ pub fn get_os(name: &str) -> Option<&str> {
 
 pub fn fetch_manifest(config: &Config) -> Result<DistManifest> {
     if let Some(repo) = &config.repository {
-        let releases = fetch_releases(repo.as_str())?;
+        let releases = changelog::fetch_releases(repo.as_str())?;
         let first = releases
             .iter()
             .find(|release| !release.prerelease)
@@ -110,7 +110,7 @@ pub fn get_install_hint_code(
     let install_hint = get_install_hint(manifest, release, target_triples, config)?;
 
     let highlighted_code =
-        syntax_highlight(Some("sh"), install_hint.0.as_str(), &config.syntax_theme);
+        markdown::syntax_highlight(Some("sh"), install_hint.0.as_str(), &config.syntax_theme);
     match highlighted_code {
         Ok(code) => Ok(code),
         Err(_) => Ok(format!(
@@ -137,7 +137,7 @@ fn build_install_block(
 ) -> Result<Box<div<String>>> {
     let install_code = get_install_hint_code(manifest, release, &artifact.target_triples, config)?;
 
-    let copy_icon = get_copyicon();
+    let copy_icon = artifacts::get_copyicon();
     let hint = get_install_hint(manifest, release, &artifact.target_triples, config)?;
 
     Ok(html!(

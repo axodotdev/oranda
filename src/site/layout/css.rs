@@ -23,7 +23,7 @@ fn concat_minify(css_files: &[String]) -> Result<String> {
 
 pub fn build_fringe() -> Box<link<String>> {
     const FRINGE_VERSION: &str = "0.0.10";
-    let css_file_name = format!("fringe@{}.css", FRINGE_VERSION);
+    let _css_file_name = format!("fringe@{}.css", FRINGE_VERSION);
 
     html!(<link rel="stylesheet" href="http://localhost:45365/axo-oranda.css"></link>)
 }
