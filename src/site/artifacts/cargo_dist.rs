@@ -31,7 +31,7 @@ pub fn fetch_manifest(config: &Config) -> Result<DistManifest> {
         let url = create_download_link(
             config,
             &String::from("dist-manifest.json"),
-            Some(first.tag_name.to_owned()),
+            first.tag_name.to_owned(),
         );
 
         match reqwest::blocking::get(&url)?.error_for_status() {
@@ -55,7 +55,7 @@ pub fn fetch_manifest(config: &Config) -> Result<DistManifest> {
 }
 
 fn get_installer_path(config: &Config, name: &String, version: String) -> Result<String> {
-    let download_link = create_download_link(config, name, Some(version));
+    let download_link = create_download_link(config, name, version);
     let file_string_future = Asset::load_string(download_link.as_str());
     let file_string = tokio::runtime::Handle::current().block_on(file_string_future)?;
     let file_path = format!("{}.txt", &name);
@@ -209,7 +209,7 @@ pub fn build_table(manifest: DistManifest, config: &Config) -> Box<div<String>> 
         for artifact_id in release.artifacts.iter() {
             let artifact = &manifest.artifacts[artifact_id];
             if let Some(name) = artifact.name.clone() {
-                let url = create_download_link(config, &name, Some(release.app_version.to_owned()));
+                let url = create_download_link(config, &name, release.app_version.to_owned());
                 let kind = get_kind_string(&artifact.kind);
                 let targets: &String = &artifact.target_triples.clone().into_iter().collect();
                 table.extend(vec![
@@ -292,12 +292,12 @@ pub fn build_list(manifest: &DistManifest, config: &Config) -> Result<Box<div<St
     ))
 }
 
-fn create_download_link(config: &Config, name: &String, version: Option<String>) -> String {
-    if let (Some(repo), Some(v)) = (&config.repository, version) {
-        let version_to_use = if v.contains('v') {
-            v.split('v').collect::<Vec<&str>>()[1]
+fn create_download_link(config: &Config, name: &String, version: String) -> String {
+    if let Some(repo) = &config.repository {
+        let version_to_use = if version.contains('v') {
+            version.split('v').collect::<Vec<&str>>()[1]
         } else {
-            v.as_str()
+            version.as_str()
         };
         format!("{}/releases/download/v{}/{}", repo, version_to_use, name)
     } else {
