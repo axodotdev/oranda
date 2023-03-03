@@ -40,10 +40,12 @@ pub fn fetch_releases(repo: &str) -> Result<Vec<ReleasesApiResponse>> {
             "https://api.github.com/repos/{}/{}/releases",
             url_parts[0], url_parts[1]
         );
+        const VERSION: &str = env!("CARGO_PKG_VERSION");
+        let header = format!("oranda-{}", VERSION);
 
         let releases = reqwest::blocking::Client::new()
             .get(url)
-            .header(USER_AGENT, "oranda")
+            .header(USER_AGENT, header)
             .send()?
             .json::<Vec<ReleasesApiResponse>>()?;
 
