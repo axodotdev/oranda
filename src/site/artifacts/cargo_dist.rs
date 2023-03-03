@@ -32,7 +32,7 @@ pub fn fetch_manifest(config: &Config) -> Result<DistManifest> {
             config,
             &String::from("dist-manifest.json"),
             first.tag_name.to_owned(),
-        );
+        )?;
 
         match reqwest::blocking::get(&url)?.error_for_status() {
             Ok(resp) => match resp.json::<DistManifest>() {
@@ -55,7 +55,7 @@ pub fn fetch_manifest(config: &Config) -> Result<DistManifest> {
 }
 
 fn get_installer_path(config: &Config, name: &String, version: String) -> Result<String> {
-    let download_link = create_download_link(config, name, version);
+    let download_link = create_download_link(config, name, version)?;
     let file_string_future = Asset::load_string(download_link.as_str());
     let file_string = tokio::runtime::Handle::current().block_on(file_string_future)?;
     let file_path = format!("{}.txt", &name);
@@ -203,13 +203,13 @@ pub fn build(config: &Config) -> Result<Box<div<String>>> {
     ))
 }
 
-pub fn build_table(manifest: DistManifest, config: &Config) -> Box<div<String>> {
+pub fn build_table(manifest: DistManifest, config: &Config) -> Result<Box<div<String>>> {
     let mut table = vec![];
     for release in manifest.releases.iter() {
         for artifact_id in release.artifacts.iter() {
             let artifact = &manifest.artifacts[artifact_id];
             if let Some(name) = artifact.name.clone() {
-                let url = create_download_link(config, &name, release.app_version.to_owned());
+                let url = create_download_link(config, &name, release.app_version.to_owned())?;
                 let kind = get_kind_string(&artifact.kind);
                 let targets: &String = &artifact.target_triples.clone().into_iter().collect();
                 table.extend(vec![
@@ -222,7 +222,7 @@ pub fn build_table(manifest: DistManifest, config: &Config) -> Box<div<String>> 
         }
     }
 
-    create_table_content(table)
+    Ok(create_table_content(table))
 }
 
 // False positive duplicate allocation warning
@@ -292,15 +292,20 @@ pub fn build_list(manifest: &DistManifest, config: &Config) -> Result<Box<div<St
     ))
 }
 
-fn create_download_link(config: &Config, name: &String, version: String) -> String {
+fn create_download_link(config: &Config, name: &String, version: String) -> Result<String> {
     if let Some(repo) = &config.repository {
         let version_to_use = if version.contains('v') {
             version.split('v').collect::<Vec<&str>>()[1]
         } else {
             version.as_str()
         };
-        format!("{}/releases/download/v{}/{}", repo, version_to_use, name)
+        Ok(format!(
+            "{}/releases/download/v{}/{}",
+            repo, version_to_use, name
+        ))
     } else {
-        String::new()
+        Err(OrandaError::Other(
+            "Repository is mandatory for the cargo dist option".to_owned(),
+        ))
     }
 }
