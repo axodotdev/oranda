@@ -44,7 +44,7 @@ pub fn cargo_dist() -> Config {
             package_managers: None,
         }),
         repository: Some(String::from("https://github.com/axodotdev/oranda")),
-        version: Some(String::from("0.0.1-prerelease2")),
+        version: Some(String::from("0.0.1")),
         ..Default::default()
     }
 }
