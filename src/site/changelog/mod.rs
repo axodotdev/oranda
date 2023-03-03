@@ -1,4 +1,4 @@
-mod single_release;
+mod release;
 mod types;
 use std::vec;
 
@@ -11,10 +11,7 @@ use crate::config::Config;
 use crate::errors::*;
 use url::Url;
 
-use crate::site::changelog::single_release::build_single_release;
-use crate::site::changelog::types::ReleasesApiResponse;
-
-fn build_prerelease_toggle(releases: Vec<ReleasesApiResponse>) -> Option<Box<div<String>>> {
+fn build_prerelease_toggle(releases: Vec<types::ReleasesApiResponse>) -> Option<Box<div<String>>> {
     let has_pre_releases = releases.iter().any(|release| release.prerelease);
 
     if has_pre_releases {
@@ -32,7 +29,7 @@ fn build_prerelease_toggle(releases: Vec<ReleasesApiResponse>) -> Option<Box<div
     }
 }
 
-pub fn fetch_releases(repo: &str) -> Result<Vec<ReleasesApiResponse>> {
+pub fn fetch_releases(repo: &str) -> Result<Vec<types::ReleasesApiResponse>> {
     let repo_parsed = Url::parse(repo)?;
     let parts = repo_parsed.path_segments().map(|c| c.collect::<Vec<_>>());
     if let Some(url_parts) = parts {
@@ -47,7 +44,7 @@ pub fn fetch_releases(repo: &str) -> Result<Vec<ReleasesApiResponse>> {
             .get(url)
             .header(USER_AGENT, header)
             .send()?
-            .json::<Vec<ReleasesApiResponse>>()?;
+            .json::<Vec<types::ReleasesApiResponse>>()?;
 
         let releases_non_drafts = releases
             .iter()
@@ -75,7 +72,7 @@ pub fn build_page(config: &Config, repo: &str) -> Result<String> {
 
         let link = format!("#{}", &release.tag_name);
 
-        releases_html.extend(build_single_release(
+        releases_html.extend(release::build_release(
             release,
             &config.syntax_theme,
             &config.version,

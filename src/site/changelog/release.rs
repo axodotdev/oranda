@@ -9,63 +9,64 @@ use chrono::DateTime;
 
 use super::types::ReleasesApiResponse;
 
-pub fn build_single_release(
+pub fn build_release(
     release: &ReleasesApiResponse,
     syntax_theme: &SyntaxTheme,
-    version: &Option<String>,
+    optional_version: &Option<String>,
     path_prefix: &Option<String>,
 ) -> Result<Box<section<String>>> {
-    let cutoff = "\r\n\r\n## Install ";
-    let body = match &release.body {
-        Some(md) => {
-            let cut_body = md.split(cutoff).collect::<Vec<&str>>()[0];
+    if let Some(version) = optional_version {
+        let cutoff = "\r\n\r\n## Install ";
+        let body = match &release.body {
+            Some(md) => {
+                let cut_body = md.split(cutoff).collect::<Vec<&str>>()[0];
 
-            markdown::to_html(cut_body.to_string(), syntax_theme)?
-        }
-        None => String::new(),
-    };
-    let id: axohtml::types::Id = axohtml::types::Id::new(release.tag_name.as_str());
-    let formatted_date = DateTime::parse_from_rfc3339(&release.published_at)?
-        .format("%b %e %Y at %R UTC")
-        .to_string();
+                markdown::to_html(cut_body.to_string(), syntax_theme)?
+            }
+            None => String::new(),
+        };
+        let id: axohtml::types::Id = axohtml::types::Id::new(release.tag_name.as_str());
+        let formatted_date = DateTime::parse_from_rfc3339(&release.published_at)?
+            .format("%b %e %Y at %R UTC")
+            .to_string();
 
-    let classnames = if release.prerelease {
-        "release pre-release hidden"
+        let classnames = if release.prerelease {
+            "release pre-release hidden"
+        } else {
+            "release"
+        };
+
+        let link = format!("#{}", &release.tag_name);
+        Ok(html!(
+        <section class=classnames>
+            <h2 id=id><a href=link>{text!(&release.name)}</a></h2>
+            <div class="release-info">
+                <span class="flex items-center gap-2">
+                    {tag_icon()}{text!(&release.tag_name)}
+                </span>
+                <span class="flex items-center gap-2">
+                    {date_icon()}{text!(&formatted_date)}
+                </span>
+            </div>
+            <div class="release-body mb-6">
+                {unsafe_text!(body)}
+            </div>
+            {build_install_button(version, release, path_prefix)}
+        </section>
+        ))
     } else {
-        "release"
-    };
-
-    let link = format!("#{}", &release.tag_name);
-    Ok(html!(
-    <section class=classnames>
-
-        <h2 id=id><a href=link>{text!(&release.name)}</a></h2>
-        <div class="release-info">
-            <span class="flex items-center gap-2">
-                {tag_icon()}{text!(&release.tag_name)}
-            </span>
-            <span class="flex items-center gap-2">
-                {date_icon()}{text!(&formatted_date)}
-            </span>
-        </div>
-        <div class="release-body mb-6">
-            {unsafe_text!(body)}
-        </div>
-        {build_install_button(version, release, path_prefix)}
-    </section>
-    ))
+        Err(OrandaError::Other(
+            "A version is required to have a changelog page".to_owned(),
+        ))
+    }
 }
 
 fn build_install_button(
-    version: &Option<String>,
+    version: &String,
     release: &ReleasesApiResponse,
     path_prefix: &Option<String>,
 ) -> Option<Box<a<String>>> {
-    let is_installable = if let Some(v) = &version {
-        release.tag_name.eq(&format!("v{}", v))
-    } else {
-        false
-    };
+    let is_installable = release.tag_name.eq(&format!("v{}", version));
     let downloads_href = link::generate(path_prefix, String::from("artifacts.html"));
 
     if is_installable {
