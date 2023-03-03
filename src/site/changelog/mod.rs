@@ -49,7 +49,12 @@ pub fn fetch_releases(repo: &str) -> Result<Vec<ReleasesApiResponse>> {
             .send()?
             .json::<Vec<ReleasesApiResponse>>()?;
 
-        Ok(releases)
+        let releases_non_drafts = releases
+            .iter()
+            .filter(|&r| !r.draft)
+            .map(|f| f.to_owned())
+            .collect();
+        Ok(releases_non_drafts)
     } else {
         Err(OrandaError::Other(String::from(
             "Your repository url is incorrect, cannot create releases API url",
