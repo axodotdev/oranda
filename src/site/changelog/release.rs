@@ -12,10 +12,10 @@ use super::types::ReleasesApiResponse;
 pub fn build_release(
     release: &ReleasesApiResponse,
     syntax_theme: &SyntaxTheme,
-    optional_version: &Option<String>,
+    config_version: &Option<String>,
     path_prefix: &Option<String>,
 ) -> Result<Box<section<String>>> {
-    if let Some(version) = optional_version {
+    if let Some(version) = config_version {
         let cutoff = "\r\n\r\n## Install ";
         let body = match &release.body {
             Some(md) => {
@@ -26,9 +26,10 @@ pub fn build_release(
             None => String::new(),
         };
         let id: axohtml::types::Id = axohtml::types::Id::new(release.tag_name.as_str());
-        let formatted_date = DateTime::parse_from_rfc3339(&release.published_at)?
-            .format("%b %e %Y at %R UTC")
-            .to_string();
+        let formatted_date = match DateTime::parse_from_rfc3339(&release.published_at) {
+            Ok(date) => date.format("%b %e %Y at %R UTC").to_string(),
+            Err(_) => release.published_at.to_owned(),
+        };
 
         let classnames = if release.prerelease {
             "release pre-release hidden"

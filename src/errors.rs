@@ -17,9 +17,6 @@ pub enum OrandaError {
     ParseError(#[from] url::ParseError),
 
     #[error(transparent)]
-    ChronoParseError(#[from] chrono::ParseError),
-
-    #[error(transparent)]
     Json(#[from] serde_json::Error),
 
     #[error(transparent)]
