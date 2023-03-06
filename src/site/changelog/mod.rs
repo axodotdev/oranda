@@ -30,8 +30,14 @@ fn build_prerelease_toggle(releases: Vec<types::ReleasesApiResponse>) -> Option<
 }
 
 pub fn fetch_releases(repo: &str) -> Result<Vec<types::ReleasesApiResponse>> {
-    let repo_parsed = Url::parse(repo)?;
-    let parts = repo_parsed.path_segments().map(|c| c.collect::<Vec<_>>());
+    let repo_parsed = match Url::parse(repo) {
+        Ok(parsed) => Ok(parsed),
+        Err(_) => Err(OrandaError::Other(
+            "There was an issue parsing your repo URL.".to_owned(),
+        )),
+    };
+    let binding = repo_parsed?;
+    let parts = binding.path_segments().map(|c| c.collect::<Vec<_>>());
     if let Some(url_parts) = parts {
         let url = format!(
             "https://api.github.com/repos/{}/{}/releases",
