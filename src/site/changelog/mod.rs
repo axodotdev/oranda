@@ -32,9 +32,10 @@ fn build_prerelease_toggle(releases: Vec<types::ReleasesApiResponse>) -> Option<
 pub fn fetch_releases(repo: &str) -> Result<Vec<types::ReleasesApiResponse>> {
     let repo_parsed = match Url::parse(repo) {
         Ok(parsed) => Ok(parsed),
-        Err(_) => Err(OrandaError::Other(
-            "There was an issue parsing your repo URL.".to_owned(),
-        )),
+        Err(parse_error) => Err(OrandaError::RepoParseError {
+            repo: repo.to_string(),
+            details: parse_error.to_string(),
+        }),
     };
     let binding = repo_parsed?;
     let parts = binding.path_segments().map(|c| c.collect::<Vec<_>>());
@@ -59,9 +60,11 @@ pub fn fetch_releases(repo: &str) -> Result<Vec<types::ReleasesApiResponse>> {
             .collect();
         Ok(releases_non_drafts)
     } else {
-        Err(OrandaError::Other(String::from(
-            "Your repository url is incorrect, cannot create releases API url",
-        )))
+        Err(OrandaError::RepoParseError {
+            repo: binding.to_string(),
+            details: "This URL is not structured the expected way, expected more segments-"
+                .to_owned(),
+        })
     }
 }
 
