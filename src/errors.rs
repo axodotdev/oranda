@@ -14,9 +14,6 @@ pub enum OrandaError {
     StripPrefixError(#[from] std::path::StripPrefixError),
 
     #[error(transparent)]
-    ParseError(#[from] url::ParseError),
-
-    #[error(transparent)]
     Json(#[from] serde_json::Error),
 
     #[error(transparent)]
