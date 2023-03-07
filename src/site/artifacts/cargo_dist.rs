@@ -119,7 +119,7 @@ pub fn get_install_hint_code(
     match highlighted_code {
         Ok(code) => Ok(code),
         Err(_) => Ok(format!(
-            "<code class='text-center break-all'>{}</code>",
+            "<code class='inline-code'>{}</code>",
             install_hint.0
         )),
     }
@@ -150,10 +150,10 @@ fn build_install_block(
             {unsafe_text!(install_code)}
             <button
                 data-copy={hint.0}
-                class="business-button primary copy-clipboard-button button">
+                class="button primary copy-clipboard-button button">
                 {copy_icon}
             </button>
-            <a class="business-button primary button" href=(hint.1)>
+            <a class="button primary button" href=(hint.1)>
                 {text!("Source")}
             </a>
         </div>
@@ -186,10 +186,10 @@ pub fn build(config: &Config) -> Result<Box<div<String>>> {
 
                 html.extend(html!(
                     <div class="hidden target artifact-header" data-targets=&targets>
-                        <h4 class="text-center">{text!("Install")}</h4>
+                        <h4>{text!("Install")}</h4>
                         {install_code_block}
                         <div>
-                            <span class="text-center detect">
+                            <span class="detect">
                                 {text!(detect_text)}
                             </span>
                             <a href=&downloads_href>{text!("View all installation options")}</a>

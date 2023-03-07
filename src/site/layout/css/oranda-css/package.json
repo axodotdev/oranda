@@ -1,0 +1,19 @@
+{
+  "name": "oranda-css",
+  "version": "1.0.0",
+  "description": "",
+  "main": "tailwind.config.js",
+  "scripts": {
+    "build": "tailwindcss -c tailwind.config.js -i ./css/main.css -o ./dist/oranda.css --minify",
+    "dev": "tailwindcss -c tailwind.config.js -i ./css/main.css -o ./dist/oranda.css --minify --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@tailwindcss/forms": "^0.5.3",
+    "@tailwindcss/line-clamp": "^0.4.2",
+    "@tailwindcss/typography": "^0.5.9",
+    "tailwindcss": "^3.2.7"
+  }
+}
