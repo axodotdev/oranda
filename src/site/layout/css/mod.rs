@@ -21,30 +21,13 @@ fn concat_minify(css_files: &[String]) -> Result<String> {
     Ok(css)
 }
 
-pub fn build_fringe() -> Box<link<String>> {
-    const FRINGE_VERSION: &str = "0.0.10";
-    let css_file_name = format!("fringe@{}.css", FRINGE_VERSION);
+pub fn build_themes_css(dist_dir: &str) -> Result<Box<link<String>>> {
+    let oranda_css = include_str!("oranda-css/dist/oranda.css");
+    let css_path = format!("{}/oranda.css", dist_dir);
 
-    html!(<link rel="stylesheet" href=css_file_name></link>)
-}
-
-pub fn write_fringe(dist_dir: &str) -> Result<()> {
-    const FRINGE_VERSION: &str = "0.0.10";
-    let css_file_name = format!("fringe@{}.css", FRINGE_VERSION);
-    let fringe_href = format!(
-        "https://www.unpkg.com/@axodotdev/fringe@{}/themes/",
-        FRINGE_VERSION
-    );
-    let minified_css = concat_minify(&[
-        format!("{}/fringe-output.css", fringe_href),
-        format!("{}/theme-output.css", fringe_href),
-    ])?;
-
-    let css_path = format!("{}/{}", dist_dir, css_file_name);
-
-    let asset = LocalAsset::new(&css_path, minified_css.as_bytes().to_vec());
+    let asset = LocalAsset::new(&css_path, oranda_css.as_bytes().to_vec());
     asset.write(dist_dir)?;
-    Ok(())
+    Ok(html!(<link rel="stylesheet" href="oranda.css"></link>))
 }
 
 pub fn build_additional() -> Box<link<String>> {

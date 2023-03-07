@@ -1,0 +1,19 @@
+.button {
+  @apply w-40 min-w-max p-3 rounded text-lg cursor-pointer transition disabled:opacity-60 disabled:cursor-default border-2;
+}
+
+.button.primary {
+  @apply text-axo-black bg-axo-orange hover:bg-axo-pink border-transparent;
+}
+
+.button.secondary {
+  @apply text-axo-orange hover:text-slate-100 hover:bg-axo-orange-dark hover:border-axo-orange-dark;
+}
+
+.button.primary-alt {
+  @apply text-slate-100 bg-violet-700 hover:bg-violet-500 border-transparent;
+}
+
+.button.secondary-alt {
+  @apply dark:text-violet-200 text-violet-700 hover:text-slate-100 hover:bg-violet-500 hover:border-violet-500 dark:hover:bg-violet-700 dark:hover:border-violet-700;
+}

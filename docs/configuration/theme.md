@@ -19,9 +19,7 @@ Dark is the default theme.
 
 ## Customizing Themes
 
-Themes can be further customized by adding extra CSS. 
-
-To see the styles applied by the theme, you can view [Fringe's `theme` directory on `unpkg`](https://www.unpkg.com/browse/@axodotdev/fringe/themes/).
+Themes can be further customized by adding extra CSS.
 
 Additional CSS can be added using the `additional_css` key.
 
@@ -58,7 +56,9 @@ p {
 When the `dark` theme is selected, a `dark` class is added to the page, and styles to be applied in dark mode only can include this selector. For instance,
 
 ```css
-.dark p { color: aquamarine; }
+.dark p {
+  color: aquamarine;
+}
 ```
 
 Will create paragraphs colored aquamarine in dark mode only.
@@ -75,7 +75,6 @@ When there are specific elements you would like to add to your pages, these can 
 <div class="my-border-class">
   <p>An outlined box</p>
 </div>
-
 ```
 
 ```css
