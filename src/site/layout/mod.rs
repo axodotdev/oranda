@@ -52,7 +52,7 @@ pub fn build(config: &Config, content: String, needs_js: bool) -> Result<String>
     } else {
         None
     };
-    let fringe_css = css::build_fringe();
+    let theme_css = css::build_themes_css(&config.dist_dir);
 
     let doc: String = html!(
     <html lang="en" id="oranda" class=theme>
@@ -61,7 +61,7 @@ pub fn build(config: &Config, content: String, needs_js: bool) -> Result<String>
             {homepage}
             {favicon}
             {meta_tags}
-            {fringe_css}
+            {theme_css}
             {additional_css}
         </head>
         <body>

@@ -27,7 +27,7 @@ pub fn build_list(managers: &LinkedHashMap<String, String>, config: &Config) -> 
         {unsafe_text!(create_package_install_code(install_code, &config.syntax_theme))}
         <button
             data-copy={install_code}
-            class="business-button primary button">
+            class="button primary button">
             {copy_icon}
         </button>
     </div>

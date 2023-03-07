@@ -7,7 +7,7 @@ pub fn create_footer(config: &Config) -> Box<footer<String>> {
     if let Some(repo) = &config.repository {
         repository = Some(html!(
             <a href=repo>
-                <div class="footer github-icon" aria-hidden="true"/>
+                <div class="github-icon" aria-hidden="true"/>
             </a>
         ));
     }
@@ -23,7 +23,7 @@ pub fn create_footer(config: &Config) -> Box<footer<String>> {
     );
 
     html!(
-        <footer class="axo-gradient text-slate-50 flex w-full justify-between px-4 py-2 text-xs items-center">
+        <footer class="footer">
             {repository}
             <span>{text!(text)}</span>
         </footer>
