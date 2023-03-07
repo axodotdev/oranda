@@ -2,7 +2,8 @@
 
 @layer base {
   ::selection {
-    @apply bg-axo-highlighter text-slate-700;
+    @apply bg-axo-highlighter text-axo-black;
+    -webkit-text-fill-color:var(--color-axo-black);
   }
 
   *:focus {
