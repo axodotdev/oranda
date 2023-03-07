@@ -5,12 +5,7 @@ use crate::message::{Message, MessageType};
 use oranda::config::Config;
 use oranda::errors::*;
 
-use axum::response::Redirect;
-use axum::{
-    http::StatusCode,
-    routing::{get, get_service},
-    Router,
-};
+use axum::{http::StatusCode, routing::get_service, Router};
 
 use clap::Parser;
 use tower_http::services::ServeDir;
@@ -74,6 +69,8 @@ impl Serve {
                     format!("Unhandled internal error: {}", error),
                 )
             });
+        let prefix_route = format!("/{}", prefix);
+        let app = Router::new().nest_service(&prefix_route, serve_dir);
 
         let addr = SocketAddr::from(([127, 0, 0, 1], self.port));
         let msg = format!("Your project is available at: http://{}/{}", addr, prefix);
