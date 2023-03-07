@@ -16,7 +16,7 @@ pub fn build_release(
     path_prefix: &Option<String>,
 ) -> Result<Box<section<String>>> {
     if let Some(version) = config_version {
-        let cutoff = "\r\n\r\n## Install ";
+        let cutoff = "\n## Install ";
         let body = match &release.body {
             Some(md) => {
                 let cut_body = md.split(cutoff).collect::<Vec<&str>>()[0];
