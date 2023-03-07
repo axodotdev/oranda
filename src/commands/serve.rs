@@ -74,16 +74,26 @@ impl Serve {
                     format!("Unhandled internal error: {}", error),
                 )
             });
-        const FRINGE_VERSION: &str = "0.0.10";
+        const FRINGE_VERSION: &str = "0.0.11";
         let prefix_route = format!("/{}", prefix);
         let fringe_route = format!("/{}/fringe@{}.css", prefix, FRINGE_VERSION);
-        let app = Router::new().nest_service(&prefix_route, serve_dir).route(
-            format!("/fringe@{}.css", FRINGE_VERSION).as_str(),
-            get(move || async {
-                let fringe_route = fringe_route;
-                Redirect::permanent(&fringe_route)
-            }),
-        );
+        let custom_route = format!("/{}/custom.css", prefix);
+        let app = Router::new()
+            .nest_service(&prefix_route, serve_dir)
+            .route(
+                format!("/fringe@{}.css", FRINGE_VERSION).as_str(),
+                get(move || async {
+                    let fringe_route = fringe_route;
+                    Redirect::permanent(&fringe_route)
+                }),
+            )
+            .route(
+                "/custom.css",
+                get(move || async {
+                    let custom_route = custom_route;
+                    Redirect::permanent(&custom_route)
+                }),
+            );
 
         let addr = SocketAddr::from(([127, 0, 0, 1], self.port));
         let msg = format!("Your project is available at: http://{}/{}", addr, prefix);
