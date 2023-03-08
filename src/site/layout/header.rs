@@ -73,9 +73,9 @@ fn nav(
 
     if *changelog {
         let href = if let Some(prefix) = &path_prefix {
-            format!("/{}/{}", prefix, "changelog")
+            format!("/{}/{}", prefix, "changelog.html")
         } else {
-            format!("/{}", "changelog")
+            format!("/{}", "changelog.html")
         };
         html.extend(html!(<li><a href=href>{text!("Changelog")}</a></li>));
     };
