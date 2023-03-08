@@ -10,7 +10,7 @@ on:
 
 jobs:
   # Create the Github Release™ so the packages have something to be uploaded to
-  release-css:
+  create-release:
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
