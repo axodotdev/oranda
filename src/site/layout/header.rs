@@ -3,8 +3,7 @@ use std::path::Path;
 use crate::config::artifacts::Artifacts;
 use crate::config::Config;
 use crate::errors::*;
-use crate::site::link;
-use crate::site::page::Page;
+use crate::site::{link, page};
 
 use axoasset::Asset;
 use axohtml::elements::{div, header, img, li, nav};
@@ -43,7 +42,7 @@ fn nav(
 
     if let Some(pages) = additional_pages {
         for page in pages.iter() {
-            if Page::is_file_markdown(page) {
+            if page::source::is_markdown(page) {
                 let file_path = Path::new(page);
                 let file_name = file_path
                     .file_stem()

@@ -25,7 +25,7 @@ impl Site {
         let mut pages = vec![index];
         if let Some(files) = &config.additional_pages {
             for file in files {
-                if Page::is_file_markdown(file) {
+                if page::source::is_markdown(file) {
                     let additional_page = Page::new_from_file(config, file, false)?;
                     pages.push(additional_page)
                 } else {
