@@ -47,13 +47,19 @@ pub fn fetch_releases(repo: &str) -> Result<Vec<types::ReleasesApiResponse>> {
         const VERSION: &str = env!("CARGO_PKG_VERSION");
         let header = format!("oranda-{}", VERSION);
 
-        let releases = reqwest::blocking::Client::new()
-            .get(url)
+        let releases_response = reqwest::blocking::Client::new()
+            .get(&url)
             .header(USER_AGENT, header)
-            .send()?
-            .json::<Vec<types::ReleasesApiResponse>>()?;
+            .send()?;
 
-        let releases_non_drafts = releases
+        let releases = match releases_response.error_for_status() {
+            Ok(resp) => Ok(resp.json::<Vec<types::ReleasesApiResponse>>()?),
+            Err(e) => Err(OrandaError::ReleasesFetchError {
+                url,
+                details: e.to_string(),
+            }),
+        };
+        let releases_non_drafts = releases?
             .iter()
             .filter(|&r| !r.draft)
             .map(|f| f.to_owned())

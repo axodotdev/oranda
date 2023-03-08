@@ -25,6 +25,9 @@ pub enum OrandaError {
     #[error(transparent)]
     Reqwest(#[from] reqwest::Error),
 
+    #[error("Failed fetchign releases from {url}. Details:\n{details}")]
+    ReleasesFetchError { url: String, details: String },
+
     #[error(transparent)]
     FSExtra(#[from] fs_extra::error::Error),
 
