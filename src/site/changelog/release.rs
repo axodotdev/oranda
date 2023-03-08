@@ -36,11 +36,16 @@ pub fn build_release(
         } else {
             "release"
         };
-
         let link = format!("#{}", &release.tag_name);
+        let title = if let Some(name) = &release.name {
+            html!(<h2 id=id><a href=link>{text!(name)}</a></h2>)
+        } else {
+            html!(<h2 id=id><a href=link>{text!(&release.tag_name)}</a></h2>)
+        };
+
         Ok(html!(
         <section class=classnames>
-            <h2 id=id><a href=link>{text!(&release.name)}</a></h2>
+            {title}
             <div class="release-info">
                 <span class="flex items-center gap-2">
                     {tag_icon()}{text!(&release.tag_name)}

@@ -8,7 +8,7 @@ pub struct ReleasesApiResponse {
     pub id: i64,
     pub tag_name: String,
     pub target_commitish: String,
-    pub name: String,
+    pub name: Option<String>,
     pub draft: bool,
     pub prerelease: bool,
     pub created_at: String,
