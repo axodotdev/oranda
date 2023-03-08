@@ -1,0 +1,58 @@
+name: Release - CSS
+
+permissions:
+  contents: write
+
+on:
+  push:
+    tags:
+      - 'css-?v[0-9]+*'
+
+jobs:
+  # Create the Github Release™ so the packages have something to be uploaded to
+  release-css:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v3
+      - id: create-release
+        run: |
+          # Create the Github Release™
+          gh release create ${{ github.ref_name }} --draft
+          echo "created announcement!"
+  build-css:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - id: build-css
+        run: |
+          # Run tailwind build
+          npm run build
+          ls dist
+          echo "built css!"
+  upload-css:
+    runs-on: ubuntu-latest
+    needs: [create-release, build-css]
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: upload-css
+        run: |
+          # Upload the manifest to the Github Release™
+          gh release upload ${{ github.ref_name }} oranda-css/dist/oranda.css
+          echo "uploaded css!"
+  publish-release:
+    runs-on: ubuntu-latest
+    needs: [upload-css]
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: mark release as non-draft
+        run: |
+          gh release edit ${{ github.ref_name }} --draft=false
