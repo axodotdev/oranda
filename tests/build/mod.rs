@@ -92,7 +92,7 @@ fn creates_download_for_mac() {
     let _guard = TEST_RUNTIME.enter();
     let config = &oranda_config::cargo_dist();
     let page_html = page::index(config);
-    assert!(page_html.contains("<span class=\"detect text-center\">We have detected you are on mac, are we wrong?</span><a href=\"/artifacts.html\">View all installation options</a>"));
+    assert!(page_html.contains("<span class=\"detect\">We have detected you are on mac, are we wrong?</span><a href=\"/artifacts.html\">View all installation options</a>"));
 }
 
 #[test]
@@ -120,7 +120,7 @@ fn creates_copy_to_clipboard_home() {
     let config = &oranda_config::cargo_dist();
     let page_html = page::index(config);
     assert!(page_html
-        .contains("<button class=\"button copy-clipboard-button primary\" data-copy=\"# WARNING: this installer is experimental\ncurl --proto &#39;=https&#39; --tlsv1.2 -LsSf https://github.com/axodotdev/oranda/releases/download/v0.0.1-prerelease2/oranda-v0.0.1-installer.sh | sh\">"));
+        .contains("<button class=\"button copy-clipboard-button primary\" data-copy=\"# WARNING: this installer is experimental\ncurl --proto &#39;=https&#39; --tlsv1.2 -LsSf https://github.com/axodotdev/oranda/releases/download/v0.0.1/oranda-v0.0.1-installer.sh | sh\">"));
     assert!(page_html.contains(
         "<a class=\"button primary\" href=\"oranda-v0.0.1-installer.sh.txt\">Source</a>"
     ));
