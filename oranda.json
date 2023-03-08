@@ -4,7 +4,8 @@
   "additional_pages": [
     "./docs/configuration.md",
     "./docs/assets.md",
-    "./docs/hosting.md"
+    "./docs/hosting.md",
+    "./Cargo.toml"
   ],
   "social": {
     "image": "https://www.axo.dev/meta_small.jpeg",

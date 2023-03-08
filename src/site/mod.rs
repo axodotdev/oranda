@@ -1,3 +1,4 @@
+use std::ffi::OsStr;
 use std::path::Path;
 
 pub mod artifacts;
@@ -10,6 +11,7 @@ use page::Page;
 
 use crate::config::Config;
 use crate::errors::*;
+use crate::message::{Message, MessageType};
 
 use axoasset::LocalAsset;
 
@@ -24,8 +26,16 @@ impl Site {
         let mut pages = vec![index];
         if let Some(files) = &config.additional_pages {
             for file in files {
-                let additional_page = Page::new_from_file(config, file, false)?;
-                pages.push(additional_page)
+                if Self::is_file_markdown(file) {
+                    let additional_page = Page::new_from_file(config, file, false)?;
+                    pages.push(additional_page)
+                } else {
+                    let msg = format!(
+                        "File {} in additional pages is not markdown and will be skipped",
+                        file
+                    );
+                    Message::new(MessageType::Warning, &msg).print();
+                }
             }
         }
         if config.artifacts.is_some() {
@@ -73,5 +83,12 @@ impl Site {
         }
 
         Ok(())
+    }
+
+    pub fn is_file_markdown(file: &str) -> bool {
+        let file_path = Path::new(&file);
+        let extension = file_path.extension().and_then(OsStr::to_str);
+
+        extension == Some("md") || extension == Some("MD")
     }
 }
