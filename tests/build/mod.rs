@@ -11,6 +11,14 @@ fn it_adds_additional_css() {
 }
 
 #[test]
+fn it_adds_oranda_css() {
+    let _guard = TEST_RUNTIME.enter();
+    let config = &oranda_config::no_artifacts();
+    let page_html = page::index(config);
+    assert!(page_html.contains("<link href=\"oranda.css\" rel=\"stylesheet\"/>"));
+}
+
+#[test]
 fn it_builds_the_site() {
     let _guard = TEST_RUNTIME.enter();
     let config = &oranda_config::no_artifacts();

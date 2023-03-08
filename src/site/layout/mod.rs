@@ -52,7 +52,7 @@ pub fn build(config: &Config, content: String, needs_js: bool) -> Result<String>
     } else {
         None
     };
-    let theme_css = css::build_themes_css(&config.dist_dir);
+    let oranda_css = css::build_oranda_css(&config.dist_dir)?;
 
     let doc: String = html!(
     <html lang="en" id="oranda" class=theme>
@@ -61,7 +61,7 @@ pub fn build(config: &Config, content: String, needs_js: bool) -> Result<String>
             {homepage}
             {favicon}
             {meta_tags}
-            {theme_css}
+            {oranda_css}
             {additional_css}
         </head>
         <body>
