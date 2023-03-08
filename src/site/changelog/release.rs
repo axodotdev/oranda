@@ -37,15 +37,10 @@ pub fn build_release(
             "release"
         };
         let link = format!("#{}", &release.tag_name);
-        let title = if let Some(name) = &release.name {
-            html!(<h2 id=id><a href=link>{text!(name)}</a></h2>)
-        } else {
-            html!(<h2 id=id><a href=link>{text!(&release.tag_name)}</a></h2>)
-        };
 
         Ok(html!(
         <section class=classnames>
-            {title}
+            <h2 id=id><a href=link>{text!(release.name.to_owned().unwrap_or(release.tag_name.to_owned()))}</a></h2>
             <div class="release-info">
                 <span class="flex items-center gap-2">
                     {tag_icon()}{text!(&release.tag_name)}
