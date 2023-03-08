@@ -22,11 +22,12 @@ fn concat_minify(css_files: &[String]) -> Result<String> {
 }
 
 pub fn build_themes_css(dist_dir: &str) -> Result<Box<link<String>>> {
-    let oranda_css = include_str!("oranda-css/dist/oranda.css");
     let css_path = format!("{}/oranda.css", dist_dir);
 
-    let asset = LocalAsset::new(&css_path, oranda_css.as_bytes().to_vec());
-    asset.write(dist_dir)?;
+    tokio::runtime::Handle::current().block_on(Asset::copy(
+        "https://github.com/axodotdev/oranda/releases/download/v0.0.1/css-v0.0.0",
+        &css_path,
+    ))?;
     Ok(html!(<link rel="stylesheet" href="oranda.css"></link>))
 }
 
