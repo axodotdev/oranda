@@ -30,6 +30,8 @@ jobs:
           node-version: 16
       - id: build-css
         run: |
+          cd oranda-css
+          npm i
           # Run tailwind build
           npm run build
           ls dist
