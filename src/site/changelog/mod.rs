@@ -41,7 +41,7 @@ pub fn fetch_releases(repo: &str) -> Result<Vec<types::ReleasesApiResponse>> {
     let parts = binding.path_segments().map(|c| c.collect::<Vec<_>>());
     if let Some(url_parts) = parts {
         let url = format!(
-            "https://api.github.com/repos/{}/{}/releases",
+            "https://octolotl.axodotdev.host/releases/{}/{}",
             url_parts[0], url_parts[1]
         );
         const VERSION: &str = env!("CARGO_PKG_VERSION");
