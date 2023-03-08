@@ -1,3 +1,4 @@
+use std::ffi::OsStr;
 use std::path::Path;
 
 use crate::config::Config;
@@ -63,5 +64,12 @@ impl Page {
         };
 
         file_name
+    }
+
+    pub fn is_file_markdown(file: &str) -> bool {
+        let file_path = Path::new(&file);
+        let extension = file_path.extension().and_then(OsStr::to_str);
+
+        extension == Some("md") || extension == Some("MD")
     }
 }
