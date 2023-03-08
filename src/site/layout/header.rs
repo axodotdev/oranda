@@ -1,4 +1,4 @@
-use std::path::Path;
+use std::collections::HashMap;
 
 use crate::config::artifacts::Artifacts;
 use crate::config::Config;
@@ -28,7 +28,7 @@ async fn fetch_logo(
 }
 
 fn nav(
-    additional_pages: &Option<Vec<String>>,
+    additional_pages: &Option<HashMap<String, String>>,
     path_prefix: &Option<String>,
     artifacts: &Option<Artifacts>,
     md_book: &Option<String>,
@@ -41,17 +41,12 @@ fn nav(
     };
 
     if let Some(pages) = additional_pages {
-        for page in pages.iter() {
-            if page::source::is_markdown(page) {
-                let file_path = Path::new(page);
-                let file_name = file_path
-                    .file_stem()
-                    .unwrap_or(file_path.as_os_str())
-                    .to_string_lossy();
+        for (page_name, page_path) in pages.iter() {
+            if page::source::is_markdown(page_path) {
+                let file_path = page::source::get_filename(page_path);
+                let href = link::generate(path_prefix, format!("{}.html", file_path));
 
-                let href = link::generate(path_prefix, format!("{}.html", file_name));
-
-                html.extend(html!(<li><a href=href>{text!(file_name)}</a></li>));
+                html.extend(html!(<li><a href=href>{text!(page_name)}</a></li>));
             }
         }
     }

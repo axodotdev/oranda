@@ -1,11 +1,11 @@
 {
   "favicon": "https://www.axo.dev/favicon.ico",
   "path_prefix": "oranda",
-  "additional_pages": [
-    "./docs/configuration.md",
-    "./docs/assets.md",
-    "./docs/hosting.md"
-  ],
+  "additional_pages": {
+    "Configuration": "./docs/configuration.md",
+    "Assets": "./docs/assets.md",
+    "Hosting": "./docs/hosting.md"
+  },
   "social": {
     "image": "https://www.axo.dev/meta_small.jpeg",
     "image_alt": "axo",
@@ -14,7 +14,7 @@
   "artifacts": {
     "cargo_dist": true,
     "package_managers": {
-        "crates.io": "cargo install oranda"
+      "crates.io": "cargo install oranda"
     }
   },
   "analytics": {

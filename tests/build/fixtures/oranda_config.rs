@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use oranda::config::artifacts::Artifacts;
 use oranda::config::theme::Theme;
 use oranda::config::Config;
@@ -5,14 +7,17 @@ use oranda::config::Config;
 use linked_hash_map::LinkedHashMap;
 
 pub fn no_artifacts() -> Config {
+    let mut additional_pages = HashMap::new();
+    additional_pages.insert(
+        "Another Page".to_string(),
+        "https://raw.githubusercontent.com/axodotdev/oranda/main/README.md".to_string(),
+    );
     Config {
         description: String::from("you axolotl questions"),
         readme_path: String::from(
             "https://raw.githubusercontent.com/axodotdev/oranda/main/README.md",
         ),
-        additional_pages: Some(vec![String::from(
-            "https://raw.githubusercontent.com/axodotdev/oranda/main/README.md",
-        )]),
+        additional_pages: Some(additional_pages),
         additional_css: vec![String::from(
             "https://raw.githubusercontent.com/axodotdev/axii/main/css/main.css",
         )],

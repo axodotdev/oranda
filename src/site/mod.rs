@@ -24,14 +24,14 @@ impl Site {
         let index = Page::new_from_file(config, &config.readme_path, true)?;
         let mut pages = vec![index];
         if let Some(files) = &config.additional_pages {
-            for file in files {
-                if page::source::is_markdown(file) {
-                    let additional_page = Page::new_from_file(config, file, false)?;
+            for file_path in files.values() {
+                if page::source::is_markdown(file_path) {
+                    let additional_page = Page::new_from_file(config, file_path, false)?;
                     pages.push(additional_page)
                 } else {
                     let msg = format!(
                         "File {} in additional pages is not markdown and will be skipped",
-                        file
+                        file_path
                     );
                     Message::new(MessageType::Warning, &msg).print();
                 }

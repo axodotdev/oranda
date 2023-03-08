@@ -9,6 +9,7 @@ use self::oranda::{OrandaConfig, Social};
 use crate::errors::*;
 use crate::site::markdown::SyntaxTheme;
 use project::ProjectConfig;
+use std::collections::HashMap;
 use std::path::Path;
 
 use theme::Theme;
@@ -28,7 +29,7 @@ pub struct Config {
     pub repository: Option<String>,
     pub syntax_theme: SyntaxTheme,
     pub analytics: Option<Analytics>,
-    pub additional_pages: Option<Vec<String>>,
+    pub additional_pages: Option<HashMap<String, String>>,
     pub social: Option<Social>,
     pub artifacts: Option<Artifacts>,
     pub version: Option<String>,
