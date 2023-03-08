@@ -68,7 +68,7 @@ fn creates_footer() {
     let config = &oranda_config::no_artifacts();
     let page_html = page::index(config);
 
-    assert!(page_html.contains("<footer class=\"axo-gradient flex items-center justify-between px-4 py-2 text-slate-50 text-xs w-full\"><span>My Axo project</span></footer>"));
+    assert!(page_html.contains("<footer class=\"footer\"><span>My Axo project</span></footer>"));
 }
 
 #[test]
