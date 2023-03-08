@@ -3,6 +3,7 @@ use std::path::Path;
 use crate::config::artifacts::Artifacts;
 use crate::config::Config;
 use crate::errors::*;
+use crate::message::{Message, MessageType};
 use crate::site::{link, page};
 
 use axoasset::Asset;
@@ -44,14 +45,24 @@ fn nav(
         for page in pages.iter() {
             if page::source::is_markdown(page) {
                 let file_path = Path::new(page);
-                let file_name = file_path
-                    .file_stem()
-                    .unwrap_or(file_path.as_os_str())
-                    .to_string_lossy();
+                let file_stem = file_path.file_stem();
 
-                let href = link::generate(path_prefix, format!("{}.html", file_name));
+                if let Some(file_name) = file_stem {
+                    let href = link::generate(
+                        path_prefix,
+                        format!("{}.html", file_name.to_string_lossy()),
+                    );
 
-                html.extend(html!(<li><a href=href>{text!(file_name)}</a></li>));
+                    html.extend(
+                        html!(<li><a href=href>{text!(file_name.to_string_lossy())}</a></li>),
+                    );
+                } else {
+                    let msg = format!(
+                        "Could not parse filename of file {} in additional pages and this file will be skipped",
+                        file_path.to_string_lossy()
+                    );
+                    Message::new(MessageType::Warning, &msg).print();
+                }
             }
         }
     }
