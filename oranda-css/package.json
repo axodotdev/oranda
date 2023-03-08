@@ -5,11 +5,11 @@
   "main": "tailwind.config.js",
   "scripts": {
     "build": "tailwindcss -c tailwind.config.js -i ./css/main.css -o ./dist/oranda.css --minify",
-    "dev": "tailwindcss -c tailwind.config.js -i ./css/main.css -o ./dist/oranda.css --minify --watch"
+    "dev": "npm run build --watch"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT OR Apache2.0",
   "dependencies": {
     "@tailwindcss/forms": "^0.5.3",
     "@tailwindcss/line-clamp": "^0.4.2",
