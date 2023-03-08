@@ -120,9 +120,9 @@ fn creates_copy_to_clipboard_home() {
     let config = &oranda_config::cargo_dist();
     let page_html = page::index(config);
     assert!(page_html
-        .contains("<button class=\"business-button button copy-clipboard-button primary\" data-copy=\"# WARNING: this installer is experimental\ncurl --proto &#39;=https&#39; --tlsv1.2 -LsSf https://github.com/axodotdev/oranda/releases/download/v0.0.1-prerelease2/oranda-v0.0.1-prerelease2-installer.sh | sh\">"));
+        .contains("<button class=\"button copy-clipboard-button primary\" data-copy=\"# WARNING: this installer is experimental\ncurl --proto &#39;=https&#39; --tlsv1.2 -LsSf https://github.com/axodotdev/oranda/releases/download/v0.0.1-prerelease2/oranda-v0.0.1-prerelease2-installer.sh | sh\">"));
     assert!(page_html.contains(
-        "<a class=\"business-button button primary\" href=\"oranda-v0.0.1-prerelease2-installer.sh.txt\">Source</a>"
+        "<a class=\"button primary\" href=\"oranda-v0.0.1-prerelease2-installer.sh.txt\">Source</a>"
     ));
 }
 
@@ -131,9 +131,9 @@ fn creates_copy_to_clipboard_artifacts() {
     let _guard = TEST_RUNTIME.enter();
     let config = &oranda_config::package_managers();
     let page_html = page::artifacts(config);
-    assert!(page_html.contains(
-        "<button class=\"business-button button primary\" data-copy=\"npm install oranda\">"
-    ));
+    assert!(
+        page_html.contains("<button class=\"button primary\" data-copy=\"npm install oranda\">")
+    );
 }
 
 #[test]
