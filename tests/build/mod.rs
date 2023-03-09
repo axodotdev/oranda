@@ -101,7 +101,7 @@ fn creates_downloads_page() {
     let config = &oranda_config::cargo_dist();
     let artifacts_page = page::artifacts(config);
     assert!(artifacts_page.contains("<h3>Downloads</h3>"));
-    assert!(artifacts_page.contains("<span>oranda-v0.0.1-prerelease2-x86_64-pc-windows-msvc.zip</span><span>Executable Zip</span><span>x86_64-pc-windows-msvc</span><span><a href=\"https://github.com/axodotdev/oranda/releases/download/v0.0.1-prerelease2/oranda-v0.0.1-prerelease2-x86_64-pc-windows-msvc.zip\">Download</a></span>"));
+    assert!(artifacts_page.contains("<span>oranda-v0.0.1-x86_64-pc-windows-msvc.zip</span><span>Executable Zip</span><span>x86_64-pc-windows-msvc</span><span><a href=\"https://github.com/axodotdev/oranda/releases/download/v0.0.1/oranda-v0.0.1-x86_64-pc-windows-msvc.zip\">Download</a></span>"));
     assert!(artifacts_page.contains("<h3>Install via script</h3>"))
 }
 
@@ -120,9 +120,9 @@ fn creates_copy_to_clipboard_home() {
     let config = &oranda_config::cargo_dist();
     let page_html = page::index(config);
     assert!(page_html
-        .contains("<button class=\"button copy-clipboard-button primary\" data-copy=\"# WARNING: this installer is experimental\ncurl --proto &#39;=https&#39; --tlsv1.2 -LsSf https://github.com/axodotdev/oranda/releases/download/v0.0.1-prerelease2/oranda-v0.0.1-prerelease2-installer.sh | sh\">"));
+        .contains("<button class=\"button copy-clipboard-button primary\" data-copy=\"# WARNING: this installer is experimental\ncurl --proto &#39;=https&#39; --tlsv1.2 -LsSf https://github.com/axodotdev/oranda/releases/download/v0.0.1/oranda-v0.0.1-installer.sh | sh\">"));
     assert!(page_html.contains(
-        "<a class=\"button primary\" href=\"oranda-v0.0.1-prerelease2-installer.sh.txt\">Source</a>"
+        "<a class=\"button primary\" href=\"oranda-v0.0.1-installer.sh.txt\">Source</a>"
     ));
 }
 
@@ -143,4 +143,12 @@ fn adds_prefix() {
     let page_html = page::index(config);
     assert!(page_html.contains("<script src=\"/axo/artifacts.js\">"));
     assert!(page_html.contains("<a href=\"/axo/artifacts.html\">View all installation options</a>"))
+}
+
+#[test]
+fn adds_changelog_nav() {
+    let _guard = TEST_RUNTIME.enter();
+    let config = &&oranda_config::changelog();
+    let page_html = page::index(config);
+    assert!(page_html.contains("<a href=\"/changelog.html\">Changelog</a>"));
 }

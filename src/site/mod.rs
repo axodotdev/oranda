@@ -1,6 +1,7 @@
 use std::path::Path;
 
 pub mod artifacts;
+pub mod changelog;
 pub mod layout;
 mod link;
 use layout::{css, javascript};
@@ -32,6 +33,15 @@ impl Site {
             let artifacts_html = artifacts::page::build(config)?;
             let artifacts_page = Page::new_from_contents(artifacts_html, "artifacts.html", true);
             pages.push(artifacts_page)
+        }
+
+        if let Some(repo) = &config.repository {
+            if config.changelog {
+                let changelog_html = changelog::build_page(config, repo)?;
+                let changelog_page =
+                    Page::new_from_contents(changelog_html, "changelog.html", true);
+                pages.push(changelog_page)
+            }
         }
 
         Ok(Site { pages })
