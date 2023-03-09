@@ -1,5 +1,4 @@
 {
-  "theme": "hacker",
   "favicon": "https://www.axo.dev/favicon.ico",
   "additional_pages": [
     "./docs/configuration.md",
