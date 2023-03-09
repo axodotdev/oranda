@@ -293,3 +293,7 @@ div.table code {
 .inline-code {
   @apply text-center break-all;
 }
+
+.release-info svg {
+ @apply w-6 h-6;
+}
