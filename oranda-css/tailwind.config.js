@@ -1,4 +1,3 @@
-const defaultColors = require("tailwindcss/colors");
 const defaultTheme = require("tailwindcss/defaultTheme");
 const listStyleType = {
   circle: "circle",
@@ -21,9 +20,6 @@ const extend = {
   listStyleType,
   maxWidth,
   backgroundImage,
-};
-
-const theme = {
   colors: {
     "axo-pink": "hsla(326, 100%, 73%, 1)",
     "axo-pink-dark": "hsla(326, 52%, 58%, 1)",
@@ -31,9 +27,7 @@ const theme = {
     "axo-orange-dark": "hsla(356, 75%, 64%, 1)",
     "axo-highlighter": "hsla(51, 100%, 50%, 1)",
     "axo-black": "hsla(0, 0%, 5%, 1)",
-    ...defaultColors,
   },
-  extend,
 };
 
 const extractColorVars = (themeColors, colorGroup = "") =>
@@ -54,7 +48,7 @@ const tailwindColorsToCSSVariables = ({ addBase, theme }) =>
 
 module.exports = {
   darkMode: "class",
-  theme: theme,
+  theme: { extend },
   plugins: [
     require("@tailwindcss/typography"),
     require("@tailwindcss/forms"),
