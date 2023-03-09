@@ -1,0 +1,18 @@
+.light .title,
+.dark .title {
+  @apply axo-gradient-text;
+}
+
+.light a,
+.dark a {
+  @apply text-axo-orange hover:decoration-axo-pink hover:text-axo-pink;
+}
+
+.dark footer .github-icon,
+.light footer .github-icon {
+  @apply invert;
+}
+
+.light .github-icon {
+  @apply invert;
+} 
