@@ -81,3 +81,23 @@ html.hacker .button.primary {
 html.hacker .artifact-header>h4 {
   @apply text-left;
 }
+
+html.hacker .releases-nav ul li a {
+ @apply text-slate-200;
+}
+
+html.hacker .releases-nav ul li:before {
+  @apply bg-gray-600;
+}
+
+html.hacker .releases-nav ul {
+  @apply border-l-gray-600;
+}
+
+html.hacker .prereleases-toggle input:checked {
+  @apply bg-orange-500;
+}
+
+html.hacker .releases-nav ul li a {
+  @apply hover:decoration-orange-500;
+}

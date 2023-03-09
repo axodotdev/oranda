@@ -62,8 +62,6 @@
 
 .prereleases-toggle input {
   @apply h-5 w-5 rounded text-axo-orange-dark focus:ring-axo-orange transition dark:bg-slate-800 dark:border-gray-700 bg-slate-200 border-gray-400;
-
-  @apply checked:bg-axo-orange-dark !important;
 }
 
 .prereleases-toggle label {
