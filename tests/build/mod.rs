@@ -142,5 +142,5 @@ fn adds_changelog_nav() {
     let _guard = TEST_RUNTIME.enter();
     let config = &&oranda_config::changelog();
     let page_html = page::index(config);
-    assert!(page_html.contains("<a href=\"/changelog\">Changelog</a>"));
+    assert!(page_html.contains("<a href=\"/changelog.html\">Changelog</a>"));
 }
