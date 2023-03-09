@@ -144,35 +144,38 @@ if (hit) {
   hit.classList.remove("hidden");
 } else {
   if (window.os === options.macSilicon) {
-    Array.from(document.querySelectorAll(".target[data-targets]"))
-      .find((a) => a.attributes["data-targets"].value.includes(options.mac))
-      .classList.remove("hidden");
-  } else if (backupButton){
+    const macDownloadButtons = Array.from(
+      document.querySelectorAll(".target[data-targets]")
+    ).find((a) => a.attributes["data-targets"].value.includes(options.mac));
+    if (macDownloadButtons) {
+      macDownloadButtons.classList.remove("hidden");
+    }
+  } else if (backupButton) {
     backupButton.classList.remove("hidden");
   }
 }
 
 let copyButtons = Array.from(document.querySelectorAll("[data-copy]"));
-if(copyButtons.length) {
-  copyButtons.forEach(function(element) {
-    element.addEventListener('click', () => {
+if (copyButtons.length) {
+  copyButtons.forEach(function (element) {
+    element.addEventListener("click", () => {
       navigator.clipboard.writeText(element.attributes["data-copy"].value);
     });
-  });  
+  });
 }
 
 // Toggle for pre releases
 const checkbox = document.getElementById("show-prereleases");
 
-if(checkbox) {
+if (checkbox) {
   checkbox.addEventListener("click", () => {
     const all = document.getElementsByClassName("pre-release");
 
-    if(all) {
+    if (all) {
       for (var item of all) {
         item.classList.toggle("hidden");
       }
     }
-  })
+  });
 }
 "#;
