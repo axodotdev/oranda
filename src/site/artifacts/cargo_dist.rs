@@ -1,11 +1,11 @@
 use axoasset::{Asset, LocalAsset};
 use axohtml::elements::{div, span};
 use axohtml::{html, text, unsafe_text};
-use cargo_dist_schema::{Artifact, ArtifactKind, DistManifest, Release};
+use cargo_dist_schema as cargo_dist;
 
 use crate::config::Config;
 use crate::errors::*;
-use crate::site::changelog;
+use crate::site::changelog::{self, GithubRelease};
 use crate::site::markdown;
 use crate::site::{link, Site};
 
@@ -21,13 +21,14 @@ pub fn get_os(name: &str) -> Option<&str> {
     }
 }
 
-pub fn fetch_manifest(config: &Config) -> Result<DistManifest> {
+pub fn fetch_manifest(config: &Config) -> Result<cargo_dist::DistManifest> {
     if let Some(repo) = &config.repository {
-        let latest_dist_release = latest_dist_release(releases)?;
-        let url = create_download_link(config, "dist-manifest.json", latest_dist_release.tag_name)?;
+        let latest_dist_release = latest_dist_release(repo)?;
+        let url =
+            create_download_link(config, "dist-manifest.json", &latest_dist_release.tag_name)?;
 
         match reqwest::blocking::get(&url)?.error_for_status() {
-            Ok(resp) => match resp.json::<DistManifest>() {
+            Ok(resp) => match resp.json::<cargo_dist::DistManifest>() {
                 Ok(manifest) => Ok(manifest),
                 Err(e) => Err(OrandaError::CargoDistManifestParseError {
                     url,
@@ -46,8 +47,16 @@ pub fn fetch_manifest(config: &Config) -> Result<DistManifest> {
     }
 }
 
-fn latest_dist_release(repo: &str) -> Result<Release> {
+fn latest_dist_release(repo: &str) -> Result<GithubRelease> {
     let releases = changelog::fetch_releases(repo)?;
+    for release in releases {
+        if release.has_dist_manifest() {
+            return Ok(release);
+        }
+    }
+    Err(OrandaError::NoCargoDistReleasesFound {
+        repo: repo.to_string(),
+    })
 }
 
 fn get_installer_path(config: &Config, name: &str, version: &str) -> Result<String> {
@@ -65,8 +74,8 @@ fn get_installer_path(config: &Config, name: &str, version: &str) -> Result<Stri
 }
 
 fn get_install_hint(
-    manifest: &DistManifest,
-    release: &Release,
+    manifest: &cargo_dist::DistManifest,
+    release: &cargo_dist::Release,
     target_triples: &[String],
     config: &Config,
 ) -> Result<(String, String)> {
@@ -98,8 +107,8 @@ fn get_install_hint(
 }
 
 pub fn get_install_hint_code(
-    manifest: &DistManifest,
-    release: &Release,
+    manifest: &cargo_dist::DistManifest,
+    release: &cargo_dist::Release,
     target_triples: &[String],
     config: &Config,
 ) -> Result<String> {
@@ -116,20 +125,20 @@ pub fn get_install_hint_code(
     }
 }
 
-fn get_kind_string(kind: &ArtifactKind) -> String {
+fn get_kind_string(kind: &cargo_dist::ArtifactKind) -> String {
     match kind {
-        ArtifactKind::ExecutableZip => String::from("Executable Zip"),
-        ArtifactKind::Symbols => String::from("Symbols"),
-        ArtifactKind::Installer => String::from("Installer"),
+        cargo_dist::ArtifactKind::ExecutableZip => String::from("Executable Zip"),
+        cargo_dist::ArtifactKind::Symbols => String::from("Symbols"),
+        cargo_dist::ArtifactKind::Installer => String::from("Installer"),
         _ => String::from("Unknown"),
     }
 }
 
 fn build_install_block(
     config: &Config,
-    manifest: &DistManifest,
-    release: &Release,
-    artifact: &Artifact,
+    manifest: &cargo_dist::DistManifest,
+    release: &cargo_dist::Release,
+    artifact: &cargo_dist::Artifact,
 ) -> Result<Box<div<String>>> {
     let install_code = get_install_hint_code(manifest, release, &artifact.target_triples, config)?;
 
@@ -164,7 +173,7 @@ pub fn build(config: &Config) -> Result<Box<div<String>>> {
     for release in typed.releases.iter() {
         for artifact_id in release.artifacts.iter() {
             let artifact = &typed.artifacts[artifact_id];
-            if let ArtifactKind::ExecutableZip = artifact.kind {
+            if let cargo_dist::ArtifactKind::ExecutableZip = artifact.kind {
                 let mut targets = String::new();
                 for targ in artifact.target_triples.iter() {
                     targets.push_str(format!("{} ", targ).as_str());
@@ -199,7 +208,10 @@ pub fn build(config: &Config) -> Result<Box<div<String>>> {
     ))
 }
 
-pub fn build_table(manifest: DistManifest, config: &Config) -> Result<Box<div<String>>> {
+pub fn build_table(
+    manifest: cargo_dist::DistManifest,
+    config: &Config,
+) -> Result<Box<div<String>>> {
     let mut table = vec![];
     for release in manifest.releases.iter() {
         for artifact_id in release.artifacts.iter() {
@@ -249,12 +261,15 @@ fn create_table_content(table: Vec<Box<span<String>>>) -> Box<div<String>> {
 // False positive duplicate allocation warning
 // https://github.com/rust-lang/rust-clippy/issues?q=is%3Aissue+redundant_allocation+sort%3Aupdated-desc
 #[allow(clippy::vec_box)]
-pub fn build_list(manifest: &DistManifest, config: &Config) -> Result<Box<div<String>>> {
+pub fn build_list(
+    manifest: &cargo_dist::DistManifest,
+    config: &Config,
+) -> Result<Box<div<String>>> {
     let mut list = vec![];
     for release in manifest.releases.iter() {
         for artifact_id in release.artifacts.iter() {
             let artifact = &manifest.artifacts[artifact_id];
-            if let ArtifactKind::ExecutableZip = artifact.kind {
+            if let cargo_dist::ArtifactKind::ExecutableZip = artifact.kind {
                 let mut targets = String::new();
                 for targ in artifact.target_triples.iter() {
                     targets.push_str(format!("{} ", targ).as_str());

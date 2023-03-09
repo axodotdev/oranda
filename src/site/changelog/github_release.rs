@@ -10,7 +10,7 @@ use chrono::DateTime;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct Release {
+pub struct GithubRelease {
     pub url: String,
     pub assets_url: String,
     pub html_url: String,
@@ -22,14 +22,14 @@ pub struct Release {
     pub prerelease: bool,
     pub created_at: String,
     pub published_at: String,
-    pub assets: Vec<ReleaseAsset>,
+    pub assets: Vec<GithubReleaseAsset>,
     pub tarball_url: String,
     pub zipball_url: String,
     pub body: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct ReleaseAsset {
+pub struct GithubReleaseAsset {
     pub url: String,
     pub id: i64,
     pub node_id: String,
@@ -44,7 +44,7 @@ pub struct ReleaseAsset {
     pub browser_download_url: String,
 }
 
-impl Release {
+impl GithubRelease {
     pub fn build(
         &self,
         syntax_theme: &SyntaxTheme,
@@ -53,7 +53,7 @@ impl Release {
     ) -> Result<Box<section<String>>> {
         if let Some(version) = config_version {
             let cutoff = "\n## Install ";
-            let body = match self.body {
+            let body = match &self.body {
                 Some(md) => {
                     let cut_body = md.split(cutoff).collect::<Vec<&str>>()[0];
 
@@ -61,7 +61,7 @@ impl Release {
                 }
                 None => String::new(),
             };
-            let id: axohtml::types::Id = axohtml::types::Id::new(self.tag_name);
+            let id: axohtml::types::Id = axohtml::types::Id::new(self.tag_name.clone());
             let formatted_date = match DateTime::parse_from_rfc3339(&self.published_at) {
                 Ok(date) => date.format("%b %e %Y at %R UTC").to_string(),
                 Err(_) => self.published_at.to_owned(),
@@ -72,14 +72,14 @@ impl Release {
             } else {
                 "release"
             };
-            let link = format!("#{}", self.tag_name);
+            let link = format!("#{}", &self.tag_name);
 
             Ok(html!(
             <section class=classnames>
-                <h2 id=id><a href=link>{text!(self.name.unwrap_or(self.tag_name))}</a></h2>
+                <h2 id=id><a href=link>{text!(GithubRelease::title(&self.name, &self.tag_name))}</a></h2>
                 <div class="release-info">
                     <span class="flex items-center gap-2">
-                        {tag_icon()}{text!(self.tag_name)}
+                        {tag_icon()}{text!(&self.tag_name)}
                     </span>
                     <span class="flex items-center gap-2">
                         {date_icon()}{text!(&formatted_date)}
@@ -96,6 +96,22 @@ impl Release {
                 "A version is required to have a changelog page".to_owned(),
             ))
         }
+    }
+
+    fn title<'a>(name: &'a Option<String>, tag: &'a str) -> &'a str {
+        match name {
+            Some(n) => n,
+            None => tag,
+        }
+    }
+
+    pub fn has_dist_manifest(&self) -> bool {
+        for asset in &self.assets {
+            if asset.name == "dist-manifest.json" {
+                return true;
+            }
+        }
+        false
     }
 
     fn build_install_button(

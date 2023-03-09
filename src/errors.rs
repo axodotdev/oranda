@@ -25,8 +25,14 @@ pub enum OrandaError {
     #[error(transparent)]
     Reqwest(#[from] reqwest::Error),
 
-    #[error("Failed fetchign releases from {url}. Details:\n{details}")]
-    ReleasesFetchError { url: String, details: String },
+    #[error("Failed fetching releases from Github. Details:\n{details}")]
+    GithubReleasesFetchError { details: String },
+
+    #[error("Failed parsing response when fetching releases from Github. Details:\n{details}")]
+    GithubReleaseParseError { details: String },
+
+    #[error("Could not find any releases from {repo} with a cargo-dist compatible `dist-manifest.json`.")]
+    NoCargoDistReleasesFound { repo: String },
 
     #[error(transparent)]
     FSExtra(#[from] fs_extra::error::Error),
