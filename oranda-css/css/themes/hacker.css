@@ -1,5 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&display=swap");
 
+html.hacker ::selection {
+  @apply text-axo-black;
+  background-color: var(--hacker-green);
+
+  -webkit-text-fill-color: var(--color-axo-black);
+}
+
 html.hacker body {
   @apply bg-axo-black text-slate-300;
   font-family: "IBM Plex Mono", monospace;
@@ -10,7 +17,7 @@ html.hacker h2,
 html.hacker h3,
 html.hacker h4,
 html.hacker h5,
-html.hacker h7 {
+html.hacker h6 {
   @apply text-violet-600;
 }
 
@@ -34,8 +41,6 @@ html.hacker .title {
   }
 }
 
-
-
 html.hacker .title:after {
   content: "";
   height: 70px;
@@ -43,8 +48,6 @@ html.hacker .title:after {
   animation: blink-animation 1s steps(5, start) infinite;
   @apply block absolute left-full ml-3 w-4 top-3;
 }
-
-
 
 html.hacker .title::before {
   content: "> ";
@@ -78,12 +81,12 @@ html.hacker .button.primary {
   @apply text-axo-black bg-orange-500 hover:bg-orange-600 border-transparent;
 }
 
-html.hacker .artifact-header>h4 {
+html.hacker .artifact-header > h4 {
   @apply text-left;
 }
 
 html.hacker .releases-nav ul li a {
- @apply text-slate-200;
+  @apply text-slate-200;
 }
 
 html.hacker .releases-nav ul li:before {

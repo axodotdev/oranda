@@ -57,7 +57,7 @@
 }
 
 .prereleases-toggle {
-  @apply relative flex items-start -mt-4;
+  @apply relative flex items-center -mt-4;
 }
 
 .prereleases-toggle input {
