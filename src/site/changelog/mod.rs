@@ -1,6 +1,7 @@
-mod release;
-mod types;
 use std::vec;
+
+mod release;
+use release::Release;
 
 use axohtml::elements::{div, li, section};
 use axohtml::html;
@@ -11,7 +12,7 @@ use crate::config::Config;
 use crate::errors::*;
 use url::Url;
 
-fn build_prerelease_toggle(releases: Vec<types::ReleasesApiResponse>) -> Option<Box<div<String>>> {
+fn build_prerelease_toggle(releases: Vec<Release>) -> Option<Box<div<String>>> {
     let has_pre_releases = releases.iter().any(|release| release.prerelease);
 
     if has_pre_releases {
@@ -29,7 +30,7 @@ fn build_prerelease_toggle(releases: Vec<types::ReleasesApiResponse>) -> Option<
     }
 }
 
-pub fn fetch_releases(repo: &str) -> Result<Vec<types::ReleasesApiResponse>> {
+pub fn fetch_releases(repo: &str) -> Result<Vec<Release>> {
     let repo_parsed = match Url::parse(repo) {
         Ok(parsed) => Ok(parsed),
         Err(parse_error) => Err(OrandaError::RepoParseError {
@@ -53,7 +54,7 @@ pub fn fetch_releases(repo: &str) -> Result<Vec<types::ReleasesApiResponse>> {
             .send()?;
 
         let releases = match releases_response.error_for_status() {
-            Ok(resp) => Ok(resp.json::<Vec<types::ReleasesApiResponse>>()?),
+            Ok(resp) => Ok(resp.json::<Vec<Release>>()?),
             Err(e) => Err(OrandaError::ReleasesFetchError {
                 url,
                 details: e.to_string(),
@@ -87,8 +88,7 @@ pub fn build_page(config: &Config, repo: &str) -> Result<String> {
 
         let link = format!("#{}", &release.tag_name);
 
-        releases_html.extend(release::build_release(
-            release,
+        releases_html.extend(release.build(
             &config.syntax_theme,
             &config.version,
             &config.path_prefix,

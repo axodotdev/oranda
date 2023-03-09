@@ -23,16 +23,8 @@ pub fn get_os(name: &str) -> Option<&str> {
 
 pub fn fetch_manifest(config: &Config) -> Result<DistManifest> {
     if let Some(repo) = &config.repository {
-        let releases = changelog::fetch_releases(repo.as_str())?;
-        let first = releases
-            .iter()
-            .find(|release| !release.prerelease)
-            .unwrap_or(&releases[0]);
-        let url = create_download_link(
-            config,
-            &String::from("dist-manifest.json"),
-            first.tag_name.to_owned(),
-        )?;
+        let latest_dist_release = latest_dist_release(releases)?;
+        let url = create_download_link(config, "dist-manifest.json", latest_dist_release.tag_name)?;
 
         match reqwest::blocking::get(&url)?.error_for_status() {
             Ok(resp) => match resp.json::<DistManifest>() {
@@ -54,14 +46,18 @@ pub fn fetch_manifest(config: &Config) -> Result<DistManifest> {
     }
 }
 
-fn get_installer_path(config: &Config, name: &String, version: String) -> Result<String> {
+fn latest_dist_release(repo: &str) -> Result<Release> {
+    let releases = changelog::fetch_releases(repo)?;
+}
+
+fn get_installer_path(config: &Config, name: &str, version: &str) -> Result<String> {
     let download_link = create_download_link(config, name, version)?;
     let file_string_future = Asset::load_string(download_link.as_str());
     let file_string = tokio::runtime::Handle::current().block_on(file_string_future)?;
     let file_path = format!("{}.txt", &name);
     Site::create_dist_dir(&config.dist_dir)?;
     let asset = LocalAsset::new(
-        format!("{}/{}", &config.dist_dir, &file_path).as_str(),
+        &format!("{}/{}", &config.dist_dir, &file_path),
         file_string.as_bytes().to_vec(),
     );
     asset.write(&config.dist_dir)?;
@@ -91,7 +87,7 @@ fn get_install_hint(
 
     if let Some(current_hint) = hint {
         if let (Some(install_hint), Some(name)) = (&current_hint.install_hint, &current_hint.name) {
-            let file_path = get_installer_path(config, name, release.app_version.to_owned())?;
+            let file_path = get_installer_path(config, name, &release.app_version)?;
             Ok((String::from(install_hint), file_path))
         } else {
             Err(no_hint_error)
@@ -209,7 +205,7 @@ pub fn build_table(manifest: DistManifest, config: &Config) -> Result<Box<div<St
         for artifact_id in release.artifacts.iter() {
             let artifact = &manifest.artifacts[artifact_id];
             if let Some(name) = artifact.name.clone() {
-                let url = create_download_link(config, &name, release.app_version.to_owned())?;
+                let url = create_download_link(config, &name, &release.app_version)?;
                 let kind = get_kind_string(&artifact.kind);
                 let targets: &String = &artifact.target_triples.clone().into_iter().collect();
                 table.extend(vec![
@@ -292,12 +288,12 @@ pub fn build_list(manifest: &DistManifest, config: &Config) -> Result<Box<div<St
     ))
 }
 
-fn create_download_link(config: &Config, name: &String, version: String) -> Result<String> {
+fn create_download_link(config: &Config, name: &str, version: &str) -> Result<String> {
     if let Some(repo) = &config.repository {
         let version_to_use = if version.contains('v') {
             version.split('v').collect::<Vec<&str>>()[1]
         } else {
-            version.as_str()
+            version
         };
         Ok(format!(
             "{}/releases/download/v{}/{}",

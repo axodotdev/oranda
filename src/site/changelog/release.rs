@@ -7,75 +7,112 @@ use axohtml::html;
 use axohtml::{text, unsafe_text};
 use chrono::DateTime;
 
-use super::types::ReleasesApiResponse;
+use serde::{Deserialize, Serialize};
 
-pub fn build_release(
-    release: &ReleasesApiResponse,
-    syntax_theme: &SyntaxTheme,
-    config_version: &Option<String>,
-    path_prefix: &Option<String>,
-) -> Result<Box<section<String>>> {
-    if let Some(version) = config_version {
-        let cutoff = "\n## Install ";
-        let body = match &release.body {
-            Some(md) => {
-                let cut_body = md.split(cutoff).collect::<Vec<&str>>()[0];
-
-                markdown::to_html(cut_body.to_string(), syntax_theme)?
-            }
-            None => String::new(),
-        };
-        let id: axohtml::types::Id = axohtml::types::Id::new(release.tag_name.as_str());
-        let formatted_date = match DateTime::parse_from_rfc3339(&release.published_at) {
-            Ok(date) => date.format("%b %e %Y at %R UTC").to_string(),
-            Err(_) => release.published_at.to_owned(),
-        };
-
-        let classnames = if release.prerelease {
-            "release pre-release hidden"
-        } else {
-            "release"
-        };
-        let link = format!("#{}", &release.tag_name);
-
-        Ok(html!(
-        <section class=classnames>
-            <h2 id=id><a href=link>{text!(release.name.to_owned().unwrap_or(release.tag_name.to_owned()))}</a></h2>
-            <div class="release-info">
-                <span class="flex items-center gap-2">
-                    {tag_icon()}{text!(&release.tag_name)}
-                </span>
-                <span class="flex items-center gap-2">
-                    {date_icon()}{text!(&formatted_date)}
-                </span>
-            </div>
-            <div class="release-body mb-6">
-                {unsafe_text!(body)}
-            </div>
-            {build_install_button(version, release, path_prefix)}
-        </section>
-        ))
-    } else {
-        Err(OrandaError::Other(
-            "A version is required to have a changelog page".to_owned(),
-        ))
-    }
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Release {
+    pub url: String,
+    pub assets_url: String,
+    pub html_url: String,
+    pub id: i64,
+    pub tag_name: String,
+    pub target_commitish: String,
+    pub name: Option<String>,
+    pub draft: bool,
+    pub prerelease: bool,
+    pub created_at: String,
+    pub published_at: String,
+    pub assets: Vec<ReleaseAsset>,
+    pub tarball_url: String,
+    pub zipball_url: String,
+    pub body: Option<String>,
 }
 
-fn build_install_button(
-    version: &String,
-    release: &ReleasesApiResponse,
-    path_prefix: &Option<String>,
-) -> Option<Box<a<String>>> {
-    let is_installable = release.tag_name.eq(&format!("v{}", version));
-    let downloads_href = link::generate(path_prefix, String::from("artifacts.html"));
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ReleaseAsset {
+    pub url: String,
+    pub id: i64,
+    pub node_id: String,
+    pub name: String,
+    pub label: String,
+    pub content_type: String,
+    pub state: String,
+    pub size: i64,
+    pub download_count: i64,
+    pub created_at: String,
+    pub updated_at: String,
+    pub browser_download_url: String,
+}
 
-    if is_installable {
-        Some(
-            html!(<a href=downloads_href><button class="business-button primary">{text!("Install")}</button></a>),
-        )
-    } else {
-        None
+impl Release {
+    pub fn build(
+        &self,
+        syntax_theme: &SyntaxTheme,
+        config_version: &Option<String>,
+        path_prefix: &Option<String>,
+    ) -> Result<Box<section<String>>> {
+        if let Some(version) = config_version {
+            let cutoff = "\n## Install ";
+            let body = match self.body {
+                Some(md) => {
+                    let cut_body = md.split(cutoff).collect::<Vec<&str>>()[0];
+
+                    markdown::to_html(cut_body.to_string(), syntax_theme)?
+                }
+                None => String::new(),
+            };
+            let id: axohtml::types::Id = axohtml::types::Id::new(self.tag_name);
+            let formatted_date = match DateTime::parse_from_rfc3339(&self.published_at) {
+                Ok(date) => date.format("%b %e %Y at %R UTC").to_string(),
+                Err(_) => self.published_at.to_owned(),
+            };
+
+            let classnames = if self.prerelease {
+                "release pre-release hidden"
+            } else {
+                "release"
+            };
+            let link = format!("#{}", self.tag_name);
+
+            Ok(html!(
+            <section class=classnames>
+                <h2 id=id><a href=link>{text!(self.name.unwrap_or(self.tag_name))}</a></h2>
+                <div class="release-info">
+                    <span class="flex items-center gap-2">
+                        {tag_icon()}{text!(self.tag_name)}
+                    </span>
+                    <span class="flex items-center gap-2">
+                        {date_icon()}{text!(&formatted_date)}
+                    </span>
+                </div>
+                <div class="release-body mb-6">
+                    {unsafe_text!(body)}
+                </div>
+                {self.build_install_button(version, path_prefix)}
+            </section>
+            ))
+        } else {
+            Err(OrandaError::Other(
+                "A version is required to have a changelog page".to_owned(),
+            ))
+        }
+    }
+
+    fn build_install_button(
+        &self,
+        version: &String,
+        path_prefix: &Option<String>,
+    ) -> Option<Box<a<String>>> {
+        let is_installable = self.tag_name.eq(&format!("v{}", version));
+        let downloads_href = link::generate(path_prefix, String::from("artifacts.html"));
+
+        if is_installable {
+            Some(
+                html!(<a href=downloads_href><button class="business-button primary">{text!("Install")}</button></a>),
+            )
+        } else {
+            None
+        }
     }
 }
 
