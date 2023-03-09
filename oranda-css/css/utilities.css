@@ -31,6 +31,10 @@
     @apply bg-gray-900;
   }
 
+  .oranda-hide {
+    @apply hidden;
+  }
+
   .axo-gradient {
     background: -webkit-linear-gradient(
       left,
@@ -93,4 +97,9 @@
   .heading-6 {
     @apply text-xl sm:text-xl leading-tight text-slate-800 dark:text-slate-300 font-bold mb-4;
   }
+
+  .hidden {
+    display: none;
+  }
+  
 }

@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&display=swap');
+
+html.hacker body {
+  @apply bg-axo-black;
+  font-family: 'IBM Plex Mono', monospace;
+  --hacker-green: #20c20e;
+}
+
+.hacker .axo-gradient, .hacker .title  {
+  background: -webkit-linear-gradient(
+    left,
+    var(--hacker-green),
+    var(--color-green-600),
+    var(--hacker-green)
+  );
+}
