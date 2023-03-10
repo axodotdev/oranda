@@ -10,6 +10,8 @@ use axoasset::LocalAsset;
 use axohtml::elements::div;
 use axohtml::{html, unsafe_text};
 
+pub mod source;
+
 #[derive(Debug)]
 pub struct Page {
     pub contents: String,
