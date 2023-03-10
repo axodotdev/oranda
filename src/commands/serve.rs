@@ -5,12 +5,7 @@ use crate::message::{Message, MessageType};
 use oranda::config::Config;
 use oranda::errors::*;
 
-use axum::response::Redirect;
-use axum::{
-    http::StatusCode,
-    routing::{get, get_service},
-    Router,
-};
+use axum::{http::StatusCode, response::Redirect, routing::get, routing::get_service, Router};
 
 use clap::Parser;
 use tower_http::services::ServeDir;
@@ -74,17 +69,16 @@ impl Serve {
                     format!("Unhandled internal error: {}", error),
                 )
             });
-        const FRINGE_VERSION: &str = "0.0.11";
         let prefix_route = format!("/{}", prefix);
-        let fringe_route = format!("/{}/fringe@{}.css", prefix, FRINGE_VERSION);
+        let oranda_route = format!("/{}/oranda.css", prefix);
         let custom_route = format!("/{}/custom.css", prefix);
         let app = Router::new()
             .nest_service(&prefix_route, serve_dir)
             .route(
-                format!("/fringe@{}.css", FRINGE_VERSION).as_str(),
+                "/oranda.css",
                 get(move || async {
-                    let fringe_route = fringe_route;
-                    Redirect::permanent(&fringe_route)
+                    let oranda_route = oranda_route;
+                    Redirect::permanent(&oranda_route)
                 }),
             )
             .route(
