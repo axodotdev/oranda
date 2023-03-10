@@ -1,4 +1,4 @@
-use std::{borrow::Cow, path::Path};
+use std::{ffi::OsStr, path::Path};
 
 pub fn is_markdown(file: &str) -> bool {
     let file_path = Path::new(&file);
@@ -8,10 +8,7 @@ pub fn is_markdown(file: &str) -> bool {
     }
 }
 
-pub fn get_filename(file: &str) -> Cow<str> {
+pub fn get_filename(file: &str) -> Option<&OsStr> {
     let file_path = Path::new(file);
-    file_path
-        .file_stem()
-        .unwrap_or(file_path.as_os_str())
-        .to_string_lossy()
+    file_path.file_stem()
 }
