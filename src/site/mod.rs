@@ -25,23 +25,32 @@ impl Site {
         let index = Page::new_from_file(config, &config.readme_path, true)?;
         let mut pages = vec![index];
         if let Some(files) = &config.additional_pages {
-            for file in files {
-                if page::source::is_markdown(file) {
-                    let additional_page = Page::new_from_file(config, file, false)?;
+            for file_path in files.values() {
+                if page::source::is_markdown(file_path) {
+                    let additional_page = Page::new_from_file(config, file_path, false)?;
                     pages.push(additional_page)
                 } else {
                     let msg = format!(
                         "File {} in additional pages is not markdown and will be skipped",
-                        file
+                        file_path
                     );
                     Message::new(MessageType::Warning, &msg).print();
                 }
             }
         }
+
         if config.artifacts.is_some() {
             let artifacts_html = artifacts::page::build(config)?;
             let artifacts_page = Page::new_from_contents(artifacts_html, "artifacts.html", true);
             pages.push(artifacts_page)
+        }
+        if let Some(repo) = &config.repository {
+            if config.changelog {
+                let changelog_html = changelog::build_page(config, repo)?;
+                let changelog_page =
+                    Page::new_from_contents(changelog_html, "changelog.html", true);
+                pages.push(changelog_page)
+            }
         }
 
         if let Some(repo) = &config.repository {
