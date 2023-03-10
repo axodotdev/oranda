@@ -1,0 +1,94 @@
+@tailwind base;
+
+@layer base {
+  ::selection {
+    @apply bg-axo-highlighter text-axo-black;
+    -webkit-text-fill-color:var(--color-axo-black);
+  }
+
+  *:focus {
+    @apply outline outline-violet-400 dark:outline-axo-highlighter outline-offset-4 outline-2;
+  }
+
+  h1 {
+    @apply heading-1;
+  }
+
+  h2 {
+    @apply heading-2;
+  }
+
+  h3 {
+    @apply heading-3;
+  }
+
+  h4 {
+    @apply heading-4;
+  }
+
+  h5 {
+    @apply heading-5;
+  }
+
+  h6 {
+    @apply heading-6;
+  }
+
+  p,
+  table {
+    @apply text-base sm:text-lg text-slate-800 dark:text-slate-300 leading-relaxed mb-8;
+  }
+
+  b,
+  li {
+    @apply text-base sm:text-lg text-slate-800 dark:text-slate-300 leading-relaxed;
+  }
+
+  code {
+    @apply whitespace-pre-wrap text-base sm:text-lg text-violet-600 dark:text-violet-400 leading-relaxed mb-4;
+  }
+
+  table {
+    @apply my-16;
+  }
+
+  table th {
+    @apply text-axo-pink text-left uppercase;
+  }
+
+  table td {
+    @apply align-top p-4 text-sm font-mono;
+  }
+
+  table td > code {
+    @apply text-sm;
+  }
+
+  table tbody tr {
+    @apply border-t border-violet-300;
+  }
+
+  ul {
+    @apply list-disc;
+  }
+
+  ol {
+    @apply list-decimal;
+  }
+
+  ul ul {
+    @apply list-circle;
+  }
+
+  ol ol, ul ol {
+    @apply list-lower-roman;
+  }
+
+  ul ul ul {
+    @apply list-square;
+  }
+
+  ul ul ol, ul ol ol, ol ul ol, ol ol ol {
+    @apply list-lower-alpha;
+  }
+}
