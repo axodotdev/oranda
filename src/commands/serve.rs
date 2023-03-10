@@ -5,7 +5,7 @@ use crate::message::{Message, MessageType};
 use oranda::config::Config;
 use oranda::errors::*;
 
-use axum::{http::StatusCode, routing::get_service, Router};
+use axum::{http::StatusCode, response::Redirect, routing::get, routing::get_service, Router};
 
 use clap::Parser;
 use tower_http::services::ServeDir;
@@ -70,7 +70,24 @@ impl Serve {
                 )
             });
         let prefix_route = format!("/{}", prefix);
-        let app = Router::new().nest_service(&prefix_route, serve_dir);
+        let oranda_route = format!("/{}/oranda.css", prefix);
+        let custom_route = format!("/{}/custom.css", prefix);
+        let app = Router::new()
+            .nest_service(&prefix_route, serve_dir)
+            .route(
+                "/oranda.css",
+                get(move || async {
+                    let oranda_route = oranda_route;
+                    Redirect::permanent(&oranda_route)
+                }),
+            )
+            .route(
+                "/custom.css",
+                get(move || async {
+                    let custom_route = custom_route;
+                    Redirect::permanent(&custom_route)
+                }),
+            );
 
         let addr = SocketAddr::from(([127, 0, 0, 1], self.port));
         let msg = format!("Your project is available at: http://{}/{}", addr, prefix);

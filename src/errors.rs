@@ -25,6 +25,9 @@ pub enum OrandaError {
     #[error(transparent)]
     Reqwest(#[from] reqwest::Error),
 
+    #[error("Found an invalid value assigned to ORANDA_CSS environment variable. Please make sure you give a valid path pointing to a css file.")]
+    InvalidOrandaCSSOverride { path: String },
+
     #[error("Failed fetching releases from Github. Details:\n{details}")]
     GithubReleasesFetchError { details: String },
 
