@@ -1,3 +1,7 @@
 /target
 public/
 oranda-debug.log
+
+# oranda-css
+oranda-css/dist
+node_modules

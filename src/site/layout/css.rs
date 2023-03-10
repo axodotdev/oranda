@@ -1,4 +1,8 @@
+use std::env;
+use std::fs;
+
 use crate::errors::*;
+use crate::message::{Message, MessageType};
 
 use axoasset::{Asset, LocalAsset};
 use axohtml::elements::link;
@@ -9,7 +13,6 @@ fn concat_minify(css_files: &[String]) -> Result<String> {
     let mut css = String::new();
     for file in css_files {
         let future = Asset::load_string(file);
-
         let unminified = tokio::runtime::Handle::current().block_on(future)?;
         let minified = match css::minify(&unminified) {
             Ok(css) => Ok(css),
@@ -21,30 +24,23 @@ fn concat_minify(css_files: &[String]) -> Result<String> {
     Ok(css)
 }
 
-pub fn build_fringe() -> Box<link<String>> {
-    const FRINGE_VERSION: &str = "0.0.10";
-    let css_file_name = format!("fringe@{}.css", FRINGE_VERSION);
-
-    html!(<link rel="stylesheet" href=css_file_name></link>)
-}
-
-pub fn write_fringe(dist_dir: &str) -> Result<()> {
-    const FRINGE_VERSION: &str = "0.0.10";
-    let css_file_name = format!("fringe@{}.css", FRINGE_VERSION);
-    let fringe_href = format!(
-        "https://www.unpkg.com/@axodotdev/fringe@{}/themes/",
-        FRINGE_VERSION
-    );
-    let minified_css = concat_minify(&[
-        format!("{}/fringe-output.css", fringe_href),
-        format!("{}/theme-output.css", fringe_href),
-    ])?;
-
-    let css_path = format!("{}/{}", dist_dir, css_file_name);
-
-    let asset = LocalAsset::new(&css_path, minified_css.as_bytes().to_vec());
-    asset.write(dist_dir)?;
-    Ok(())
+pub fn build_oranda(dist_dir: &str) -> Result<Box<link<String>>> {
+    match env::var("ORANDA_CSS") {
+        Ok(path) => {
+            let msg = format!("Overriding oranda_css path with {}", &path);
+            Message::new(MessageType::Warning, &msg).print();
+            LocalAsset::copy(&path, dist_dir)?;
+        }
+        Err(_) => {
+            let fetched_oranda = tokio::runtime::Handle::current().block_on(Asset::copy(
+                "https://github.com/axodotdev/oranda/releases/download/css-v0.0.0/oranda.css",
+                dist_dir,
+            ))?;
+            let path = "oranda.css";
+            fs::rename(fetched_oranda, format!("{dist_dir}/{path}"))?;
+        }
+    };
+    Ok(html!(<link rel="stylesheet" href="oranda.css"></link>))
 }
 
 pub fn build_additional() -> Box<link<String>> {

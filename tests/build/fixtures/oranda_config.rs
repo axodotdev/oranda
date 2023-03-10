@@ -49,7 +49,7 @@ pub fn cargo_dist() -> Config {
             package_managers: None,
         }),
         repository: Some(String::from("https://github.com/axodotdev/oranda")),
-        version: Some(String::from("0.0.1-prerelease2")),
+        version: Some(String::from("0.0.1")),
         ..Default::default()
     }
 }
@@ -65,6 +65,19 @@ pub fn package_managers() -> Config {
         }),
         repository: Some(String::from("https://github.com/axodotdev/oranda")),
         version: Some(String::from("0.0.1-prerelease2")),
+        ..Default::default()
+    }
+}
+
+pub fn changelog() -> Config {
+    Config {
+        artifacts: Some(Artifacts {
+            cargo_dist: Some(true),
+            package_managers: None,
+        }),
+        repository: Some(String::from("https://github.com/axodotdev/oranda")),
+        version: Some(String::from("0.0.1")),
+        changelog: true,
         ..Default::default()
     }
 }

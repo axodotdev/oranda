@@ -15,7 +15,8 @@ ammonia = "3"
 axoasset = "0.0.1"
 axohtml = "0.4.1"
 axum = "0.6.2"
-cargo-dist-schema = "=0.0.3-prerelease12"
+cargo-dist-schema = "=0.0.3"
+chrono = "0.4.23"
 clap = { version = "4", features = ["derive", "help", "usage", "error-context", "wrap_help"] }
 comrak = "0.14"
 console = "0.15.5"
@@ -34,6 +35,7 @@ tower-http = { version = "0.3.0", features = ["fs", "trace"] }
 tracing = "0.1"
 tracing-appender = "0.2"
 tracing-subscriber = "0.3"
+url = "2.3.1"
 
 [dev-dependencies]
 assert_cmd="2"

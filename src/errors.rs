@@ -25,11 +25,26 @@ pub enum OrandaError {
     #[error(transparent)]
     Reqwest(#[from] reqwest::Error),
 
+    #[error("Found an invalid value assigned to ORANDA_CSS environment variable. Please make sure you give a valid path pointing to a css file.")]
+    InvalidOrandaCSSOverride { path: String },
+
+    #[error("Failed fetching releases from Github. Details:\n{details}")]
+    GithubReleasesFetchError { details: String },
+
+    #[error("Failed parsing response when fetching releases from Github. Details:\n{details}")]
+    GithubReleaseParseError { details: String },
+
+    #[error("Could not find any releases from {repo} with a cargo-dist compatible `dist-manifest.json`.")]
+    NoCargoDistReleasesFound { repo: String },
+
     #[error(transparent)]
     FSExtra(#[from] fs_extra::error::Error),
 
     #[error("failed to read {filedesc} at {path}")]
     FileNotFound { filedesc: String, path: String },
+
+    #[error("failed to parse your repo, current config has repo as: {repo}, please make sure this is correct.Details: {details}")]
+    RepoParseError { repo: String, details: String },
 
     #[error("Could not find a build in {dist_dir}. Did you remember to run `oranda build`?")]
     BuildNotFound { dist_dir: String },

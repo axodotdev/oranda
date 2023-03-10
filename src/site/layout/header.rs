@@ -32,6 +32,7 @@ fn nav(
     path_prefix: &Option<String>,
     artifacts: &Option<Artifacts>,
     md_book: &Option<String>,
+    changelog: &bool,
 ) -> Result<Box<nav<String>>> {
     let mut html: Vec<Box<li<String>>> = if let Some(prefix) = &path_prefix {
         let href = format!("/{}", prefix);
@@ -67,6 +68,15 @@ fn nav(
         html.extend(html!(<li><a href=href>{text!("Docs")}</a></li>));
     };
 
+    if *changelog {
+        let href = if let Some(prefix) = &path_prefix {
+            format!("/{}/{}", prefix, "changelog.html")
+        } else {
+            format!("/{}", "changelog.html")
+        };
+        html.extend(html!(<li><a href=href>{text!("Changelog")}</a></li>));
+    };
+
     Ok(html!(
         <nav class="nav">
             <ul>
@@ -92,6 +102,7 @@ pub fn create(config: &Config) -> Result<Box<header<String>>> {
             &config.path_prefix,
             &config.artifacts,
             &config.md_book,
+            &config.changelog,
         )?)
     } else {
         None

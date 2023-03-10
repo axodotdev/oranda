@@ -6,6 +6,7 @@
     "Assets": "./docs/assets.md",
     "Hosting": "./docs/hosting.md"
   },
+  "changelog": true,
   "social": {
     "image": "https://www.axo.dev/meta_small.jpeg",
     "image_alt": "axo",
