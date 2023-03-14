@@ -183,10 +183,10 @@ pub fn build(config: &Config) -> Result<Box<div<String>>> {
                     None => String::from("We couldn't detect the system you are using."),
                 };
                 let install_code_block = build_install_block(config, &typed, release, artifact);
-
+                let title = format!("Install v{}", release.app_version);
                 html.extend(html!(
                     <div class="hidden target artifact-header" data-targets=&targets>
-                        <h4>{text!("Install")}</h4>
+                        <h4>{text!(title)}</h4>
                         {install_code_block}
                         <div>
                             <span class="detect">

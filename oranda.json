@@ -5,7 +5,6 @@
     "./docs/assets.md",
     "./docs/hosting.md"
   ],
-  "path_prefix": "oranda",
   "changelog": true,
   "social": {
     "image": "https://www.axo.dev/meta_small.jpeg",
