@@ -85,11 +85,7 @@ pub fn build_page(config: &Config, repo: &str) -> Result<String> {
 
         let link = format!("#{}", &release.tag_name);
 
-        releases_html.extend(release.build(
-            &config.syntax_theme,
-            &config.version,
-            &config.path_prefix,
-        )?);
+        releases_html.extend(release.build(config)?);
         releases_nav
             .extend(html!(<li class=classnames><a href=link>{text!(&release.tag_name)}</a></li>))
     }

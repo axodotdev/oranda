@@ -1,6 +1,7 @@
+use crate::config::Config;
+use crate::data::artifacts::cargo_dist;
 use crate::errors::*;
-use crate::site::link;
-use crate::site::markdown::{self, SyntaxTheme};
+use crate::site::{link, markdown};
 use axohtml::dom::UnsafeTextNode;
 use axohtml::elements::{a, section};
 use axohtml::html;
@@ -45,22 +46,8 @@ pub struct GithubReleaseAsset {
 }
 
 impl GithubRelease {
-    pub fn build(
-        &self,
-        syntax_theme: &SyntaxTheme,
-        config_version: &Option<String>,
-        path_prefix: &Option<String>,
-    ) -> Result<Box<section<String>>> {
-        if let Some(version) = config_version {
-            let cutoff = "\n## Install ";
-            let body = match &self.body {
-                Some(md) => {
-                    let cut_body = md.split(cutoff).collect::<Vec<&str>>()[0];
-
-                    markdown::to_html(cut_body, syntax_theme)?
-                }
-                None => String::new(),
-            };
+    pub fn build(&self, config: &Config) -> Result<Box<section<String>>> {
+        if let Some(version) = &config.version {
             let id: axohtml::types::Id = axohtml::types::Id::new(self.tag_name.clone());
             let formatted_date = match DateTime::parse_from_rfc3339(&self.published_at) {
                 Ok(date) => date.format("%b %e %Y at %R UTC").to_string(),
@@ -73,6 +60,7 @@ impl GithubRelease {
                 "release"
             };
             let link = format!("#{}", &self.tag_name);
+            let body = self.create_release_body(config)?;
 
             Ok(html!(
             <section class=classnames>
@@ -88,7 +76,7 @@ impl GithubRelease {
                 <div class="release-body mb-6">
                     {unsafe_text!(body)}
                 </div>
-                {self.build_install_button(version, path_prefix)}
+                {self.build_install_button(version,  &config.path_prefix)}
             </section>
             ))
         } else {
@@ -97,7 +85,24 @@ impl GithubRelease {
             ))
         }
     }
+    fn create_release_body(&self, config: &Config) -> Result<String> {
+        let body_md = match &self.body {
+            Some(md) => {
+                if self.has_dist_manifest() {
+                    let manifest = cargo_dist::fetch_manifest(config)?.manifest;
+                    match manifest.announcement_changelog {
+                        Some(changelog) => changelog,
+                        None => md.to_string(),
+                    }
+                } else {
+                    md.to_string()
+                }
+            }
+            None => String::new(),
+        };
 
+        markdown::to_html(&body_md, &config.syntax_theme)
+    }
     fn title<'a>(name: &'a Option<String>, tag: &'a str) -> &'a str {
         match name {
             Some(n) => n,
