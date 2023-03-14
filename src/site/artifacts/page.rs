@@ -7,7 +7,7 @@ use axohtml::html;
 
 pub fn build(config: &Config) -> Result<String> {
     let mut html = vec![];
-    let manifest = cargo_dist::fetch_manifest(config)?;
+    let (manifest, _) = cargo_dist::fetch_manifest(config)?;
 
     if config.artifacts.is_some() {
         let mut lists = vec![];
