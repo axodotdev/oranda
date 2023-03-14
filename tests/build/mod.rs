@@ -50,7 +50,7 @@ fn creates_nav() {
     let config = &oranda_config::no_artifacts();
     let page_html = page::index(config);
 
-    assert!(page_html.contains("<nav class=\"nav\"><ul><li><a href=\"/\">Home</a></li><li><a href=\"/README.html\">README</a></li></ul></nav>"));
+    assert!(page_html.contains("<nav class=\"nav\"><ul><li><a href=\"/\">Home</a></li><li><a href=\"/README.html\">Another Page</a></li></ul></nav>"));
 }
 
 #[test]
