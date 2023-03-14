@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::path::Path;
 
 use axoasset::Asset;
@@ -32,7 +33,7 @@ pub struct OrandaConfig {
     pub repository: Option<String>,
     pub syntax_theme: Option<SyntaxTheme>,
     pub analytics: Option<Analytics>,
-    pub additional_pages: Option<Vec<String>>,
+    pub additional_pages: Option<HashMap<String, String>>,
     pub social: Option<Social>,
     pub artifacts: Option<Artifacts>,
     pub version: Option<String>,
