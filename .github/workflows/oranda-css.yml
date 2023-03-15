@@ -21,8 +21,11 @@ jobs:
           # Create the Github Release™
           gh release create ${{ github.ref_name }} --draft
           echo "created announcement!"
-  build-css:
+  build-and-upload-css:
+    needs: create-release
     runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -36,17 +39,8 @@ jobs:
           npm run build
           ls dist
           echo "built css!"
-  upload-css:
-    runs-on: ubuntu-latest
-    needs: [create-release, build-css]
-    env:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    steps:
-      - uses: actions/checkout@v3
-      - name: upload-css
-        run: |
           # Upload the manifest to the Github Release™
-          gh release upload ${{ github.ref_name }} oranda-css/dist/oranda.css
+          gh release upload ${{ github.ref_name }} dist/oranda.css
           echo "uploaded css!"
   publish-release:
     runs-on: ubuntu-latest
