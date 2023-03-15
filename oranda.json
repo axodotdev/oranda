@@ -1,22 +1,16 @@
 {
   "favicon": "https://www.axo.dev/favicon.ico",
   "path_prefix": "oranda",
+  "funding": true,
   "additional_pages": {
     "Configuration": "./docs/configuration.md",
     "Assets": "./docs/assets.md",
     "Hosting": "./docs/hosting.md"
   },
-  "changelog": true,
   "social": {
     "image": "https://www.axo.dev/meta_small.jpeg",
     "image_alt": "axo",
     "twitter_account": "@axodotdev"
-  },
-  "artifacts": {
-    "cargo_dist": true,
-    "package_managers": {
-      "crates.io": "cargo install oranda"
-    }
   },
   "analytics": {
     "plausible": {

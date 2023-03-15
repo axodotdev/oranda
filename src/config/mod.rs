@@ -39,6 +39,7 @@ pub struct Config {
     pub license: Option<String>,
     pub md_book: Option<String>,
     pub changelog: bool,
+    pub funding: bool,
 }
 
 impl Config {
@@ -105,6 +106,8 @@ impl Config {
                     path_prefix: custom.path_prefix,
                     md_book: custom.md_book,
                     changelog: custom.changelog.unwrap_or(default.changelog),
+
+                    funding: custom.funding.unwrap_or(default.funding),
                 });
             // otherwise both oranda config and project manifest exists
             } else if let Some(project) = project {
@@ -140,6 +143,7 @@ impl Config {
                     path_prefix: custom.path_prefix,
                     md_book: custom.md_book,
                     changelog: custom.changelog.unwrap_or(default.changelog),
+                    funding: custom.funding.unwrap_or(default.funding),
                 });
             }
         }
@@ -189,6 +193,7 @@ impl Default for Config {
             static_dir: String::from("static"),
             md_book: None,
             changelog: false,
+            funding: false,
         }
     }
 }

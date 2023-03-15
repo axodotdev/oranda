@@ -1,7 +1,7 @@
 [package]
 name = "oranda"
 description = "🎁 generate beautiful landing pages for your projects"
-repository = "https://github.com/axodotdev/oranda"
+repository = "https://github.com/SaraVieira/roms-explorer"
 version = "0.0.1"
 edition = "2021"
 authors = ["Axo Developer Co. <hello@axo.dev>"]
@@ -15,6 +15,7 @@ ammonia = "3"
 axoasset = "0.0.1"
 axohtml = "0.4.1"
 axum = "0.6.2"
+base64 = "0.21.0"
 cargo-dist-schema = "=0.0.3"
 chrono = "0.4.23"
 clap = { version = "4", features = ["derive", "help", "usage", "error-context", "wrap_help"] }
@@ -27,6 +28,7 @@ minifier = "0.2.2"
 reqwest = { version = "0.11.13", features = ["blocking", "json"] }
 serde = { version = "1.0.144", features = ["derive"] }
 serde_json = { version = "1.0.85" }
+serde_yaml = "0.9.19"
 syntect = "5.0"
 thiserror = "1.0.37"
 tokio = { version = "1.20.1", features = ["full"] }

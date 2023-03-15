@@ -43,6 +43,7 @@ pub struct OrandaConfig {
     pub license: Option<String>,
     pub md_book: Option<String>,
     pub changelog: Option<bool>,
+    pub funding: Option<bool>,
 }
 
 impl OrandaConfig {

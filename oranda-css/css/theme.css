@@ -297,3 +297,11 @@ div.table code {
 .release-info svg {
  @apply w-6 h-6;
 }
+
+.funding-list {
+  @apply flex gap-4 items-center my-6;
+}
+
+.funding-list li {
+  @apply m-0;
+}

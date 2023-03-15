@@ -10,6 +10,8 @@ use axoasset::LocalAsset;
 use axohtml::elements::div;
 use axohtml::{html, unsafe_text};
 
+use super::funding::fetch_funding_info;
+
 pub mod source;
 
 #[derive(Debug)]
@@ -48,7 +50,17 @@ impl Page {
     pub fn build(self, config: &Config) -> Result<String> {
         let page_contents = if self.is_index {
             let artifacts_header = artifacts::build_header(config)?;
-            html!(<div>{artifacts_header}{unsafe_text!(self.contents)}</div>).to_string()
+            let mut funding_info = String::new();
+            if let Some(repo) = &config.repository {
+                if config.funding {
+                    funding_info = fetch_funding_info(&repo)?;
+                }
+            }
+            html!(<div>{artifacts_header}
+                {unsafe_text!(funding_info)}
+                {unsafe_text!(self.contents)}
+            </div>)
+            .to_string()
         } else {
             let html: Box<div<String>> = html!(<div>{unsafe_text!(self.contents)}</div>);
             html.to_string()

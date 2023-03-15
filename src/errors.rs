@@ -28,6 +28,12 @@ pub enum OrandaError {
     #[error("Found an invalid value assigned to ORANDA_CSS environment variable. Please make sure you give a valid path pointing to a css file.")]
     InvalidOrandaCSSOverride { path: String },
 
+    #[error("Failed fetching funding info from Github. Details:\n{details}")]
+    GithubFundingFetchError { details: String },
+
+    #[error("Failed parsing response when fetching funding info from Github. Details:\n{details}")]
+    GithubFundingParseError { details: String },
+
     #[error("Failed fetching releases from Github. Details:\n{details}")]
     GithubReleasesFetchError { details: String },
 
