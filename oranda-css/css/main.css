@@ -2,4 +2,11 @@
 @import "base.css";
 @import "utilities.css";
 @import "buttons.css";
-@import "theme.css"
+@import "components.css";
+
+@import "pages/artifacts.css";
+@import "pages/changelog.css";
+
+@import "themes/axo.css";
+@import "themes/hacker.css";
+@import "themes/cupcake.css";

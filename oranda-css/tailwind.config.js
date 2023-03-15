@@ -1,4 +1,3 @@
-const defaultColors = require("tailwindcss/colors");
 const defaultTheme = require("tailwindcss/defaultTheme");
 const listStyleType = {
   circle: "circle",
@@ -31,10 +30,6 @@ const extend = {
   },
 };
 
-const theme = {
-  extend,
-};
-
 const extractColorVars = (themeColors, colorGroup = "") =>
   Object.keys(themeColors).reduce((currentVars, colorKey) => {
     const value = themeColors[colorKey];
@@ -53,7 +48,7 @@ const tailwindColorsToCSSVariables = ({ addBase, theme }) =>
 
 module.exports = {
   darkMode: "class",
-  theme: theme,
+  theme: { extend },
   plugins: [
     require("@tailwindcss/typography"),
     require("@tailwindcss/forms"),

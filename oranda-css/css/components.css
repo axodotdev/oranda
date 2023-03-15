@@ -1,0 +1,29 @@
+/* FOOTER */
+
+footer {
+  @apply axo-gradient text-slate-50 flex w-full justify-between px-4 py-2 text-xs items-center;
+}
+
+/* NAV */
+
+.nav {
+  @apply p-0 text-center mb-12;
+}
+
+.nav ul {
+  @apply p-0 flex flex-wrap gap-6 items-center text-center list-none justify-center;
+}
+
+.nav ul li {
+  @apply m-0 capitalize;
+}
+
+/* REPO BANNER */
+
+.repo_banner {
+  @apply axo-gradient py-1.5;
+}
+
+.repo_banner > a {
+  @apply flex justify-center gap-2 items-start text-slate-50 dark:text-axo-black h-[20px];
+}

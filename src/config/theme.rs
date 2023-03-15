@@ -5,11 +5,15 @@ use serde::Deserialize;
 pub enum Theme {
     Light,
     Dark,
+    Hacker,
+    Cupcake,
 }
 
 pub fn css_class(theme: &Theme) -> &str {
     match theme {
         Theme::Dark => "dark",
+        Theme::Hacker => "hacker",
+        Theme::Cupcake => "cupcake",
         _ => "light",
     }
 }
