@@ -1,11 +1,10 @@
 mod icons;
 
-use crate::errors::*;
-use axohtml::{dom::UnsafeTextNode, elements::li, html, types::SpacedList};
+use crate::{errors::*, site::repo};
+use axohtml::{dom::UnsafeTextNode, elements::li, html, text, types::SpacedList};
 use base64::{engine::general_purpose, Engine as _};
 use reqwest::header::USER_AGENT;
 use serde::{Deserialize, Serialize};
-use url::Url;
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Contents {
@@ -85,61 +84,46 @@ pub fn build_funding_html(funding_links: Funding) -> Vec<Box<li<String>>> {
     html
 }
 
-pub fn fetch_funding_info(repo: &str) -> Result<String> {
-    let repo_parsed = match Url::parse(repo) {
-        Ok(parsed) => Ok(parsed),
-        Err(parse_error) => Err(OrandaError::RepoParseError {
-            repo: repo.to_string(),
-            details: parse_error.to_string(),
-        }),
-    };
-    let binding = repo_parsed?;
-    let parts = binding.path_segments().map(|c| c.collect::<Vec<_>>());
-    if let Some(url_parts) = parts {
-        let url = format!(
-            "https://api.github.com/repos/{}/{}/contents/.github/FUNDING.yml",
-            url_parts[0], url_parts[1]
-        );
-        const VERSION: &str = env!("CARGO_PKG_VERSION");
-        let header = format!("oranda-{}", VERSION);
+pub fn parse_funding_yaml(content: String) -> Result<Funding> {
+    let string_yaml = &general_purpose::STANDARD
+        .decode(content.replace('\n', ""))
+        .unwrap();
+    match std::str::from_utf8(string_yaml) {
+        Ok(parsed_yaml) => {
+            let deserialized_map = serde_yaml::from_str(parsed_yaml);
 
-        let response = reqwest::blocking::Client::new()
-            .get(url)
-            .header(USER_AGENT, header)
-            .send()?;
-
-        match response.error_for_status() {
-            Ok(r) => match r.json::<Contents>() {
-                Ok(contents) => {
-                    let string_yaml = &general_purpose::STANDARD
-                        .decode(contents.content.replace('\n', ""))
-                        .unwrap();
-                    let yaml_contents = match std::str::from_utf8(string_yaml) {
-                        Ok(y) => {
-                            let deserialized_map: Funding = serde_yaml::from_str(y).unwrap();
-                            let funding_html = build_funding_html(deserialized_map);
-                            Ok(html!(<ul class="funding-list">{funding_html}</ul>).to_string())
-                        }
-                        Err(e) => Err(OrandaError::GithubFundingParseError {
-                            details: e.to_string(),
-                        }),
-                    }?;
-
-                    Ok(yaml_contents.to_string())
-                }
+            match deserialized_map {
+                Ok(yaml) => Ok(yaml),
                 Err(e) => Err(OrandaError::GithubFundingParseError {
                     details: e.to_string(),
                 }),
-            },
-            Err(e) => Err(OrandaError::GithubFundingFetchError {
-                details: e.to_string(),
-            }),
+            }
         }
-    } else {
-        Err(OrandaError::RepoParseError {
-            repo: binding.to_string(),
-            details: "This URL is not structured the expected way, expected more segments-"
-                .to_owned(),
-        })
+        Err(e) => Err(OrandaError::GithubFundingParseError {
+            details: e.to_string(),
+        }),
+    }
+}
+
+pub fn fetch_funding_info(repo: &str) -> Result<String> {
+    let url_parts = repo::parse(repo)?;
+    let response = repo::fetch_funding_file(url_parts)?;
+    match response.json::<Contents>() {
+        Ok(contents) => {
+            let funding_yaml = parse_funding_yaml(contents.content)?;
+            let funding_html = build_funding_html(funding_yaml);
+            Ok(html!(
+                <div class="flex flex-col items-center">
+                    <h3>{text!("Help fund this project")}</h3>
+                    <ul class="funding-list">
+                        {funding_html}
+                    </ul>
+                </div>
+            )
+            .to_string())
+        }
+        Err(e) => Err(OrandaError::GithubFundingParseError {
+            details: e.to_string(),
+        }),
     }
 }

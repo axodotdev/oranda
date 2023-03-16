@@ -5,6 +5,7 @@ pub mod changelog;
 pub mod funding;
 pub mod layout;
 mod link;
+mod repo;
 use layout::{css, javascript};
 pub mod markdown;
 pub mod page;

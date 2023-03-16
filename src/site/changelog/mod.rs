@@ -10,7 +10,8 @@ use reqwest::header::USER_AGENT;
 
 use crate::config::Config;
 use crate::errors::*;
-use url::Url;
+
+use crate::site::repo;
 
 fn build_prerelease_toggle(releases: Vec<GithubRelease>) -> Option<Box<div<String>>> {
     let has_pre_releases = releases.iter().any(|release| release.prerelease);
@@ -31,36 +32,21 @@ fn build_prerelease_toggle(releases: Vec<GithubRelease>) -> Option<Box<div<Strin
 }
 
 pub fn fetch_releases(repo: &str) -> Result<Vec<GithubRelease>> {
-    let repo_parsed = match Url::parse(repo) {
-        Ok(parsed) => Ok(parsed),
-        Err(parse_error) => Err(OrandaError::RepoParseError {
-            repo: repo.to_string(),
-            details: parse_error.to_string(),
-        }),
-    };
-    let binding = repo_parsed?;
-    let parts = binding.path_segments().map(|c| c.collect::<Vec<_>>());
-    if let Some(url_parts) = parts {
-        let url = format!(
-            "https://octolotl.axodotdev.host/releases/{}/{}",
-            url_parts[0], url_parts[1]
-        );
-        const VERSION: &str = env!("CARGO_PKG_VERSION");
-        let header = format!("oranda-{}", VERSION);
+    let url_parts = repo::parse(repo)?;
 
-        let releases_response = reqwest::blocking::Client::new()
-            .get(url)
-            .header(USER_AGENT, header)
-            .send()?;
+    let url = format!(
+        "https://octolotl.axodotdev.host/releases/{}/{}",
+        url_parts.owner, url_parts.repo
+    );
+    const VERSION: &str = env!("CARGO_PKG_VERSION");
+    let header = format!("oranda-{}", VERSION);
 
-        parse_response(releases_response)
-    } else {
-        Err(OrandaError::RepoParseError {
-            repo: binding.to_string(),
-            details: "This URL is not structured the expected way, expected more segments-"
-                .to_owned(),
-        })
-    }
+    let releases_response = reqwest::blocking::Client::new()
+        .get(url)
+        .header(USER_AGENT, header)
+        .send()?;
+
+    parse_response(releases_response)
 }
 
 fn parse_response(response: reqwest::blocking::Response) -> Result<Vec<GithubRelease>> {
