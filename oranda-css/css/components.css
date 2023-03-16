@@ -35,7 +35,7 @@ footer {
 }
 
 .funding-wrapper h3 {
-  @apply mt-6;
+  @apply mt-8;
 }
 
 .funding-list {

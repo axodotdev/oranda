@@ -109,3 +109,8 @@ html.hacker .prereleases-toggle input:checked {
 html.hacker .releases-nav ul li a {
   @apply hover:decoration-orange-500;
 }
+
+html.hacker .funding-wrapper {
+    @apply items-start;
+  
+}

@@ -1,5 +1,6 @@
 use crate::config::Config;
 use crate::errors::*;
+use crate::site::artifacts;
 use crate::site::markdown::{syntax_highlight, SyntaxTheme};
 use linked_hash_map::LinkedHashMap;
 
@@ -58,10 +59,19 @@ pub fn build(
         )));
     };
     let install_code = create_package_install_code(hint.as_str(), &config.syntax_theme);
+    let copy_icon = artifacts::get_copyicon();
 
-    Ok(html!(<div>
-    <h4 class="text-center">{text!(format!("Install with {}", manager))}</h4>
-    {unsafe_text!(install_code)}
+    Ok(html!(<div class="artifact-header">
+    <h4>{text!(format!("Install with {}", manager))}</h4>
+    <div class="install-code-wrapper">
+        {unsafe_text!(install_code)}
+        <button
+            data-copy={hint}
+            class="button primary copy-clipboard-button button">
+            {copy_icon}
+        </button>
+    </div>
+
     <div>
         <a href="/artifacts.html" class="download-all">{text!("View all downloads")}</a>
     </div>

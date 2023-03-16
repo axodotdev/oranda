@@ -6,10 +6,16 @@
     "Assets": "./docs/assets.md",
     "Hosting": "./docs/hosting.md"
   },
+  "changelog": true,
   "social": {
     "image": "https://www.axo.dev/meta_small.jpeg",
     "image_alt": "axo",
     "twitter_account": "@axodotdev"
+  },
+  "artifacts": {
+    "package_managers": {
+      "crates.io": "cargo install oranda"
+    }
   },
   "analytics": {
     "plausible": {

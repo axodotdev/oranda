@@ -53,7 +53,7 @@ impl Page {
             let mut funding_info = String::new();
             if let Some(repo) = &config.repository {
                 if config.funding {
-                    funding_info = fetch_funding_info(&repo)?;
+                    funding_info = fetch_funding_info(repo)?;
                 }
             }
             html!(<div>{artifacts_header}

@@ -50,6 +50,7 @@
   @apply w-auto rounded-l-none flex items-center hover:no-underline focus:outline-offset-[-2px];
 }
 
-.install-code-wrapper > .button.copy-clipboard-button {
+.install-code-wrapper > .button:not(:last-of-type) {
   @apply rounded-none border-r-axo-black border-r-2;
 }
+

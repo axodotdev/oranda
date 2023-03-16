@@ -32,7 +32,8 @@ fn create_link(
     let mut rels = SpacedList::new();
     rels.add("noopener");
     rels.add("noreferrer");
-    html!(<a class="button secondary" href=link target="_blank" title={format!("Support us on {}", site_name)}rel=rels>{icon}</a>)
+    let title = format!("Support us on {}", site_name);
+    html!(<a class="button secondary" href=link target="_blank" title=title rel=rels>{icon}</a>)
 }
 
 pub fn build_funding_html(funding_links: Funding) -> Vec<Box<li<String>>> {
