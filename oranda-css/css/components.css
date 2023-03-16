@@ -31,12 +31,9 @@ footer {
 /* FUNDING */
 
 .funding-wrapper {
-  @apply flex flex-col items-center;
+  @apply mt-8 flex flex-col items-center;
 }
 
-.funding-wrapper h3 {
-  @apply mt-8;
-}
 
 .funding-list {
   @apply flex gap-4 items-center mb-12;
