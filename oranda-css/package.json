@@ -5,7 +5,7 @@
   "main": "tailwind.config.js",
   "scripts": {
     "build": "tailwindcss -c tailwind.config.js -i ./css/main.css -o ./dist/oranda.css --minify",
-    "dev": "npm run build --watch"
+    "dev": "npm run build -- --watch"
   },
   "keywords": [],
   "author": "",

@@ -1,0 +1,106 @@
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&display=swap");
+
+html.hacker ::selection {
+  @apply text-axo-black;
+  background-color: var(--hacker-green);
+
+  -webkit-text-fill-color: var(--color-axo-black);
+}
+
+html.hacker body {
+  @apply bg-axo-black text-slate-300;
+  font-family: "IBM Plex Mono", monospace;
+  --hacker-green: #20c20e;
+}
+
+html.hacker h2,
+html.hacker h3,
+html.hacker h4,
+html.hacker h5,
+html.hacker h6 {
+  @apply text-violet-600;
+}
+
+html.hacker .repo_banner > a,
+html.hacker footer {
+  @apply text-axo-black;
+}
+
+html.hacker p,
+html.hacker table {
+  @apply text-slate-300;
+}
+
+html.hacker .title {
+  @apply text-left relative inline-block ml-8;
+}
+
+@keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}
+
+html.hacker .title:after {
+  content: "";
+  height: 70px;
+  background: var(--hacker-green);
+  animation: blink-animation 1s steps(5, start) infinite;
+  @apply block absolute left-full ml-3 w-4 top-3;
+}
+
+html.hacker .title::before {
+  content: "> ";
+  @apply block text-gray-800 text-5xl absolute top-1/2 -translate-y-1/2 -left-8 mt-2;
+}
+
+html.hacker .title,
+html.hacker div.table .th,
+html.hacker h1 {
+  color: var(--hacker-green);
+}
+
+html.hacker a {
+  @apply text-orange-500 hover:decoration-orange-500;
+}
+
+html.hacker .axo-gradient {
+  background: -webkit-linear-gradient(
+    left,
+    var(--hacker-green),
+    var(--color-green-600),
+    var(--hacker-green)
+  );
+}
+
+html.hacker .nav ul {
+  @apply justify-start;
+}
+
+html.hacker .button.primary {
+  @apply text-axo-black bg-orange-500 hover:bg-orange-600 border-transparent;
+}
+
+html.hacker .artifact-header > h4 {
+  @apply text-left;
+}
+
+html.hacker .releases-nav ul li a {
+  @apply text-slate-200;
+}
+
+html.hacker .releases-nav ul li:before {
+  @apply bg-gray-600;
+}
+
+html.hacker .releases-nav ul {
+  @apply border-l-gray-600;
+}
+
+html.hacker .prereleases-toggle input:checked {
+  @apply bg-orange-500;
+}
+
+html.hacker .releases-nav ul li a {
+  @apply hover:decoration-orange-500;
+}
