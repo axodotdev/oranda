@@ -31,6 +31,17 @@ html.cupcake .button.primary:hover {
   background: var(--secondary-100);
 }
 
+html.cupcake .button.secondary {
+  border: 1px solid var(--secondary);
+  color: var(--secondary-100);
+}
+
+html.cupcake .button.secondary:hover {
+  background: var(--secondary);
+  color: var(--b2);
+}
+
+
 html.cupcake h1,
 html.cupcake h2,
 html.cupcake h3,

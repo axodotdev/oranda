@@ -28,12 +28,20 @@ footer {
   @apply flex justify-center gap-2 items-start text-slate-50 dark:text-axo-black h-[20px];
 }
 
+/* FUNDING */
 
+.funding-wrapper {
+  @apply flex flex-col items-center;
+}
 
 .funding-list {
-  @apply flex gap-4 items-center my-6;
+  @apply flex gap-4 items-center mb-12;
 }
 
 .funding-list li {
   @apply m-0;
+}
+
+.funding-list .button {
+  @apply block w-auto;
 }
