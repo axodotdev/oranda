@@ -20,7 +20,7 @@
 }
 
 .releases-nav {
-  @apply top-12 sticky self-start;
+  @apply top-12 sticky self-start  w-max;
 }
 
 .release > h2 {
@@ -32,7 +32,7 @@
 }
 
 .releases-wrapper {
-  @apply grid gap-12 relative items-start mt-24;
+  @apply grid gap-12 relative items-start mt-12;
   grid-template-columns: 160px 1fr;
 }
 
@@ -57,7 +57,7 @@
 }
 
 .prereleases-toggle {
-  @apply relative flex items-center -mt-4;
+  @apply relative flex items-center  mb-6;
 }
 
 .prereleases-toggle input {

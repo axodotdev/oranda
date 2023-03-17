@@ -102,9 +102,9 @@ pub fn build_page(config: &Config, repo: &str) -> Result<String> {
     Ok(html!(
         <div>
             <h1>{text!("Releases")}</h1>
-            {build_prerelease_toggle(releases)}
             <div class="releases-wrapper">
                 <nav class="releases-nav">
+                    {build_prerelease_toggle(releases)}
                     <ul>
                         {releases_nav}
                     </ul>
