@@ -1,0 +1,58 @@
+.package-managers-downloads {
+  ul {
+    @apply my-16;
+    li {
+      @apply ml-0;
+    }
+  }
+  pre {
+    @apply my-0;
+  }
+}
+
+.artifacts {
+  @apply flex gap-2 items-center flex-col mb-16;
+}
+
+.detect {
+  @apply text-center text-slate-500;
+}
+
+.artifact-header {
+  @apply max-w-full;
+
+  > h4 {
+    @apply text-center;
+  }
+
+  pre {
+    @apply my-0 mx-auto;
+  }
+  > div:not(.install-code-wrapper) {
+    @apply flex gap-4 justify-center items-center mt-4;
+  }
+
+  .install-code-wrapper {
+    @apply flex items-stretch;
+
+    > pre {
+      @apply flex-grow;
+    }
+
+    > .button {
+      @apply w-auto rounded-l-none flex items-center hover:no-underline focus:outline-offset-[-2px];
+
+      &.copy-clipboard-button {
+        @apply rounded-none border-r-axo-black border-r-2;
+      }
+    }
+
+    > .button svg {
+      @apply w-6 h-6;
+    }
+  }
+}
+
+.backup-download {
+  @apply hover:no-underline;
+}

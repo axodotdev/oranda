@@ -1,4 +1,4 @@
-@tailwind base;
+@import url("https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap");
 
 /* GLOBAL */
 
@@ -73,34 +73,37 @@ li {
 
 table {
   @apply my-16;
-}
 
-table th {
-  @apply text-axo-pink text-left uppercase;
-}
+  th {
+    @apply text-axo-pink text-left uppercase;
+  }
 
-table td {
-  @apply align-top p-4 text-sm font-mono;
-}
+  td {
+    @apply align-top p-4 text-sm font-mono;
 
-table td > code {
-  @apply text-sm;
-}
-
-table tbody tr {
-  @apply border-t border-violet-300;
+    > code {
+      @apply text-sm;
+    }
+  }
+  tbody tr {
+    @apply border-t border-violet-300;
+  }
 }
 
 div.table {
   @apply grid grid-cols-4 w-full my-16;
-}
 
-div.table .th {
-  @apply text-axo-pink text-left uppercase font-bold border-t border-violet-300 text-lg p-4;
-}
+  code {
+    @apply text-sm;
+  }
 
-div.table span:not(.th) {
-  @apply text-sm font-mono border-t border-violet-300 p-4;
+  .th {
+    @apply text-axo-pink text-left uppercase font-bold border-t border-violet-300 text-lg p-4;
+  }
+
+  span:not(.th) {
+    @apply text-sm font-mono border-t border-violet-300 p-4;
+  }
 }
 
 /* LISTS */
@@ -119,10 +122,6 @@ code {
   @apply whitespace-pre-wrap text-base sm:text-lg text-violet-600 dark:text-violet-400 leading-relaxed mb-4;
 }
 
-div.table code {
-  @apply text-sm;
-}
-
 h1 code,
 h2 code,
 h3 code,
@@ -135,10 +134,10 @@ h6 code {
 
 pre {
   @apply p-4 overflow-auto my-16;
-}
 
-pre > code {
-  @apply text-xs sm:text-base;
+  > code {
+    @apply text-xs sm:text-base;
+  }
 }
 
 hr {
