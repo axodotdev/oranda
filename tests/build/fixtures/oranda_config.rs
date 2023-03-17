@@ -6,6 +6,14 @@ use oranda::config::Config;
 
 use linked_hash_map::LinkedHashMap;
 
+fn temp_build_dir() -> String {
+    assert_fs::TempDir::new()
+        .unwrap()
+        .to_str()
+        .unwrap()
+        .to_string()
+}
+
 pub fn no_artifacts() -> Config {
     let mut additional_pages = HashMap::new();
     additional_pages.insert(
@@ -13,6 +21,7 @@ pub fn no_artifacts() -> Config {
         "https://raw.githubusercontent.com/axodotdev/oranda/main/README.md".to_string(),
     );
     Config {
+        dist_dir: temp_build_dir(),
         description: String::from("you axolotl questions"),
         readme_path: String::from(
             "https://raw.githubusercontent.com/axodotdev/oranda/main/README.md",
@@ -28,6 +37,7 @@ pub fn no_artifacts() -> Config {
 
 pub fn path_prefix() -> Config {
     Config {
+        dist_dir: temp_build_dir(),
         path_prefix: Some(String::from("axo")),
         artifacts: Some(Artifacts {
             cargo_dist: Some(true),
@@ -44,6 +54,7 @@ pub fn path_prefix() -> Config {
 
 pub fn cargo_dist() -> Config {
     Config {
+        dist_dir: temp_build_dir(),
         artifacts: Some(Artifacts {
             cargo_dist: Some(true),
             package_managers: None,
@@ -59,6 +70,7 @@ pub fn package_managers() -> Config {
     package_managers.insert(String::from("npm"), String::from("npm install oranda"));
     package_managers.insert(String::from("yarn"), String::from("yarn add oranda"));
     Config {
+        dist_dir: temp_build_dir(),
         artifacts: Some(Artifacts {
             cargo_dist: None,
             package_managers: Some(package_managers),
@@ -71,6 +83,7 @@ pub fn package_managers() -> Config {
 
 pub fn changelog() -> Config {
     Config {
+        dist_dir: temp_build_dir(),
         artifacts: Some(Artifacts {
             cargo_dist: Some(true),
             package_managers: None,
