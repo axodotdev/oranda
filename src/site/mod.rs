@@ -22,6 +22,7 @@ pub struct Site {
 
 impl Site {
     pub fn build(config: &Config) -> Result<Site> {
+        Self::clean_dist_dir(&config.dist_dir)?;
         let index = Page::new_from_file(config, &config.readme_path, true)?;
         let mut pages = vec![index];
         if let Some(files) = &config.additional_pages {
@@ -66,7 +67,6 @@ impl Site {
     }
 
     pub fn copy_static(dist_path: &String, static_path: &String) -> Result<()> {
-        Self::create_dist_dir(dist_path)?;
         let mut options = fs_extra::dir::CopyOptions::new();
         options.overwrite = true;
         fs_extra::copy_items(&[static_path], dist_path, &options)?;
@@ -76,7 +76,6 @@ impl Site {
 
     pub fn write(self, config: &Config) -> Result<()> {
         let dist = &config.dist_dir;
-        Self::create_dist_dir(dist)?;
         for page in self.pages {
             LocalAsset::new(&page.filename.clone(), page.build(config)?.into()).write(dist)?;
         }
@@ -94,11 +93,16 @@ impl Site {
         Ok(())
     }
 
-    pub fn create_dist_dir(dist_path: &String) -> Result<()> {
-        if !Path::new(dist_path).exists() {
-            std::fs::create_dir_all(dist_path)?;
+    pub fn clean_dist_dir(dist_path: &str) -> Result<()> {
+        if Path::new(dist_path).exists() {
+            std::fs::remove_dir_all(dist_path)?;
         }
-
-        Ok(())
+        match std::fs::create_dir_all(dist_path) {
+            Ok(_) => Ok(()),
+            Err(e) => Err(OrandaError::DistDirCreationError {
+                dist_path: dist_path.to_string(),
+                details: e.to_string(),
+            }),
+        }
     }
 }

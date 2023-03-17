@@ -6,8 +6,8 @@ use cargo_dist_schema as cargo_dist;
 use crate::config::Config;
 use crate::errors::*;
 use crate::site::changelog::{self, GithubRelease};
+use crate::site::link;
 use crate::site::markdown;
-use crate::site::{link, Site};
 
 use crate::site::artifacts;
 
@@ -64,7 +64,6 @@ fn get_installer_path(config: &Config, name: &str, version: &str) -> Result<Stri
     let file_string_future = Asset::load_string(download_link.as_str());
     let file_string = tokio::runtime::Handle::current().block_on(file_string_future)?;
     let file_path = format!("{}.txt", &name);
-    Site::create_dist_dir(&config.dist_dir)?;
     let asset = LocalAsset::new(
         &format!("{}/{}", &config.dist_dir, &file_path),
         file_string.as_bytes().to_vec(),

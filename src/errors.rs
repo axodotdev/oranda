@@ -25,6 +25,11 @@ pub enum OrandaError {
     #[error(transparent)]
     Reqwest(#[from] reqwest::Error),
 
+    #[error(
+        "Failed to create a directory, `{dist_path}` to build your project in. Details:\n{details}"
+    )]
+    DistDirCreationError { dist_path: String, details: String },
+
     #[error("Found an invalid value assigned to ORANDA_CSS environment variable. Please make sure you give a valid path pointing to a css file.")]
     InvalidOrandaCSSOverride { path: String },
 
