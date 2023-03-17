@@ -85,6 +85,19 @@ impl GithubRelease {
             ))
         }
     }
+
+    fn get_announcement_changelog(&self, config: &Config, md: &str) -> Result<String> {
+        if self.has_dist_manifest() {
+            let manifest = cargo_dist::fetch_manifest(config)?.manifest;
+            match manifest.announcement_changelog {
+                Some(changelog) => Ok(changelog),
+                None => Ok(md.to_string()),
+            }
+        } else {
+            Ok(md.to_string())
+        }
+    }
+
     fn create_release_body(&self, config: &Config) -> Result<String> {
         let body_md = match &self.body {
             Some(md) => {
@@ -103,6 +116,7 @@ impl GithubRelease {
 
         markdown::to_html(&body_md, &config.syntax_theme)
     }
+
     fn title<'a>(name: &'a Option<String>, tag: &'a str) -> &'a str {
         match name {
             Some(n) => n,
