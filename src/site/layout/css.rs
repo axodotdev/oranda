@@ -33,7 +33,7 @@ pub fn build_oranda(dist_dir: &str) -> Result<Box<link<String>>> {
         }
         Err(_) => {
             let fetched_oranda = tokio::runtime::Handle::current().block_on(Asset::copy(
-                "https://github.com/axodotdev/oranda/releases/download/css-v0.0.0/oranda.css",
+                "https://github.com/axodotdev/oranda/releases/download/css-v0.0.1/oranda.css",
                 dist_dir,
             ))?;
             let path = "oranda.css";
