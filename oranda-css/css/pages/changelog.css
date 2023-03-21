@@ -57,7 +57,7 @@
 }
 
 .prereleases-toggle {
-  @apply relative flex items-center  mb-6;
+  @apply relative flex items-center mb-6 w-max;
 }
 
 .prereleases-toggle input {
