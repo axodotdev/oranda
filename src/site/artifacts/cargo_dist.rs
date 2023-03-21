@@ -177,9 +177,17 @@ pub fn build(config: &Config) -> Result<Box<div<String>>> {
                 for targ in artifact.target_triples.iter() {
                     targets.push_str(format!("{} ", targ).as_str());
                 }
-                let detect_text = match get_os(targets.as_str()) {
-                    Some(os) => format!("We have detected you are on {}, are we wrong?", os),
-                    None => String::from("We couldn't detect the system you are using."),
+                let detect_html = match get_os(targets.as_str()) {
+                    Some(os) => {
+                        html!(
+                            <span class="detect">{text!("We have detected you are on ")}
+                                <span class="detected-os">{text!(os)}</span>
+                            {text!(", are we wrong?")}
+                            </span>)
+                    }
+                    None => {
+                        html!(<span class="detect">{text!("We couldn't detect the system you are using.")}</span>)
+                    }
                 };
                 let install_code_block = build_install_block(config, &typed, release, artifact);
 
@@ -188,9 +196,7 @@ pub fn build(config: &Config) -> Result<Box<div<String>>> {
                         <h4>{text!("Install")}</h4>
                         {install_code_block}
                         <div>
-                            <span class="detect">
-                                {text!(detect_text)}
-                            </span>
+                            {detect_html}
                             <a href=&downloads_href>{text!("View all installation options")}</a>
                         </div>
                     </div>
