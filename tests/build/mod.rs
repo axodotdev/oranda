@@ -92,7 +92,7 @@ fn creates_download_for_mac() {
     let _guard = TEST_RUNTIME.enter();
     let config = &oranda_config::cargo_dist();
     let page_html = page::index(config);
-    assert!(page_html.contains("<span class=\"detect\">We have detected you are on mac, are we wrong?</span><a href=\"/artifacts.html\">View all installation options</a>"));
+    assert!(page_html.contains("<span class=\"detect\">We have detected you are on <span class=\"detected-os\">mac</span>, are we wrong?</span>"));
 }
 
 #[test]
