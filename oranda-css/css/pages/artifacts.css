@@ -18,6 +18,10 @@
   @apply text-center text-slate-500;
 }
 
+.detect .detected-os {
+  @apply capitalize;
+}
+
 .artifact-header pre {
   @apply my-0 mx-auto;
 }
