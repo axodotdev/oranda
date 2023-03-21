@@ -1,12 +1,11 @@
 use crate::config::Config;
+use crate::data::artifacts::get_copyicon;
 use crate::errors::*;
 use crate::site::markdown::{syntax_highlight, SyntaxTheme};
 use linked_hash_map::LinkedHashMap;
 
 use axohtml::elements::div;
 use axohtml::{html, text, unsafe_text};
-
-use crate::site::artifacts::get_copyicon;
 
 fn create_package_install_code(code: &str, syntax_theme: &SyntaxTheme) -> String {
     let highlighted_code = syntax_highlight(Some("sh"), code, syntax_theme);

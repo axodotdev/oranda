@@ -1,8 +1,8 @@
 use crate::config::artifacts::Artifacts;
 use crate::config::Config;
+use crate::data::artifacts::{cargo_dist, package_managers};
 use crate::errors::*;
-use crate::site::artifacts::cargo_dist;
-use crate::site::artifacts::package_managers;
+
 use axohtml::html;
 
 pub fn build(config: &Config) -> Result<String> {

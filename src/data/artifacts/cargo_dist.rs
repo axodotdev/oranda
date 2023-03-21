@@ -5,12 +5,13 @@ use cargo_dist_schema as cargo_dist;
 use chrono::DateTime;
 
 use crate::config::Config;
+use crate::data::changelog;
+use crate::data::releases::github::GithubRelease;
 use crate::errors::*;
-use crate::site::changelog::{self, GithubRelease};
 use crate::site::link;
 use crate::site::markdown;
 
-use crate::site::artifacts;
+use crate::data::artifacts;
 
 pub fn get_os(name: &str) -> Option<&str> {
     match name.trim() {

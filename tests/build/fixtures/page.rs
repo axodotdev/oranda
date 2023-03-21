@@ -1,5 +1,6 @@
 use oranda::config::Config;
-use oranda::site::{self, artifacts, markdown, page::Page};
+use oranda::data::artifacts;
+use oranda::site::{self, markdown, page::Page};
 
 fn readme() -> &'static str {
     r#"

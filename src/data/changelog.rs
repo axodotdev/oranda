@@ -1,7 +1,6 @@
 use std::vec;
 
-mod github_release;
-pub use github_release::GithubRelease;
+use crate::data::releases::github::GithubRelease;
 
 use axohtml::elements::{div, li, section};
 use axohtml::html;
