@@ -2,7 +2,7 @@ mod fixtures;
 use super::utils::tokio_utils::TEST_RUNTIME;
 use fixtures::project_config;
 
-use oranda::config::project::{JavaScript, ProjectConfig, Rust, Type};
+use oranda::config::project::ProjectConfig;
 
 use assert_fs::fixture::{FileWriteStr, PathChild};
 
@@ -15,8 +15,10 @@ fn it_detects_a_js_project() {
         .expect("failed to write package_json");
 
     assert_eq!(
-        ProjectConfig::detect(&Some(tempdir.path().to_path_buf())),
-        Some(Type::JavaScript(JavaScript {}))
+        ProjectConfig::get_project(&Some(tempdir.path().to_path_buf()))
+            .unwrap()
+            .kind,
+        axo_project::WorkspaceKind::Javascript
     );
     tempdir
         .close()
@@ -53,8 +55,10 @@ fn it_detects_a_rust_project() {
         .expect("failed to write cargo toml");
 
     assert_eq!(
-        ProjectConfig::detect(&Some(tempdir.path().to_path_buf())),
-        Some(Type::Rust(Rust {}))
+        ProjectConfig::get_project(&Some(tempdir.path().to_path_buf()))
+            .unwrap()
+            .kind,
+        axo_project::WorkspaceKind::Rust
     );
     tempdir
         .close()
