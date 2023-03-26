@@ -53,7 +53,9 @@ fn it_detects_a_rust_project() {
     cargo_toml
         .write_str(project_config::cargo_toml())
         .expect("failed to write cargo toml");
-
+    let main = tempdir.child("src/main.rs");
+    main.write_str(project_config::main_rs())
+        .expect("failed to write main.rs");
     assert_eq!(
         ProjectConfig::get_project(&Some(tempdir.path().to_path_buf()))
             .unwrap()
@@ -73,6 +75,9 @@ fn it_loads_a_rust_project_config() {
     cargo_toml
         .write_str(project_config::cargo_toml())
         .expect("failed to write cargo toml");
+    let main = tempdir.child("src/main.rs");
+    main.write_str(project_config::main_rs())
+        .expect("failed to write main.rs");
     let config = ProjectConfig::load(Some(tempdir.path().to_path_buf()))
         .expect("failed to load Cargo.toml")
         .unwrap();

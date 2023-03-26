@@ -8,6 +8,14 @@ pub fn cargo_toml() -> &'static str {
     "#
 }
 
+pub fn main_rs() -> &'static str {
+    r#"
+fn main() {
+    println!("hello world!);
+}
+    "#
+}
+
 pub fn package_json() -> &'static str {
     r#"
 {
