@@ -14,7 +14,7 @@ name = "oranda"
 ammonia = "3"
 axoasset = "0.0.1"
 axohtml = "0.4.1"
-axo-project = { version = "0.1.0", git = "https://github.com/axodotdev/axo-project/", default-features = false, features = ["cargo-projects", "npm-projects"] }
+axoproject = { version = "0.1.0", default-features = false, features = ["cargo-projects", "npm-projects"] }
 axum = "0.6.2"
 cargo-dist-schema = "=0.0.3"
 chrono = "0.4.23"

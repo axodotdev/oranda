@@ -22,6 +22,9 @@ pub fn package_json() -> &'static str {
     "name": "axo",
     "version": "0.1.0",
     "description": ">o_o<",
+    "bin": {
+        "axo": "src/main.js"
+    },
     "repository": {
         "type": "git",
         "url": "https://github.com/axodotdev/not-a-real-project"

@@ -20,11 +20,11 @@ impl ProjectConfig {
     pub fn load(project_root: Option<PathBuf>) -> Result<Option<ProjectConfig>> {
         if let Some(project) = ProjectConfig::get_project(&project_root) {
             match project.kind {
-                axo_project::WorkspaceKind::Rust => {
+                axoproject::WorkspaceKind::Rust => {
                     Message::new(MessageType::Info, "Detected Rust project...").print();
                     tracing::info!("Detected Rust project...");
                 }
-                axo_project::WorkspaceKind::Javascript => {
+                axoproject::WorkspaceKind::Javascript => {
                     Message::new(MessageType::Info, "Detected JavaScript project...").print();
                     tracing::info!("Detected JavaScript project...");
                 }
@@ -75,13 +75,13 @@ impl ProjectConfig {
         }
     }
 
-    pub fn get_project(project_root: &Option<PathBuf>) -> Option<axo_project::WorkspaceInfo> {
+    pub fn get_project(project_root: &Option<PathBuf>) -> Option<axoproject::WorkspaceInfo> {
         // Get the general info about the project (via axo-project)
         let start_dir = project_root.clone().unwrap_or_else(|| {
             std::env::current_dir().expect("couldn't get current working dir!?")
         });
         let start_dir = Utf8PathBuf::from_path_buf(start_dir).expect("project path isn't utf8!?");
-        let Some(project) = axo_project::get_project(&start_dir) else {
+        let Some(project) = axoproject::get_project(&start_dir) else {
             Message::new(MessageType::Warning, "Could not identify project type...").print();
             tracing::warn!("Could not identify project type...");
             return None;

@@ -18,7 +18,7 @@ fn it_detects_a_js_project() {
         ProjectConfig::get_project(&Some(tempdir.path().to_path_buf()))
             .unwrap()
             .kind,
-        axo_project::WorkspaceKind::Javascript
+        axoproject::WorkspaceKind::Javascript
     );
     tempdir
         .close()
@@ -60,7 +60,7 @@ fn it_detects_a_rust_project() {
         ProjectConfig::get_project(&Some(tempdir.path().to_path_buf()))
             .unwrap()
             .kind,
-        axo_project::WorkspaceKind::Rust
+        axoproject::WorkspaceKind::Rust
     );
     tempdir
         .close()
