@@ -24,9 +24,15 @@ fn find_syntax<'a>(ps: &'a SyntaxSet, language: &'a str) -> Result<&'a SyntaxRef
         return Ok(syntax_name);
     }
 
-    Err(OrandaError::Other(
-        "Please add the language to your code snippets".to_owned(),
-    ))
+    // this syntax will always be found as it's part of the default set
+    // https://github.com/sublimehq/Packages
+    let plain_text = ps
+        .syntaxes()
+        .iter()
+        .find(|syntax| syntax.name == "Plain Text")
+        .unwrap();
+
+    Ok(plain_text)
 }
 
 const THEMES: &[(&str, &str)] = &[("MaterialTheme", include_str!("MaterialTheme.tmTheme"))];
