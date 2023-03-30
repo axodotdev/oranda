@@ -6,7 +6,7 @@ use miette::Report;
 use tracing::level_filters::LevelFilter;
 
 mod commands;
-use commands::{Build, Serve};
+use commands::{Build, Dev, Serve};
 
 pub mod message;
 use message::OutputFormat;
@@ -34,6 +34,7 @@ struct Cli {
 #[derive(Subcommand, Debug)]
 enum Command {
     Build(Build),
+    Dev(Dev),
     Serve(Serve),
 }
 
@@ -57,6 +58,7 @@ fn run(cli: &axocli::CliApp<Cli>) -> Result<(), Report> {
 
     match &cli.config.command {
         Command::Build(cmd) => cmd.run()?,
+        Command::Dev(cmd) => cmd.run()?,
         Command::Serve(cmd) => cmd.run()?,
     };
     Ok(())

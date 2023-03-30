@@ -6,7 +6,7 @@ use oranda::config::Config;
 use oranda::errors::*;
 use oranda::site::Site;
 
-#[derive(Debug, Parser)]
+#[derive(Debug, Default, Parser)]
 pub struct Build {
     #[arg(long, default_value = "./")]
     project_root: Utf8PathBuf,
@@ -15,6 +15,13 @@ pub struct Build {
 }
 
 impl Build {
+    pub fn new(project_root: Option<Utf8PathBuf>, config_path: Option<Utf8PathBuf>) -> Self {
+        Build {
+            project_root: project_root.unwrap_or(Build::default().project_root),
+            config_path: config_path.unwrap_or(Build::default().config_path),
+        }
+    }
+
     pub fn run(&self) -> Result<()> {
         Message::new(MessageType::Info, "Running build...").print();
         tracing::info!("Running build...");
