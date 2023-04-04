@@ -12,7 +12,7 @@ name = "oranda"
 
 [dependencies]
 ammonia = "3"
-axoasset = "0.0.1"
+axoasset = { git = "https://github.com/axodotdev/axoasset" }
 axohtml = "0.5.0"
 axoproject = { version = "0.1.0", default-features = false, features = ["cargo-projects", "npm-projects"] }
 axum = "0.6.2"
@@ -38,6 +38,8 @@ tracing-appender = "0.2"
 tracing-subscriber = "0.3"
 url = "2.3.1"
 camino = "1.1.4"
+axocli = "0.1.0"
+miette = "5.7.0"
 
 [dev-dependencies]
 assert_cmd="2"

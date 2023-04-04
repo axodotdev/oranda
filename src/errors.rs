@@ -1,8 +1,9 @@
+use miette::Diagnostic;
 use thiserror::Error;
 
 pub type Result<T> = std::result::Result<T, OrandaError>;
 
-#[derive(Debug, Error)]
+#[derive(Debug, Diagnostic, Error)]
 pub enum OrandaError {
     #[error(transparent)]
     Io(#[from] std::io::Error),
@@ -20,6 +21,7 @@ pub enum OrandaError {
     Syntect(#[from] syntect::Error),
 
     #[error(transparent)]
+    #[diagnostic(transparent)]
     AxoAsset(#[from] axoasset::AxoassetError),
 
     #[error(transparent)]
