@@ -144,6 +144,8 @@ dependencies = [
  "miette",
  "mime",
  "reqwest",
+ "serde",
+ "serde_json",
  "thiserror",
  "url",
 ]

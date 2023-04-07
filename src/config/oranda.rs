@@ -1,7 +1,7 @@
 use std::collections::HashMap;
-use std::path::Path;
 
-use axoasset::Asset;
+use axoasset::SourceFile;
+use camino::Utf8PathBuf;
 use serde::Deserialize;
 
 use crate::config::analytics::Analytics;
@@ -46,17 +46,15 @@ pub struct OrandaConfig {
 }
 
 impl OrandaConfig {
-    pub fn load(config_path: &Path) -> Result<Option<OrandaConfig>> {
-        let config_path = config_path.to_string_lossy();
+    pub fn load(config_path: &Utf8PathBuf) -> Result<Option<OrandaConfig>> {
         let msg = format!("Loading config at {}", config_path);
         Message::new(MessageType::Info, &msg).print();
         tracing::info!("{}", &msg);
-        let config_future = Asset::load_string(&config_path);
-        let config_result = tokio::runtime::Handle::current().block_on(config_future);
+        let config_result = SourceFile::load_local(config_path.as_path());
 
         match config_result {
             Ok(config) => {
-                let data: OrandaConfig = serde_json::from_str(config.as_str())?;
+                let data: OrandaConfig = config.deserialize_json()?;
                 tracing::debug!("{:?}", data);
                 Ok(Some(data))
             }
