@@ -30,10 +30,7 @@ pub fn fetch_manifest(config: &Config) -> Result<cargo_dist::DistManifest> {
         match reqwest::blocking::get(&url)?.error_for_status() {
             Ok(resp) => match resp.json::<cargo_dist::DistManifest>() {
                 Ok(manifest) => Ok(manifest),
-                Err(e) => Err(OrandaError::CargoDistManifestParseError {
-                    url,
-                    details: e.to_string(),
-                }),
+                Err(e) => Err(OrandaError::CargoDistManifestParseError { url, details: e }),
             },
             Err(e) => Err(OrandaError::CargoDistManifestFetchError {
                 url,

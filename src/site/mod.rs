@@ -102,7 +102,7 @@ impl Site {
             Ok(_) => Ok(()),
             Err(e) => Err(OrandaError::DistDirCreationError {
                 dist_path: dist_path.to_string(),
-                details: e.to_string(),
+                details: e,
             }),
         }
     }
