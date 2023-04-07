@@ -46,7 +46,7 @@ pub fn get_favicon(
 
     let path_as_string = copy_result.strip_prefix(dist_dir)?.to_string_lossy();
 
-    let favicon_url = link::generate(path_prefix, path_as_string.to_string());
+    let favicon_url = link::generate(path_prefix, &path_as_string);
 
     Ok(html!(<link rel="icon" href=favicon_url />))
 }

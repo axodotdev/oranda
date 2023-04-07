@@ -120,7 +120,7 @@ impl GithubRelease {
         path_prefix: &Option<String>,
     ) -> Option<Box<a<String>>> {
         let is_installable = self.tag_name.eq(&format!("v{}", version));
-        let downloads_href = link::generate(path_prefix, String::from("artifacts.html"));
+        let downloads_href = link::generate(path_prefix, "artifacts.html");
 
         if is_installable {
             Some(

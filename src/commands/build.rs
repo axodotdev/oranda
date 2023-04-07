@@ -1,5 +1,4 @@
-use std::path::PathBuf;
-
+use camino::Utf8PathBuf;
 use clap::Parser;
 
 use crate::message::{Message, MessageType};
@@ -10,9 +9,9 @@ use oranda::site::Site;
 #[derive(Debug, Parser)]
 pub struct Build {
     #[arg(long, default_value = "./")]
-    project_root: PathBuf,
+    project_root: Utf8PathBuf,
     #[arg(long, default_value = "./oranda.json")]
-    config_path: PathBuf,
+    config_path: Utf8PathBuf,
 }
 
 impl Build {

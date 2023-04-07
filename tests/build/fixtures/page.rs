@@ -1,5 +1,5 @@
 use oranda::config::Config;
-use oranda::site::{self, artifacts, layout, markdown, page::Page};
+use oranda::site::{self, artifacts, markdown, page::Page};
 
 fn readme() -> String {
     r#"
@@ -24,16 +24,12 @@ pub fn index(config: &Config) -> String {
         is_index: true,
         needs_js: true,
     };
-    let needs_js = page.needs_js;
-    let contents = page.build(config).unwrap();
-    layout::build(config, contents, needs_js).unwrap()
+    page.build(config).unwrap()
 }
 
 pub fn artifacts(config: &Config) -> String {
     reset(&config.dist_dir);
     let artifacts_content = artifacts::page::build(config).unwrap();
     let page = Page::new_from_contents(artifacts_content, "artifacts.html", true);
-    let needs_js = page.needs_js;
-    let contents = page.build(config).unwrap();
-    layout::build(config, contents, needs_js).unwrap()
+    page.build(config).unwrap()
 }

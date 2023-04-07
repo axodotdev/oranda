@@ -2,15 +2,16 @@ pub mod artifacts;
 mod oranda;
 pub mod project;
 pub mod theme;
+
 use self::artifacts::Artifacts;
 pub mod analytics;
 use self::analytics::Analytics;
 use self::oranda::{OrandaConfig, Social};
 use crate::errors::*;
 use crate::site::markdown::SyntaxTheme;
+use camino::Utf8PathBuf;
 use project::ProjectConfig;
 use std::collections::HashMap;
-use std::path::Path;
 
 use theme::Theme;
 
@@ -42,7 +43,7 @@ pub struct Config {
 }
 
 impl Config {
-    pub fn build(config_path: &Path) -> Result<Config> {
+    pub fn build(config_path: &Utf8PathBuf) -> Result<Config> {
         //Users can have multiple types of configuration or no configuration at all
         //
         //- Project configuration comes from a project manifest file. We currently

@@ -1,3 +1,4 @@
+use clap::ValueEnum;
 use console::Color::{Cyan, Green, Magenta, Red, White, Yellow};
 use console::Style;
 
@@ -24,7 +25,7 @@ impl Message {
     }
 
     pub fn print(&self) {
-        println!("{}", &self.style());
+        eprintln!("{}", &self.style());
     }
 
     fn style(&self) -> String {
@@ -63,4 +64,13 @@ impl Message {
             }
         }
     }
+}
+
+/// Style of output we should produce
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, ValueEnum)]
+pub enum OutputFormat {
+    /// Human-readable output
+    Human,
+    /// Machine-readable JSON output
+    Json,
 }

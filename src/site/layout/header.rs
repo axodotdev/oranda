@@ -50,7 +50,7 @@ fn nav(
                 if let Some(file_name) = file_path {
                     let href = link::generate(
                         path_prefix,
-                        format!("{}.html", file_name.to_string_lossy()),
+                        &format!("{}.html", file_name.to_string_lossy()),
                     );
 
                     html.extend(html!(<li><a href=href>{text!(page_name)}</a></li>));
@@ -67,7 +67,7 @@ fn nav(
 
     if let Some(artifact) = artifacts {
         if artifact.cargo_dist.is_some() {
-            let href = link::generate(path_prefix, String::from("artifacts.html"));
+            let href = link::generate(path_prefix, "artifacts.html");
             html.extend(html!(<li><a href=href>{text!("Install")}</a></li>));
         }
     };

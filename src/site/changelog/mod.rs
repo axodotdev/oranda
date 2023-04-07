@@ -6,6 +6,7 @@ pub use github_release::GithubRelease;
 use axohtml::elements::{div, li, section};
 use axohtml::html;
 use axohtml::text;
+use miette::{miette, IntoDiagnostic};
 use reqwest::header::USER_AGENT;
 
 use crate::config::Config;
@@ -31,11 +32,11 @@ fn build_prerelease_toggle(releases: Vec<GithubRelease>) -> Option<Box<div<Strin
 }
 
 pub fn fetch_releases(repo: &str) -> Result<Vec<GithubRelease>> {
-    let repo_parsed = match Url::parse(repo) {
+    let repo_parsed = match Url::parse(repo).into_diagnostic() {
         Ok(parsed) => Ok(parsed),
-        Err(parse_error) => Err(OrandaError::RepoParseError {
+        Err(e) => Err(OrandaError::RepoParseError {
             repo: repo.to_string(),
-            details: parse_error.to_string(),
+            details: e,
         }),
     };
     let binding = repo_parsed?;
@@ -57,8 +58,7 @@ pub fn fetch_releases(repo: &str) -> Result<Vec<GithubRelease>> {
     } else {
         Err(OrandaError::RepoParseError {
             repo: binding.to_string(),
-            details: "This URL is not structured the expected way, expected more segments-"
-                .to_owned(),
+            details: miette!("This URL is not structured the expected way, expected more segments"),
         })
     }
 }
@@ -67,13 +67,9 @@ fn parse_response(response: reqwest::blocking::Response) -> Result<Vec<GithubRel
     match response.error_for_status() {
         Ok(r) => match r.json() {
             Ok(releases) => Ok(releases),
-            Err(e) => Err(OrandaError::GithubReleaseParseError {
-                details: e.to_string(),
-            }),
+            Err(e) => Err(OrandaError::GithubReleaseParseError { details: e }),
         },
-        Err(e) => Err(OrandaError::GithubReleasesFetchError {
-            details: e.to_string(),
-        }),
+        Err(e) => Err(OrandaError::GithubReleasesFetchError { details: e }),
     }
 }
 
