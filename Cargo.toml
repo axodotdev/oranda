@@ -12,7 +12,7 @@ name = "oranda"
 
 [dependencies]
 ammonia = "3"
-axoasset = { git = "https://github.com/axodotdev/axoasset" }
+axoasset = "0.1.1"
 axohtml = "0.5.0"
 axoproject = { version = "0.1.0", default-features = false, features = ["cargo-projects", "npm-projects"] }
 axum = "0.6.2"

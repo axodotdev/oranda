@@ -77,7 +77,8 @@ impl Site {
     pub fn write(self, config: &Config) -> Result<()> {
         let dist = &config.dist_dir;
         for page in self.pages {
-            LocalAsset::new(&page.filename.clone(), page.build(config)?.into()).write(dist)?;
+            let contents = page.build(config)?;
+            LocalAsset::write_new(&contents, &page.filename, dist)?;
         }
         if let Some(book_path) = &config.md_book {
             Self::copy_static(dist, book_path)?;

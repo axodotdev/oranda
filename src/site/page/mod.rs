@@ -7,7 +7,6 @@ use crate::site::layout;
 use crate::site::markdown::{self, SyntaxTheme};
 
 use axoasset::LocalAsset;
-use axohtml::elements::div;
 use axohtml::{html, unsafe_text};
 
 pub mod source;
@@ -45,15 +44,15 @@ impl Page {
         markdown::to_html(contents, syntax_theme)
     }
 
-    pub fn build(self, config: &Config) -> Result<String> {
-        let page_contents = if self.is_index {
-            let artifacts_header = artifacts::build_header(config)?;
-            html!(<div>{artifacts_header}{unsafe_text!(self.contents)}</div>).to_string()
-        } else {
-            let html: Box<div<String>> = html!(<div>{unsafe_text!(self.contents)}</div>);
-            html.to_string()
-        };
-        layout::build(config, page_contents, self.needs_js)
+    pub fn build(&self, config: &Config) -> Result<String> {
+        let mut contents = vec![];
+        if self.is_index {
+            if let Some(artifacts_header) = artifacts::build_header(config)? {
+                contents.push(artifacts_header);
+            }
+        }
+        contents.push(html!(<div>{unsafe_text!(&self.contents)}</div>));
+        layout::build(config, contents, self.needs_js)
     }
 
     pub fn filename(source: &str, is_index: bool) -> String {

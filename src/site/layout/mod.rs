@@ -6,9 +6,9 @@ pub mod javascript;
 
 use crate::config::{analytics, theme, Config};
 use crate::errors::*;
-use axohtml::{html, text, unsafe_text};
+use axohtml::{elements::div, html, text};
 
-pub fn build(config: &Config, content: String, needs_js: bool) -> Result<String> {
+pub fn build(config: &Config, content: Vec<Box<div<String>>>, needs_js: bool) -> Result<String> {
     let theme = theme::css_class(&config.theme);
     let analytics = analytics::get_analytics(config);
     let google_script = match &config.analytics {
@@ -69,7 +69,7 @@ pub fn build(config: &Config, content: String, needs_js: bool) -> Result<String>
             {banner}
             <main>
                 {header}
-                {unsafe_text!(content)}
+                {content}
             </main>
             {footer}
         </div>

@@ -49,9 +49,7 @@ pub fn build_additional() -> Box<link<String>> {
 
 pub fn write_additional(additional_css: &[String], dist_dir: &str) -> Result<()> {
     let minified_css = concat_minify(additional_css)?;
-    let css_path = format!("{}/custom.css", dist_dir);
 
-    let asset = LocalAsset::new(&css_path, minified_css.as_bytes().to_vec());
-    asset.write(dist_dir)?;
+    LocalAsset::write_new(&minified_css, "custom.css", dist_dir)?;
     Ok(())
 }

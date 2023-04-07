@@ -64,11 +64,7 @@ fn get_installer_path(config: &Config, name: &str, version: &str) -> Result<Stri
     let file_string_future = Asset::load_string(download_link.as_str());
     let file_string = tokio::runtime::Handle::current().block_on(file_string_future)?;
     let file_path = format!("{}.txt", &name);
-    let asset = LocalAsset::new(
-        &format!("{}/{}", &config.dist_dir, &file_path),
-        file_string.as_bytes().to_vec(),
-    );
-    asset.write(&config.dist_dir)?;
+    LocalAsset::write_new(&file_string, &file_path, &config.dist_dir)?;
     Ok(file_path)
 }
 
@@ -96,7 +92,7 @@ fn get_install_hint(
     if let Some(current_hint) = hint {
         if let (Some(install_hint), Some(name)) = (&current_hint.install_hint, &current_hint.name) {
             let file_path = get_installer_path(config, name, &release.app_version)?;
-            Ok((String::from(install_hint), file_path))
+            Ok((install_hint.to_string(), file_path))
         } else {
             Err(no_hint_error)
         }
@@ -114,7 +110,7 @@ pub fn get_install_hint_code(
     let install_hint = get_install_hint(manifest, release, target_triples, config)?;
 
     let highlighted_code =
-        markdown::syntax_highlight(Some("sh"), install_hint.0.as_str(), &config.syntax_theme);
+        markdown::syntax_highlight(Some("sh"), &install_hint.0, &config.syntax_theme);
     match highlighted_code {
         Ok(code) => Ok(code),
         Err(_) => Ok(format!(
@@ -165,7 +161,7 @@ pub fn build(config: &Config) -> Result<Box<div<String>>> {
             "The repository and version are required for cargo_dist",
         )));
     }
-    let downloads_href = link::generate(&config.path_prefix, String::from("artifacts.html"));
+    let downloads_href = link::generate(&config.path_prefix, "artifacts.html");
     let typed = fetch_manifest(config)?;
 
     let mut html: Vec<Box<div<String>>> = vec![];
