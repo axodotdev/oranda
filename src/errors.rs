@@ -85,6 +85,19 @@ pub enum OrandaError {
         details: reqwest::Error,
     },
 
+    #[error("Found syntax highlight language annotation `{language}` which is not currently supported. The annotated block will be shown as plaintext.")]
+    #[diagnostic(
+        help = "Please file an issue https://github.com/axodotdev/oranda/issues/new to let us know you'd like to see it supported."
+    )]
+    #[diagnostic(severity = "warning")]
+    UnknownLanguage {
+        #[source_code]
+        src: axoasset::SourceFile,
+        #[label]
+        span: Option<miette::SourceSpan>,
+        language: String,
+    },
+
     #[error("{0}")]
     Other(String),
 }

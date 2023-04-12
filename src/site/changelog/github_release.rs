@@ -1,6 +1,7 @@
 use crate::errors::*;
 use crate::site::link;
 use crate::site::markdown::{self, SyntaxTheme};
+use axoasset::SourceFile;
 use axohtml::dom::UnsafeTextNode;
 use axohtml::elements::{a, section};
 use axohtml::html;
@@ -56,8 +57,8 @@ impl GithubRelease {
             let body = match &self.body {
                 Some(md) => {
                     let cut_body = md.split(cutoff).collect::<Vec<&str>>()[0];
-
-                    markdown::to_html(cut_body, syntax_theme)?
+                    let cut_body = SourceFile::new("Github Release", cut_body.to_owned());
+                    markdown::to_html(&cut_body, syntax_theme)?
                 }
                 None => String::new(),
             };

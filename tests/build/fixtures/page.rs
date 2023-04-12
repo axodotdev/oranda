@@ -1,8 +1,11 @@
+use axoasset::SourceFile;
 use oranda::config::Config;
 use oranda::site::{self, artifacts, markdown, page::Page};
 
-fn readme() -> &'static str {
-    r#"
+fn readme() -> SourceFile {
+    SourceFile::new(
+        "readme.md",
+        r#"
 # axo
 > a fun side project
 
@@ -14,10 +17,14 @@ $ axo | lotl
 this block has no highlight annotation
 ```
 "#
+        .to_owned(),
+    )
 }
 
-fn readme_invalid_annotation() -> &'static str {
-    r#"
+fn readme_invalid_annotation() -> SourceFile {
+    SourceFile::new(
+        "readme.md",
+        r#"
 # axo
 > a fun side project
 
@@ -30,6 +37,8 @@ fn this_annotation_will_never_be_supported() {
     println!("this block will render but not be highlighted!");
 }
 ```"#
+            .to_owned(),
+    )
 }
 
 fn reset(dist_dir: &str) {
@@ -38,8 +47,9 @@ fn reset(dist_dir: &str) {
 
 pub fn index(config: &Config) -> String {
     reset(&config.dist_dir);
+    let src = readme();
     let page = Page {
-        contents: markdown::to_html(readme(), &config.syntax_theme).unwrap(),
+        contents: markdown::to_html(&src, &config.syntax_theme).unwrap(),
         filename: "index.html".to_string(),
         is_index: true,
         needs_js: true,
@@ -49,8 +59,9 @@ pub fn index(config: &Config) -> String {
 
 pub fn index_with_warning(config: &Config) -> String {
     reset(&config.dist_dir);
+    let src = readme_invalid_annotation();
     let page = Page {
-        contents: markdown::to_html(readme_invalid_annotation(), &config.syntax_theme).unwrap(),
+        contents: markdown::to_html(&src, &config.syntax_theme).unwrap(),
         filename: "index.html".to_string(),
         is_index: true,
         needs_js: true,

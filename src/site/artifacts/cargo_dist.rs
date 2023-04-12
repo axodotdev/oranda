@@ -1,4 +1,4 @@
-use axoasset::{Asset, LocalAsset};
+use axoasset::{Asset, LocalAsset, SourceFile};
 use axohtml::elements::{div, span};
 use axohtml::{html, text, unsafe_text};
 use cargo_dist_schema as cargo_dist;
@@ -105,14 +105,14 @@ pub fn get_install_hint_code(
     config: &Config,
 ) -> Result<String> {
     let install_hint = get_install_hint(manifest, release, target_triples, config)?;
-
+    let src = SourceFile::new("cargo-dist install hint", install_hint.0);
     let highlighted_code =
-        markdown::syntax_highlight(Some("sh"), &install_hint.0, &config.syntax_theme);
+        markdown::syntax_highlight(&src, Some("sh"), src.contents(), &config.syntax_theme);
     match highlighted_code {
         Ok(code) => Ok(code),
         Err(_) => Ok(format!(
             "<code class='inline-code'>{}</code>",
-            install_hint.0
+            src.contents()
         )),
     }
 }

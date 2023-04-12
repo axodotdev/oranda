@@ -1,6 +1,7 @@
 use crate::config::Config;
 use crate::errors::*;
 use crate::site::markdown::{syntax_highlight, SyntaxTheme};
+use axoasset::SourceFile;
 use linked_hash_map::LinkedHashMap;
 
 use axohtml::elements::div;
@@ -9,7 +10,8 @@ use axohtml::{html, text, unsafe_text};
 use crate::site::artifacts::get_copyicon;
 
 fn create_package_install_code(code: &str, syntax_theme: &SyntaxTheme) -> String {
-    let highlighted_code = syntax_highlight(Some("sh"), code, syntax_theme);
+    let src = SourceFile::new("package install code", code.to_owned());
+    let highlighted_code = syntax_highlight(&src, Some("sh"), src.contents(), syntax_theme);
     match highlighted_code {
         Ok(code) => code,
         Err(_) => format!("<code class='text-center break-all'>{}</code>", code),

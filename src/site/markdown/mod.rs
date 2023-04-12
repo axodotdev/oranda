@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 
 mod syntax_highlight;
+use axoasset::SourceFile;
 pub use syntax_highlight::syntax_highlight;
 pub use syntax_highlight::syntax_themes::SyntaxTheme;
 
@@ -12,10 +13,11 @@ use comrak::{self, ComrakOptions, ComrakPlugins};
 
 pub struct Adapters<'a> {
     syntax_theme: &'a SyntaxTheme,
+    src: &'a SourceFile,
 }
 impl SyntaxHighlighterAdapter for Adapters<'_> {
     fn highlight(&self, lang: Option<&str>, code: &str) -> String {
-        let highlighted_code = syntax_highlight(lang, code, self.syntax_theme);
+        let highlighted_code = syntax_highlight(self.src, lang, code, self.syntax_theme);
 
         // requires a string to be returned
         match highlighted_code {
@@ -47,14 +49,18 @@ fn initialize_comrak_options() -> ComrakOptions {
     options
 }
 
-pub fn to_html(markdown: &str, syntax_theme: &SyntaxTheme) -> Result<String> {
+pub fn to_html(markdown: &SourceFile, syntax_theme: &SyntaxTheme) -> Result<String> {
     let options = initialize_comrak_options();
 
     let mut plugins = ComrakPlugins::default();
-    let adapter = Adapters { syntax_theme };
+    let adapter = Adapters {
+        syntax_theme,
+        src: markdown,
+    };
     plugins.render.codefence_syntax_highlighter = Some(&adapter);
 
-    let unsafe_html = comrak::markdown_to_html_with_plugins(markdown, &options, &plugins);
+    let unsafe_html =
+        comrak::markdown_to_html_with_plugins(markdown.contents(), &options, &plugins);
     let safe_html = Builder::new()
         .add_generic_attributes(&["style", "class", "id"])
         .clean(&unsafe_html)

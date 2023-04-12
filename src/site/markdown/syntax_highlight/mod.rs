@@ -3,8 +3,8 @@ pub mod syntax_themes;
 use std::collections::BTreeMap;
 
 use crate::errors::*;
-use crate::message::{Message, MessageType};
 use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxTheme;
+use axoasset::SourceFile;
 use syntect::highlighting::{Theme, ThemeSet};
 use syntect::html::highlighted_html_for_string;
 use syntect::parsing::{SyntaxReference, SyntaxSet};
@@ -13,7 +13,11 @@ use syntect::parsing::{SyntaxReference, SyntaxSet};
 // snippet uses rs but not when it uses rust as the language.
 // The other one works backwards so trash code it is
 
-fn find_syntax<'a>(ps: &'a SyntaxSet, language: &'a str) -> Result<&'a SyntaxReference> {
+fn find_syntax<'a>(
+    src: &SourceFile,
+    ps: &'a SyntaxSet,
+    language: &'a str,
+) -> Result<&'a SyntaxReference> {
     let syntax_extension = ps.find_syntax_by_extension(language);
     let syntax_name = ps.find_syntax_by_token(language);
 
@@ -28,9 +32,13 @@ fn find_syntax<'a>(ps: &'a SyntaxSet, language: &'a str) -> Result<&'a SyntaxRef
         // to see if there was an annotation at all, and if so, warn that it's
         // unsupported and being overridden as plain text.
         if !language.is_empty() {
-            let msg = format!("Found syntax highlight language annotation `{language}` which is not currently supported. The annotated block will be shown as plaintext. Please file an issue https://github.com/axodotdev/oranda/issues/new to let us know you'd like to see it supported.");
-            Message::new(MessageType::Warning, &msg).print();
-            tracing::warn!("{}", &msg);
+            // TODO: ALAS THIS ISN'T ACTUALLY A SUBSTRING, COMRAK BUFFERS IT..!
+            let warning = OrandaError::UnknownLanguage {
+                src: src.clone(),
+                span: src.span_for_substr(language),
+                language: language.to_owned(),
+            };
+            eprintln!("{:?}", miette::Report::new(warning));
         }
 
         // this syntax will always be found as it's part of the default set
@@ -48,6 +56,7 @@ fn find_syntax<'a>(ps: &'a SyntaxSet, language: &'a str) -> Result<&'a SyntaxRef
 const THEMES: &[(&str, &str)] = &[("MaterialTheme", include_str!("MaterialTheme.tmTheme"))];
 
 pub fn syntax_highlight(
+    src: &SourceFile,
     lang: Option<&str>,
     code: &str,
     syntax_theme: &SyntaxTheme,
@@ -67,7 +76,7 @@ pub fn syntax_highlight(
         None | Some("") => "rs",
         Some(l) => l,
     };
-    let syntax = find_syntax(&ps, language)?;
+    let syntax = find_syntax(src, &ps, language)?;
 
     Ok(highlighted_html_for_string(
         code,

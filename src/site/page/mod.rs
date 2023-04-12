@@ -41,8 +41,7 @@ impl Page {
 
     fn load_and_render_contents(source: &str, syntax_theme: &SyntaxTheme) -> Result<String> {
         let source = SourceFile::load_local(source)?;
-        let contents = source.contents();
-        markdown::to_html(contents, syntax_theme)
+        markdown::to_html(&source, syntax_theme)
     }
 
     pub fn build(&self, config: &Config) -> Result<String> {
