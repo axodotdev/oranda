@@ -108,7 +108,7 @@ impl GithubRelease {
                         None => md.to_string(),
                     }
                 } else {
-                    md.to_string()
+                    self.get_announcement_changelog(config, md)?
                 }
             }
             None => String::new(),
