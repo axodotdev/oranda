@@ -1,7 +1,7 @@
 use oranda::config::Config;
 use oranda::site::{self, artifacts, markdown, page::Page};
 
-fn readme() -> String {
+fn readme() -> &'static str {
     r#"
 # axo
 > a fun side project
@@ -14,10 +14,9 @@ $ axo | lotl
 this block has no highlight annotation
 ```
 "#
-    .to_string()
 }
 
-fn readme_invalid_annotation() -> String {
+fn readme_invalid_annotation() -> &'static str {
     r#"
 # axo
 > a fun side project
@@ -31,7 +30,6 @@ fn this_annotation_will_never_be_supported() {
     println!("this block will render but not be highlighted!");
 }
 ```"#
-        .to_string()
 }
 
 fn reset(dist_dir: &str) {

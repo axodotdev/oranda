@@ -47,14 +47,14 @@ fn initialize_comrak_options() -> ComrakOptions {
     options
 }
 
-pub fn to_html(markdown: String, syntax_theme: &SyntaxTheme) -> Result<String> {
+pub fn to_html(markdown: &str, syntax_theme: &SyntaxTheme) -> Result<String> {
     let options = initialize_comrak_options();
 
     let mut plugins = ComrakPlugins::default();
     let adapter = Adapters { syntax_theme };
     plugins.render.codefence_syntax_highlighter = Some(&adapter);
 
-    let unsafe_html = comrak::markdown_to_html_with_plugins(&markdown, &options, &plugins);
+    let unsafe_html = comrak::markdown_to_html_with_plugins(markdown, &options, &plugins);
     let safe_html = Builder::new()
         .add_generic_attributes(&["style", "class", "id"])
         .clean(&unsafe_html)
