@@ -2,14 +2,16 @@ use axoasset::{Asset, LocalAsset};
 use axohtml::elements::{div, span};
 use axohtml::{html, text, unsafe_text};
 use cargo_dist_schema as cargo_dist;
+use chrono::DateTime;
 
 use crate::config::Config;
+use crate::data::changelog;
+use crate::data::releases::github::GithubRelease;
 use crate::errors::*;
-use crate::site::changelog::{self, GithubRelease};
 use crate::site::link;
 use crate::site::markdown;
 
-use crate::site::artifacts;
+use crate::data::artifacts;
 
 pub fn get_os(name: &str) -> Option<&str> {
     match name.trim() {
@@ -21,7 +23,7 @@ pub fn get_os(name: &str) -> Option<&str> {
     }
 }
 
-pub fn fetch_manifest(config: &Config) -> Result<cargo_dist::DistManifest> {
+pub fn fetch_manifest(config: &Config) -> Result<(cargo_dist::DistManifest, String)> {
     if let Some(repo) = &config.repository {
         let latest_dist_release = latest_dist_release(repo)?;
         let url =
@@ -29,7 +31,7 @@ pub fn fetch_manifest(config: &Config) -> Result<cargo_dist::DistManifest> {
 
         match reqwest::blocking::get(&url)?.error_for_status() {
             Ok(resp) => match resp.json::<cargo_dist::DistManifest>() {
-                Ok(manifest) => Ok(manifest),
+                Ok(manifest) => Ok((manifest, latest_dist_release.published_at)),
                 Err(e) => Err(OrandaError::CargoDistManifestParseError { url, details: e }),
             },
             Err(e) => Err(OrandaError::CargoDistManifestFetchError {
@@ -159,7 +161,7 @@ pub fn build(config: &Config) -> Result<Box<div<String>>> {
         )));
     }
     let downloads_href = link::generate(&config.path_prefix, "artifacts.html");
-    let typed = fetch_manifest(config)?;
+    let (typed, published_at) = fetch_manifest(config)?;
 
     let mut html: Vec<Box<div<String>>> = vec![];
     for release in typed.releases.iter() {
@@ -183,10 +185,19 @@ pub fn build(config: &Config) -> Result<Box<div<String>>> {
                     }
                 };
                 let install_code_block = build_install_block(config, &typed, release, artifact);
+                let title = format!("Install v{}", release.app_version);
+                let formatted_date = match DateTime::parse_from_rfc3339(published_at.as_str()) {
+                    Ok(date) => date.format("%b %e %Y at %R UTC").to_string(),
+                    Err(_) => published_at.to_owned(),
+                };
+                let date_published = format!("Published at {}", formatted_date);
 
                 html.extend(html!(
                     <div class="hidden target artifact-header" data-targets=&targets>
-                        <h4>{text!("Install")}</h4>
+                        <h4>{text!(title)}</h4>
+                        <div>
+                            <small class="published-date">{text!(date_published)}</small>
+                        </div>
                         {install_code_block}
                         <div>
                             {detect_html}

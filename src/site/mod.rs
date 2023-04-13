@@ -1,9 +1,8 @@
 use std::path::Path;
 
-pub mod artifacts;
-pub mod changelog;
+use crate::data::{artifacts, changelog};
 pub mod layout;
-mod link;
+pub mod link;
 use layout::{css, javascript};
 pub mod markdown;
 pub mod page;
