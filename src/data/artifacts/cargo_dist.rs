@@ -23,7 +23,12 @@ pub fn get_os(name: &str) -> Option<&str> {
     }
 }
 
-pub fn fetch_manifest(config: &Config) -> Result<(cargo_dist::DistManifest, String)> {
+pub struct DistRelease {
+    pub manifest: cargo_dist::DistManifest,
+    publish_date: String,
+}
+
+pub fn fetch_manifest(config: &Config) -> Result<DistRelease> {
     if let Some(repo) = &config.repository {
         let latest_dist_release = latest_dist_release(repo)?;
         let url =
@@ -31,7 +36,10 @@ pub fn fetch_manifest(config: &Config) -> Result<(cargo_dist::DistManifest, Stri
 
         match reqwest::blocking::get(&url)?.error_for_status() {
             Ok(resp) => match resp.json::<cargo_dist::DistManifest>() {
-                Ok(manifest) => Ok((manifest, latest_dist_release.published_at)),
+                Ok(manifest) => Ok(DistRelease {
+                    manifest,
+                    publish_date: latest_dist_release.published_at,
+                }),
                 Err(e) => Err(OrandaError::CargoDistManifestParseError { url, details: e }),
             },
             Err(e) => Err(OrandaError::CargoDistManifestFetchError {
@@ -161,12 +169,12 @@ pub fn build(config: &Config) -> Result<Box<div<String>>> {
         )));
     }
     let downloads_href = link::generate(&config.path_prefix, "artifacts.html");
-    let (typed, published_at) = fetch_manifest(config)?;
+    let gh_distrelease = fetch_manifest(config)?;
 
     let mut html: Vec<Box<div<String>>> = vec![];
-    for release in typed.releases.iter() {
+    for release in gh_distrelease.manifest.releases.iter() {
         for artifact_id in release.artifacts.iter() {
-            let artifact = &typed.artifacts[artifact_id];
+            let artifact = &gh_distrelease.manifest.artifacts[artifact_id];
             if let cargo_dist::ArtifactKind::ExecutableZip = artifact.kind {
                 let mut targets = String::new();
                 for targ in artifact.target_triples.iter() {
@@ -184,12 +192,14 @@ pub fn build(config: &Config) -> Result<Box<div<String>>> {
                         html!(<span class="detect">{text!("We couldn't detect the system you are using.")}</span>)
                     }
                 };
-                let install_code_block = build_install_block(config, &typed, release, artifact);
+                let install_code_block =
+                    build_install_block(config, &gh_distrelease.manifest, release, artifact);
                 let title = format!("Install v{}", release.app_version);
-                let formatted_date = match DateTime::parse_from_rfc3339(published_at.as_str()) {
-                    Ok(date) => date.format("%b %e %Y at %R UTC").to_string(),
-                    Err(_) => published_at.to_owned(),
-                };
+                let formatted_date =
+                    match DateTime::parse_from_rfc3339(gh_distrelease.publish_date.as_str()) {
+                        Ok(date) => date.format("%b %e %Y at %R UTC").to_string(),
+                        Err(_) => gh_distrelease.publish_date.to_owned(),
+                    };
                 let date_published = format!("Published at {}", formatted_date);
 
                 html.extend(html!(

@@ -1,4 +1,4 @@
-mod cargo_dist;
+pub mod cargo_dist;
 mod package_managers;
 pub mod page;
 
