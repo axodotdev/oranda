@@ -10,13 +10,19 @@ use axum::{http::StatusCode, response::Redirect, routing::get, routing::get_serv
 use clap::Parser;
 use tower_http::services::ServeDir;
 
-#[derive(Debug, Parser)]
+#[derive(Debug, Default, Parser)]
 pub struct Serve {
     #[arg(long, default_value = "7979")]
     port: u16,
 }
 
 impl Serve {
+    pub fn new(port: Option<u16>) -> Self {
+        Serve {
+            port: port.unwrap_or(Serve::default().port),
+        }
+    }
+
     pub fn run(&self) -> Result<()> {
         Message::new(MessageType::Info, "Running serve...").print();
         tracing::info!("Running serve...");
