@@ -1,15 +1,35 @@
 use oranda::config::Config;
 use oranda::site::{self, artifacts, markdown, page::Page};
 
-fn readme() -> String {
+fn readme() -> &'static str {
     r#"
 # axo
 > a fun side project
 
 ```sh
 $ axo | lotl
+```
+
+```
+this block has no highlight annotation
+```
+"#
+}
+
+fn readme_invalid_annotation() -> &'static str {
+    r#"
+# axo
+> a fun side project
+
+```sh
+$ axo | lotl
+```
+
+```farts
+fn this_annotation_will_never_be_supported() {
+    println!("this block will render but not be highlighted!");
+}
 ```"#
-        .to_string()
 }
 
 fn reset(dist_dir: &str) {
@@ -20,6 +40,17 @@ pub fn index(config: &Config) -> String {
     reset(&config.dist_dir);
     let page = Page {
         contents: markdown::to_html(readme(), &config.syntax_theme).unwrap(),
+        filename: "index.html".to_string(),
+        is_index: true,
+        needs_js: true,
+    };
+    page.build(config).unwrap()
+}
+
+pub fn index_with_warning(config: &Config) -> String {
+    reset(&config.dist_dir);
+    let page = Page {
+        contents: markdown::to_html(readme_invalid_annotation(), &config.syntax_theme).unwrap(),
         filename: "index.html".to_string(),
         is_index: true,
         needs_js: true,

@@ -57,7 +57,7 @@ impl GithubRelease {
                 Some(md) => {
                     let cut_body = md.split(cutoff).collect::<Vec<&str>>()[0];
 
-                    markdown::to_html(cut_body.to_string(), syntax_theme)?
+                    markdown::to_html(cut_body, syntax_theme)?
                 }
                 None => String::new(),
             };

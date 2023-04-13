@@ -152,3 +152,11 @@ fn adds_changelog_nav() {
     let page_html = page::index(config);
     assert!(page_html.contains("<a href=\"/changelog.html\">Changelog</a>"));
 }
+
+#[test]
+fn it_renders_code_blocks_with_invalid_annotations() {
+    let _guard = TEST_RUNTIME.enter();
+    let config = &oranda_config::no_artifacts();
+    let page_html = page::index_with_warning(config);
+    assert!(page_html.contains("this block will render but not be highlighted!"));
+}
