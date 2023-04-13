@@ -6,7 +6,7 @@ use crate::site::artifacts;
 use crate::site::layout;
 use crate::site::markdown::{self, SyntaxTheme};
 
-use axoasset::LocalAsset;
+use axoasset::SourceFile;
 use axohtml::{html, unsafe_text};
 
 pub mod source;
@@ -40,7 +40,8 @@ impl Page {
     }
 
     fn load_and_render_contents(source: &str, syntax_theme: &SyntaxTheme) -> Result<String> {
-        let contents = LocalAsset::load_string(source)?;
+        let source = SourceFile::load_local(source)?;
+        let contents = source.contents();
         markdown::to_html(contents, syntax_theme)
     }
 

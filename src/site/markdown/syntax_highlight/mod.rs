@@ -3,6 +3,7 @@ pub mod syntax_themes;
 use std::collections::BTreeMap;
 
 use crate::errors::*;
+use crate::message::{Message, MessageType};
 use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxTheme;
 use syntect::highlighting::{Theme, ThemeSet};
 use syntect::html::highlighted_html_for_string;
@@ -17,16 +18,31 @@ fn find_syntax<'a>(ps: &'a SyntaxSet, language: &'a str) -> Result<&'a SyntaxRef
     let syntax_name = ps.find_syntax_by_token(language);
 
     if let Some(syntax_extension) = syntax_extension {
-        return Ok(syntax_extension);
-    }
+        Ok(syntax_extension)
+    } else if let Some(syntax_name) = syntax_name {
+        Ok(syntax_name)
+    } else {
+        // if we end up here it means that we could not find the provided language
+        // by name or extension. either this means that no language was provided
+        // or the language is not supported. we check if the language str is empty
+        // to see if there was an annotation at all, and if so, warn that it's
+        // unsupported and being overridden as plain text.
+        if !language.is_empty() {
+            let msg = format!("Found syntax highlight language annotation `{language}` which is not currently supported. The annotated block will be shown as plaintext. Please file an issue https://github.com/axodotdev/oranda/issues/new to let us know you'd like to see it supported.");
+            Message::new(MessageType::Warning, &msg).print();
+            tracing::warn!("{}", &msg);
+        }
 
-    if let Some(syntax_name) = syntax_name {
-        return Ok(syntax_name);
-    }
+        // this syntax will always be found as it's part of the default set
+        // https://github.com/sublimehq/Packages
+        let plain_text = ps
+            .syntaxes()
+            .iter()
+            .find(|syntax| syntax.name == "Plain Text")
+            .unwrap();
 
-    Err(OrandaError::Other(
-        "Please add the language to your code snippets".to_owned(),
-    ))
+        Ok(plain_text)
+    }
 }
 
 const THEMES: &[(&str, &str)] = &[("MaterialTheme", include_str!("MaterialTheme.tmTheme"))];
