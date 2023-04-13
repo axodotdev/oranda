@@ -2,7 +2,7 @@
 name = "oranda"
 description = "🎁 generate beautiful landing pages for your projects"
 repository = "https://github.com/axodotdev/oranda"
-version = "0.0.1"
+version = "0.0.2"
 edition = "2021"
 authors = ["Axo Developer Co. <hello@axo.dev>"]
 license = "MIT OR Apache-2.0"
@@ -12,7 +12,7 @@ name = "oranda"
 
 [dependencies]
 ammonia = "3"
-axoasset = { branch = "0.2.0", features = ["json-serde"], git = "https://github.com/axodotdev/axoasset" }
+axoasset = {version = "0.1.1", features = ["json-serde"] }
 axohtml = "0.5.0"
 axoproject = { version = "0.1.0", default-features = false, features = ["cargo-projects", "npm-projects"] }
 axum = "0.6.2"
