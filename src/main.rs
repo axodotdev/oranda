@@ -48,6 +48,14 @@ fn main() {
 }
 
 fn run(cli: &axocli::CliApp<Cli>) -> Result<(), Report> {
+    let runtime = tokio::runtime::Builder::new_multi_thread()
+        .worker_threads(1)
+        .max_blocking_threads(128)
+        .enable_all()
+        .build()
+        .expect("Initializing tokio runtime failed");
+    let _guard = runtime.enter();
+
     match &cli.config.command {
         Command::Build(cmd) => cmd.run()?,
         Command::Dev(cmd) => cmd.clone().run()?,

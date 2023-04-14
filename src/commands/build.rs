@@ -23,13 +23,6 @@ impl Build {
     }
 
     pub fn run(&self) -> Result<()> {
-        let runtime = tokio::runtime::Builder::new_multi_thread()
-            .worker_threads(1)
-            .max_blocking_threads(128)
-            .enable_all()
-            .build()
-            .expect("Initializing tokio runtime failed");
-        let _guard = runtime.enter();
         Message::new(MessageType::Info, "Running build...").print();
         tracing::info!("Running build...");
         let config = Config::build(&self.config_path)?;

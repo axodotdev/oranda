@@ -19,7 +19,7 @@ pub struct Serve {
 impl Serve {
     pub fn new(port: Option<u16>) -> Self {
         Serve {
-            port: port.unwrap_or(Serve::default().port),
+            port: port.unwrap_or(7979),
         }
     }
 

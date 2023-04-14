@@ -40,9 +40,6 @@ url = "2.3.1"
 camino = "1.1.4"
 axocli = "0.1.0"
 miette = "5.7.0"
-rayon = "1.7.0"
-notify = "4"
-crossbeam-channel = "0.5.7"
 
 [dev-dependencies]
 assert_cmd="2"
