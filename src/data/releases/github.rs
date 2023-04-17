@@ -1,9 +1,9 @@
 use crate::config::Config;
 use crate::data::artifacts::cargo_dist;
 use crate::errors::*;
-use crate::site::{link, markdown};
+use crate::site::markdown;
 use axohtml::dom::UnsafeTextNode;
-use axohtml::elements::{a, section};
+use axohtml::elements::section;
 use axohtml::html;
 use axohtml::{text, unsafe_text};
 use chrono::DateTime;
@@ -50,43 +50,36 @@ impl GithubRelease {
         let tag_name = self.tag_name.clone();
         let title = self.name.clone().unwrap_or(tag_name.clone());
 
-        if let Some(version) = &config.version {
-            let id: axohtml::types::Id = axohtml::types::Id::new(tag_name.clone());
-            let formatted_date = match DateTime::parse_from_rfc3339(&self.published_at) {
-                Ok(date) => date.format("%b %e %Y at %R UTC").to_string(),
-                Err(_) => self.published_at.to_owned(),
-            };
+        let id: axohtml::types::Id = axohtml::types::Id::new(tag_name.clone());
+        let formatted_date = match DateTime::parse_from_rfc3339(&self.published_at) {
+            Ok(date) => date.format("%b %e %Y at %R UTC").to_string(),
+            Err(_) => self.published_at.to_owned(),
+        };
 
-            let classnames = if self.prerelease {
-                "release pre-release hidden"
-            } else {
-                "release"
-            };
-            let link = format!("#{}", &tag_name);
-            let body = self.build_release_body(config)?;
-
-            Ok(html!(
-            <section class=classnames>
-                <h2 id=id><a href=link>{text!(title)}</a></h2>
-                <div class="release-info">
-                    <span class="flex items-center gap-2">
-                        {tag_icon()}{text!(tag_name)}
-                    </span>
-                    <span class="flex items-center gap-2">
-                        {date_icon()}{text!(&formatted_date)}
-                    </span>
-                </div>
-                <div class="release-body mb-6">
-                    {unsafe_text!(body)}
-                </div>
-                {self.build_install_button(version,  &config.path_prefix)}
-            </section>
-            ))
+        let classnames = if self.prerelease {
+            "release pre-release hidden"
         } else {
-            Err(OrandaError::Other(
-                "A version is required to have a changelog page".to_owned(),
-            ))
-        }
+            "release"
+        };
+        let link = format!("#{}", &tag_name);
+        let body = self.build_release_body(config)?;
+
+        Ok(html!(
+        <section class=classnames>
+            <h2 id=id><a href=link>{text!(title)}</a></h2>
+            <div class="release-info">
+                <span class="flex items-center gap-2">
+                    {tag_icon()}{text!(tag_name)}
+                </span>
+                <span class="flex items-center gap-2">
+                    {date_icon()}{text!(&formatted_date)}
+                </span>
+            </div>
+            <div class="release-body mb-6">
+                {unsafe_text!(body)}
+            </div>
+        </section>
+        ))
     }
 
     fn build_release_body(&self, config: &Config) -> Result<String> {
@@ -109,23 +102,6 @@ impl GithubRelease {
             }
         }
         false
-    }
-
-    fn build_install_button(
-        &self,
-        version: &String,
-        path_prefix: &Option<String>,
-    ) -> Option<Box<a<String>>> {
-        let is_installable = self.tag_name.eq(&format!("v{}", version));
-        let downloads_href = link::generate(path_prefix, "artifacts.html");
-
-        if is_installable {
-            Some(
-                html!(<a href=downloads_href><button class="business-button primary">{text!("Install")}</button></a>),
-            )
-        } else {
-            None
-        }
     }
 }
 
