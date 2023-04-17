@@ -17,7 +17,7 @@ pub fn get_os(name: &str) -> Option<&str> {
     match name.trim() {
         "x86_64-unknown-linux-gnu" => Some("linux"),
         "x86_64-apple-darwin" => Some("mac"),
-        "x86_64-apple-silicon" => Some("mac"),
+        "aarch64-apple-darwin" => Some("arm mac"),
         "x86_64-pc-windows-msvc" => Some("windows"),
         &_ => None,
     }
