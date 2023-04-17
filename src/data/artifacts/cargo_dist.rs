@@ -142,6 +142,31 @@ fn build_install_block(
     release: &cargo_dist::Release,
     artifact: &cargo_dist::Artifact,
 ) -> Result<Box<div<String>>> {
+    // If there's an installer that covers that, prefer it
+    if let Ok(val) = build_install_block_for_installer(config, manifest, release, artifact) {
+        return Ok(val);
+    }
+
+    // Otherwise, just link the artifact
+    let url = create_download_link(
+        config,
+        artifact.name.as_ref().unwrap(),
+        &release.app_version,
+    )?;
+    Ok(html!(
+        <div class="install-code-wrapper">
+            <a href=url>{text!("Download {}", artifact.name.as_ref().unwrap())}</a>
+        </div>
+    ))
+}
+
+/// Tries to recommend an installer that installs the given artifact
+fn build_install_block_for_installer(
+    config: &Config,
+    manifest: &cargo_dist::DistManifest,
+    release: &cargo_dist::Release,
+    artifact: &cargo_dist::Artifact,
+) -> Result<Box<div<String>>> {
     let install_code = get_install_hint_code(manifest, release, &artifact.target_triples, config)?;
 
     let copy_icon = artifacts::get_copyicon();
