@@ -47,8 +47,11 @@ pub struct GithubReleaseAsset {
 
 impl GithubRelease {
     pub fn build(&self, config: &Config) -> Result<Box<section<String>>> {
+        let tag_name = self.tag_name.clone();
+        let title = self.name.clone().unwrap_or(tag_name.clone());
+
         if let Some(version) = &config.version {
-            let id: axohtml::types::Id = axohtml::types::Id::new(self.tag_name.clone());
+            let id: axohtml::types::Id = axohtml::types::Id::new(tag_name.clone());
             let formatted_date = match DateTime::parse_from_rfc3339(&self.published_at) {
                 Ok(date) => date.format("%b %e %Y at %R UTC").to_string(),
                 Err(_) => self.published_at.to_owned(),
@@ -59,15 +62,15 @@ impl GithubRelease {
             } else {
                 "release"
             };
-            let link = format!("#{}", &self.tag_name);
-            let body = self.create_release_body(config)?;
+            let link = format!("#{}", &tag_name);
+            let body = self.build_release_body(config)?;
 
             Ok(html!(
             <section class=classnames>
-                <h2 id=id><a href=link>{text!(GithubRelease::title(&self.name, &self.tag_name))}</a></h2>
+                <h2 id=id><a href=link>{text!(title)}</a></h2>
                 <div class="release-info">
                     <span class="flex items-center gap-2">
-                        {tag_icon()}{text!(&self.tag_name)}
+                        {tag_icon()}{text!(tag_name)}
                     </span>
                     <span class="flex items-center gap-2">
                         {date_icon()}{text!(&formatted_date)}
@@ -86,42 +89,17 @@ impl GithubRelease {
         }
     }
 
-    fn get_announcement_changelog(&self, config: &Config, md: &str) -> Result<String> {
-        if self.has_dist_manifest() {
-            let manifest = cargo_dist::fetch_manifest(config)?.manifest;
-            match manifest.announcement_changelog {
-                Some(changelog) => Ok(changelog),
-                None => Ok(md.to_string()),
-            }
+    fn build_release_body(&self, config: &Config) -> Result<String> {
+        let contents = if self.has_dist_manifest() {
+            cargo_dist::fetch_manifest(config)?
+                .manifest
+                .announcement_changelog
+                .unwrap_or(String::new())
         } else {
-            Ok(md.to_string())
-        }
-    }
-
-    fn create_release_body(&self, config: &Config) -> Result<String> {
-        let body_md = match &self.body {
-            Some(md) => {
-                if self.has_dist_manifest() {
-                    let manifest = cargo_dist::fetch_manifest(config)?.manifest;
-                    match manifest.announcement_changelog {
-                        Some(changelog) => changelog,
-                        None => md.to_string(),
-                    }
-                } else {
-                    self.get_announcement_changelog(config, md)?
-                }
-            }
-            None => String::new(),
+            self.body.clone().unwrap_or(String::new())
         };
 
-        markdown::to_html(&body_md, &config.syntax_theme)
-    }
-
-    fn title<'a>(name: &'a Option<String>, tag: &'a str) -> &'a str {
-        match name {
-            Some(n) => n,
-            None => tag,
-        }
+        markdown::to_html(&contents, &config.syntax_theme)
     }
 
     pub fn has_dist_manifest(&self) -> bool {
