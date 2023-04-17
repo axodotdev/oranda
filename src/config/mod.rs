@@ -134,7 +134,7 @@ impl Config {
                     additional_pages: custom.additional_pages,
                     social: custom.social,
                     artifacts: custom.artifacts,
-                    version: custom.version.or(project.version),
+                    version: Self::project_override(custom.version, None, default.version),
                     license: custom.license.or(project.license),
                     logo: custom.logo,
                     favicon: custom.favicon,
