@@ -11,6 +11,14 @@ fn it_adds_additional_css() {
 }
 
 #[test]
+fn it_renders_changelog_with_no_cargo_dist() {
+    let _guard = TEST_RUNTIME.enter();
+    let config = &oranda_config::changelog();
+    let page_html = page::changelog(config);
+    assert!(page_html.contains("<h1>Releases</h1>"));
+}
+
+#[test]
 fn it_adds_oranda_css() {
     let _guard = TEST_RUNTIME.enter();
     let config = &oranda_config::no_artifacts();

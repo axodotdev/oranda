@@ -72,37 +72,44 @@ fn parse_response(response: reqwest::blocking::Response) -> Result<Vec<GithubRel
     }
 }
 
-pub fn build_page(config: &Config, repo: &str) -> Result<String> {
-    let releases = fetch_releases(repo)?;
-    let mut releases_html: Vec<Box<section<String>>> = vec![];
-    let mut releases_nav: Vec<Box<li<String>>> = vec![];
-    for release in releases.iter() {
-        let classnames = if release.prerelease {
-            "pre-release hidden"
-        } else {
-            ""
-        };
+pub fn build(config: &Config) -> Result<String> {
+    if let Some(repo) = &config.repository {
+        let releases = fetch_releases(repo)?;
+        let mut releases_html: Vec<Box<section<String>>> = vec![];
+        let mut releases_nav: Vec<Box<li<String>>> = vec![];
+        for release in releases.iter() {
+            let classnames = if release.prerelease {
+                "pre-release hidden"
+            } else {
+                ""
+            };
 
-        let link = format!("#{}", &release.tag_name);
+            let link = format!("#{}", &release.tag_name);
 
-        releases_html.extend(release.build(config)?);
-        releases_nav
-            .extend(html!(<li class=classnames><a href=link>{text!(&release.tag_name)}</a></li>))
-    }
+            releases_html.extend(release.build(config)?);
+            releases_nav.extend(
+                html!(<li class=classnames><a href=link>{text!(&release.tag_name)}</a></li>),
+            )
+        }
 
-    Ok(html!(
-        <div>
-            <h1>{text!("Releases")}</h1>
-            <div class="releases-wrapper">
-                <nav class="releases-nav">
-                    {build_prerelease_toggle(releases)}
-                    <ul>
-                        {releases_nav}
-                    </ul>
-                </nav>
-                <div class="releases-list">{releases_html}</div>
+        Ok(html!(
+            <div>
+                <h1>{text!("Releases")}</h1>
+                <div class="releases-wrapper">
+                    <nav class="releases-nav">
+                        {build_prerelease_toggle(releases)}
+                        <ul>
+                            {releases_nav}
+                        </ul>
+                    </nav>
+                    <div class="releases-list">{releases_html}</div>
+                </div>
             </div>
-        </div>
-    )
-    .to_string())
+        )
+        .to_string())
+    } else {
+        Err(OrandaError::Other(
+            "repository required for changelog feature".to_string(),
+        ))
+    }
 }

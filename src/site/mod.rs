@@ -44,22 +44,10 @@ impl Site {
             let artifacts_page = Page::new_from_contents(artifacts_html, "artifacts.html", true);
             pages.push(artifacts_page)
         }
-        if let Some(repo) = &config.repository {
-            if config.changelog {
-                let changelog_html = changelog::build_page(config, repo)?;
-                let changelog_page =
-                    Page::new_from_contents(changelog_html, "changelog.html", true);
-                pages.push(changelog_page)
-            }
-        }
-
-        if let Some(repo) = &config.repository {
-            if config.changelog {
-                let changelog_html = changelog::build_page(config, repo)?;
-                let changelog_page =
-                    Page::new_from_contents(changelog_html, "changelog.html", true);
-                pages.push(changelog_page)
-            }
+        if config.changelog {
+            let changelog_html = changelog::build(config)?;
+            let changelog_page = Page::new_from_contents(changelog_html, "changelog.html", true);
+            pages.push(changelog_page)
         }
 
         Ok(Site { pages })
