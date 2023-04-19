@@ -1,9 +1,9 @@
 use crate::config::Config;
 use crate::data::artifacts::cargo_dist;
 use crate::errors::*;
-use crate::site::{link, markdown};
+use crate::site::markdown;
 use axohtml::dom::UnsafeTextNode;
-use axohtml::elements::{a, section};
+use axohtml::elements::section;
 use axohtml::html;
 use axohtml::{text, unsafe_text};
 use chrono::DateTime;
@@ -47,81 +47,52 @@ pub struct GithubReleaseAsset {
 
 impl GithubRelease {
     pub fn build(&self, config: &Config) -> Result<Box<section<String>>> {
-        if let Some(version) = &config.version {
-            let id: axohtml::types::Id = axohtml::types::Id::new(self.tag_name.clone());
-            let formatted_date = match DateTime::parse_from_rfc3339(&self.published_at) {
-                Ok(date) => date.format("%b %e %Y at %R UTC").to_string(),
-                Err(_) => self.published_at.to_owned(),
-            };
+        let tag_name = self.tag_name.clone();
+        let title = self.name.clone().unwrap_or(tag_name.clone());
 
-            let classnames = if self.prerelease {
-                "release pre-release hidden"
-            } else {
-                "release"
-            };
-            let link = format!("#{}", &self.tag_name);
-            let body = self.create_release_body(config)?;
-
-            Ok(html!(
-            <section class=classnames>
-                <h2 id=id><a href=link>{text!(GithubRelease::title(&self.name, &self.tag_name))}</a></h2>
-                <div class="release-info">
-                    <span class="flex items-center gap-2">
-                        {tag_icon()}{text!(&self.tag_name)}
-                    </span>
-                    <span class="flex items-center gap-2">
-                        {date_icon()}{text!(&formatted_date)}
-                    </span>
-                </div>
-                <div class="release-body mb-6">
-                    {unsafe_text!(body)}
-                </div>
-                {self.build_install_button(version,  &config.path_prefix)}
-            </section>
-            ))
-        } else {
-            Err(OrandaError::Other(
-                "A version is required to have a changelog page".to_owned(),
-            ))
-        }
-    }
-
-    fn get_announcement_changelog(&self, config: &Config, md: &str) -> Result<String> {
-        if self.has_dist_manifest() {
-            let manifest = cargo_dist::fetch_manifest(config)?.manifest;
-            match manifest.announcement_changelog {
-                Some(changelog) => Ok(changelog),
-                None => Ok(md.to_string()),
-            }
-        } else {
-            Ok(md.to_string())
-        }
-    }
-
-    fn create_release_body(&self, config: &Config) -> Result<String> {
-        let body_md = match &self.body {
-            Some(md) => {
-                if self.has_dist_manifest() {
-                    let manifest = cargo_dist::fetch_manifest(config)?.manifest;
-                    match manifest.announcement_changelog {
-                        Some(changelog) => changelog,
-                        None => md.to_string(),
-                    }
-                } else {
-                    self.get_announcement_changelog(config, md)?
-                }
-            }
-            None => String::new(),
+        let id: axohtml::types::Id = axohtml::types::Id::new(tag_name.clone());
+        let formatted_date = match DateTime::parse_from_rfc3339(&self.published_at) {
+            Ok(date) => date.format("%b %e %Y at %R UTC").to_string(),
+            Err(_) => self.published_at.to_owned(),
         };
 
-        markdown::to_html(&body_md, &config.syntax_theme)
+        let classnames = if self.prerelease {
+            "release pre-release hidden"
+        } else {
+            "release"
+        };
+        let link = format!("#{}", &tag_name);
+        let body = self.build_release_body(config)?;
+
+        Ok(html!(
+        <section class=classnames>
+            <h2 id=id><a href=link>{text!(title)}</a></h2>
+            <div class="release-info">
+                <span class="flex items-center gap-2">
+                    {tag_icon()}{text!(tag_name)}
+                </span>
+                <span class="flex items-center gap-2">
+                    {date_icon()}{text!(&formatted_date)}
+                </span>
+            </div>
+            <div class="release-body mb-6">
+                {unsafe_text!(body)}
+            </div>
+        </section>
+        ))
     }
 
-    fn title<'a>(name: &'a Option<String>, tag: &'a str) -> &'a str {
-        match name {
-            Some(n) => n,
-            None => tag,
-        }
+    fn build_release_body(&self, config: &Config) -> Result<String> {
+        let contents = if self.has_dist_manifest() {
+            cargo_dist::fetch_manifest(config)?
+                .manifest
+                .announcement_changelog
+                .unwrap_or(String::new())
+        } else {
+            self.body.clone().unwrap_or(String::new())
+        };
+
+        markdown::to_html(&contents, &config.syntax_theme)
     }
 
     pub fn has_dist_manifest(&self) -> bool {
@@ -131,23 +102,6 @@ impl GithubRelease {
             }
         }
         false
-    }
-
-    fn build_install_button(
-        &self,
-        version: &String,
-        path_prefix: &Option<String>,
-    ) -> Option<Box<a<String>>> {
-        let is_installable = self.tag_name.eq(&format!("v{}", version));
-        let downloads_href = link::generate(path_prefix, "artifacts.html");
-
-        if is_installable {
-            Some(
-                html!(<a href=downloads_href><button class="business-button primary">{text!("Install")}</button></a>),
-            )
-        } else {
-            None
-        }
     }
 }
 

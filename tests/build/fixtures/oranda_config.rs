@@ -84,10 +84,6 @@ pub fn package_managers() -> Config {
 pub fn changelog() -> Config {
     Config {
         dist_dir: temp_build_dir(),
-        artifacts: Some(Artifacts {
-            cargo_dist: Some(true),
-            package_managers: None,
-        }),
         repository: Some(String::from("https://github.com/axodotdev/oranda")),
         version: Some(String::from("0.0.1")),
         changelog: true,

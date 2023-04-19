@@ -35,6 +35,7 @@ fn nav(
     md_book: &Option<String>,
     changelog: &bool,
 ) -> Result<Box<nav<String>>> {
+    Message::new(MessageType::Info, "Building nav...").print();
     let mut html: Vec<Box<li<String>>> = if let Some(prefix) = &path_prefix {
         let href = format!("/{}", prefix);
         vec![html!(<li><a href=href>"Home"</a></li>)]
@@ -43,6 +44,7 @@ fn nav(
     };
 
     if let Some(pages) = additional_pages {
+        Message::new(MessageType::Info, "Found additional pages...").print();
         for (page_name, page_path) in pages.iter() {
             if page::source::is_markdown(page_path) {
                 let file_path = page::source::get_filename(page_path);
@@ -67,12 +69,14 @@ fn nav(
 
     if let Some(artifact) = artifacts {
         if artifact.cargo_dist.is_some() {
+            Message::new(MessageType::Info, "Adding artifacts page...").print();
             let href = link::generate(path_prefix, "artifacts.html");
             html.extend(html!(<li><a href=href>{text!("Install")}</a></li>));
         }
     };
 
     if md_book.is_some() {
+        Message::new(MessageType::Info, "Adding book...").print();
         let href = if let Some(prefix) = &path_prefix {
             format!("/{}/{}/", prefix, "book")
         } else {
@@ -81,7 +85,9 @@ fn nav(
         html.extend(html!(<li><a href=href>{text!("Docs")}</a></li>));
     };
 
+    println!("{:?}", changelog);
     if *changelog {
+        Message::new(MessageType::Info, "Adding changelog...").print();
         let href = if let Some(prefix) = &path_prefix {
             format!("/{}/{}", prefix, "changelog.html")
         } else {
@@ -109,6 +115,7 @@ pub fn create(config: &Config) -> Result<Box<header<String>>> {
     let nav = if config.additional_pages.is_some()
         || config.artifacts.is_some()
         || config.md_book.is_some()
+        || config.changelog
     {
         Some(nav(
             &config.additional_pages,

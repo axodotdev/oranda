@@ -1,5 +1,5 @@
 use oranda::config::Config;
-use oranda::data::artifacts;
+use oranda::data::{artifacts, changelog};
 use oranda::site::{self, markdown, page::Page};
 
 fn readme() -> &'static str {
@@ -63,5 +63,12 @@ pub fn artifacts(config: &Config) -> String {
     reset(&config.dist_dir);
     let artifacts_content = artifacts::page::build(config).unwrap();
     let page = Page::new_from_contents(artifacts_content, "artifacts.html", true);
+    page.build(config).unwrap()
+}
+
+pub fn changelog(config: &Config) -> String {
+    reset(&config.dist_dir);
+    let changelog_content = changelog::build(config).unwrap();
+    let page = Page::new_from_contents(changelog_content, "changelog.html", true);
     page.build(config).unwrap()
 }
