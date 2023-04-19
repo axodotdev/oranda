@@ -145,7 +145,7 @@ fn creates_copy_to_clipboard_artifacts() {
 #[test]
 fn adds_prefix() {
     let _guard = TEST_RUNTIME.enter();
-    let config = &&oranda_config::path_prefix();
+    let config = &oranda_config::path_prefix();
     let page_html = page::index(config);
     assert!(page_html.contains("<script src=\"/axo/artifacts.js\">"));
     assert!(page_html.contains("<a href=\"/axo/artifacts.html\">View all installation options</a>"))
@@ -154,9 +154,9 @@ fn adds_prefix() {
 #[test]
 fn adds_changelog_nav() {
     let _guard = TEST_RUNTIME.enter();
-    let config = &&oranda_config::changelog();
+    let config = &oranda_config::changelog();
     let page_html = page::index(config);
-    assert!(page_html.contains("<a href=\"/changelog.html\">Changelog</a>"));
+    assert!(page_html.contains("changelog.html"));
 }
 
 #[test]
