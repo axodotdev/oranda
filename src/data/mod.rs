@@ -1,3 +1,2 @@
-pub mod artifacts;
-pub mod changelog;
-pub mod releases;
+pub mod cargo_dist;
+pub mod github;

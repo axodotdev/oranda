@@ -1,18 +1,20 @@
 use std::path::Path;
 
-use crate::data::{artifacts, changelog};
-pub mod layout;
-pub mod link;
-use layout::{css, javascript};
-pub mod markdown;
-pub mod page;
-use page::Page;
+use axoasset::LocalAsset;
 
 use crate::config::Config;
 use crate::errors::*;
 use crate::message::{Message, MessageType};
 
-use axoasset::LocalAsset;
+pub mod artifacts;
+pub mod icons;
+pub mod layout;
+use layout::{css, javascript};
+pub mod link;
+pub mod markdown;
+pub mod page;
+use page::Page;
+pub mod changelog;
 
 #[derive(Debug)]
 pub struct Site {
@@ -40,7 +42,7 @@ impl Site {
         }
 
         if config.artifacts.is_some() {
-            let artifacts_html = artifacts::page::build(config)?;
+            let artifacts_html = artifacts::build(config)?;
             let artifacts_page = Page::new_from_contents(artifacts_html, "artifacts.html", true);
             pages.push(artifacts_page)
         }

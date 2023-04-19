@@ -1,6 +1,5 @@
 use oranda::config::Config;
-use oranda::data::{artifacts, changelog};
-use oranda::site::{self, markdown, page::Page};
+use oranda::site::{self, artifacts, changelog, markdown, page::Page};
 
 fn readme() -> &'static str {
     r#"
@@ -61,7 +60,7 @@ pub fn index_with_warning(config: &Config) -> String {
 
 pub fn artifacts(config: &Config) -> String {
     reset(&config.dist_dir);
-    let artifacts_content = artifacts::page::build(config).unwrap();
+    let artifacts_content = artifacts::build(config).unwrap();
     let page = Page::new_from_contents(artifacts_content, "artifacts.html", true);
     page.build(config).unwrap()
 }

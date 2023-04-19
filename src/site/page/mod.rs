@@ -48,7 +48,7 @@ impl Page {
     pub fn build(&self, config: &Config) -> Result<String> {
         let mut contents = vec![];
         if self.is_index {
-            if let Some(artifacts_header) = artifacts::build_header(config)? {
+            if let Some(artifacts_header) = artifacts::header::build(config)? {
                 contents.push(artifacts_header);
             }
         }

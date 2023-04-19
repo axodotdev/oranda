@@ -1,13 +1,18 @@
 use crate::config::artifacts::Artifacts;
 use crate::config::Config;
-use crate::data::artifacts::{cargo_dist, package_managers};
+use crate::data::cargo_dist;
 use crate::errors::*;
+
+pub mod header;
+mod installers;
+mod package_managers;
+mod table;
 
 use axohtml::html;
 
 pub fn build(config: &Config) -> Result<String> {
     let mut html = vec![];
-    let manifest = cargo_dist::fetch_manifest(config)?.manifest;
+    let release = cargo_dist::fetch_release(config)?;
 
     if config.artifacts.is_some() {
         let mut lists = vec![];
@@ -16,7 +21,7 @@ pub fn build(config: &Config) -> Result<String> {
             ..
         }) = &config.artifacts
         {
-            lists.extend(cargo_dist::build_list(&manifest, config));
+            lists.extend(installers::build_list(&release, config));
         }
 
         if let Some(Artifacts {
@@ -39,7 +44,7 @@ pub fn build(config: &Config) -> Result<String> {
         ..
     }) = &config.artifacts
     {
-        html.extend(cargo_dist::build_table(manifest, config));
+        html.extend(table::build(release, config));
     }
     Ok(html!(<div>{html}</div>).to_string())
 }
