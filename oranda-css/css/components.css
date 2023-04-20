@@ -25,5 +25,7 @@ footer {
 }
 
 .repo_banner > a {
-  @apply flex justify-center gap-2 items-start text-slate-50 dark:text-axo-black h-[20px];
+  @apply flex justify-center gap-2 items-start 
+  hover:text-slate-50
+  text-slate-50 dark:text-axo-black dark:hover:text-axo-black h-[20px];
 }
