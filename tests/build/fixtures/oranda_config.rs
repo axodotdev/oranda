@@ -85,7 +85,6 @@ pub fn changelog() -> Config {
     Config {
         dist_dir: temp_build_dir(),
         repository: Some(String::from("https://github.com/axodotdev/oranda")),
-        version: Some(String::from("0.0.1")),
         changelog: true,
         ..Default::default()
     }
