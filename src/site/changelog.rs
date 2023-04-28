@@ -4,67 +4,57 @@ use axohtml::{text, unsafe_text};
 use chrono::DateTime;
 
 use crate::config::Config;
-use crate::data::cargo_dist;
-use crate::data::github::GithubRelease;
+use crate::data::{Context, Release};
 use crate::errors::*;
 use crate::site::{icons, markdown};
 
-pub fn build(config: &Config) -> Result<String> {
-    if let Some(repo) = &config.repository {
-        let releases = GithubRelease::fetch_all(repo)?;
-        let mut releases_html: Vec<Box<section<String>>> = vec![];
-        let mut releases_nav: Vec<Box<li<String>>> = vec![];
-        for release in releases.iter() {
-            let classnames = if release.prerelease {
-                "pre-release hidden"
-            } else {
-                ""
-            };
+pub fn build(context: &Context, config: &Config) -> Result<String> {
+    let mut releases_html: Vec<Box<section<String>>> = vec![];
+    let mut releases_nav: Vec<Box<li<String>>> = vec![];
 
-            let link = format!("#{}", &release.tag_name);
+    for release in context.releases.iter() {
+        let classnames = if release.source.prerelease {
+            "pre-release hidden"
+        } else {
+            ""
+        };
 
-            releases_html.extend(build_page_preview(release, config)?);
-            releases_nav.extend(
-                html!(<li class=classnames><a href=link>{text!(&release.tag_name)}</a></li>),
-            )
-        }
+        let link = format!("#{}", &release.source.tag_name);
 
-        Ok(html!(
-            <div>
-                <h1>{text!("Releases")}</h1>
-                <div class="releases-wrapper">
-                    <nav class="releases-nav">
-                        {build_prerelease_toggle(releases)}
-                        <ul>
-                            {releases_nav}
-                        </ul>
-                    </nav>
-                    <div class="releases-list">{releases_html}</div>
-                </div>
-            </div>
+        releases_html.extend(build_page_preview(release, config)?);
+        releases_nav.extend(
+            html!(<li class=classnames><a href=link>{text!(&release.source.tag_name)}</a></li>),
         )
-        .to_string())
-    } else {
-        Err(OrandaError::Other(
-            "repository required for changelog feature".to_string(),
-        ))
     }
+
+    Ok(html!(
+        <div>
+            <h1>{text!("Releases")}</h1>
+            <div class="releases-wrapper">
+                <nav class="releases-nav">
+                    {build_prerelease_toggle(context.has_prereleases)}
+                    <ul>
+                        {releases_nav}
+                    </ul>
+                </nav>
+                <div class="releases-list">{releases_html}</div>
+            </div>
+        </div>
+    )
+    .to_string())
 }
 
-pub fn build_page_preview(
-    release: &GithubRelease,
-    config: &Config,
-) -> Result<Box<section<String>>> {
-    let tag_name = release.tag_name.clone();
-    let title = release.name.clone().unwrap_or(tag_name.clone());
+pub fn build_page_preview(release: &Release, config: &Config) -> Result<Box<section<String>>> {
+    let tag_name = &release.source.tag_name;
+    let title = release.source.name.as_ref().unwrap_or(tag_name);
 
     let id: axohtml::types::Id = axohtml::types::Id::new(tag_name.clone());
-    let formatted_date = match DateTime::parse_from_rfc3339(&release.published_at) {
+    let formatted_date = match DateTime::parse_from_rfc3339(&release.source.published_at) {
         Ok(date) => date.format("%b %e %Y at %R UTC").to_string(),
-        Err(_) => release.published_at.to_owned(),
+        Err(_) => release.source.published_at.to_owned(),
     };
 
-    let classnames = if release.prerelease {
+    let classnames = if release.source.prerelease {
         "release pre-release hidden"
     } else {
         "release"
@@ -90,23 +80,21 @@ pub fn build_page_preview(
     ))
 }
 
-fn build_release_body(release: &GithubRelease, config: &Config) -> Result<String> {
-    let contents = if release.has_dist_manifest() {
-        cargo_dist::fetch_release(config)?
-            .manifest
+fn build_release_body(release: &Release, config: &Config) -> Result<String> {
+    let contents = if let Some(manifest) = &release.manifest {
+        manifest
             .announcement_changelog
+            .clone()
             .unwrap_or(String::new())
     } else {
-        release.body.clone().unwrap_or(String::new())
+        release.source.body.clone().unwrap_or(String::new())
     };
 
     markdown::to_html(&contents, &config.syntax_theme)
 }
 
-fn build_prerelease_toggle(releases: Vec<GithubRelease>) -> Option<Box<div<String>>> {
-    let has_pre_releases = releases.iter().any(|release| release.prerelease);
-
-    if has_pre_releases {
+fn build_prerelease_toggle(has_prereleases: bool) -> Option<Box<div<String>>> {
+    if has_prereleases {
         Some(html!(
     <div class="prereleases-toggle">
         <div class="flex h-6 items-center">

@@ -3,13 +3,13 @@ mod oranda;
 pub mod project;
 pub mod theme;
 
-use self::artifacts::Artifacts;
+use artifacts::Artifacts;
 pub mod analytics;
-use self::analytics::Analytics;
-use self::oranda::{OrandaConfig, Social};
 use crate::errors::*;
 use crate::site::markdown::SyntaxTheme;
+use analytics::Analytics;
 use camino::Utf8PathBuf;
+use oranda::{OrandaConfig, Social};
 use project::ProjectConfig;
 use std::collections::HashMap;
 

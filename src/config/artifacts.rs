@@ -30,6 +30,6 @@ enum ArtifactSystem {
 
 #[derive(Debug, Deserialize)]
 pub struct Artifacts {
-    pub cargo_dist: Option<bool>,
+    pub cargo_dist: bool,
     pub package_managers: Option<LinkedHashMap<String, String>>,
 }

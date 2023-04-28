@@ -1,85 +1,88 @@
+use axohtml::{html, text};
+
+use crate::config::{theme, Config};
+use crate::errors::*;
+
 pub mod css;
 mod footer;
 mod head;
 mod header;
 pub mod javascript;
+use javascript::Analytics;
 
-use crate::config::{analytics, theme, Config};
-use crate::errors::*;
-use axohtml::{elements::div, html, text};
+pub struct Layout {
+    template: String,
+}
 
-pub fn build(config: &Config, content: Vec<Box<div<String>>>, needs_js: bool) -> Result<String> {
-    let theme = theme::css_class(&config.theme);
-    let analytics = analytics::get_analytics(config);
-    let google_script = match &config.analytics {
-        Some(analytics::Analytics::Google(g)) => Some(g.get_script()),
-        _ => None,
-    };
-    let header = match config.no_header {
-        true => None,
-        false => Some(header::create(config)?),
-    };
-    let os_script = match config.artifacts {
-        None => None,
-        Some(_) => {
-            if needs_js {
-                Some(javascript::build_os_script(&config.path_prefix)?)
-            } else {
-                None
-            }
-        }
-    };
-    let homepage = config.homepage.as_ref().map(|homepage| {
-        html!(
-          <meta property="og:url" content=homepage/>
+const BODY_PLACEHOLDER: &str = "{{{BODY}}}";
+const OS_SCRIPT_PLACEHOLDER: &str = "{{{OS_SCRIPT}}}";
+
+impl Layout {
+    pub fn render(&self, body: String, os_script: Option<String>) -> String {
+        self.template
+            .replace(BODY_PLACEHOLDER, &body)
+            .replace(OS_SCRIPT_PLACEHOLDER, &os_script.unwrap_or(String::new()))
+    }
+
+    pub fn new(config: &Config) -> Result<Self> {
+        let theme = theme::css_class(&config.theme);
+        let name = &config.name;
+        let header = match config.no_header {
+            true => None,
+            false => Some(header::create(config)?),
+        };
+        let homepage = config.homepage.as_ref().map(|homepage| {
+            html!(
+              <meta property="og:url" content=homepage/>
+            )
+        });
+        let banner = header::repo_banner(config);
+        let meta_tags = head::create_meta_tags(config);
+        let favicon = if let Some(favicon) = config.favicon.clone() {
+            Some(head::get_favicon(
+                favicon,
+                config.dist_dir.clone(),
+                &config.path_prefix,
+            )?)
+        } else {
+            None
+        };
+        let footer = footer::create_footer(config);
+
+        let additional_css = if !config.additional_css.is_empty() {
+            Some(css::build_additional())
+        } else {
+            None
+        };
+        let oranda_css = css::build_oranda(&config.dist_dir)?;
+        let analytics = Analytics::new(config)?;
+        let template: String = html!(
+        <html lang="en" id="oranda" class=theme>
+            <head>
+                <title>{ text!(name) }</title>
+                {homepage}
+                {favicon}
+                {meta_tags}
+                {oranda_css}
+                {additional_css}
+            </head>
+            <body>
+            <div class="container">
+                {banner}
+                <main>
+                    {header}
+                    <div>{text!(BODY_PLACEHOLDER)}</div>
+                </main>
+                {footer}
+            </div>
+                {analytics.snippet}
+                {analytics.google_script}
+                <div>{text!(OS_SCRIPT_PLACEHOLDER)}</div>
+            </body>
+        </html>
         )
-    });
-    let banner = header::repo_banner(config);
-    let meta_tags = head::create_meta_tags(config);
-    let favicon = if let Some(favicon) = config.favicon.clone() {
-        Some(head::get_favicon(
-            favicon,
-            config.dist_dir.clone(),
-            &config.path_prefix,
-        )?)
-    } else {
-        None
-    };
-    let footer = footer::create_footer(config);
+        .to_string();
 
-    let additional_css = if !config.additional_css.is_empty() {
-        Some(css::build_additional())
-    } else {
-        None
-    };
-    let oranda_css = css::build_oranda(&config.dist_dir)?;
-
-    let doc: String = html!(
-    <html lang="en" id="oranda" class=theme>
-        <head>
-            <title>{ text!(&config.name) }</title>
-            {homepage}
-            {favicon}
-            {meta_tags}
-            {oranda_css}
-            {additional_css}
-        </head>
-        <body>
-        <div class="container">
-            {banner}
-            <main>
-                {header}
-                {content}
-            </main>
-            {footer}
-        </div>
-            {analytics}
-            {google_script}
-            {os_script}
-        </body>
-    </html>
-    )
-    .to_string();
-
-    Ok(doc)
+        Ok(Layout { template })
+    }
 }
