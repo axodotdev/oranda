@@ -1,5 +1,6 @@
 use crate::data::github::{GithubRelease, GithubRepo};
 use crate::errors::*;
+use crate::message::{Message, MessageType};
 
 pub mod cargo_dist;
 use cargo_dist::DistRelease;
@@ -35,18 +36,20 @@ impl Context {
         let mut latest_dist_release = None;
         let mut all = vec![];
         for gh_release in gh_releases {
-            if gh_release.prerelease {
+            if gh_release.prerelease && !has_prereleases {
+                let msg = "Detected pre-releases...";
+                Message::new(MessageType::Info, msg).print();
                 has_prereleases = true
             }
             if !found_latest_dist_release && gh_release.has_dist_manifest() {
                 let release = Release::new(gh_release.clone())?;
                 if let Some(manifest) = release.manifest {
-                    found_latest_dist_release = true;
                     latest_dist_release = Some(DistRelease {
                         manifest,
                         source: gh_release.clone(),
                     });
                 }
+                found_latest_dist_release = latest_dist_release.is_some();
             }
             all.push(Release::new(gh_release)?)
         }

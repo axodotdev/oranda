@@ -1,7 +1,8 @@
 use cargo_dist_schema::DistManifest;
 
-use crate::data::github::GithubRelease;
+use crate::data::{cargo_dist, github::GithubRelease};
 use crate::errors::*;
+use crate::message::{Message, MessageType};
 
 #[derive(Clone, Debug)]
 pub struct Release {
@@ -11,7 +12,7 @@ pub struct Release {
 
 impl Release {
     pub fn new(gh_release: GithubRelease) -> Result<Self> {
-        let manifest = Self::fetch_manifest(gh_release.asset_url("dist_manifest.json"))?;
+        let manifest = Self::fetch_manifest(gh_release.asset_url(cargo_dist::MANIFEST_FILENAME))?;
         Ok(Self {
             manifest,
             source: gh_release,
@@ -23,10 +24,11 @@ impl Release {
             match reqwest::blocking::get(manifest_url)?.error_for_status() {
                 Ok(resp) => match resp.json::<DistManifest>() {
                     Ok(manifest) => Ok(Some(manifest)),
-                    Err(e) => Err(OrandaError::CargoDistManifestParseError {
-                        url: manifest_url.to_string(),
-                        details: e,
-                    }),
+                    Err(e) => {
+                        let msg = format!("Failed to parse dist-manifest at {manifest_url}.\nDetails:{e}\n\nSkipping...");
+                        Message::new(MessageType::Warning, &msg).print();
+                        Ok(None)
+                    }
                 },
                 Err(e) => Err(OrandaError::CargoDistManifestFetchError {
                     url: manifest_url.to_string(),

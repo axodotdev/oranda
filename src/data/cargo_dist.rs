@@ -5,7 +5,9 @@ use crate::config::Config;
 use crate::data::github::GithubRelease;
 use crate::errors::*;
 
-#[derive(Clone)]
+pub const MANIFEST_FILENAME: &str = "dist-manifest.json";
+
+#[derive(Clone, Debug)]
 pub struct DistRelease {
     pub manifest: DistManifest,
     pub source: GithubRelease,
