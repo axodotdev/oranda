@@ -18,6 +18,10 @@
   @apply text-center text-slate-500 pr-2 md:pr-0;
 }
 
+.detect + a {
+  @apply block sm:inline my-2 sm:my-0;
+}
+
 .detect .detected-os {
   @apply capitalize;
 }
