@@ -3,7 +3,7 @@
 }
 
 .button.primary {
-  @apply text-axo-black bg-axo-orange hover:bg-axo-pink border-transparent;
+  @apply text-axo-black hover:text-axo-black bg-axo-orange hover:bg-axo-pink border-transparent;
 }
 
 .button.secondary {

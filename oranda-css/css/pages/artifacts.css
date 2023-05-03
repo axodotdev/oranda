@@ -15,7 +15,11 @@
 }
 
 .detect {
-  @apply text-center text-slate-500;
+  @apply text-center text-slate-500 pr-2 md:pr-0;
+}
+
+.detect + a {
+  @apply block sm:inline my-2 sm:my-0;
 }
 
 .detect .detected-os {
@@ -27,7 +31,7 @@
 }
 
 .artifact-header > h4 {
-  @apply text-center;
+  @apply text-center -mb-2;
 }
 
 .artifact-header {
@@ -35,7 +39,7 @@
 }
 
 .artifact-header > div:not(.install-code-wrapper) {
-  @apply flex gap-4 justify-center items-center mt-4;
+  @apply md:flex md:gap-4 justify-center text-center md:text-left items-center mt-4;
 }
 
 .backup-download {
@@ -56,4 +60,8 @@
 
 .install-code-wrapper > .button.copy-clipboard-button {
   @apply rounded-none border-r-axo-black border-r-2;
+}
+
+.published-date {
+  @apply block mb-2;
 }
