@@ -181,9 +181,6 @@ fn build_install_hint_code(data: &InstallerData, config: &Config) -> Result<Stri
 }
 
 fn get_install_hint(data: &InstallerData, config: &Config) -> Result<(String, String)> {
-    let no_hint_error = OrandaError::Other(
-        "There has been an issue getting your install hint, are you using cargo dist?".to_string(),
-    );
     let hint = data
         .app
         .artifacts
@@ -201,11 +198,10 @@ fn get_install_hint(data: &InstallerData, config: &Config) -> Result<(String, St
         if let (Some(install_hint), Some(name)) = (&current_hint.install_hint, &current_hint.name) {
             let file_path =
                 cargo_dist::write_installer_source(config, name, &data.app.app_version)?;
-            Ok((install_hint.to_string(), file_path))
-        } else {
-            Err(no_hint_error)
+            return Ok((install_hint.to_string(), file_path));
         }
-    } else {
-        Err(no_hint_error)
     }
+    Err(OrandaError::Other(
+        "There has been an issue getting your install hint, are you using cargo dist?".to_string(),
+    ))
 }
