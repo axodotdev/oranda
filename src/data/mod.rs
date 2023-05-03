@@ -17,7 +17,7 @@ pub struct Context {
 
 impl Context {
     pub fn new(repo_url: &str) -> Result<Self> {
-        let repo = GithubRepo::from(repo_url)?;
+        let repo = GithubRepo::from_url(repo_url)?;
         let (releases, has_prereleases, latest_dist_release) = Self::fetch_all_releases(&repo)?;
         Ok(Self {
             repo,

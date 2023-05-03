@@ -10,7 +10,7 @@ pub struct GithubRepo {
 }
 
 impl GithubRepo {
-    pub fn from(repo_url: &str) -> Result<Self> {
+    pub fn from_url(repo_url: &str) -> Result<Self> {
         let repo_parsed = match Url::parse(repo_url).into_diagnostic() {
             Ok(parsed) => Ok(parsed),
             Err(e) => Err(OrandaError::RepoParseError {
