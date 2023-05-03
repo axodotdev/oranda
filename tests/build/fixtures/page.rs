@@ -45,8 +45,9 @@ pub fn index(config: &Config, layout: &Layout) -> Page {
 
 pub fn index_with_artifacts(config: &Config, layout: &Layout) -> Page {
     reset(&config.dist_dir);
-    let body = markdown::to_html(readme(), &config.syntax_theme).unwrap();
-    Page::new_from_contents(body, "index.html", layout)
+    let repo_url = config.repository.as_ref().unwrap();
+    let context = Context::new(repo_url).unwrap();
+    Page::index_with_artifacts(&context, layout, config).unwrap()
 }
 
 pub fn index_with_warning(config: &Config, layout: &Layout) -> Page {

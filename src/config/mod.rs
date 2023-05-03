@@ -5,11 +5,11 @@ pub mod theme;
 
 use artifacts::Artifacts;
 pub mod analytics;
+use crate::config::oranda::{OrandaConfig, Social};
 use crate::errors::*;
 use crate::site::markdown::SyntaxTheme;
 use analytics::Analytics;
 use camino::Utf8PathBuf;
-use oranda::{OrandaConfig, Social};
 use project::ProjectConfig;
 use std::collections::HashMap;
 
