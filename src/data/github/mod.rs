@@ -91,12 +91,7 @@ impl GithubRelease {
     }
 
     pub fn has_dist_manifest(&self) -> bool {
-        for asset in &self.assets {
-            if asset.name == "dist-manifest.json" {
-                return true;
-            }
-        }
-        false
+        self.assets.iter().any(|a| a.name == "dist-manifest.json")
     }
 
     pub fn asset_url<'a>(&'a self, asset_name: &'a str) -> Option<&'a str> {
