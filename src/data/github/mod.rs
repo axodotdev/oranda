@@ -7,7 +7,7 @@ mod repo;
 pub use repo::GithubRepo;
 
 /// From the GitHub Rest API
-/// as documented here: https://docs.github.com/en/rest/releases/releases?apiVersion=2022-11-28
+/// as documented here: <https://docs.github.com/en/rest/releases/releases?apiVersion=2022-11-28>
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct GithubRelease {
     pub url: String,
@@ -28,7 +28,7 @@ pub struct GithubRelease {
 }
 
 /// From the GitHub Rest API
-/// as documented here: https://docs.github.com/en/rest/releases/assets?apiVersion=2022-11-28
+/// as documented here: <https://docs.github.com/en/rest/releases/assets?apiVersion=2022-11-28>
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct GithubReleaseAsset {
     pub url: String,

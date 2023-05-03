@@ -10,6 +10,7 @@ mod header;
 pub mod javascript;
 use javascript::Analytics;
 
+#[derive(Debug)]
 pub struct Layout {
     template: String,
 }
