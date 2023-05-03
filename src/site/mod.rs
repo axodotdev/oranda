@@ -46,8 +46,8 @@ impl Site {
         }
 
         if let Some(repo_url) = &config.repository {
-            let context = Context::new(repo_url)?;
-            if config.artifacts.is_some() {
+            let context = Context::new(repo_url, config.artifacts.cargo_dist)?;
+            if config.artifacts.has_some() {
                 let index = Page::index_with_artifacts(&context, &layout_template, config)?;
                 pages.push(index);
                 if context.latest_dist_release.is_some() {

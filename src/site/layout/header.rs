@@ -31,7 +31,7 @@ async fn fetch_logo(
 fn nav(
     additional_pages: &Option<HashMap<String, String>>,
     path_prefix: &Option<String>,
-    artifacts: &Option<Artifacts>,
+    artifacts: &Artifacts,
     md_book: &Option<String>,
     changelog: &bool,
 ) -> Result<Box<nav<String>>> {
@@ -67,12 +67,10 @@ fn nav(
         }
     }
 
-    if let Some(artifact) = artifacts {
-        if artifact.cargo_dist {
-            Message::new(MessageType::Info, "Adding artifacts page...").print();
-            let href = link::generate(path_prefix, "artifacts.html");
-            html.extend(html!(<li><a href=href>{text!("Install")}</a></li>));
-        }
+    if artifacts.has_some() {
+        Message::new(MessageType::Info, "Adding artifacts page...").print();
+        let href = link::generate(path_prefix, "artifacts.html");
+        html.extend(html!(<li><a href=href>{text!("Install")}</a></li>));
     };
 
     if md_book.is_some() {
@@ -85,7 +83,6 @@ fn nav(
         html.extend(html!(<li><a href=href>{text!("Docs")}</a></li>));
     };
 
-    println!("{:?}", changelog);
     if *changelog {
         Message::new(MessageType::Info, "Adding changelog...").print();
         let href = if let Some(prefix) = &path_prefix {
@@ -113,7 +110,7 @@ pub fn create(config: &Config) -> Result<Box<header<String>>> {
     };
 
     let nav = if config.additional_pages.is_some()
-        || config.artifacts.is_some()
+        || config.artifacts.has_some()
         || config.md_book.is_some()
         || config.changelog
     {

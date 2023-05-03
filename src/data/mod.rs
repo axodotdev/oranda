@@ -16,9 +16,10 @@ pub struct Context {
 }
 
 impl Context {
-    pub fn new(repo_url: &str) -> Result<Self> {
+    pub fn new(repo_url: &str, cargo_dist: bool) -> Result<Self> {
         let repo = GithubRepo::from_url(repo_url)?;
-        let (releases, has_prereleases, latest_dist_release) = Self::fetch_all_releases(&repo)?;
+        let (releases, has_prereleases, latest_dist_release) =
+            Self::fetch_all_releases(&repo, cargo_dist)?;
         Ok(Self {
             repo,
             releases,
@@ -29,6 +30,7 @@ impl Context {
 
     pub fn fetch_all_releases(
         repo: &GithubRepo,
+        cargo_dist: bool,
     ) -> Result<(Vec<Release>, bool, Option<DistRelease>)> {
         let gh_releases = GithubRelease::fetch_all(repo)?;
         let mut has_prereleases = false;
@@ -41,8 +43,8 @@ impl Context {
                 Message::new(MessageType::Info, msg).print();
                 has_prereleases = true
             }
-            if !found_latest_dist_release && gh_release.has_dist_manifest() {
-                let release = Release::new(gh_release.clone())?;
+            if cargo_dist && !found_latest_dist_release && gh_release.has_dist_manifest() {
+                let release = Release::new(gh_release.clone(), cargo_dist)?;
                 if let Some(manifest) = release.manifest {
                     latest_dist_release = Some(DistRelease {
                         manifest,
@@ -51,7 +53,7 @@ impl Context {
                 }
                 found_latest_dist_release = latest_dist_release.is_some();
             }
-            all.push(Release::new(gh_release)?)
+            all.push(Release::new(gh_release, cargo_dist)?)
         }
         Ok((all, has_prereleases, latest_dist_release))
     }

@@ -16,7 +16,6 @@ use std::collections::HashMap;
 use theme::Theme;
 
 #[derive(Debug)]
-
 pub struct Config {
     pub description: String,
     pub dist_dir: String,
@@ -32,7 +31,7 @@ pub struct Config {
     pub analytics: Option<Analytics>,
     pub additional_pages: Option<HashMap<String, String>>,
     pub social: Option<Social>,
-    pub artifacts: Option<Artifacts>,
+    pub artifacts: Artifacts,
     pub version: Option<String>,
     pub logo: Option<String>,
     pub favicon: Option<String>,
@@ -98,7 +97,7 @@ impl Config {
                     analytics: custom.analytics,
                     additional_pages: custom.additional_pages,
                     social: custom.social,
-                    artifacts: custom.artifacts,
+                    artifacts: custom.artifacts.unwrap_or(default.artifacts),
                     version: None,
                     license: None,
                     logo: custom.logo,
@@ -133,7 +132,7 @@ impl Config {
                     analytics: custom.analytics,
                     additional_pages: custom.additional_pages,
                     social: custom.social,
-                    artifacts: custom.artifacts,
+                    artifacts: custom.artifacts.unwrap_or(default.artifacts),
                     version: custom.version.or(project.version),
                     license: custom.license.or(project.license),
                     logo: custom.logo,
@@ -181,7 +180,7 @@ impl Default for Config {
             analytics: None,
             additional_pages: None,
             social: None,
-            artifacts: None,
+            artifacts: Artifacts::default(),
             version: None,
             license: None,
             logo: None,
