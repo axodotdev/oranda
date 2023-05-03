@@ -19,6 +19,11 @@
   @apply heading-6;
 }
 
+.release-body ul,
+.release-body li {
+  @apply list-disc;
+}
+
 .releases-nav {
   @apply top-12 sticky self-start  w-max;
 }
