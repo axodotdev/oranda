@@ -1,21 +1,20 @@
+use assert_fs::TempDir;
 use oranda::site::layout::Layout;
 
 mod fixtures;
 use super::utils::tokio_utils::TEST_RUNTIME;
 use fixtures::{oranda_config, page};
 
-fn temp_build_dir() -> String {
-    assert_fs::TempDir::new()
-        .unwrap()
-        .to_str()
-        .unwrap()
-        .to_string()
+fn temp_build_dir() -> (TempDir, String) {
+    let dir = assert_fs::TempDir::new().unwrap();
+    let dir_str = dir.to_str().unwrap().to_string();
+    (dir, dir_str)
 }
 
 #[test]
 fn it_adds_additional_css() {
     let _guard = TEST_RUNTIME.enter();
-    let temp_dir = temp_build_dir();
+    let (_t, temp_dir) = temp_build_dir();
     let config = oranda_config::no_artifacts(temp_dir);
     let layout = Layout::new(&config).unwrap();
     let page = page::index(&config, &layout);
@@ -27,7 +26,7 @@ fn it_adds_additional_css() {
 #[test]
 fn it_renders_changelog_with_no_cargo_dist() {
     let _guard = TEST_RUNTIME.enter();
-    let temp_dir = temp_build_dir();
+    let (_t, temp_dir) = temp_build_dir();
     let config = oranda_config::changelog(temp_dir);
     let layout = Layout::new(&config).unwrap();
     let page = page::changelog(&config, &layout);
@@ -37,7 +36,7 @@ fn it_renders_changelog_with_no_cargo_dist() {
 #[test]
 fn it_renders_changelog_with_release_content() {
     let _guard = TEST_RUNTIME.enter();
-    let temp_dir = temp_build_dir();
+    let (_t, temp_dir) = temp_build_dir();
     let config = oranda_config::changelog(temp_dir);
     let layout = Layout::new(&config).unwrap();
     let page = page::changelog(&config, &layout);
@@ -47,7 +46,7 @@ fn it_renders_changelog_with_release_content() {
 #[test]
 fn it_adds_oranda_css() {
     let _guard = TEST_RUNTIME.enter();
-    let temp_dir = temp_build_dir();
+    let (_t, temp_dir) = temp_build_dir();
     let config = oranda_config::no_artifacts(temp_dir);
     let layout = Layout::new(&config).unwrap();
     let page = page::index(&config, &layout);
@@ -59,7 +58,7 @@ fn it_adds_oranda_css() {
 #[test]
 fn it_builds_the_site() {
     let _guard = TEST_RUNTIME.enter();
-    let temp_dir = temp_build_dir();
+    let (_t, temp_dir) = temp_build_dir();
     let config = oranda_config::no_artifacts(temp_dir);
     let layout = Layout::new(&config).unwrap();
     let page = page::index(&config, &layout);
@@ -70,7 +69,7 @@ fn it_builds_the_site() {
 #[test]
 fn reads_description() {
     let _guard = TEST_RUNTIME.enter();
-    let temp_dir = temp_build_dir();
+    let (_t, temp_dir) = temp_build_dir();
     let config = oranda_config::no_artifacts(temp_dir);
     let layout = Layout::new(&config).unwrap();
     let page = page::index(&config, &layout);
@@ -81,7 +80,7 @@ fn reads_description() {
 #[test]
 fn reads_theme() {
     let _guard = TEST_RUNTIME.enter();
-    let temp_dir = temp_build_dir();
+    let (_t, temp_dir) = temp_build_dir();
     let config = oranda_config::no_artifacts(temp_dir);
     let layout = Layout::new(&config).unwrap();
     let page = page::index(&config, &layout);
@@ -91,7 +90,7 @@ fn reads_theme() {
 #[test]
 fn creates_nav() {
     let _guard = TEST_RUNTIME.enter();
-    let temp_dir = temp_build_dir();
+    let (_t, temp_dir) = temp_build_dir();
     let config = oranda_config::no_artifacts(temp_dir);
     let layout = Layout::new(&config).unwrap();
     let page = page::index(&config, &layout);
@@ -101,7 +100,7 @@ fn creates_nav() {
 #[test]
 fn creates_nav_no_additional_pages() {
     let _guard = TEST_RUNTIME.enter();
-    let temp_dir = temp_build_dir();
+    let (_t, temp_dir) = temp_build_dir();
     let config = oranda_config::no_artifacts(temp_dir);
     let layout = Layout::new(&config).unwrap();
     let page = page::index(&config, &layout);
@@ -111,7 +110,7 @@ fn creates_nav_no_additional_pages() {
 #[test]
 fn creates_footer() {
     let _guard = TEST_RUNTIME.enter();
-    let temp_dir = temp_build_dir();
+    let (_t, temp_dir) = temp_build_dir();
     let config = oranda_config::no_artifacts(temp_dir);
     let layout = Layout::new(&config).unwrap();
     let page = page::index(&config, &layout);
@@ -123,7 +122,7 @@ fn creates_footer() {
 #[test]
 fn creates_nav_item() {
     let _guard = TEST_RUNTIME.enter();
-    let temp_dir = temp_build_dir();
+    let (_t, temp_dir) = temp_build_dir();
     let config = oranda_config::cargo_dist(temp_dir);
     let layout = Layout::new(&config).unwrap();
     let page = page::index_with_artifacts(&config, &layout);
@@ -135,7 +134,7 @@ fn creates_nav_item() {
 #[test]
 fn loads_js() {
     let _guard = TEST_RUNTIME.enter();
-    let temp_dir = temp_build_dir();
+    let (_t, temp_dir) = temp_build_dir();
     let config = oranda_config::cargo_dist(temp_dir);
     let layout = Layout::new(&config).unwrap();
     let page = page::index_with_artifacts(&config, &layout);
@@ -145,7 +144,7 @@ fn loads_js() {
 #[test]
 fn creates_download_for_mac() {
     let _guard = TEST_RUNTIME.enter();
-    let temp_dir = temp_build_dir();
+    let (_t, temp_dir) = temp_build_dir();
     let config = oranda_config::cargo_dist(temp_dir);
     let layout = Layout::new(&config).unwrap();
     let page = page::index_with_artifacts(&config, &layout);
@@ -155,7 +154,7 @@ fn creates_download_for_mac() {
 #[test]
 fn creates_downloads_page() {
     let _guard = TEST_RUNTIME.enter();
-    let temp_dir = temp_build_dir();
+    let (_t, temp_dir) = temp_build_dir();
     let config = oranda_config::cargo_dist(temp_dir);
     let layout = Layout::new(&config).unwrap();
     let artifacts_page = page::artifacts(&config, &layout);
@@ -171,7 +170,7 @@ fn creates_downloads_page() {
 #[test]
 fn creates_nav_item_install() {
     let _guard = TEST_RUNTIME.enter();
-    let temp_dir = temp_build_dir();
+    let (_t, temp_dir) = temp_build_dir();
     let config = oranda_config::package_managers(temp_dir);
     let layout = Layout::new(&config).unwrap();
     let page = page::index_with_artifacts(&config, &layout);
@@ -181,7 +180,7 @@ fn creates_nav_item_install() {
 #[test]
 fn creates_copy_to_clipboard_home() {
     let _guard = TEST_RUNTIME.enter();
-    let temp_dir = temp_build_dir();
+    let (_t, temp_dir) = temp_build_dir();
     let config = oranda_config::cargo_dist(temp_dir);
     let layout = Layout::new(&config).unwrap();
     let page = page::index_with_artifacts(&config, &layout);
@@ -192,7 +191,7 @@ fn creates_copy_to_clipboard_home() {
 #[test]
 fn creates_copy_to_clipboard_artifacts() {
     let _guard = TEST_RUNTIME.enter();
-    let temp_dir = temp_build_dir();
+    let (_t, temp_dir) = temp_build_dir();
     let config = oranda_config::package_managers(temp_dir);
     let layout = Layout::new(&config).unwrap();
     let page = page::artifacts(&config, &layout);
@@ -204,7 +203,7 @@ fn creates_copy_to_clipboard_artifacts() {
 #[test]
 fn adds_prefix() {
     let _guard = TEST_RUNTIME.enter();
-    let temp_dir = temp_build_dir();
+    let (_t, temp_dir) = temp_build_dir();
     let config = oranda_config::path_prefix(temp_dir);
     let layout = Layout::new(&config).unwrap();
     let page = page::index_with_artifacts(&config, &layout);
@@ -217,7 +216,7 @@ fn adds_prefix() {
 #[test]
 fn adds_changelog_nav() {
     let _guard = TEST_RUNTIME.enter();
-    let temp_dir = temp_build_dir();
+    let (_t, temp_dir) = temp_build_dir();
     let config = oranda_config::changelog(temp_dir);
     let layout = Layout::new(&config).unwrap();
     let page = page::index(&config, &layout);
@@ -227,7 +226,7 @@ fn adds_changelog_nav() {
 #[test]
 fn it_renders_code_blocks_with_invalid_annotations() {
     let _guard = TEST_RUNTIME.enter();
-    let temp_dir = temp_build_dir();
+    let (_t, temp_dir) = temp_build_dir();
     let config = oranda_config::no_artifacts(temp_dir);
     let layout = Layout::new(&config).unwrap();
     let page = page::index_with_warning(&config, &layout);
