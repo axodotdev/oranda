@@ -11,14 +11,13 @@ pub struct GithubRepo {
 
 impl GithubRepo {
     pub fn from_url(repo_url: &str) -> Result<Self> {
-        let repo_parsed = match Url::parse(repo_url).into_diagnostic() {
-            Ok(parsed) => Ok(parsed),
-            Err(e) => Err(OrandaError::RepoParseError {
-                repo: repo_url.to_string(),
-                details: e,
-            }),
-        };
-        let binding = repo_parsed?;
+        let binding =
+            Url::parse(repo_url)
+                .into_diagnostic()
+                .map_err(|e| OrandaError::RepoParseError {
+                    repo: repo_url.to_string(),
+                    details: e,
+                })?;
         let segment_list = binding.path_segments().map(|c| c.collect::<Vec<_>>());
         if let Some(segments) = segment_list {
             if segments.len() == 2 {
