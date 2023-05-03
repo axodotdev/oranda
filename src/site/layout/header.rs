@@ -68,7 +68,7 @@ fn nav(
     }
 
     if let Some(artifact) = artifacts {
-        if artifact.cargo_dist.is_some() {
+        if artifact.cargo_dist {
             Message::new(MessageType::Info, "Adding artifacts page...").print();
             let href = link::generate(path_prefix, "artifacts.html");
             html.extend(html!(<li><a href=href>{text!("Install")}</a></li>));

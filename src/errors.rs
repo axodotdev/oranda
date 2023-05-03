@@ -50,8 +50,11 @@ pub enum OrandaError {
         details: reqwest::Error,
     },
 
-    #[error("Could not find any releases from {repo} with a cargo-dist compatible `dist-manifest.json`.")]
-    NoCargoDistReleasesFound { repo: String },
+    #[error("Could not find any releases from {repo_owner}/{repo_name} with a cargo-dist compatible `dist-manifest.json`.")]
+    NoCargoDistReleasesFound {
+        repo_owner: String,
+        repo_name: String,
+    },
 
     #[error(transparent)]
     FSExtra(#[from] fs_extra::error::Error),

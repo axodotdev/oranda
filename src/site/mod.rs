@@ -1,18 +1,21 @@
 use std::path::Path;
 
-use crate::data::{artifacts, changelog};
-pub mod layout;
-pub mod link;
-use layout::{css, javascript};
-pub mod markdown;
-pub mod page;
-use page::Page;
+use axoasset::LocalAsset;
 
 use crate::config::Config;
+use crate::data::Context;
 use crate::errors::*;
 use crate::message::{Message, MessageType};
 
-use axoasset::LocalAsset;
+pub mod artifacts;
+pub mod icons;
+pub mod layout;
+use layout::{css, javascript, Layout};
+pub mod link;
+pub mod markdown;
+pub mod page;
+use page::Page;
+pub mod changelog;
 
 #[derive(Debug)]
 pub struct Site {
@@ -22,12 +25,14 @@ pub struct Site {
 impl Site {
     pub fn build(config: &Config) -> Result<Site> {
         Self::clean_dist_dir(&config.dist_dir)?;
-        let index = Page::new_from_file(config, &config.readme_path, true)?;
-        let mut pages = vec![index];
+
+        let mut pages = vec![];
+        let layout_template = Layout::new(config)?;
+
         if let Some(files) = &config.additional_pages {
             for file_path in files.values() {
                 if page::source::is_markdown(file_path) {
-                    let additional_page = Page::new_from_file(config, file_path, false)?;
+                    let additional_page = Page::new_from_file(file_path, &layout_template, config)?;
                     pages.push(additional_page)
                 } else {
                     let msg = format!(
@@ -39,15 +44,27 @@ impl Site {
             }
         }
 
-        if config.artifacts.is_some() {
-            let artifacts_html = artifacts::page::build(config)?;
-            let artifacts_page = Page::new_from_contents(artifacts_html, "artifacts.html", true);
-            pages.push(artifacts_page)
-        }
-        if config.changelog {
-            let changelog_html = changelog::build(config)?;
-            let changelog_page = Page::new_from_contents(changelog_html, "changelog.html", true);
-            pages.push(changelog_page)
+        if let Some(repo_url) = &config.repository {
+            let context = Context::new(repo_url)?;
+            if config.artifacts.is_some() {
+                let index = Page::index_with_artifacts(&context, &layout_template, config)?;
+                pages.push(index);
+                if context.latest_dist_release.is_some() {
+                    let body = artifacts::page(&context, config)?;
+                    let artifacts_page =
+                        Page::new_from_contents(body, "artifacts.html", &layout_template);
+                    pages.push(artifacts_page);
+                }
+            } else {
+                let index = Page::index(&layout_template, config)?;
+                pages.push(index);
+            }
+            if config.changelog {
+                let changelog_html = changelog::build(&context, config)?;
+                let changelog_page =
+                    Page::new_from_contents(changelog_html, "changelog.html", &layout_template);
+                pages.push(changelog_page);
+            }
         }
 
         Ok(Site { pages })
@@ -64,8 +81,7 @@ impl Site {
     pub fn write(self, config: &Config) -> Result<()> {
         let dist = &config.dist_dir;
         for page in self.pages {
-            let contents = page.build(config)?;
-            LocalAsset::write_new(&contents, &page.filename, dist)?;
+            LocalAsset::write_new(&page.contents, &page.filename, dist)?;
         }
         if let Some(book_path) = &config.md_book {
             Self::copy_static(dist, book_path)?;
