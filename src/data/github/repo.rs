@@ -3,7 +3,7 @@ use crate::errors::*;
 use miette::{miette, IntoDiagnostic};
 use url::Url;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GithubRepo {
     pub owner: String,
     pub name: String,
