@@ -50,9 +50,21 @@ assert_fs = "1.0.7"
 inherits = "release"
 lto = "thin"
 
+# Config for 'cargo dist'
 [workspace.metadata.dist]
-cargo-dist-version = "0.0.5"
+# The preferred cargo-dist version to use in CI (Cargo.toml SemVer syntax)
+cargo-dist-version = "0.0.6-prerelease.8"
+# The preferred Rust toolchain to use in CI (rustup toolchain syntax)
 rust-toolchain-version = "stable"
+# CI backends to support (see 'cargo dist generate-ci')
 ci = ["github"]
-installers = ["shell", "powershell"]
+# The installers to generate for each app
+installers = ["shell", "powershell", "npm"]
+# Target platforms to build apps for (Rust target-triple syntax)
 targets = ["x86_64-unknown-linux-gnu", "x86_64-apple-darwin", "x86_64-pc-windows-msvc", "aarch64-apple-darwin"]
+# The archive format to use for windows builds (defaults .zip)
+windows-archive = ".tar.gz"
+# The archive format to use for non-windows builds (defaults .tar.xz)
+unix-archive = ".tar.gz"
+# A namespace to use when publishing this package to the npm registry
+npm-scope = "@axodotdev"

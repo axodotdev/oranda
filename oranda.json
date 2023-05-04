@@ -11,7 +11,10 @@
   "artifacts": {
     "cargo_dist": true,
     "package_managers": {
-      "crates.io": "cargo install oranda --locked --profile=dist"
+      "npm": "npm install @axodotdev/oranda --save-dev",
+      "npx": "npx @axodotdev/oranda",
+      "crates.io": "cargo install oranda --locked --profile=dist",
+      "binstall": "cargo binstall oranda"
     }
   },
   "analytics": {
