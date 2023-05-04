@@ -2,7 +2,7 @@
 
 Oranda comes with two default themes:
 
-## ADD IMAGES UNDER EACH
+## TODO: ADD IMAGES UNDER EACH
 
 - Light
 - Dark
