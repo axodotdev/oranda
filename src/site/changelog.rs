@@ -19,9 +19,9 @@ pub fn build(context: &Context, config: &Config) -> Result<String> {
             ""
         };
 
-        let link = format!("#{}", &release.source.tag_name);
+        let link = format!("changelog/{}.html", &release.source.tag_name);
 
-        releases_html.extend(build_page_preview(release, config)?);
+        releases_html.extend(build_page_preview(release, config, true)?);
         releases_nav.extend(
             html!(<li class=classnames><a href=link>{text!(&release.source.tag_name)}</a></li>),
         )
@@ -44,7 +44,46 @@ pub fn build(context: &Context, config: &Config) -> Result<String> {
     .to_string())
 }
 
-pub fn build_page_preview(release: &Release, config: &Config) -> Result<Box<section<String>>> {
+/// Builds a page for every release. Returns a vec of tuples, the first element being the
+/// release name to be used for the filename, and the second element being the content of
+/// the page itself.
+pub fn build_all(context: &Context, config: &Config) -> Result<Vec<(String, String)>> {
+    let mut releases = vec![];
+    for release in context.releases.iter() {
+        releases.push((
+            release.source.tag_name.clone(),
+            build_single_release(config, release)?,
+        ))
+    }
+
+    Ok(releases)
+}
+
+/// Builds a single, standalone release page.
+pub fn build_single_release(config: &Config, release: &Release) -> Result<String> {
+    let preview = build_page_preview(release, config, false);
+    let title = release
+        .source
+        .name
+        .as_ref()
+        .unwrap_or(&release.source.tag_name);
+
+    Ok(html!(
+         <div>
+            <h1>{text!(title)}</h1>
+            <div class="releases-body">
+                {preview}
+            </div>
+        </div>
+    )
+    .to_string())
+}
+
+pub fn build_page_preview(
+    release: &Release,
+    config: &Config,
+    is_page: bool,
+) -> Result<Box<section<String>>> {
     let tag_name = &release.source.tag_name;
     let title = release.source.name.as_ref().unwrap_or(tag_name);
 
@@ -59,24 +98,29 @@ pub fn build_page_preview(release: &Release, config: &Config) -> Result<Box<sect
     } else {
         "release"
     };
-    let link = format!("#{}", &tag_name);
+    let link = if is_page {
+        format!("changelog/{}.html", &tag_name)
+    } else {
+        format!("#{}", &tag_name)
+    };
     let body = build_release_body(release, config)?;
+    let header_class = if is_page { "" } else { "hidden" };
 
     Ok(html!(
-    <section class=classnames>
-        <h2 id=id><a href=link>{text!(title)}</a></h2>
-        <div class="release-info">
-            <span class="flex items-center gap-2">
-                {icons::tag()}{text!(tag_name)}
-            </span>
-            <span class="flex items-center gap-2">
-                {icons::date()}{text!(&formatted_date)}
-            </span>
-        </div>
-        <div class="release-body mb-6">
-            {unsafe_text!(body)}
-        </div>
-    </section>
+        <section class=classnames>
+            <h2 class=header_class id=id><a href=link>{text!(title)}</a></h2>
+            <div class="release-info">
+                <span class="flex items-center gap-2">
+                    {icons::tag()}{text!(tag_name)}
+                </span>
+                <span class="flex items-center gap-2">
+                    {icons::date()}{text!(&formatted_date)}
+                </span>
+            </div>
+            <div class="release-body mb-6">
+                {unsafe_text!(body)}
+            </div>
+        </section>
     ))
 }
 

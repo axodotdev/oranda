@@ -24,7 +24,8 @@ fn concat_minify(css_files: &[String]) -> Result<String> {
     Ok(css)
 }
 
-pub fn build_oranda(dist_dir: &str) -> Result<Box<link<String>>> {
+pub fn build_oranda(dist_dir: &str, path_prefix: &Option<String>) -> Result<Box<link<String>>> {
+    let dist_dir = dist_dir;
     match env::var("ORANDA_CSS") {
         Ok(path) => {
             let msg = format!("Overriding oranda_css path with {}", &path);
@@ -40,7 +41,8 @@ pub fn build_oranda(dist_dir: &str) -> Result<Box<link<String>>> {
             fs::rename(fetched_oranda, format!("{dist_dir}/{path}"))?;
         }
     };
-    Ok(html!(<link rel="stylesheet" href="oranda.css"></link>))
+    let abs_path = crate::site::link::generate(path_prefix, "oranda.css");
+    Ok(html!(<link rel="stylesheet" href=abs_path></link>))
 }
 
 pub fn build_additional() -> Box<link<String>> {

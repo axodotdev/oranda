@@ -1,6 +1,7 @@
 use std::path::Path;
 
 use axoasset::LocalAsset;
+use camino::Utf8Path;
 
 use crate::config::Config;
 use crate::data::Context;
@@ -63,7 +64,16 @@ impl Site {
                 let changelog_html = changelog::build(&context, config)?;
                 let changelog_page =
                     Page::new_from_contents(changelog_html, "changelog.html", &layout_template);
+                let changelog_releases = changelog::build_all(&context, config)?;
                 pages.push(changelog_page);
+                for (name, content) in changelog_releases {
+                    let page = Page::new_from_contents(
+                        content,
+                        &format!("changelog/{}.html", name),
+                        &layout_template,
+                    );
+                    pages.push(page);
+                }
             }
         }
 
@@ -81,7 +91,15 @@ impl Site {
     pub fn write(self, config: &Config) -> Result<()> {
         let dist = &config.dist_dir;
         for page in self.pages {
-            LocalAsset::write_new(&page.contents, &page.filename, dist)?;
+            // FIXME: We have to do some gymnastics here due to `LocalAsset::write_new_all` taking filename and dest
+            // path separately. Hopefully in a future version of axoasset, this only takes one parameter instead of
+            // two, and we can just add the page filename to the dest path and pass it in.
+            let full_path = Utf8Path::new(&config.dist_dir).join(&page.filename);
+            LocalAsset::write_new_all(
+                &page.contents,
+                full_path.file_name().unwrap(),
+                full_path.parent().unwrap().as_str(),
+            )?;
         }
         if let Some(book_path) = &config.md_book {
             Self::copy_static(dist, book_path)?;
