@@ -19,7 +19,7 @@ pub fn build(context: &Context, config: &Config) -> Result<String> {
             ""
         };
 
-        let link = format!("{}.html", &release.source.tag_name);
+        let link = format!("changelog/{}.html", &release.source.tag_name);
 
         releases_html.extend(build_page_preview(release, config, true)?);
         releases_nav.extend(
@@ -103,7 +103,7 @@ pub fn build_page_preview(
         "release"
     };
     let link = if is_page {
-        format!("{}.html", &tag_name)
+        format!("changelog/{}.html", &tag_name)
     } else {
         format!("#{}", &tag_name)
     };

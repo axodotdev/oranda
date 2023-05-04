@@ -12,7 +12,7 @@ name = "oranda"
 
 [dependencies]
 ammonia = "3"
-axoasset = {version = "0.1.1", features = ["json-serde"] }
+axoasset = {version = "0.2.0", features = ["json-serde"] }
 axohtml = "0.5.0"
 axoproject = { version = "0.1.0", default-features = false, features = ["cargo-projects", "npm-projects"] }
 axum = "0.6.2"
