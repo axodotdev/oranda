@@ -28,8 +28,16 @@ enum ArtifactSystem {
     Freebsd,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Default, Deserialize)]
 pub struct Artifacts {
+    #[serde(default)]
     pub cargo_dist: bool,
+    #[serde(default)]
     pub package_managers: Option<LinkedHashMap<String, String>>,
+}
+
+impl Artifacts {
+    pub fn has_some(&self) -> bool {
+        self.cargo_dist || self.package_managers.is_some()
+    }
 }

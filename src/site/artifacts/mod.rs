@@ -23,7 +23,7 @@ fn has_valid_setup(
 }
 
 pub fn page(context: &Context, config: &Config) -> Result<String> {
-    let artifacts = config.artifacts.as_ref().unwrap();
+    let artifacts = &config.artifacts;
     let release = &context.latest_dist_release;
 
     let (installer_list, artifact_table) = if let Some(release) =
@@ -59,7 +59,7 @@ pub fn page(context: &Context, config: &Config) -> Result<String> {
 }
 
 pub fn header(context: &Context, config: &Config) -> Result<String> {
-    let artifacts = config.artifacts.as_ref().unwrap();
+    let artifacts = &config.artifacts;
     if artifacts.cargo_dist {
         if let Some(release) = &context.latest_dist_release {
             return Ok(installers::build_header(release, config)?.to_string());
@@ -69,6 +69,6 @@ pub fn header(context: &Context, config: &Config) -> Result<String> {
         return Ok(package_managers::build_header(config, package_managers)?.to_string());
     }
     Err(OrandaError::Other(
-        "Can't have artifacts header with no artfacts".to_string(),
+        "Can't have artifacts header with no artifacts".to_string(),
     ))
 }

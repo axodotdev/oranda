@@ -11,8 +11,12 @@ pub struct Release {
 }
 
 impl Release {
-    pub fn new(gh_release: GithubRelease) -> Result<Self> {
-        let manifest = Self::fetch_manifest(gh_release.asset_url(cargo_dist::MANIFEST_FILENAME))?;
+    pub fn new(gh_release: GithubRelease, cargo_dist: bool) -> Result<Self> {
+        let manifest = if cargo_dist {
+            Self::fetch_manifest(gh_release.asset_url(cargo_dist::MANIFEST_FILENAME))?
+        } else {
+            None
+        };
         Ok(Self {
             manifest,
             source: gh_release,
