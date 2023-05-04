@@ -63,6 +63,15 @@ impl Site {
                 let changelog_html = changelog::build(&context, config)?;
                 let changelog_page =
                     Page::new_from_contents(changelog_html, "changelog.html", &layout_template);
+                let changelog_releases = changelog::build_all(&context, config)?;
+                for (name, content) in changelog_releases {
+                    let page = Page::new_from_contents(
+                        content,
+                        &format!("{}.html", name),
+                        &layout_template,
+                    );
+                    pages.push(page);
+                }
                 pages.push(changelog_page);
             }
         }
