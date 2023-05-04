@@ -52,7 +52,7 @@ fn it_adds_oranda_css() {
     let page = page::index(&config, &layout);
     assert!(page
         .contents
-        .contains("<link href=\"oranda.css\" rel=\"stylesheet\"/>"));
+        .contains("<link href=\"/oranda.css\" rel=\"stylesheet\"/>"));
 }
 
 #[test]
