@@ -52,7 +52,7 @@ pub fn build_all(context: &Context, config: &Config) -> Result<Vec<(String, Stri
     for release in context.releases.iter() {
         releases.push((
             release.source.tag_name.clone(),
-            build_single_release(context, config, release)?,
+            build_single_release(config, release)?,
         ))
     }
 
@@ -60,11 +60,7 @@ pub fn build_all(context: &Context, config: &Config) -> Result<Vec<(String, Stri
 }
 
 /// Builds a single, standalone release page.
-pub fn build_single_release(
-    _context: &Context,
-    config: &Config,
-    release: &Release,
-) -> Result<String> {
+pub fn build_single_release(config: &Config, release: &Release) -> Result<String> {
     let preview = build_page_preview(release, config, false);
     let title = release
         .source
