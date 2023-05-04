@@ -35,6 +35,7 @@ impl Context {
         let gh_releases = GithubRelease::fetch_all(repo)?;
         let mut has_prereleases = false;
         let mut found_latest_dist_release = false;
+        let mut warned = false;
         let mut latest_dist_release = None;
         let mut all = vec![];
         for gh_release in gh_releases {
@@ -43,15 +44,21 @@ impl Context {
                 Message::new(MessageType::Info, msg).print();
                 has_prereleases = true
             }
-            if cargo_dist && !found_latest_dist_release && gh_release.has_dist_manifest() {
-                let release = Release::new(gh_release.clone(), cargo_dist)?;
-                if let Some(manifest) = release.manifest {
-                    latest_dist_release = Some(DistRelease {
-                        manifest,
-                        source: gh_release.clone(),
-                    });
+            if !found_latest_dist_release && gh_release.has_dist_manifest() {
+                if cargo_dist {
+                    let release = Release::new(gh_release.clone(), cargo_dist)?;
+                    if let Some(manifest) = release.manifest {
+                        latest_dist_release = Some(DistRelease {
+                            manifest,
+                            source: gh_release.clone(),
+                        });
+                    }
+                    found_latest_dist_release = latest_dist_release.is_some();
+                } else if !warned {
+                    let msg = "You have not configured cargo-dist yet we detected dist-manifests in your releases. Is this intended?";
+                    Message::new(MessageType::Warning, msg).print();
+                    warned = true;
                 }
-                found_latest_dist_release = latest_dist_release.is_some();
             }
             all.push(Release::new(gh_release, cargo_dist)?)
         }
