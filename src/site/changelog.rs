@@ -19,7 +19,7 @@ pub fn build(context: &Context, config: &Config) -> Result<String> {
             ""
         };
 
-        let link = format!("#{}", &release.source.tag_name);
+        let link = format!("{}.html", &release.source.tag_name);
 
         releases_html.extend(build_page_preview(release, config, true)?);
         releases_nav.extend(
@@ -66,10 +66,15 @@ pub fn build_single_release(
     release: &Release,
 ) -> Result<String> {
     let preview = build_page_preview(release, config, false);
+    let title = release
+        .source
+        .name
+        .as_ref()
+        .unwrap_or(&release.source.tag_name);
 
     Ok(html!(
          <div>
-            <h1>{text!(format!("Release {}", &release.source.tag_name))}</h1>
+            <h1>{text!(title)}</h1>
             <div class="releases-body">
                 {preview}
             </div>
@@ -81,7 +86,7 @@ pub fn build_single_release(
 pub fn build_page_preview(
     release: &Release,
     config: &Config,
-    include_header: bool,
+    is_page: bool,
 ) -> Result<Box<section<String>>> {
     let tag_name = &release.source.tag_name;
     let title = release.source.name.as_ref().unwrap_or(tag_name);
@@ -97,9 +102,13 @@ pub fn build_page_preview(
     } else {
         "release"
     };
-    let link = format!("#{}", &tag_name);
+    let link = if is_page {
+        format!("{}.html", &tag_name)
+    } else {
+        format!("#{}", &tag_name)
+    };
     let body = build_release_body(release, config)?;
-    let header_class = if include_header { "" } else { "hidden" };
+    let header_class = if is_page { "" } else { "hidden" };
 
     Ok(html!(
         <section class=classnames>
