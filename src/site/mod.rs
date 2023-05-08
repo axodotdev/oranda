@@ -58,9 +58,6 @@ impl Site {
                         Page::new_from_contents(body, "artifacts.html", &layout_template, config);
                     pages.push(artifacts_page);
                 }
-            } else {
-                let index = Page::index(&layout_template, config)?;
-                pages.push(index);
             }
             if config.changelog {
                 let changelog_html = changelog::build(&context, config)?;
@@ -82,6 +79,9 @@ impl Site {
                     pages.push(page);
                 }
             }
+        } else {
+            let index = Page::index(&layout_template, config)?;
+            pages.push(index);
         }
 
         Ok(Site { pages })
