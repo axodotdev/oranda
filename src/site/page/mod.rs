@@ -52,8 +52,14 @@ impl Page {
         })
     }
 
-    pub fn new_from_contents(body: String, filename: &str, layout: &Layout) -> Self {
-        let contents = layout.render(body, None);
+    pub fn new_from_contents(
+        body: String,
+        filename: &str,
+        layout: &Layout,
+        config: &Config,
+    ) -> Self {
+        let os_script = javascript::build_os_script(&config.path_prefix);
+        let contents = layout.render(body, Some(os_script));
         Page {
             contents,
             filename: filename.to_string(),
