@@ -20,7 +20,7 @@ fn it_adds_additional_css() {
     let page = page::index(&config, &layout);
     assert!(page
         .contents
-        .contains("<link href=\"custom.css\" rel=\"stylesheet\"/>"));
+        .contains("<link href=\"/custom.css\" rel=\"stylesheet\"/>"));
 }
 
 #[test]

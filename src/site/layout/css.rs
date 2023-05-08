@@ -45,8 +45,9 @@ pub fn build_oranda(dist_dir: &str, path_prefix: &Option<String>) -> Result<Box<
     Ok(html!(<link rel="stylesheet" href=abs_path></link>))
 }
 
-pub fn build_additional() -> Box<link<String>> {
-    html!(<link rel="stylesheet" href="custom.css"></link>)
+pub fn build_additional(path_prefix: &Option<String>) -> Box<link<String>> {
+    let abs_path = crate::site::link::generate(path_prefix, "custom.css");
+    html!(<link rel="stylesheet" href=abs_path></link>)
 }
 
 pub fn write_additional(additional_css: &[String], dist_dir: &str) -> Result<()> {

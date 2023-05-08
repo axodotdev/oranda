@@ -51,7 +51,7 @@ impl Layout {
         let footer = footer::create_footer(config);
 
         let additional_css = if !config.additional_css.is_empty() {
-            Some(css::build_additional())
+            Some(css::build_additional(&config.path_prefix))
         } else {
             None
         };
