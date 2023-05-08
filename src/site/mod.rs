@@ -55,7 +55,7 @@ impl Site {
                 {
                     let body = artifacts::page(&context, config)?;
                     let artifacts_page =
-                        Page::new_from_contents(body, "artifacts.html", &layout_template);
+                        Page::new_from_contents(body, "artifacts.html", &layout_template, config);
                     pages.push(artifacts_page);
                 }
             } else {
@@ -64,8 +64,12 @@ impl Site {
             }
             if config.changelog {
                 let changelog_html = changelog::build(&context, config)?;
-                let changelog_page =
-                    Page::new_from_contents(changelog_html, "changelog.html", &layout_template);
+                let changelog_page = Page::new_from_contents(
+                    changelog_html,
+                    "changelog.html",
+                    &layout_template,
+                    config,
+                );
                 let changelog_releases = changelog::build_all(&context, config)?;
                 pages.push(changelog_page);
                 for (name, content) in changelog_releases {
@@ -73,6 +77,7 @@ impl Site {
                         content,
                         &format!("changelog/{}.html", name),
                         &layout_template,
+                        config,
                     );
                     pages.push(page);
                 }
