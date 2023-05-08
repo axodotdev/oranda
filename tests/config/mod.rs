@@ -2,7 +2,7 @@ mod fixtures;
 use super::utils::tokio_utils::TEST_RUNTIME;
 use fixtures::project_config;
 
-use oranda::config::project::ProjectConfig;
+use oranda::config::project::{JavaScript, ProjectConfig, Rust, Type};
 
 use assert_fs::fixture::{FileWriteStr, PathChild};
 
@@ -15,10 +15,8 @@ fn it_detects_a_js_project() {
         .expect("failed to write package_json");
 
     assert_eq!(
-        ProjectConfig::get_project(&Some(tempdir.path().to_path_buf()))
-            .unwrap()
-            .kind,
-        axoproject::WorkspaceKind::Javascript
+        ProjectConfig::detect(&Some(tempdir.path().to_path_buf())),
+        Some(Type::JavaScript(JavaScript {}))
     );
     tempdir
         .close()
@@ -53,14 +51,10 @@ fn it_detects_a_rust_project() {
     cargo_toml
         .write_str(project_config::cargo_toml())
         .expect("failed to write cargo toml");
-    let main = tempdir.child("src/main.rs");
-    main.write_str(project_config::main_rs())
-        .expect("failed to write main.rs");
+
     assert_eq!(
-        ProjectConfig::get_project(&Some(tempdir.path().to_path_buf()))
-            .unwrap()
-            .kind,
-        axoproject::WorkspaceKind::Rust
+        ProjectConfig::detect(&Some(tempdir.path().to_path_buf())),
+        Some(Type::Rust(Rust {}))
     );
     tempdir
         .close()
@@ -75,9 +69,6 @@ fn it_loads_a_rust_project_config() {
     cargo_toml
         .write_str(project_config::cargo_toml())
         .expect("failed to write cargo toml");
-    let main = tempdir.child("src/main.rs");
-    main.write_str(project_config::main_rs())
-        .expect("failed to write main.rs");
     let config = ProjectConfig::load(Some(tempdir.path().to_path_buf()))
         .expect("failed to load Cargo.toml")
         .unwrap();
@@ -85,6 +76,19 @@ fn it_loads_a_rust_project_config() {
     assert_eq!(config.name, "axo");
     assert_eq!(config.description, "blublublub");
     assert_eq!(config.version, Some("0.0.0".to_string()));
+    tempdir
+        .close()
+        .expect("could not successfully delete temporary directory");
+}
+
+#[test]
+fn it_can_successfully_not_detect_a_project() {
+    let tempdir = assert_fs::TempDir::new().expect("failed creating tempdir");
+
+    assert_eq!(
+        ProjectConfig::detect(&Some(tempdir.path().to_path_buf())),
+        None
+    );
     tempdir
         .close()
         .expect("could not successfully delete temporary directory");

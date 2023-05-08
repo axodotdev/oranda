@@ -2,7 +2,6 @@ use crate::config::Config;
 use crate::data::cargo_dist::DistRelease;
 use crate::data::Context;
 use crate::errors::*;
-use crate::message::{Message, MessageType};
 
 mod installers;
 mod package_managers;
@@ -26,18 +25,15 @@ pub fn page(context: &Context, config: &Config) -> Result<String> {
     let artifacts = &config.artifacts;
     let release = &context.latest_dist_release;
 
-    let (installer_list, artifact_table) = if let Some(release) =
-        has_valid_setup(artifacts.cargo_dist, release)
-    {
-        (
-            Some(installers::build_list(&release, config)?),
-            Some(table::build(release, config)?),
-        )
-    } else {
-        let msg = "You have indicated that you use cargo dist but we could not find a cargo dist release for your project. We are continuing to build your site, but it will not include artifact features.";
-        Message::new(MessageType::Warning, msg).print();
-        (None, None)
-    };
+    let (installer_list, artifact_table) =
+        if let Some(release) = has_valid_setup(artifacts.cargo_dist, release) {
+            (
+                Some(installers::build_list(&release, config)?),
+                Some(table::build(release, config)?),
+            )
+        } else {
+            (None, None)
+        };
 
     let package_manager_list = artifacts
         .package_managers
