@@ -50,7 +50,9 @@ impl Site {
             if config.artifacts.has_some() {
                 let index = Page::index_with_artifacts(&context, &layout_template, config)?;
                 pages.push(index);
-                if context.latest_dist_release.is_some() {
+                if context.latest_dist_release.is_some()
+                    || config.artifacts.package_managers.is_some()
+                {
                     let body = artifacts::page(&context, config)?;
                     let artifacts_page =
                         Page::new_from_contents(body, "artifacts.html", &layout_template);
