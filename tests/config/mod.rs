@@ -80,3 +80,16 @@ fn it_loads_a_rust_project_config() {
         .close()
         .expect("could not successfully delete temporary directory");
 }
+
+#[test]
+fn it_can_successfully_not_detect_a_project() {
+    let tempdir = assert_fs::TempDir::new().expect("failed creating tempdir");
+
+    assert_eq!(
+        ProjectConfig::detect(&Some(tempdir.path().to_path_buf())),
+        None
+    );
+    tempdir
+        .close()
+        .expect("could not successfully delete temporary directory");
+}
