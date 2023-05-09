@@ -15,6 +15,7 @@ pub struct Layout {
     template: String,
 }
 
+const DOCTYPE: &str = r#"<!doctype html>"#;
 const BODY_PLACEHOLDER: &str = "{{{BODY}}}";
 const OS_SCRIPT_PLACEHOLDER: &str = "{{{OS_SCRIPT}}}";
 
@@ -57,7 +58,7 @@ impl Layout {
         };
         let oranda_css = css::build_oranda(&config.dist_dir, &config.path_prefix)?;
         let analytics = Analytics::new(config)?;
-        let template: String = html!(
+        let template_html: String = html!(
         <html lang="en" id="oranda" class=theme>
             <head>
                 <title>{ text!(name) }</title>
@@ -83,6 +84,8 @@ impl Layout {
         </html>
         )
         .to_string();
+
+        let template = format!("{DOCTYPE}{template_html}");
 
         Ok(Layout { template })
     }
