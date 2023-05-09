@@ -27,7 +27,7 @@ a {
 }
 
 .title {
-  @apply text-center text-6xl sm:text-8xl pb-1;
+  @apply text-center text-6xl sm:text-8xl pb-2;
 }
 
 h1 {
