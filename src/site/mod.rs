@@ -45,11 +45,12 @@ impl Site {
             }
         }
 
+        let mut index = Page::index(&layout_template, config)?;
+
         if let Some(repo_url) = &config.repository {
             let context = Context::new(repo_url, config.artifacts.cargo_dist)?;
             if config.artifacts.has_some() {
-                let index = Page::index_with_artifacts(&context, &layout_template, config)?;
-                pages.push(index);
+                index = Page::index_with_artifacts(&context, &layout_template, config)?;
                 if context.latest_dist_release.is_some()
                     || config.artifacts.package_managers.is_some()
                 {
@@ -79,11 +80,9 @@ impl Site {
                     pages.push(page);
                 }
             }
-        } else {
-            let index = Page::index(&layout_template, config)?;
-            pages.push(index);
         }
 
+        pages.push(index);
         Ok(Site { pages })
     }
 
