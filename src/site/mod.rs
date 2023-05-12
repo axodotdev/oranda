@@ -59,24 +59,8 @@ impl Site {
                     }
                 }
                 if config.changelog {
-                    let changelog_html = changelog::build(&context, config)?;
-                    let changelog_page = Page::new_from_contents(
-                        changelog_html,
-                        "changelog.html",
-                        &layout_template,
-                        config,
-                    );
-                    let changelog_releases = changelog::build_all(&context, config)?;
-                    pages.push(changelog_page);
-                    for (name, content) in changelog_releases {
-                        let page = Page::new_from_contents(
-                            content,
-                            &format!("changelog/{}.html", name),
-                            &layout_template,
-                            config,
-                        );
-                        pages.push(page);
-                    }
+                    let mut changelog_pages = Self::build_changelog_pages(&context, &layout_template, config)?;
+                    pages.append(&mut changelog_pages);
                 }
             },
             None => Err(OrandaError::Other("You have indicated you want to use features that require a repository context. Please make sure you have a repo listed in your project or oranda config.".to_string()))?
@@ -108,6 +92,29 @@ impl Site {
                 );
                 Message::new(MessageType::Warning, &msg).print();
             }
+        }
+        Ok(pages)
+    }
+
+    fn build_changelog_pages(
+        context: &Context,
+        layout_template: &Layout,
+        config: &Config,
+    ) -> Result<Vec<Page>> {
+        let mut pages = vec![];
+        let changelog_html = changelog::build(context, config)?;
+        let changelog_page =
+            Page::new_from_contents(changelog_html, "changelog.html", layout_template, config);
+        let changelog_releases = changelog::build_all(context, config)?;
+        pages.push(changelog_page);
+        for (name, content) in changelog_releases {
+            let page = Page::new_from_contents(
+                content,
+                &format!("changelog/{}.html", name),
+                layout_template,
+                config,
+            );
+            pages.push(page);
         }
         Ok(pages)
     }
