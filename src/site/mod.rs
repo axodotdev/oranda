@@ -63,7 +63,7 @@ impl Site {
                     pages.append(&mut changelog_pages);
                 }
             },
-            None => Err(OrandaError::Other("You have indicated you want to use features that require a repository context. Please make sure you have a repo listed in your project or oranda config.".to_string()))?
+            None => Err(OrandaError::Other("You have indicated you want to use features that require a repository context. Please add a \"repository\" key and value to your project (such as a package.json or Cargo.toml) or oranda config (oranda.json).".to_string()))?
             }
         }
 
