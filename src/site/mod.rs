@@ -47,43 +47,56 @@ impl Site {
 
         let mut index = Page::index(&layout_template, config)?;
 
-        if let Some(repo_url) = &config.repository {
-            let context = Context::new(repo_url, config.artifacts.cargo_dist)?;
-            if config.artifacts.has_some() {
-                index = Page::index_with_artifacts(&context, &layout_template, config)?;
-                if context.latest_dist_release.is_some()
-                    || config.artifacts.package_managers.is_some()
-                {
-                    let body = artifacts::page(&context, config)?;
-                    let artifacts_page =
-                        Page::new_from_contents(body, "artifacts.html", &layout_template, config);
-                    pages.push(artifacts_page);
+        if Self::needs_context(config) {
+            match &config.repository {
+                Some(repo_url) => {
+                let context = Context::new(repo_url, config.artifacts.cargo_dist)?;
+                if config.artifacts.has_some() {
+                    index = Page::index_with_artifacts(&context, &layout_template, config)?;
+                    if context.latest_dist_release.is_some()
+                        || config.artifacts.package_managers.is_some()
+                    {
+                        let body = artifacts::page(&context, config)?;
+                        let artifacts_page = Page::new_from_contents(
+                            body,
+                            "artifacts.html",
+                            &layout_template,
+                            config,
+                        );
+                        pages.push(artifacts_page);
+                    }
                 }
-            }
-            if config.changelog {
-                let changelog_html = changelog::build(&context, config)?;
-                let changelog_page = Page::new_from_contents(
-                    changelog_html,
-                    "changelog.html",
-                    &layout_template,
-                    config,
-                );
-                let changelog_releases = changelog::build_all(&context, config)?;
-                pages.push(changelog_page);
-                for (name, content) in changelog_releases {
-                    let page = Page::new_from_contents(
-                        content,
-                        &format!("changelog/{}.html", name),
+                if config.changelog {
+                    let changelog_html = changelog::build(&context, config)?;
+                    let changelog_page = Page::new_from_contents(
+                        changelog_html,
+                        "changelog.html",
                         &layout_template,
                         config,
                     );
-                    pages.push(page);
+                    let changelog_releases = changelog::build_all(&context, config)?;
+                    pages.push(changelog_page);
+                    for (name, content) in changelog_releases {
+                        let page = Page::new_from_contents(
+                            content,
+                            &format!("changelog/{}.html", name),
+                            &layout_template,
+                            config,
+                        );
+                        pages.push(page);
+                    }
                 }
+            },
+            None => Err(OrandaError::Other("You have indicated you want to use features that require a repository context. Please make sure you have a repo listed in your project or oranda config."))
             }
         }
 
         pages.push(index);
         Ok(Site { pages })
+    }
+
+    fn needs_context(config: &Config) -> bool {
+        config.artifacts.has_some() || config.changelog
     }
 
     pub fn copy_static(dist_path: &String, static_path: &String) -> Result<()> {
