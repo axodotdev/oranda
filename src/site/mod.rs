@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::path::Path;
 
 use axoasset::LocalAsset;
@@ -31,18 +32,9 @@ impl Site {
         let layout_template = Layout::new(config)?;
 
         if let Some(files) = &config.additional_pages {
-            for file_path in files.values() {
-                if page::source::is_markdown(file_path) {
-                    let additional_page = Page::new_from_file(file_path, &layout_template, config)?;
-                    pages.push(additional_page)
-                } else {
-                    let msg = format!(
-                        "File {} in additional pages is not markdown and will be skipped",
-                        file_path
-                    );
-                    Message::new(MessageType::Warning, &msg).print();
-                }
-            }
+            let mut additional_pages =
+                Self::build_additional_pages(files, &layout_template, config)?;
+            pages.append(&mut additional_pages);
         }
 
         let mut index = Page::index(&layout_template, config)?;
@@ -87,7 +79,7 @@ impl Site {
                     }
                 }
             },
-            None => Err(OrandaError::Other("You have indicated you want to use features that require a repository context. Please make sure you have a repo listed in your project or oranda config."))
+            None => Err(OrandaError::Other("You have indicated you want to use features that require a repository context. Please make sure you have a repo listed in your project or oranda config.".to_string()))?
             }
         }
 
@@ -97,6 +89,27 @@ impl Site {
 
     fn needs_context(config: &Config) -> bool {
         config.artifacts.has_some() || config.changelog
+    }
+
+    fn build_additional_pages(
+        files: &HashMap<String, String>,
+        layout_template: &Layout,
+        config: &Config,
+    ) -> Result<Vec<Page>> {
+        let mut pages = vec![];
+        for file_path in files.values() {
+            if page::source::is_markdown(file_path) {
+                let additional_page = Page::new_from_file(file_path, layout_template, config)?;
+                pages.push(additional_page)
+            } else {
+                let msg = format!(
+                    "File {} in additional pages is not markdown and will be skipped",
+                    file_path
+                );
+                Message::new(MessageType::Warning, &msg).print();
+            }
+        }
+        Ok(pages)
     }
 
     pub fn copy_static(dist_path: &String, static_path: &String) -> Result<()> {
