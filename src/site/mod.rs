@@ -37,14 +37,14 @@ impl Site {
             pages.append(&mut additional_pages);
         }
 
-        let mut index = Page::index(&layout_template, config)?;
+        let mut index = None;
 
         if Self::needs_context(config) {
             match &config.repository {
                 Some(repo_url) => {
                 let context = Context::new(repo_url, config.artifacts.cargo_dist)?;
                 if config.artifacts.has_some() {
-                    index = Page::index_with_artifacts(&context, &layout_template, config)?;
+                    index = Some(Page::index_with_artifacts(&context, &layout_template, config)?);
                     if context.latest_dist_release.is_some()
                         || config.artifacts.package_managers.is_some()
                     {
@@ -67,7 +67,7 @@ impl Site {
             }
         }
 
-        pages.push(index);
+        pages.push(index.unwrap_or(Page::index(&layout_template, config)?));
         Ok(Site { pages })
     }
 
