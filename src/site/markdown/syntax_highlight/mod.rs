@@ -65,6 +65,7 @@ pub fn syntax_highlight(
     let theme_set = ThemeSet { themes };
     let language = match lang {
         None | Some("") => "rs",
+        Some("text") => "txt",
         Some(l) => l,
     };
     let syntax = find_syntax(&ps, language)?;
