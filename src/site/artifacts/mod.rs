@@ -2,11 +2,13 @@ use crate::config::Config;
 use crate::data::cargo_dist::DistRelease;
 use crate::data::Context;
 use crate::errors::*;
+use crate::message::{Message, MessageType};
 
 mod installers;
 mod package_managers;
 mod table;
 
+use axohtml::elements::div;
 use axohtml::html;
 
 fn has_valid_setup(
@@ -59,12 +61,17 @@ pub fn header(context: &Context, config: &Config) -> Result<String> {
     if artifacts.cargo_dist {
         if let Some(release) = &context.latest_dist_release {
             return Ok(installers::build_header(release, config)?.to_string());
+        } else {
+            let msg = "You enabled cargo-dist support but it doesn't seem like you have any cargo-dist releases yet?".to_string();
+            Message::new(MessageType::Warning, &msg).print();
+            tracing::warn!("{}", &msg);
         }
     }
     if let Some(package_managers) = &artifacts.package_managers {
         return Ok(package_managers::build_header(config, package_managers)?.to_string());
     }
-    Err(OrandaError::Other(
-        "Can't have artifacts header with no artifacts".to_string(),
-    ))
+
+    // If everything failed just give an empty div and move along
+    let empty: Box<div<String>> = html!(<div class="artifacts">"No published artifacts yet!"</div>);
+    Ok(empty.to_string())
 }
