@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::path::Path;
 
 use axoasset::LocalAsset;
@@ -31,60 +32,91 @@ impl Site {
         let layout_template = Layout::new(config)?;
 
         if let Some(files) = &config.additional_pages {
-            for file_path in files.values() {
-                if page::source::is_markdown(file_path) {
-                    let additional_page = Page::new_from_file(file_path, &layout_template, config)?;
-                    pages.push(additional_page)
-                } else {
-                    let msg = format!(
-                        "File {} in additional pages is not markdown and will be skipped",
-                        file_path
-                    );
-                    Message::new(MessageType::Warning, &msg).print();
+            let mut additional_pages =
+                Self::build_additional_pages(files, &layout_template, config)?;
+            pages.append(&mut additional_pages);
+        }
+
+        let mut index = None;
+
+        if Self::needs_context(config) {
+            match &config.repository {
+                Some(repo_url) => {
+                let context = Context::new(repo_url, config.artifacts.cargo_dist)?;
+                if config.artifacts.has_some() {
+                    index = Some(Page::index_with_artifacts(&context, &layout_template, config)?);
+                    if context.latest_dist_release.is_some()
+                        || config.artifacts.package_managers.is_some()
+                    {
+                        let body = artifacts::page(&context, config)?;
+                        let artifacts_page = Page::new_from_contents(
+                            body,
+                            "artifacts.html",
+                            &layout_template,
+                            config,
+                        );
+                        pages.push(artifacts_page);
+                    }
                 }
+                if config.changelog {
+                    let mut changelog_pages = Self::build_changelog_pages(&context, &layout_template, config)?;
+                    pages.append(&mut changelog_pages);
+                }
+            },
+            None => Err(OrandaError::Other("You have indicated you want to use features that require a repository context. Please add a \"repository\" key and value to your project (such as a package.json or Cargo.toml) or oranda config (oranda.json).".to_string()))?
             }
         }
 
-        if let Some(repo_url) = &config.repository {
-            let context = Context::new(repo_url, config.artifacts.cargo_dist)?;
-            if config.artifacts.has_some() {
-                let index = Page::index_with_artifacts(&context, &layout_template, config)?;
-                pages.push(index);
-                if context.latest_dist_release.is_some()
-                    || config.artifacts.package_managers.is_some()
-                {
-                    let body = artifacts::page(&context, config)?;
-                    let artifacts_page =
-                        Page::new_from_contents(body, "artifacts.html", &layout_template, config);
-                    pages.push(artifacts_page);
-                }
-            }
-            if config.changelog {
-                let changelog_html = changelog::build(&context, config)?;
-                let changelog_page = Page::new_from_contents(
-                    changelog_html,
-                    "changelog.html",
-                    &layout_template,
-                    config,
-                );
-                let changelog_releases = changelog::build_all(&context, config)?;
-                pages.push(changelog_page);
-                for (name, content) in changelog_releases {
-                    let page = Page::new_from_contents(
-                        content,
-                        &format!("changelog/{}.html", name),
-                        &layout_template,
-                        config,
-                    );
-                    pages.push(page);
-                }
-            }
-        } else {
-            let index = Page::index(&layout_template, config)?;
-            pages.push(index);
-        }
-
+        pages.push(index.unwrap_or(Page::index(&layout_template, config)?));
         Ok(Site { pages })
+    }
+
+    fn needs_context(config: &Config) -> bool {
+        config.artifacts.has_some() || config.changelog
+    }
+
+    fn build_additional_pages(
+        files: &HashMap<String, String>,
+        layout_template: &Layout,
+        config: &Config,
+    ) -> Result<Vec<Page>> {
+        let mut pages = vec![];
+        for file_path in files.values() {
+            if page::source::is_markdown(file_path) {
+                let additional_page = Page::new_from_file(file_path, layout_template, config)?;
+                pages.push(additional_page)
+            } else {
+                let msg = format!(
+                    "File {} in additional pages is not markdown and will be skipped",
+                    file_path
+                );
+                Message::new(MessageType::Warning, &msg).print();
+            }
+        }
+        Ok(pages)
+    }
+
+    fn build_changelog_pages(
+        context: &Context,
+        layout_template: &Layout,
+        config: &Config,
+    ) -> Result<Vec<Page>> {
+        let mut pages = vec![];
+        let changelog_html = changelog::build(context, config)?;
+        let changelog_page =
+            Page::new_from_contents(changelog_html, "changelog.html", layout_template, config);
+        let changelog_releases = changelog::build_all(context, config)?;
+        pages.push(changelog_page);
+        for (name, content) in changelog_releases {
+            let page = Page::new_from_contents(
+                content,
+                &format!("changelog/{}.html", name),
+                layout_template,
+                config,
+            );
+            pages.push(page);
+        }
+        Ok(pages)
     }
 
     pub fn copy_static(dist_path: &String, static_path: &String) -> Result<()> {
