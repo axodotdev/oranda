@@ -29,7 +29,7 @@ pub struct Site {
 }
 
 impl Site {
-    pub fn build(config: &Config) -> Result<Site> {
+    pub fn build(config: &Config, cached: bool) -> Result<Site> {
         Self::clean_dist_dir(&config.dist_dir)?;
 
         let mut pages = vec![];
@@ -46,7 +46,17 @@ impl Site {
         if Self::needs_context(config) {
             match &config.repository {
                 Some(repo_url) => {
-                    let context = Context::new(repo_url, config.artifacts.cargo_dist())?;
+                let context = if cached {
+                    match Context::read_cache() {
+                        Ok(cached) => {
+                            Message::new(MessageType::Warning, "Using cached context...").print();
+                            cached
+                        }
+                        Err(e) => Err(OrandaError::Other("Failed to read cached context".to_string()))?
+                    }
+                } else {
+                    Context::new(repo_url, config.artifacts.cargo_dist())?
+                };
                     if config.artifacts.has_some() {
                         index = Some(Page::index_with_artifacts(&context, &layout_template, config)?);
                         if context.latest_dist_release.is_some()

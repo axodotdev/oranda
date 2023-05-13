@@ -1,10 +1,11 @@
 use crate::errors::*;
 
 use miette::{miette, IntoDiagnostic};
+use serde::{Deserialize, Serialize};
 use url::Url;
 
 /// Represents a GitHub repository that we can query things about.
-#[derive(Debug, Clone)]
+#[derive(Debug, Deserialize, Clone, Serialize)]
 pub struct GithubRepo {
     /// The repository owner.
     pub owner: String,

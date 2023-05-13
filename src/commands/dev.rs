@@ -33,6 +33,8 @@ pub struct Dev {
     /// List of extra paths to watch
     #[arg(short, long)]
     include_paths: Option<Vec<Utf8PathBuf>>,
+    #[arg(short, long)]
+    cached: bool,
 }
 
 impl Dev {
@@ -148,7 +150,12 @@ impl Dev {
         .print();
 
         if !self.no_first_build {
-            Build::new(self.project_root.clone(), self.config_path.clone()).run()?;
+            Build::new(
+                self.project_root.clone(),
+                self.config_path.clone(),
+                self.cached.clone(),
+            )
+            .run()?;
         }
 
         // Spawn the serve process out into a separate thread so that we can loop through received events on this thread
@@ -187,9 +194,13 @@ impl Dev {
                 )
                 .print();
 
-                Build::new(self.project_root.clone(), self.config_path.clone())
-                    .run()
-                    .unwrap();
+                Build::new(
+                    self.project_root.clone(),
+                    self.config_path.clone(),
+                    self.cached.clone(),
+                )
+                .run()
+                .unwrap();
             }
         }
     }
