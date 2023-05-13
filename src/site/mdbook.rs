@@ -81,6 +81,8 @@ pub enum AxomdbookTheme {
     Hacker,
     /// Equivalent to oranda's "cupcake"
     Cupcake,
+    /// Equivalent to oranda's "tui"
+    Tui,
 }
 
 impl AxomdbookTheme {
@@ -96,6 +98,7 @@ impl AxomdbookTheme {
             Theme::AxoLight => Some(AxoLight),
             Theme::Hacker => Some(Hacker),
             Theme::Cupcake => Some(Cupcake),
+            Theme::Tui => Some(Tui),
         }
     }
 
@@ -109,6 +112,7 @@ impl AxomdbookTheme {
             AxoLight => false,
             Hacker => true,
             Cupcake => false,
+            Tui => true,
         }
     }
 
@@ -123,6 +127,7 @@ impl AxomdbookTheme {
             AxoLight => Some(AxoDark),
             Hacker => None,
             Cupcake => None,
+            Tui => None,
         }
     }
 
@@ -148,6 +153,7 @@ impl AxomdbookTheme {
             AxoLight => "Axo Light",
             Hacker => "Hacker",
             Cupcake => "Cupcake",
+            Tui => "Tui",
         }
     }
 }

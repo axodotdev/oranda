@@ -1,0 +1,133 @@
+@import url('https://unpkg.com/fixedsys-css/css/fixedsys.css');
+
+html.tui ::selection {
+  @apply text-axo-black;
+  background-color: white;
+
+  -webkit-text-fill-color: var(--color-axo-black);
+}
+
+html.tui body {
+  @apply bg-axo-black text-zinc-100;
+  font-family: "fixedsys", monospace;
+}
+
+html.tui code,
+html.tui pre {
+  @apply text-zinc-300;
+  font-family: "fixedsys", monospace;
+}
+
+html.tui .button {
+    @apply rounded-none;
+    box-shadow: 10px 10px 10px #000;
+}
+
+html.tui blockquote {
+    @apply bg-zinc-100 p-2 border-double border-axo-black border-8;
+    box-shadow: 0 0 0 8px #f4f4f5;
+}
+
+html.tui blockquote p {
+    @apply text-axo-black p-0 m-0;
+}
+
+html.tui h2,
+html.tui h3,
+html.tui h4,
+html.tui h5,
+html.tui h6 {
+  @apply text-zinc-100;
+  text-transform: uppercase;
+}
+
+html.tui .repo_banner > a,
+html.tui footer {
+  @apply text-zinc-100;
+}
+
+html.tui p,
+html.tui table {
+  @apply text-zinc-100;
+}
+
+html.tui p {
+    @apply pl-8;
+}
+
+html.tui .title {
+  @apply text-left text-zinc-100 relative inline-block ml-8;
+}
+
+@keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}
+
+html.tui .title:after {
+  content: "";
+  height: 70px;
+  animation: blink-animation 1s steps(5, start) infinite;
+  @apply block absolute left-full ml-3 w-4 top-3 bg-cyan-700;
+}
+
+html.tui .title::before {
+  content: "> ";
+  @apply block text-zinc-800 text-5xl absolute top-1/2 -translate-y-1/2 -left-8 mt-2;
+}
+
+html.tui div.table .th,
+html.tui h1 {
+  @apply text-cyan-700;
+}
+
+html.tui a {
+  @apply text-cyan-700 hover:decoration-cyan-700 p-2;
+}
+
+html.tui a:focus,
+html.tui .button.primary:focus {
+  @apply text-axo-black bg-zinc-100 p-2;
+}
+
+html.tui .detect {
+    @apply p-2;
+}
+
+html.tui .axo-gradient {
+  background: none;
+}
+
+html.tui .nav ul {
+  @apply justify-start;
+}
+
+html.tui .button.primary {
+  @apply text-zinc-100 bg-cyan-700 hover:bg-zinc-100 hover:text-axo-black;
+}
+
+html.tui .artifact-header > h4,
+html.tui .artifact-header>div:not(.install-code-wrapper) {
+  @apply text-left items-start justify-start;
+}
+
+html.tui .releases-nav ul li a {
+  @apply text-cyan-700;
+}
+
+html.hacker .releases-nav ul li:before {
+  @apply bg-gray-600;
+}
+
+html.hacker .releases-nav ul {
+  @apply border-l-gray-600;
+}
+
+html.hacker .prereleases-toggle input:checked {
+  @apply bg-orange-500;
+}
+
+html.hacker .releases-nav ul li a {
+  @apply hover:decoration-orange-500;
+}

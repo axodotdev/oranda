@@ -12,6 +12,7 @@ pub enum Theme {
     AxoDark,
     Hacker,
     Cupcake,
+    Tui,
 }
 
 pub fn css_class(theme: &Theme) -> &'static str {
@@ -19,6 +20,7 @@ pub fn css_class(theme: &Theme) -> &'static str {
         Theme::Dark => "dark",
         Theme::AxoLight => "axo",
         Theme::AxoDark => "dark axo",
+        Theme::Tui => "tui",
         Theme::Hacker => "hacker",
         Theme::Cupcake => "cupcake",
         _ => "light",
