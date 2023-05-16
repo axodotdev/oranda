@@ -70,7 +70,7 @@ pub enum OrandaError {
         details: miette::Report,
     },
 
-    #[error("Could not find a build in {dist_dir}.")]
+    #[error("Could not find a build in {dist_dir}")]
     #[diagnostic(help("Did you remember to run `oranda build`?"))]
     BuildNotFound { dist_dir: String },
 
@@ -86,6 +86,18 @@ pub enum OrandaError {
         url: String,
         #[source]
         details: reqwest::Error,
+    },
+
+    #[error("Couldn't load your mdbook at {path}")]
+    MdBookLoad {
+        path: String,
+        inner: mdbook::errors::Error,
+    },
+
+    #[error("Couldn't build your mdbook at {path}")]
+    MdBookBuild {
+        path: String,
+        inner: mdbook::errors::Error,
     },
 
     #[error("{0}")]

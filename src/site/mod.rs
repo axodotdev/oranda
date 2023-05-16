@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::path::Path;
 
 use axoasset::LocalAsset;
-use camino::Utf8Path;
+use camino::{Utf8Path, Utf8PathBuf};
 
 use crate::config::Config;
 use crate::data::Context;
@@ -119,16 +119,18 @@ impl Site {
         Ok(pages)
     }
 
-    pub fn copy_static(dist_path: &String, static_path: &String) -> Result<()> {
+    pub fn copy_static(dist_path: &str, static_path: &str) -> Result<()> {
         let mut options = fs_extra::dir::CopyOptions::new();
         options.overwrite = true;
+        // We want to be able to rename dirs in the copy, this enables it
+        options.copy_inside = true;
         fs_extra::copy_items(&[static_path], dist_path, &options)?;
 
         Ok(())
     }
 
     pub fn write(self, config: &Config) -> Result<()> {
-        let dist = &config.dist_dir;
+        let dist = Utf8PathBuf::from(&config.dist_dir);
         for page in self.pages {
             // FIXME: We have to do some gymnastics here due to `LocalAsset::write_new_all` taking filename and dest
             // path separately. Hopefully in a future version of axoasset, this only takes one parameter instead of
@@ -140,11 +142,31 @@ impl Site {
                 full_path.parent().unwrap().as_str(),
             )?;
         }
-        if let Some(book_path) = &config.md_book {
-            Self::copy_static(dist, book_path)?;
+        if let Some(book_cfg) = &config.md_book {
+            Message::new(MessageType::Info, "Building mdbook...").print();
+            tracing::info!("Building mdbook...");
+
+            // Read mdbook's config to find the right dirs
+            let book_path = &book_cfg.path;
+            let md = mdbook::MDBook::load(book_path).map_err(|e| OrandaError::MdBookLoad {
+                path: book_path.clone(),
+                inner: e,
+            })?;
+            let build_dir = Utf8PathBuf::from_path_buf(md.build_dir_for("html"))
+                .expect("mdbook path wasn't utf8");
+
+            // Build the mdbook
+            md.build().map_err(|e| OrandaError::MdBookBuild {
+                path: book_path.clone(),
+                inner: e,
+            })?;
+
+            // Copy the contents to "public/book/"
+            let book_dist = dist.join("book");
+            Self::copy_static(book_dist.as_str(), build_dir.as_str())?;
         }
         if Path::new(&config.static_dir).exists() {
-            Self::copy_static(dist, &config.static_dir)?;
+            Self::copy_static(dist.as_str(), &config.static_dir)?;
         }
         javascript::write_os_script(&config.dist_dir)?;
         if !config.additional_css.is_empty() {
