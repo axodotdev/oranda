@@ -11,9 +11,9 @@ pub struct Release {
 }
 
 impl Release {
-    pub fn new(gh_release: GithubRelease, cargo_dist: bool) -> Result<Self> {
+    pub async fn new(gh_release: GithubRelease, cargo_dist: bool) -> Result<Self> {
         let manifest = if cargo_dist {
-            Self::fetch_manifest(gh_release.asset_url(cargo_dist::MANIFEST_FILENAME))?
+            Self::fetch_manifest(gh_release.asset_url(cargo_dist::MANIFEST_FILENAME)).await?
         } else {
             None
         };
@@ -23,10 +23,10 @@ impl Release {
         })
     }
 
-    fn fetch_manifest(url: Option<&str>) -> Result<Option<DistManifest>> {
+    async fn fetch_manifest(url: Option<&str>) -> Result<Option<DistManifest>> {
         if let Some(manifest_url) = url {
-            match reqwest::blocking::get(manifest_url)?.error_for_status() {
-                Ok(resp) => match resp.json::<DistManifest>() {
+            match reqwest::get(manifest_url).await?.error_for_status() {
+                Ok(resp) => match resp.json::<DistManifest>().await {
                     Ok(manifest) => Ok(Some(manifest)),
                     Err(e) => {
                         let msg = format!("Failed to parse dist-manifest at {manifest_url}.\nDetails:{e}\n\nSkipping...");
