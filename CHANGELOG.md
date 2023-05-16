@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+FIXME: write a proper changelog for the next release
+
+* various fixes
+* much faster
+* mdbook integration change
+
 ## 0.0.3 - 2023-05-08
 
 ### Features
