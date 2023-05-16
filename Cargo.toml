@@ -40,6 +40,7 @@ camino = "1.1.4"
 axocli = "0.1.0"
 miette = "5.7.0"
 futures-util = "0.3.28"
+mdbook = { version = "0.4.17", default-features = false }
 
 [dev-dependencies]
 assert_cmd="2"

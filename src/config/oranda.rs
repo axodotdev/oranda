@@ -19,6 +19,15 @@ pub struct Social {
     pub twitter_account: Option<String>,
 }
 
+/// Config for us bulding and integrating your mdbook
+#[derive(Debug, Deserialize)]
+pub struct BookConfig {
+    /// Path to the mdbook
+    pub path: String,
+    /// Whether to enable the custom oranda/axo theme
+    pub theme: Option<bool>,
+}
+
 #[derive(Debug, Deserialize)]
 pub struct OrandaConfig {
     pub description: Option<String>,
@@ -41,7 +50,9 @@ pub struct OrandaConfig {
     pub favicon: Option<String>,
     pub path_prefix: Option<String>,
     pub license: Option<String>,
-    pub md_book: Option<String>,
+    /// Config for mdbook
+    #[serde(alias = "mdbook")]
+    pub md_book: Option<BookConfig>,
     pub changelog: Option<bool>,
 }
 

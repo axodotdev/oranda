@@ -60,21 +60,7 @@ jobs:
           toolchain: stable
           override: true
 
-      # OPTIONAL: build your mdbook
-      # Note that "./docs/" is the directory in our repo where the book.toml is
-      # and we pass that to mdbook. You also need to tell oranda.json this with
-      #   "md_book": "./docs/book/" 
-      # ("book" being the dir where mdbook writes is output)
-      - name: Install mdbook
-        run: |
-          mkdir mdbook
-          curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.14/mdbook-v0.4.14-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=./mdbook
-          echo `pwd`/mdbook >> $GITHUB_PATH
-      - name: Run mdbook build
-        run: |
-          mdbook build docs
-      
-      # Install and run oranda
+      # Install and run oranda (and mdbook)
       # This will write all output to ./public/ (including copying mdbook's output to there)
       - name: Install and run oranda
         # Install from this checkout because WE'RE ORANDA

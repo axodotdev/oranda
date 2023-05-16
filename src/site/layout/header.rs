@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use crate::config::artifacts::Artifacts;
-use crate::config::Config;
+use crate::config::{BookConfig, Config};
 use crate::errors::*;
 use crate::message::{Message, MessageType};
 use crate::site::{link, page};
@@ -32,7 +32,7 @@ fn nav(
     additional_pages: &Option<HashMap<String, String>>,
     path_prefix: &Option<String>,
     artifacts: &Artifacts,
-    md_book: &Option<String>,
+    md_book: &Option<BookConfig>,
     changelog: &bool,
 ) -> Result<Box<nav<String>>> {
     Message::new(MessageType::Info, "Building nav...").print();
