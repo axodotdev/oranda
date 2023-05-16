@@ -90,8 +90,10 @@ impl Context {
         // that don't use cargo-dist, we're going to prefer the cargo-dist one, but we should
         // warn the user that things are wonky
         if latest_dist_release.is_some() && latest_dist_release != latest_stable_release {
-            let msg = "You have newer stable Github Releases than your latest cargo-dist Release. Is this intended? (We're going to prefer the cargo-dist one.)";
-            Message::new(MessageType::Warning, msg).print();
+            let dist_rel = &all[latest_dist_prerelease.unwrap()].source.tag_name;
+            let stable_rel = &all[latest_stable_release.unwrap()].source.tag_name;
+            let msg = format!("You have newer stable Github Releases ({}) than your latest cargo-dist Release ({}). Is this intended? (We're going to prefer the cargo-dist one.)", stable_rel, dist_rel);
+            Message::new(MessageType::Warning, &msg).print();
         }
 
         // If we found a stable dist release, use that
