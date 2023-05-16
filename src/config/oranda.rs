@@ -21,7 +21,7 @@ pub struct Social {
 
 /// Config for us bulding and integrating your mdbook
 #[derive(Debug, Deserialize)]
-pub struct BookConfig {
+pub struct MdBookConfig {
     /// Path to the mdbook
     pub path: String,
     /// Whether to enable the custom oranda/axo theme
@@ -51,8 +51,8 @@ pub struct OrandaConfig {
     pub path_prefix: Option<String>,
     pub license: Option<String>,
     /// Config for mdbook
-    #[serde(alias = "mdbook")]
-    pub md_book: Option<BookConfig>,
+    #[serde(alias = "md_book")]
+    pub mdbook: Option<MdBookConfig>,
     pub changelog: Option<bool>,
 }
 

@@ -2,7 +2,7 @@
   "favicon": "https://www.axo.dev/favicon.ico",
   "path_prefix": "oranda",
   "mdbook": {
-    "path": "./docs/",
+    "path": "./docs",
     "theme": true
   },
   "changelog": true,

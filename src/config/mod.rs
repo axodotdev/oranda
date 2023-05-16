@@ -15,7 +15,7 @@ use std::collections::HashMap;
 
 use theme::Theme;
 
-pub use self::oranda::BookConfig;
+pub use self::oranda::MdBookConfig;
 
 #[derive(Debug)]
 pub struct Config {
@@ -40,7 +40,7 @@ pub struct Config {
     pub path_prefix: Option<String>,
     pub license: Option<String>,
     /// The config for using mdbook
-    pub md_book: Option<BookConfig>,
+    pub mdbook: Option<MdBookConfig>,
     pub changelog: bool,
 }
 
@@ -106,7 +106,7 @@ impl Config {
                     logo: custom.logo,
                     favicon: custom.favicon,
                     path_prefix: custom.path_prefix,
-                    md_book: None,
+                    mdbook: None,
                     changelog: custom.changelog.unwrap_or(default.changelog),
                 });
             // otherwise both oranda config and project manifest exists
@@ -141,7 +141,7 @@ impl Config {
                     logo: custom.logo,
                     favicon: custom.favicon,
                     path_prefix: custom.path_prefix,
-                    md_book: custom.md_book,
+                    mdbook: custom.mdbook,
                     changelog: custom.changelog.unwrap_or(default.changelog),
                 });
             }
@@ -190,7 +190,7 @@ impl Default for Config {
             favicon: None,
             path_prefix: None,
             static_dir: String::from("static"),
-            md_book: None,
+            mdbook: None,
             changelog: false,
         }
     }
