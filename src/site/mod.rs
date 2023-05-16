@@ -4,7 +4,7 @@ use std::path::Path;
 use axoasset::LocalAsset;
 use camino::{Utf8Path, Utf8PathBuf};
 
-use crate::config::Config;
+use crate::config::{Config, MdBookConfig};
 use crate::data::Context;
 use crate::errors::*;
 use crate::message::{Message, MessageType};
@@ -142,28 +142,8 @@ impl Site {
                 full_path.parent().unwrap().as_str(),
             )?;
         }
-        if let Some(book_cfg) = &config.md_book {
-            Message::new(MessageType::Info, "Building mdbook...").print();
-            tracing::info!("Building mdbook...");
-
-            // Read mdbook's config to find the right dirs
-            let book_path = &book_cfg.path;
-            let md = mdbook::MDBook::load(book_path).map_err(|e| OrandaError::MdBookLoad {
-                path: book_path.clone(),
-                inner: e,
-            })?;
-            let build_dir = Utf8PathBuf::from_path_buf(md.build_dir_for("html"))
-                .expect("mdbook path wasn't utf8");
-
-            // Build the mdbook
-            md.build().map_err(|e| OrandaError::MdBookBuild {
-                path: book_path.clone(),
-                inner: e,
-            })?;
-
-            // Copy the contents to "public/book/"
-            let book_dist = dist.join("book");
-            Self::copy_static(book_dist.as_str(), build_dir.as_str())?;
+        if let Some(book_cfg) = &config.mdbook {
+            Self::handle_mdbook(&dist, book_cfg)?;
         }
         if Path::new(&config.static_dir).exists() {
             Self::copy_static(dist.as_str(), &config.static_dir)?;
@@ -187,5 +167,33 @@ impl Site {
                 details: e,
             }),
         }
+    }
+
+    /// Build and write mdbook to the dist dir
+    pub fn handle_mdbook(dist: &Utf8Path, book_cfg: &MdBookConfig) -> Result<()> {
+        Message::new(MessageType::Info, "Building mdbook...").print();
+        tracing::info!("Building mdbook...");
+
+        // Read mdbook's config to find the right dirs
+        let book_path = &book_cfg.path;
+        let md = mdbook::MDBook::load(book_path).map_err(|e| OrandaError::MdBookLoad {
+            path: book_path.clone(),
+            inner: e,
+        })?;
+        let build_dir =
+            Utf8PathBuf::from_path_buf(md.build_dir_for("html")).expect("mdbook path wasn't utf8");
+
+        // Build the mdbook
+        md.build().map_err(|e| OrandaError::MdBookBuild {
+            path: book_path.clone(),
+            inner: e,
+        })?;
+
+        // Copy the contents to "public/book/"
+        // FIXME: make this something they can set in the MdBookConfig
+        let book_dist = dist.join("book");
+        Self::copy_static(book_dist.as_str(), build_dir.as_str())?;
+
+        Ok(())
     }
 }
