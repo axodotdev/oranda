@@ -23,7 +23,7 @@ pub fn build_list(managers: &LinkedHashMap<String, String>, config: &Config) -> 
     for (manager, install_code) in managers.iter() {
         list.extend(html!(<li class="list-none"><h5>{text!(manager)}</h5> 
         <div class="install-code-wrapper">
-        {unsafe_text!(create_package_install_code(install_code, &config.syntax_theme))}
+        {unsafe_text!(create_package_install_code(install_code, &config.styles.syntax_theme))}
         <button
             data-copy={install_code}
             class="button primary button">
@@ -56,7 +56,7 @@ pub fn build_header(
             "You are using package managers but none is present, please add one.",
         )));
     };
-    let install_code = create_package_install_code(hint.as_str(), &config.syntax_theme);
+    let install_code = create_package_install_code(hint.as_str(), &config.styles.syntax_theme);
 
     Ok(html!(<div>
     <h4 class="text-center">{text!(format!("Install with {}", manager))}</h4>

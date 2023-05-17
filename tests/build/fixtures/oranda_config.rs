@@ -1,8 +1,7 @@
 use std::collections::HashMap;
 
 use oranda::config::artifacts::Artifacts;
-use oranda::config::theme::Theme;
-use oranda::config::Config;
+use oranda::config::{Config, StyleConfig};
 
 use linked_hash_map::LinkedHashMap;
 
@@ -19,10 +18,12 @@ pub fn no_artifacts(temp_dir: String) -> Config {
             "https://raw.githubusercontent.com/axodotdev/oranda/main/README.md",
         ),
         additional_pages: Some(additional_pages),
-        additional_css: vec![String::from(
-            "https://raw.githubusercontent.com/axodotdev/axii/main/css/main.css",
-        )],
-        theme: Theme::Dark,
+        styles: StyleConfig {
+            additional_css: vec![String::from(
+                "https://raw.githubusercontent.com/axodotdev/axii/main/css/main.css",
+            )],
+            ..Default::default()
+        },
         ..Default::default()
     }
 }
@@ -35,9 +36,12 @@ pub fn path_prefix(temp_dir: String) -> Config {
             cargo_dist: true,
             package_managers: None,
         },
-        additional_css: vec![String::from(
-            "https://raw.githubusercontent.com/axodotdev/axii/main/css/main.css",
-        )],
+        styles: StyleConfig {
+            additional_css: vec![String::from(
+                "https://raw.githubusercontent.com/axodotdev/axii/main/css/main.css",
+            )],
+            ..Default::default()
+        },
         repository: Some(String::from("https://github.com/axodotdev/oranda")),
         version: Some(String::from("0.0.1-prerelease2")),
         ..Default::default()

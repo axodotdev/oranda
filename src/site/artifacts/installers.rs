@@ -174,7 +174,7 @@ fn build_install_hint_code(data: &InstallerData, config: &Config) -> Result<Stri
     let install_hint = get_install_hint(data, config)?;
 
     let highlighted_code =
-        markdown::syntax_highlight(Some("sh"), &install_hint.0, &config.syntax_theme);
+        markdown::syntax_highlight(Some("sh"), &install_hint.0, &config.styles.syntax_theme);
     match highlighted_code {
         Ok(code) => Ok(code),
         Err(_) => Ok(format!(
