@@ -56,7 +56,11 @@ impl Layout {
         } else {
             None
         };
-        let oranda_css = css::build_oranda(&config.dist_dir, &config.path_prefix)?;
+        let oranda_css = css::build_oranda(
+            &config.dist_dir,
+            &config.path_prefix,
+            &config.styles.oranda_css_version,
+        )?;
         let analytics = Analytics::new(config)?;
         let template_html: String = html!(
         <html lang="en" id="oranda" class=theme>
