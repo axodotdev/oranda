@@ -102,9 +102,12 @@ pub enum OrandaError {
     },
     #[error("We found a {kind} project at {manifest_path} but there was an issue")]
     #[diagnostic(severity = "warn")]
-    BrokenProject { kind: String, manifest_path: Utf8PathBuf, 
+    BrokenProject {
+        kind: String,
+        manifest_path: Utf8PathBuf,
         #[diagnostic_source]
-        cause: axoproject::errors::AxoprojectError },
+        cause: axoproject::errors::AxoprojectError,
+    },
 
     #[error("{0}")]
     Other(String),
