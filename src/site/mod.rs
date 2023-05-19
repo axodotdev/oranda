@@ -149,8 +149,10 @@ impl Site {
             Self::copy_static(dist.as_str(), &config.static_dir)?;
         }
         javascript::write_os_script(&config.dist_dir)?;
-        if !config.additional_css.is_empty() {
-            css::write_additional(&config.additional_css, &config.dist_dir)?;
+
+        let additional_css = &config.styles.additional_css;
+        if !additional_css.is_empty() {
+            css::write_additional(additional_css, &config.dist_dir)?;
         }
 
         Ok(())

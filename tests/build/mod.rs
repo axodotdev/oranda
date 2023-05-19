@@ -1,4 +1,5 @@
 use assert_fs::TempDir;
+use oranda::site::layout::css::LATEST_ORANDA_CSS;
 use oranda::site::layout::Layout;
 
 mod fixtures;
@@ -50,9 +51,20 @@ fn it_adds_oranda_css() {
     let config = oranda_config::no_artifacts(temp_dir);
     let layout = Layout::new(&config).unwrap();
     let page = page::index(&config, &layout);
+    let filename = format!("oranda-v{LATEST_ORANDA_CSS}.css");
+    assert!(page.contents.contains(&filename));
+}
+
+#[test]
+fn it_adds_oranda_css_with_pinned_version() {
+    let _guard = TEST_RUNTIME.enter();
+    let (_t, temp_dir) = temp_build_dir();
+    let config = oranda_config::pinned_css(temp_dir);
+    let layout = Layout::new(&config).unwrap();
+    let page = page::index(&config, &layout);
     assert!(page
         .contents
-        .contains("<link href=\"/oranda.css\" rel=\"stylesheet\"/>"));
+        .contains("<link href=\"/oranda-v0.0.3.css\" rel=\"stylesheet\"/>"));
 }
 
 #[test]

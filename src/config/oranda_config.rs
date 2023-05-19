@@ -28,6 +28,26 @@ pub struct MdBookConfig {
     pub theme: Option<bool>,
 }
 
+/// Config related to styling your page
+#[derive(Debug, Deserialize)]
+pub struct StyleConfig {
+    pub theme: Theme,
+    pub syntax_theme: SyntaxTheme,
+    pub additional_css: Vec<String>,
+    pub oranda_css_version: Option<String>,
+}
+
+impl Default for StyleConfig {
+    fn default() -> Self {
+        StyleConfig {
+            theme: Theme::Dark,
+            additional_css: vec![],
+            syntax_theme: SyntaxTheme::MaterialTheme,
+            oranda_css_version: None,
+        }
+    }
+}
+
 #[derive(Debug, Deserialize)]
 pub struct OrandaConfig {
     pub description: Option<String>,
@@ -37,10 +57,7 @@ pub struct OrandaConfig {
     pub name: Option<String>,
     pub no_header: Option<bool>,
     pub readme_path: Option<String>,
-    pub theme: Option<Theme>,
-    pub additional_css: Option<Vec<String>>,
     pub repository: Option<String>,
-    pub syntax_theme: Option<SyntaxTheme>,
     pub analytics: Option<Analytics>,
     pub additional_pages: Option<HashMap<String, String>>,
     pub social: Option<Social>,
@@ -54,6 +71,7 @@ pub struct OrandaConfig {
     #[serde(alias = "md_book")]
     pub mdbook: Option<MdBookConfig>,
     pub changelog: Option<bool>,
+    pub styles: Option<StyleConfig>,
 }
 
 impl OrandaConfig {
