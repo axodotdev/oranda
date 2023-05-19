@@ -1,5 +1,6 @@
 mod fixtures;
 use super::utils::tokio_utils::TEST_RUNTIME;
+use camino::Utf8Path;
 use fixtures::project_config;
 
 use oranda::config::project::ProjectConfig;
@@ -9,15 +10,14 @@ use assert_fs::fixture::{FileWriteStr, PathChild};
 #[test]
 fn it_detects_a_js_project() {
     let tempdir = assert_fs::TempDir::new().expect("failed creating tempdir");
+    let temppath = Utf8Path::from_path(tempdir.path()).expect("non-utf8 temp path");
     let package_json = tempdir.child("package.json");
     package_json
         .write_str(project_config::package_json())
         .expect("failed to write package_json");
 
     assert_eq!(
-        ProjectConfig::get_project(&Some(tempdir.path().to_path_buf()))
-            .unwrap()
-            .kind,
+        ProjectConfig::get_project(temppath).unwrap().0.kind,
         axoproject::WorkspaceKind::Javascript
     );
     tempdir
@@ -49,6 +49,7 @@ fn it_loads_a_js_project_config() {
 #[test]
 fn it_detects_a_rust_project() {
     let tempdir = assert_fs::TempDir::new().expect("failed creating tempdir");
+    let temppath = Utf8Path::from_path(tempdir.path()).expect("non-utf8 temp path");
     let cargo_toml = tempdir.child("Cargo.toml");
     cargo_toml
         .write_str(project_config::cargo_toml())
@@ -57,9 +58,7 @@ fn it_detects_a_rust_project() {
     main.write_str(project_config::main_rs())
         .expect("failed to write main.rs");
     assert_eq!(
-        ProjectConfig::get_project(&Some(tempdir.path().to_path_buf()))
-            .unwrap()
-            .kind,
+        ProjectConfig::get_project(temppath).unwrap().0.kind,
         axoproject::WorkspaceKind::Rust
     );
     tempdir
@@ -93,10 +92,9 @@ fn it_loads_a_rust_project_config() {
 #[test]
 fn it_can_successfully_not_detect_a_project() {
     let tempdir = assert_fs::TempDir::new().expect("failed creating tempdir");
+    let temppath = Utf8Path::from_path(tempdir.path()).expect("non-utf8 temp path");
 
-    assert!(
-        ProjectConfig::get_project(&Some(tempdir.path().to_path_buf())).is_none(),
-    );
+    assert!(ProjectConfig::get_project(temppath).is_none(),);
     tempdir
         .close()
         .expect("could not successfully delete temporary directory");
