@@ -1,3 +1,4 @@
+use camino::Utf8PathBuf;
 use miette::Diagnostic;
 use thiserror::Error;
 
@@ -99,6 +100,11 @@ pub enum OrandaError {
         path: String,
         inner: mdbook::errors::Error,
     },
+    #[error("We found a {kind} project at {manifest_path} but there was an issue")]
+    #[diagnostic(severity = "warn")]
+    BrokenProject { kind: String, manifest_path: Utf8PathBuf, 
+        #[diagnostic_source]
+        cause: axoproject::errors::AxoprojectError },
 
     #[error("{0}")]
     Other(String),

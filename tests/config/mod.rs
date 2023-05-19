@@ -94,9 +94,8 @@ fn it_loads_a_rust_project_config() {
 fn it_can_successfully_not_detect_a_project() {
     let tempdir = assert_fs::TempDir::new().expect("failed creating tempdir");
 
-    assert_eq!(
-        ProjectConfig::detect(&Some(tempdir.path().to_path_buf())),
-        None
+    assert!(
+        ProjectConfig::get_project(&Some(tempdir.path().to_path_buf())).is_none(),
     );
     tempdir
         .close()

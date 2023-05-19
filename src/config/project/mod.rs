@@ -1,5 +1,6 @@
 use std::path::PathBuf;
 
+use axoproject::{WorkspaceSearch, WorkspaceInfo};
 use camino::Utf8PathBuf;
 use serde::Deserialize;
 
@@ -44,9 +45,6 @@ impl ProjectConfig {
                             "Your project has multiple binaries, Oranda doesn't support that",
                         )
                         .print();
-                        tracing::warn!(
-                            "Your project has multiple binaries, Oranda doesn't support that"
-                        );
                         return Ok(None);
                     }
                 }
@@ -67,7 +65,6 @@ impl ProjectConfig {
                     "Your project doesn't seem to have binaries",
                 )
                 .print();
-                tracing::warn!("Your project doesn't seem to have binaries");
                 Ok(None)
             }
         } else {
@@ -75,17 +72,68 @@ impl ProjectConfig {
         }
     }
 
-    pub fn get_project(project_root: &Option<PathBuf>) -> Option<axoproject::WorkspaceInfo> {
-        // Get the general info about the project (via axo-project)
+    /// Get information about the project workspace (using axoproject)
+    pub fn get_project(project_root: &Option<PathBuf>) -> Option<WorkspaceInfo> {
+        // Start in the project root, or failing that current dir
         let start_dir = project_root.clone().unwrap_or_else(|| {
             std::env::current_dir().expect("couldn't get current working dir!?")
         });
         let start_dir = Utf8PathBuf::from_path_buf(start_dir).expect("project path isn't utf8!?");
-        let Some(project) = axoproject::get_project(&start_dir) else {
-            Message::new(MessageType::Warning, "Could not identify project type...").print();
-            tracing::warn!("Could not identify project type...");
-            return None;
+        
+        // Clamp the search for project files to the nearest oranda.json, or failing, that cwd.
+        // This is overly conservative to give us more options in the future
+        //
+        // FIXME: this is currently kinda whack because oranda won't actually use the oranda.json file
+        // we find here... that choice is made in the caller.
+        let clamp_to_dir = if let Ok(file) = axoproject::find_file("oranda.json", &start_dir, None) {
+            file.parent().unwrap().to_owned()    
+        } else {
+            start_dir.clone()
         };
-        Some(project)
+
+        // Search for workspaces and process the results
+        let workspaces = axoproject::get_workspaces(&start_dir, Some(&clamp_to_dir));
+        let rust_workspace = Self::handle_search_result(workspaces.rust, "rust");
+        let js_workspace = Self::handle_search_result(workspaces.javascript, "javascript");
+        
+        // Now pick the "best" one based on which one is "deeper" in the filesystem
+        // (and therefore closer to the start dir, since we only look at ancestors).
+        //
+        // This is kinda hacky, but it's a starting point.
+        let all_workspaces = vec![rust_workspace, js_workspace];
+        let mut best_workspace_depth = 0;
+        let mut best_workspace = None;
+        for workspace in all_workspaces {
+            let Some(workspace) = workspace else {
+                continue;
+            };
+            let workspace_depth = workspace.manifest_path.ancestors().count();
+            if workspace_depth > best_workspace_depth {
+                best_workspace = Some(workspace);
+                best_workspace_depth = workspace_depth;
+            }
+        }
+
+        best_workspace
+    }
+
+    fn handle_search_result(search: WorkspaceSearch, name: &str) -> Option<WorkspaceInfo> {
+        match search {
+            axoproject::WorkspaceSearch::Found(info) => Some(info),
+            axoproject::WorkspaceSearch::Broken { manifest_path, cause } => {
+                let warning = OrandaError::BrokenProject {
+                    kind: name.to_owned(),
+                    manifest_path,
+                    cause,
+                };
+                eprintln!("{:?}", miette::Report::new(warning));
+                None
+            },
+            axoproject::WorkspaceSearch::Missing(cause) => {
+                // Just quietly log this in case useful
+                tracing::info!("Couldn't find {name} project {:?}", &miette::Report::new(cause));
+                None
+            },
+        }
     }
 }
