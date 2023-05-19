@@ -2,7 +2,7 @@ mod fixtures;
 use super::utils::tokio_utils::TEST_RUNTIME;
 use fixtures::project_config;
 
-use oranda::config::project::{JavaScript, ProjectConfig, Rust, Type};
+use oranda::config::project::ProjectConfig;
 
 use assert_fs::fixture::{FileWriteStr, PathChild};
 
@@ -15,8 +15,10 @@ fn it_detects_a_js_project() {
         .expect("failed to write package_json");
 
     assert_eq!(
-        ProjectConfig::detect(&Some(tempdir.path().to_path_buf())),
-        Some(Type::JavaScript(JavaScript {}))
+        ProjectConfig::get_project(&Some(tempdir.path().to_path_buf()))
+            .unwrap()
+            .kind,
+        axoproject::WorkspaceKind::Javascript
     );
     tempdir
         .close()
@@ -51,10 +53,14 @@ fn it_detects_a_rust_project() {
     cargo_toml
         .write_str(project_config::cargo_toml())
         .expect("failed to write cargo toml");
-
+    let main = tempdir.child("src/main.rs");
+    main.write_str(project_config::main_rs())
+        .expect("failed to write main.rs");
     assert_eq!(
-        ProjectConfig::detect(&Some(tempdir.path().to_path_buf())),
-        Some(Type::Rust(Rust {}))
+        ProjectConfig::get_project(&Some(tempdir.path().to_path_buf()))
+            .unwrap()
+            .kind,
+        axoproject::WorkspaceKind::Rust
     );
     tempdir
         .close()
@@ -69,6 +75,9 @@ fn it_loads_a_rust_project_config() {
     cargo_toml
         .write_str(project_config::cargo_toml())
         .expect("failed to write cargo toml");
+    let main = tempdir.child("src/main.rs");
+    main.write_str(project_config::main_rs())
+        .expect("failed to write main.rs");
     let config = ProjectConfig::load(Some(tempdir.path().to_path_buf()))
         .expect("failed to load Cargo.toml")
         .unwrap();
