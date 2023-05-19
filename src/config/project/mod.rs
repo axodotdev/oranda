@@ -117,10 +117,9 @@ impl ProjectConfig {
                 // in the dir we're looking at. We need to use canonicalize here because
                 // something in guppy/cargo is desugarring symlinks in their output, so
                 // we need to too.
-                let canonical_start_dir = start_dir.canonicalize_utf8().ok()?;
                 let package = workspace.packages().find_map(|(idx, p)| {
-                    let package_dir = p.manifest_path.parent().unwrap().canonicalize_utf8().ok()?;
-                    if package_dir == canonical_start_dir {
+                    let package_dir = p.manifest_path.parent().unwrap();
+                    if is_same_path(package_dir, start_dir) {
                         Some(idx)
                     } else {
                         None
@@ -163,4 +162,13 @@ impl ProjectConfig {
             }
         }
     }
+}
+
+fn is_same_path(path1: &Utf8Path, path2: &Utf8Path) -> bool {
+    if let Ok(path1) = std::fs::canonicalize(path1) {
+        if let Ok(path2) = std::fs::canonicalize(path2) {
+            return path1 == path2;
+        }
+    }
+    path1 == path2
 }
