@@ -100,7 +100,7 @@ pub enum OrandaError {
         path: String,
         inner: mdbook::errors::Error,
     },
-    #[error("We found a {kind} project at {manifest_path} but there was an issue")]
+    #[error("We found a potential {kind} project at {manifest_path} but there was an issue")]
     #[diagnostic(severity = "warn")]
     BrokenProject {
         kind: String,
