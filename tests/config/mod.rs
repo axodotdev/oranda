@@ -16,10 +16,8 @@ fn it_detects_a_js_project() {
         .write_str(project_config::package_json())
         .expect("failed to write package_json");
 
-    assert_eq!(
-        ProjectConfig::get_project(temppath).unwrap().0.kind,
-        axoproject::WorkspaceKind::Javascript
-    );
+    let (ws, _pkg) = ProjectConfig::get_project(temppath).unwrap();
+    assert_eq!(ws.kind, axoproject::WorkspaceKind::Javascript);
     tempdir
         .close()
         .expect("could not successfully delete temporary directory");
@@ -57,10 +55,8 @@ fn it_detects_a_rust_project() {
     let main = tempdir.child("src/main.rs");
     main.write_str(project_config::main_rs())
         .expect("failed to write main.rs");
-    assert_eq!(
-        ProjectConfig::get_project(temppath).unwrap().0.kind,
-        axoproject::WorkspaceKind::Rust
-    );
+    let (ws, _pkg) = ProjectConfig::get_project(temppath).unwrap();
+    assert_eq!(ws.kind, axoproject::WorkspaceKind::Rust);
     tempdir
         .close()
         .expect("could not successfully delete temporary directory");
@@ -94,7 +90,7 @@ fn it_can_successfully_not_detect_a_project() {
     let tempdir = assert_fs::TempDir::new().expect("failed creating tempdir");
     let temppath = Utf8Path::from_path(tempdir.path()).expect("non-utf8 temp path");
 
-    assert!(ProjectConfig::get_project(temppath).is_none(),);
+    assert!(ProjectConfig::get_project(temppath).is_none());
     tempdir
         .close()
         .expect("could not successfully delete temporary directory");

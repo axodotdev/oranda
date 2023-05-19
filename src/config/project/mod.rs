@@ -131,7 +131,7 @@ impl ProjectConfig {
                     // This can happen if you run oranda in a dir with a virtual Cargo.toml.
                     Message::new(
                         MessageType::Warning,
-                        &format!("Ignoring {:?} project, none of the packages seem to own this directory", workspace.kind),
+                        &format!("Ignoring {:?} project, oranda is currently per-package and this looks like a whole workspace", workspace.kind),
                     )
                     .print();
                     None
