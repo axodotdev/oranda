@@ -115,8 +115,17 @@ impl ProjectConfig {
             axoproject::WorkspaceSearch::Found(workspace) => {
                 // Now that we found the workspace, find the actual package that appears
                 // in the dir we're looking at.
+                let canonical_start_dir = start_dir
+                    .canonicalize_utf8()
+                    .expect("failed to canonicalize dir");
                 let package = workspace.packages().find_map(|(idx, p)| {
-                    if p.manifest_path.parent().unwrap() == start_dir {
+                    let package_dir = p
+                        .manifest_path
+                        .parent()
+                        .unwrap()
+                        .canonicalize_utf8()
+                        .expect("failed to canonicalize dir");
+                    if package_dir == canonical_start_dir {
                         Some(idx)
                     } else {
                         None
