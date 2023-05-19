@@ -276,8 +276,9 @@ dependencies = [
 
 [[package]]
 name = "axoproject"
-version = "0.3.0"
-source = "git+https://github.com/axodotdev/axoproject/?branch=oranda-adjust#7ebc9d0c484b614893cf6c0bb47213367f9f44b0"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4ef8f81c088f51006c86fdba3d9b003c9e2d750b6c131aafc3485a0c24029277"
 dependencies = [
  "axoasset 0.1.1",
  "camino",
