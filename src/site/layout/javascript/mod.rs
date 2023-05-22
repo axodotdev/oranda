@@ -23,7 +23,11 @@ impl Analytics {
                     google_script,
                 })
             }
-            _ => Ok(Self {
+            Some(_) => Ok(Self {
+                snippet,
+                google_script: None,
+            }),
+            None => Ok(Self {
                 snippet: None,
                 google_script: None,
             }),
