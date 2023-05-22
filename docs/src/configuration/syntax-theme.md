@@ -1,6 +1,6 @@
 # Syntax Theme
 
-When it comes to syntax highlighting by default oranda will use the [`material-theme`](./themes/themes.html#materialtheme) and can be easily changed for any of the default themes that can be seen in the [Available themes page](./themes/themes).
+When it comes to syntax highlighting by default oranda will use the [`material-theme`](./theme.md#materialtheme) and can be easily changed for any of the default themes that can be seen in the [Available themes page](./theme.md).
 
 ```json
 {

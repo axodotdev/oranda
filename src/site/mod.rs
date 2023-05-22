@@ -177,9 +177,11 @@ impl Site {
         tracing::info!("Building mdbook...");
 
         // Read mdbook's config to find the right dirs
-        let book_path = &book_cfg.path;
-        let md = mdbook::MDBook::load(book_path).map_err(|e| OrandaError::MdBookLoad {
-            path: book_path.clone(),
+
+        let cur_dir = axoasset::LocalAsset::current_dir()?;
+        let book_path = cur_dir.join(&book_cfg.path);
+        let md = mdbook::MDBook::load(&book_path).map_err(|e| OrandaError::MdBookLoad {
+            path: book_path.to_string(),
             inner: e,
         })?;
         let build_dir =
@@ -187,7 +189,7 @@ impl Site {
 
         // Build the mdbook
         md.build().map_err(|e| OrandaError::MdBookBuild {
-            path: book_path.clone(),
+            path: book_path.to_string(),
             inner: e,
         })?;
 
