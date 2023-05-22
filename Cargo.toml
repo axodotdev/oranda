@@ -43,6 +43,7 @@ miette = "5.7.0"
 futures-util = "0.3.28"
 mdbook = { version = "0.4.17", default-features = false }
 notify = "6.0.0"
+toml_edit = "0.19.9"
 
 [dev-dependencies]
 assert_cmd="2"

@@ -108,6 +108,20 @@ pub enum OrandaError {
         #[diagnostic_source]
         cause: axoproject::errors::AxoprojectError,
     },
+    /// This error indicates we tried to deserialize some TOML with toml_edit
+    /// but failed.
+    #[error("Failed to edit toml document")]
+    TomlEdit {
+        /// The SourceFile we were trying to parse
+        #[source_code]
+        source: axoasset::SourceFile,
+        /// The range the error was found on
+        #[label]
+        span: Option<miette::SourceSpan>,
+        /// Details of the error
+        #[source]
+        details: toml_edit::TomlError,
+    },
 
     #[error("We were unable to watch your filesystem for changes")]
     #[diagnostic(help = "Make sure that oranda has privileges to set up file watchers!")]
