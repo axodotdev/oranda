@@ -6,3 +6,5 @@ src = "src"
 
 [output.markdown]
 [output.html]
+default-theme = "axo"
+preferred-dark-theme = "axo"
