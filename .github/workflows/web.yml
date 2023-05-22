@@ -69,7 +69,7 @@ jobs:
       - name: Install and run oranda
         # Install from this checkout because WE'RE ORANDA
         run: |
-          cargo install --locked --profile=dist --path ./
+          curl --proto '=https' --tlsv1.2 -LsSf https://github.com/axodotdev/oranda/releases/download/v0.1.0-prerelease.1/oranda-installer.sh | sh
           oranda build
 
       # Deploy to our gh-pages branch (making it if it doesn't exist)
