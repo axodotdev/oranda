@@ -57,17 +57,10 @@ jobs:
           fetch-depth: 0
       - uses: dtolnay/rust-toolchain@stable
       - uses: swatinem/rust-cache@v2
-      
-      # Install mdbook plugins
-      - name: Install mdbook plugins
-        run: |
-          cargo install --locked mdbook-toc@0.11.2
-          cargo install --locked mdbook-linkcheck@0.7.7
 
       # Install and run oranda (and mdbook)
       # This will write all output to ./public/ (including copying mdbook's output to there)
       - name: Install and run oranda
-        # Install from this checkout because WE'RE ORANDA
         run: |
           curl --proto '=https' --tlsv1.2 -LsSf https://github.com/axodotdev/oranda/releases/download/v0.1.0-prerelease.1/oranda-installer.sh | sh
           oranda build
