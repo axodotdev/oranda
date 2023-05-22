@@ -2,7 +2,7 @@
 name = "oranda"
 description = "🎁 generate beautiful landing pages for your projects"
 repository = "https://github.com/axodotdev/oranda"
-version = "0.1.0-prerelease.3"
+version = "0.1.0-prerelease.4"
 edition = "2021"
 authors = ["Axo Developer Co. <hello@axo.dev>"]
 license = "MIT OR Apache-2.0"
