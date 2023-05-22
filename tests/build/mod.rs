@@ -246,3 +246,14 @@ fn it_renders_code_blocks_with_invalid_annotations() {
         .contents
         .contains("this block will render but not be highlighted!"));
 }
+
+#[test]
+fn it_inserts_plausible_tag() {
+    let _guard = TEST_RUNTIME.enter();
+    let (_t, temp_dir) = temp_build_dir();
+    let config = oranda_config::analytics_plausible(temp_dir);
+    let layout = Layout::new(&config).unwrap();
+    let page = page::index(&config, &layout);
+    dbg!(&page.contents);
+    assert!(page.contents.contains(r#"<script defer="true" src="https://plausible.io/js/script.js" data-domain="opensource.axo.dev"></script>"#))
+}

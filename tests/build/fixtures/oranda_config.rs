@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 
+use oranda::config::analytics::{Analytics, PlausibleTracking};
 use oranda::config::artifacts::Artifacts;
 use oranda::config::{Config, StyleConfig};
 
@@ -104,6 +105,18 @@ pub fn changelog(temp_dir: String) -> Config {
         dist_dir: temp_dir,
         repository: Some(String::from("https://github.com/axodotdev/oranda")),
         changelog: true,
+        ..Default::default()
+    }
+}
+
+pub fn analytics_plausible(temp_dir: String) -> Config {
+    Config {
+        dist_dir: temp_dir,
+        repository: Some(String::from("https://github.com/axodotdev/oranda")),
+        analytics: Some(Analytics::Plausible(PlausibleTracking {
+            domain: "opensource.axo.dev".into(),
+            script_url: None,
+        })),
         ..Default::default()
     }
 }
