@@ -3,14 +3,17 @@ use std::path::PathBuf;
 use axoproject::WorkspaceSearch;
 use camino::Utf8PathBuf;
 use clap::Parser;
-use mdbook::MDBook;
 use notify::{event::ModifyKind, EventKind, Watcher};
 
 use crate::{
     commands::{Build, Serve},
     message::{Message, MessageType},
 };
-use oranda::{config::Config, errors::*};
+use oranda::{
+    config::Config,
+    errors::*,
+    site::mdbook::{has_custom_theme, load_mdbook, mdbook_dir},
+};
 
 #[derive(Clone, Debug, Parser)]
 pub struct Dev {
@@ -77,19 +80,15 @@ impl Dev {
 
         // Watch for the mdbook directory, if we have it
         if let Some(book_cfg) = &config.mdbook {
-            let path = &book_cfg.path;
-            let md = MDBook::load(path).map_err(|e| OrandaError::MdBookLoad {
-                path: path.to_string(),
-                inner: e,
-            })?;
-
+            let path = mdbook_dir(book_cfg)?;
+            let md = load_mdbook(&path)?;
             // watch book.toml and /src/
             paths_to_watch.push(md.root.join("book.toml").display().to_string());
             paths_to_watch.push(md.source_dir().display().to_string());
 
             // If we're not clobbering the theme, also watch the theme dir
             // (note that this may not exist on the fs, mdbook reports the path regardless)
-            if !book_cfg.theme.unwrap_or(true) {
+            if !has_custom_theme(book_cfg) {
                 paths_to_watch.push(md.theme_dir().display().to_string());
             }
         }
