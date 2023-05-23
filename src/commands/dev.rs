@@ -25,6 +25,9 @@ pub struct Dev {
     /// Skip the first build before starting to watch for changes
     #[arg(long)]
     no_first_build: bool,
+    /// List of extra paths to watch
+    #[arg(short, long)]
+    include_paths: Option<Vec<Utf8PathBuf>>,
 }
 
 impl Dev {
@@ -53,13 +56,21 @@ impl Dev {
                 .into(),
         );
 
+        // Watch for any user-provided paths
+        if self.include_paths.is_some() {
+            let mut include_paths: Vec<String> = self
+                .include_paths
+                .unwrap()
+                .iter()
+                .map(|p| p.to_string())
+                .collect();
+            paths_to_watch.append(&mut include_paths);
+        }
+
         // Watch for additional pages, if we have any
         if config.additional_pages.is_some() {
-            let mut additional_pages: Vec<String> = config
-                .additional_pages
-                .unwrap().values()
-                .cloned()
-                .collect();
+            let mut additional_pages: Vec<String> =
+                config.additional_pages.unwrap().values().cloned().collect();
             paths_to_watch.append(&mut additional_pages);
         }
 
