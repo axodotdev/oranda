@@ -76,10 +76,22 @@ impl Dev {
         }
 
         // Watch for the mdbook directory, if we have it
-        if config.mdbook.is_some() {
-            let path = config.mdbook.unwrap().path;
-            let md = MDBook::load(&path).map_err(|e| OrandaError::MdBookLoad { path, inner: e })?;
+        if let Some(book_cfg) = &config.mdbook {
+            let path = &book_cfg.path;
+            let md = MDBook::load(path).map_err(|e| OrandaError::MdBookLoad {
+                path: path.to_string(),
+                inner: e,
+            })?;
+
+            // watch book.toml and /src/
+            paths_to_watch.push(md.root.join("book.toml").display().to_string());
             paths_to_watch.push(md.source_dir().display().to_string());
+
+            // If we're not clobbering the theme, also watch the theme dir
+            // (note that this may not exist on the fs, mdbook reports the path regardless)
+            if !book_cfg.theme.unwrap_or(true) {
+                paths_to_watch.push(md.theme_dir().display().to_string());
+            }
         }
 
         // Watch for any project manifest files
