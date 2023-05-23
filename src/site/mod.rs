@@ -119,12 +119,12 @@ impl Site {
         Ok(pages)
     }
 
-    pub fn copy_static(dist_path: &str, static_path: &str) -> Result<()> {
+    pub fn copy_static(dist_dir: &Utf8Path, static_path: &str) -> Result<()> {
         let mut options = fs_extra::dir::CopyOptions::new();
         options.overwrite = true;
         // We want to be able to rename dirs in the copy, this enables it
         options.copy_inside = true;
-        fs_extra::copy_items(&[static_path], dist_path, &options)?;
+        fs_extra::copy_items(&[static_path], dist_dir, &options)?;
 
         Ok(())
     }
@@ -135,24 +135,20 @@ impl Site {
             // FIXME: We have to do some gymnastics here due to `LocalAsset::write_new_all` taking filename and dest
             // path separately. Hopefully in a future version of axoasset, this only takes one parameter instead of
             // two, and we can just add the page filename to the dest path and pass it in.
-            let full_path = Utf8Path::new(&config.dist_dir).join(&page.filename);
-            LocalAsset::write_new_all(
-                &page.contents,
-                full_path.file_name().unwrap(),
-                full_path.parent().unwrap().as_str(),
-            )?;
+            let full_path = dist.join(&page.filename);
+            LocalAsset::write_new_all(&page.contents, full_path)?;
         }
         if let Some(book_cfg) = &config.mdbook {
             Self::handle_mdbook(&dist, book_cfg)?;
         }
         if Path::new(&config.static_dir).exists() {
-            Self::copy_static(dist.as_str(), &config.static_dir)?;
+            Self::copy_static(&dist, &config.static_dir)?;
         }
-        javascript::write_os_script(&config.dist_dir)?;
+        javascript::write_os_script(&dist)?;
 
         let additional_css = &config.styles.additional_css;
         if !additional_css.is_empty() {
-            css::write_additional(additional_css, &config.dist_dir)?;
+            css::write_additional(additional_css, &dist)?;
         }
 
         Ok(())
@@ -194,7 +190,7 @@ impl Site {
         // Copy the contents to "public/book/"
         // FIXME: make this something they can set in the MdBookConfig
         let book_dist = dist.join("book");
-        Self::copy_static(book_dist.as_str(), build_dir.as_str())?;
+        Self::copy_static(&book_dist, build_dir.as_str())?;
 
         Ok(())
     }

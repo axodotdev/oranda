@@ -7,6 +7,7 @@ use crate::message::{Message, MessageType};
 use axoasset::{Asset, LocalAsset};
 use axohtml::elements::link;
 use axohtml::html;
+use camino::Utf8Path;
 use minifier::css;
 
 pub const LATEST_ORANDA_CSS: &str = "0.0.4";
@@ -59,9 +60,9 @@ pub fn build_additional(path_prefix: &Option<String>) -> Box<link<String>> {
     html!(<link rel="stylesheet" href=abs_path></link>)
 }
 
-pub fn write_additional(additional_css: &[String], dist_dir: &str) -> Result<()> {
+pub fn write_additional(additional_css: &[String], dist_dir: &Utf8Path) -> Result<()> {
     let minified_css = concat_minify(additional_css)?;
 
-    LocalAsset::write_new(&minified_css, "custom.css", dist_dir)?;
+    LocalAsset::write_new(&minified_css, dist_dir.join("custom.css"))?;
     Ok(())
 }

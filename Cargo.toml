@@ -12,9 +12,10 @@ name = "oranda"
 
 [dependencies]
 ammonia = "3"
-axoasset = {version = "0.2.0", features = ["json-serde"] }
+axoasset = { version = "0.3.0", features = ["json-serde", "toml-edit"] }
+axocli = "0.1.0"
 axohtml = "0.5.0"
-axoproject = { version = "0.4.0", default-features = false, features = ["cargo-projects", "npm-projects"] }
+axoproject = { version = "0.4.1", default-features = false, features = ["cargo-projects", "npm-projects"] }
 axum = "0.6.2"
 cargo-dist-schema = "=0.0.3"
 chrono = "0.4.23"
@@ -38,7 +39,6 @@ tracing-appender = "0.2"
 tracing-subscriber = "0.3"
 url = "2.3.1"
 camino = "1.1.4"
-axocli = "0.1.0"
 miette = "5.7.0"
 futures-util = "0.3.28"
 mdbook = { version = "0.4.17", default-features = false }
