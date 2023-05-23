@@ -76,9 +76,16 @@ impl Dev {
 
         // Watch for the mdbook directory, if we have it
         if config.mdbook.is_some() {
+<<<<<<< HEAD
             let mut source_path = PathBuf::from(config.mdbook.unwrap().path);
             source_path.push("src");
             paths_to_watch.push(source_path.display().to_string());
+=======
+            // FIXME: We generate the mdbook html content in a subfolder of this folder, which means we can't watch
+            // the folder recursively with `notify`. This breaks usage for users who use a nested mdbook docs structure,
+            // and it's something we should handle.
+            paths_to_watch.push(config.mdbook.unwrap().path);
+>>>>>>> 6513910312f39b6750a0ba1f08d292ce6f2985d1
         }
 
         // Watch for any project manifest files

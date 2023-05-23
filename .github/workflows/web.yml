@@ -55,17 +55,14 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: swatinem/rust-cache@v2
 
       # Install and run oranda (and mdbook)
       # This will write all output to ./public/ (including copying mdbook's output to there)
       - name: Install and run oranda
-        # Install from this checkout because WE'RE ORANDA
         run: |
-          cargo install --locked --profile=dist --path ./
+          curl --proto '=https' --tlsv1.2 -LsSf https://github.com/axodotdev/oranda/releases/download/v0.1.0-prerelease.2/oranda-installer.sh | sh
           oranda build
 
       # Deploy to our gh-pages branch (making it if it doesn't exist)

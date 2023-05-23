@@ -47,7 +47,6 @@ pub fn build_oranda(
             let oranda_url = format!("https://octolotl.axodotdev.host/downloads/axodotdev/oranda/css-v{oranda_version}/oranda.css");
             let fetched_oranda =
                 tokio::runtime::Handle::current().block_on(Asset::copy(&oranda_url, dist_dir))?;
-            let filename = "oranda.css";
             fs::rename(fetched_oranda, format!("{dist_dir}/{filename}"))?;
         }
     };
