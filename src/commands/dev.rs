@@ -76,10 +76,9 @@ impl Dev {
 
         // Watch for the mdbook directory, if we have it
         if config.mdbook.is_some() {
-            // FIXME: We generate the mdbook html content in a subfolder of this folder, which means we can't watch
-            // the folder recursively with `notify`. This breaks usage for users who use a nested mdbook docs structure,
-            // and it's something we should handle.
-            paths_to_watch.push(config.mdbook.unwrap().path);
+            let mut source_path = PathBuf::from(config.mdbook.unwrap().path);
+            source_path.push("src");
+            paths_to_watch.push(source_path.display().to_string());
         }
 
         // Watch for any project manifest files
@@ -114,6 +113,7 @@ impl Dev {
 
         for path in paths_to_watch {
             let path = PathBuf::from(path);
+            // FIXME: Allow users to recursively watch directories!
             watcher.watch(path.as_path(), notify::RecursiveMode::NonRecursive)?;
         }
 
