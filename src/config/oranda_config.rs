@@ -19,7 +19,7 @@ pub struct Social {
     pub twitter_account: Option<String>,
 }
 
-/// Config for us bulding and integrating your mdbook
+/// Config for us building and integrating your mdbook
 #[derive(Debug, Deserialize)]
 pub struct MdBookConfig {
     /// Path to the mdbook
