@@ -3,6 +3,7 @@ use std::path::PathBuf;
 use axoproject::WorkspaceSearch;
 use camino::Utf8PathBuf;
 use clap::Parser;
+use mdbook::MDBook;
 use notify::{event::ModifyKind, EventKind, Watcher};
 
 use crate::{
@@ -76,10 +77,9 @@ impl Dev {
 
         // Watch for the mdbook directory, if we have it
         if config.mdbook.is_some() {
-            // FIXME: We generate the mdbook html content in a subfolder of this folder, which means we can't watch
-            // the folder recursively with `notify`. This breaks usage for users who use a nested mdbook docs structure,
-            // and it's something we should handle.
-            paths_to_watch.push(config.mdbook.unwrap().path);
+            let path = config.mdbook.unwrap().path;
+            let md = MDBook::load(&path).map_err(|e| OrandaError::MdBookLoad { path, inner: e })?;
+            paths_to_watch.push(md.source_dir().display().to_string());
         }
 
         // Watch for any project manifest files
@@ -114,7 +114,7 @@ impl Dev {
 
         for path in paths_to_watch {
             let path = PathBuf::from(path);
-            watcher.watch(path.as_path(), notify::RecursiveMode::NonRecursive)?;
+            watcher.watch(path.as_path(), notify::RecursiveMode::Recursive)?;
         }
 
         if !self.no_first_build {
