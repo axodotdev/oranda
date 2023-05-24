@@ -1993,6 +1993,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "octolotl"
+version = "0.1.0"
+dependencies = [
+ "miette",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "thiserror",
+]
+
+[[package]]
 name = "once_cell"
 version = "1.17.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2100,6 +2111,7 @@ dependencies = [
  "miette",
  "minifier",
  "notify",
+ "octolotl",
  "reqwest",
  "serde",
  "serde_json",

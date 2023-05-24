@@ -32,7 +32,8 @@ impl Context {
         repo: &GithubRepo,
         cargo_dist: bool,
     ) -> Result<(Vec<Release>, bool, Option<DistRelease>)> {
-        let gh_releases = GithubRelease::fetch_all(repo)?;
+        let gh_releases =
+            tokio::runtime::Handle::current().block_on(GithubRelease::fetch_all(repo))?;
         let all =
             tokio::runtime::Handle::current().block_on(futures_util::future::try_join_all(
                 gh_releases
