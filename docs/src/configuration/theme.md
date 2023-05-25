@@ -1,17 +1,23 @@
-# Theme
+# Theming
 
-Oranda comes with two default themes:
+> **Caveat empor!** Theme configuration is _weird_ right now, and will probably be changed in the future.
 
-## TODO: ADD IMAGES UNDER EACH
+## Predefined themes
+
+Oranda comes with four default themes:
 
 - Light
 - Dark
+- Hacker
+- Cupcake
 
-You can change the theme by adding the theme key to your `oranda.json`:
+You can change the theme by adding the `styles.theme` key to your `oranda.json`:
 
 ```json
 {
-  "theme": "light | dark"
+  "styles": {
+    "theme": "hacker"
+  }
 }
 ```
 
@@ -21,11 +27,13 @@ Dark is the default theme.
 
 Themes can be further customized by adding extra CSS.
 
-Additional CSS can be added using the `additional_css` key.
+Additional CSS can be added using the `styles.additional_css` key.
 
 ```json
 {
-  "additional_css": ["./local/file.css", "http://www.remote.dev/file.css"]
+  "styles": {
+    "additional_css": ["./local/file.css", "http://www.remote.dev/file.css"]
+  }
 }
 ```
 
@@ -33,7 +41,7 @@ Additional CSS can be added using the `additional_css` key.
 
 ### Adding CSS
 
-Oranda CSS makes use of [cascade layers](https://css-tricks.com/css-cascade-layers/) to scope CSS and make it simpler to override styles. To override themed styles, say on a `<p>` element, place it inside a layer called `overrides`.
+Oranda's CSS makes use of [cascade layers](https://css-tricks.com/css-cascade-layers/) to scope CSS and make it simpler to override styles. To override themed styles, say on a `<p>` element, place it inside a layer called `overrides`.
 
 ```css
 @layer overrides {

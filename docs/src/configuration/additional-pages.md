@@ -1,9 +1,9 @@
-# Additional pages
+# Additional Pages
 
-This option is here if you have more than one markdown file you would like to transform and have on your website.
+If you have extra Markdown files you'd like to link directly as root pages on your generated website, you can
+use the `additional_pages` option to list them.
 
-This option accepts an object where the key is the page name and the value is the path to the markdown file.
-Any files passed here will be also added to a navbar at the top of the site.
+The option's format is an object with the human-readable page name as keys, and the path to the file as values. Example:
 
 ```json
 {

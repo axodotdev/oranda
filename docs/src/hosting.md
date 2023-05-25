@@ -1,4 +1,6 @@
-# Hosting on Github Pages
+# Hosting
+
+## On GitHub pages
 
 When hosting on Github pages, it is often the case that your site will be served from a non-root url such as `myorg.github.io/reponame`.
 
@@ -11,3 +13,9 @@ Let's say your website is hosted at `https://myorg.github.io/reponame/`, to fix 
   "path_prefix": "reponame"
 }
 ```
+
+## Elsewhere
+
+oranda is, effectively, a static site generator. It outputs HTML, CSS and JavaScript files. These can all be hosted on a
+looooot of different platforms, in fact, too many for us to enumerate here! You can use Vercel, Netlify, any GitHub pages
+competitor, or you can plop it on your own server that runs nginx, Apache httpd, Caddy, or anything else!
