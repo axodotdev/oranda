@@ -52,13 +52,13 @@ oranda has picked up on our readme file and converted it into a static page! How
 
 If we want to work with the more advanced features that oranda offers, we'll have to create a configuration file.
 The default location of this file is `oranda.json` in the same directory where your project manifest is located.
-You can view a full reference of the configuration schema [here](./configuration.md), but for now, let's focus on
-doing something else – we want to show the releases of our project on this website we've generated.
+You can view a full reference of the configuration schema [here](./configuration.md). Let's start by making the simplest and highest impact change: telling oranda that our project has releases and changelogs that it should make pages for!
 
-oranda supports _changelog generation_, meaning we can opt into generating a page that pulls directly from our
-GitHub releases.  If you're working with `axolotlsay`, you have have noticed that oranda automatically pulls
-some metadata from our project manifest - in this case our `Cargo.toml` file. This means oranda already knows
-where our project is on GitHub, so to enable changelogs, we create our configuration file as such:
+`axolotlsay` uses GitHub Releases, and oranda knows how to handle those, so all it needs is the URL
+to our repository and permission to do so. As it turns out, oranda already has the URL, because it
+_also_ knows how to find and read `Cargo.toml` files, and ours specifies
+`repository = "https://github.com/axodotdev/axolotlsay"`.
+So let's tell oranda it's ok to look through our GitHub Releases by enabling the "changelog" feature:
 
 ```json
 {
