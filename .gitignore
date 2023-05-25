@@ -1,6 +1,8 @@
 /target
 public/
 oranda-debug.log
+# banish macos to the depths of hell
+.DS_Store
 
 # oranda-css
 oranda-css/dist

@@ -1,6 +1,6 @@
 # Analytics
 
-When it comes to analytics Oranda gives you a simple interface to add your scripts and make sure you collect analytics.
+When it comes to analytics, oranda gives you a simple interface to add your scripts and make sure you collect analytics.
 
 Right now we support the following analytics providers:
 
@@ -9,7 +9,7 @@ Right now we support the following analytics providers:
 - [Fathom](https://usefathom.com/)
 - [Unami](https://umami.is/)
 
-To add any of these you can add to your `oranda.json` the info for the one you use:
+To add any of these, add the required configuration under the `analytics` key:
 
 ### Google Analytics
 
