@@ -1,7 +1,8 @@
 # Adding static assets
 
-If you reference static assets in your Markdown, you'll need to place them all inside a directory at the root of your project called `static`. This is because Oranda currently doesn't know about each indidivual asset, and instead just copies
-the folder where they're contained.
+If you reference static assets in your Markdown, you'll need to place them all inside a directory at the same level as
+your project manifest file called `static`. This is because Oranda currently doesn't know about each indidivual asset,
+and instead just copies the folder where they're contained.
 
 In your Markdown, you'll need to refer to the assets in this directory. For example:
 

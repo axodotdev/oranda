@@ -51,9 +51,9 @@ oranda has picked up on our readme file and converted it into a static page! How
 ## Beyond the Basics
 
 If we want to work with the more advanced features that oranda offers, we'll have to create a configuration file.
-The default location of this file is `oranda.json` in your project root. You can view a full reference of the
-configuration schema [here](./configuration.md), but for now, let's focus on doing something else – we want to
-show the releases of our project on this website we've generated.
+The default location of this file is `oranda.json` in the same directory where your project manifest is located.
+You can view a full reference of the configuration schema [here](./configuration.md), but for now, let's focus on
+doing something else – we want to show the releases of our project on this website we've generated.
 
 oranda supports _changelog generation_, meaning we can opt into generating a page that pulls directly from our
 GitHub releases.  If you're working with `axolotlsay`, you have have noticed that oranda automatically pulls

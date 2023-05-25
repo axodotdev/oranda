@@ -36,8 +36,8 @@ For example:
 ```
 
 > **NOTE:** All paths in `oranda.json` are relative to the `oranda.json` file. We
-  recommend placing this file in the root of your project, alongside any other
-  project manifest files you may be using, such as a `package.json` or `Cargo.toml`.
+  recommend placing this file in the same directory as your project manifest, such as a `package.json`
+  or `Cargo.toml`.
 
 ## Configuration options
 
