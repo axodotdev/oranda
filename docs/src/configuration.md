@@ -1,5 +1,30 @@
 # Configuration
 
+- [Configuration](#configuration)
+  - [Manifest file: `oranda.json`](#manifest-file-orandajson)
+  - [Configuration options](#configuration-options)
+    - [name](#name)
+    - [description](#description)
+    - [dist\_dir](#dist_dir)
+    - [homepage](#homepage)
+    - [static\_dir](#static_dir)
+    - [no\_header](#no_header)
+    - [readme\_path](#readme_path)
+    - [repository](#repository)
+    - [analytics](#analytics)
+    - [additional\_pages](#additional_pages)
+    - [social](#social)
+    - [artifacts](#artifacts)
+    - [version](#version)
+    - [logo](#logo)
+    - [favicon](#favicon)
+    - [path\_prefix](#path_prefix)
+    - [license](#license)
+    - [mdbook or md\_book](#mdbook-or-md_book)
+    - [changelog](#changelog)
+    - [styles](#styles)
+
+
 `oranda` is designed to work with no configuration- for projects with a
 `package.json` or `Cargo.toml`, `oranda` will grab the project metadata it needs
 from your project manifest file.
@@ -41,28 +66,107 @@ For example:
 
 ## Configuration options
 
-Some options have more detailed documentation, indicated by a link from the configuration key.
+### name
 
-- `name`: Your project's name. By default fetched from your project's manifest file.
-- `description`: Your project's description. By default fetched from your project's manifest file.
-- `dist_dir`: The directory where your static files will be output to. By default, this is `public/`.
-- `homepage`: Your project's homepage. By default fetched from your project's manifest file.
-- `static_dir`: Static content that oranda will copy to its output folder. By default, this is `static/`.
-- `no_header`: Whether to hide the page header (title and navigation bar).
-- `readme_path`: The path to your project's readme file. oranda by default tries a variation of the standard `README.md`.
-- `repository`: Your project's Git repository. By default fetched from your project's manifest file.
-- [`analytics`](./configuration/analytics.md): Configuration for page analytics.
-- [`additional_pages`](./configuration/additional-pages.md): An object of additional Markdown pages that you'd like to be included. All of these will appear in the site
-  header.
-- [`social`](./configuration/social.md): Options useful for SEO features.
-- [`artifacts`](./configuration/artifacts.md): Configuration for enabling downloadable artifacts, as well as the `cargo-dist`
-  integration.
-- `version`: Not currently used.
-- `logo`: Path to a custom logo to be shown in your website header.
-- `favicon`: Path to a custom favicon.
-- `path_prefix`: If you're hosting oranda on a nested path (e.g. `mysite.cool/myproject`), you should set `path_prefix` to
-  `myproject` in your configuration in order for oranda to generate correct links.
-- `license`: Your project's license. By default fetched from your project's manifest file.
-- [`mdbook` or `md_book`](./configuration/mdbook.md): Configuration for mdbook.
-- [`changelog`](./configuration/changelog.md): Enable changelog generation.
-- [`styles`](./configuration/theme.md): Configuration for custom styles or themes.
+- Default value: Project manifest `name` field
+
+Your project's name.
+
+### description
+
+- Default value: Project manifest `description` field
+
+Your project's description.
+
+### dist_dir
+
+- Default value: `public/`
+
+The directory where your static files will be output to. This must be relative to the `oranda.json` file.
+
+### homepage
+
+- Default value: Project manifest `homepage` field
+
+Your project's homepage.
+
+### static_dir
+
+- Default value: `static/`
+
+Static content that oranda will copy to its output folder. This must be relative to the `oranda.json` file.
+
+### no_header
+
+> **Note:** This option might change or get removed in the future.
+
+- Default value: `false`
+
+Whether to hide the page header (title and navigation bar).
+
+### readme_path
+
+- Default value: A variation of the standard `README.md`
+
+The path to your project's readme file.
+
+### repository
+
+- Default value: Project manifest `repository` field
+
+Your project's Git repository.
+
+### analytics
+
+[Configuration for page analytics.](./configuration/analytics.md)
+
+### additional_pages
+
+An object of additional Markdown pages that you'd like to be included. All of these will appear in the site header.
+[More information](./configuration/additional-pages.md)
+
+### social
+
+[Options useful for SEO features.](./configuration/social.md)
+
+### artifacts
+
+Configuration for enabling downloadable artifacts, as well as the `cargo-dist`integration.
+[More information](./configuration/artifacts.md)
+
+### version
+
+> **Note:** This option might change or get removed in the future.
+
+Not currently used.
+
+### logo
+
+Path to a custom logo to be shown in your website header.
+
+### favicon
+
+Path to a custom favicon.
+
+### path_prefix
+
+If you're hosting oranda on a nested path (e.g. `mysite.cool/myproject`), you should set `path_prefix` to
+`myproject` in your configuration in order for oranda to generate correct links.
+
+### license
+
+- Default value: Project manifest `license` field.
+
+Your project's license.
+
+### mdbook or md_book
+
+[Configuration for mdbook.](./configuration/mdbook.md)
+
+### changelog
+
+Enable changelog generation. [More information](./configuration/changelog.md)
+
+### styles
+
+[Configuration for custom styles or themes.](./configuration/theme.md)
