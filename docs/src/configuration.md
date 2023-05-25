@@ -114,7 +114,7 @@ The path to your project's readme file.
 
 - Default value: Project manifest `repository` field
 
-Your project's Git repository.
+Your project's Git repository. Right now, only the HTTPS URL works.
 
 ### analytics
 
