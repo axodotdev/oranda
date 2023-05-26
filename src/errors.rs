@@ -48,7 +48,7 @@ pub enum OrandaError {
     #[error("Failed parsing response when fetching releases from Github.")]
     GithubReleaseParseError {
         #[source]
-        details: reqwest::Error,
+        details: axoasset::AxoassetError,
     },
 
     #[error("Could not find any releases from {repo_owner}/{repo_name} with a cargo-dist compatible `dist-manifest.json`.")]
