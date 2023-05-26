@@ -36,7 +36,7 @@ pub struct GithubReleaseAsset {
     pub id: i64,
     pub node_id: String,
     pub name: String,
-    pub label: String,
+    pub label: Option<String>,
     pub content_type: String,
     pub state: String,
     pub size: i64,
