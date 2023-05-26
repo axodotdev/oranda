@@ -83,10 +83,14 @@ impl GithubRelease {
 
     fn parse_response(response: reqwest::blocking::Response) -> Result<Vec<GithubRelease>> {
         match response.error_for_status() {
-            Ok(r) => match SourceFile::new("", r.text()?).deserialize_json() {
-                Ok(releases) => Ok(releases),
-                Err(e) => Err(OrandaError::GithubReleaseParseError { details: e }),
-            },
+            Ok(r) => {
+                let res: serde_json::Value = serde_json::from_str(&r.text()?)?;
+                let pretty_response = serde_json::to_string_pretty(&res)?;
+                Ok(
+                    SourceFile::new("", pretty_response)
+                        .deserialize_json::<Vec<GithubRelease>>()?,
+                )
+            }
             Err(e) => Err(OrandaError::GithubReleasesFetchError { details: e }),
         }
     }
