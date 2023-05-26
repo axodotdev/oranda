@@ -1,5 +1,6 @@
 use crate::errors::*;
 
+use axoasset::SourceFile;
 use reqwest::{blocking::Response, header::USER_AGENT};
 use serde::{Deserialize, Serialize};
 
@@ -82,7 +83,7 @@ impl GithubRelease {
 
     fn parse_response(response: reqwest::blocking::Response) -> Result<Vec<GithubRelease>> {
         match response.error_for_status() {
-            Ok(r) => match r.json() {
+            Ok(r) => match SourceFile::new("", r.text()?).deserialize_json() {
                 Ok(releases) => Ok(releases),
                 Err(e) => Err(OrandaError::GithubReleaseParseError { details: e }),
             },
