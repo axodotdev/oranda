@@ -2090,7 +2090,7 @@ dependencies = [
 
 [[package]]
 name = "oranda"
-version = "0.1.0-prerelease.4"
+version = "0.1.0-prerelease.5"
 dependencies = [
  "ammonia",
  "assert_cmd",
