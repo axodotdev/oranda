@@ -92,13 +92,15 @@ pub enum OrandaError {
     #[error("Couldn't load your mdbook at {path}")]
     MdBookLoad {
         path: String,
-        inner: mdbook::errors::Error,
+        #[source]
+        details: mdbook::errors::Error,
     },
 
     #[error("Couldn't build your mdbook at {path}")]
     MdBookBuild {
         path: String,
-        inner: mdbook::errors::Error,
+        #[source]
+        details: mdbook::errors::Error,
     },
     #[error("We found a potential {kind} project at {manifest_path} but there was an issue")]
     #[diagnostic(severity = "warn")]
@@ -107,6 +109,20 @@ pub enum OrandaError {
         manifest_path: Utf8PathBuf,
         #[diagnostic_source]
         cause: axoproject::errors::AxoprojectError,
+    },
+    /// This error indicates we tried to deserialize some TOML with toml_edit
+    /// but failed.
+    #[error("Failed to edit toml document")]
+    TomlEdit {
+        /// The SourceFile we were trying to parse
+        #[source_code]
+        source: axoasset::SourceFile,
+        /// The range the error was found on
+        #[label]
+        span: Option<miette::SourceSpan>,
+        /// Details of the error
+        #[source]
+        details: toml_edit::TomlError,
     },
 
     #[error("We were unable to watch your filesystem for changes")]
