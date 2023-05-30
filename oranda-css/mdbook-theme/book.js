@@ -366,10 +366,6 @@ function playground_text(playground, hidden = true) {
             try { localStorage.setItem('axomdbook-theme', theme); } catch (e) { }
         }
 
-        // This one gets injected into the initial html based on the mdbook config,
-        // so we need to always clear it since it might not be set at the JS level.
-        // Not sure if this is a bug in vanilla mdbook or something I introduced.
-        html.classList.remove(default_theme);
         html.classList.remove(previousTheme);
         html.classList.add(theme);
         updateThemeSelected();
