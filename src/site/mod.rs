@@ -140,7 +140,12 @@ impl Site {
             LocalAsset::write_new_all(&page.contents, full_path)?;
         }
         if let Some(book_cfg) = &config.mdbook {
-            mdbook::build_mdbook(&dist, book_cfg, &config.styles.syntax_theme)?;
+            mdbook::build_mdbook(
+                &dist,
+                book_cfg,
+                &config.styles.theme,
+                &config.styles.syntax_theme,
+            )?;
         }
         if Path::new(&config.static_dir).exists() {
             Self::copy_static(&dist, &config.static_dir)?;

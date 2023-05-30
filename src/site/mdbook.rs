@@ -2,6 +2,7 @@ use axoasset::LocalAsset;
 use camino::{Utf8Path, Utf8PathBuf};
 use mdbook::MDBook;
 
+use crate::config::theme::Theme;
 use crate::config::MdBookConfig;
 use crate::errors::*;
 use crate::message::{Message, MessageType};
@@ -24,10 +25,61 @@ const THEME_INDEX_HBS_PATH: &str = "index.hbs";
 const THEME_INDEX_HBS: &str = include_str!("../../oranda-css/mdbook-theme/index.hbs");
 
 const THEME_AXO_HIGHLIGHT_CSS_PATH: &str = "axo-highlight.css";
-const THEMES: &[(&str, &str)] = &[(
+const SYNTAX_THEMES: &[(&str, &str)] = &[(
     "MaterialTheme",
     include_str!("../../oranda-css/mdbook-theme/highlight-js-themes/base16-material.css"),
 )];
+
+/// A theme we can inject when building mdbooks
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub enum AxomdbookTheme {
+    /// Equivalent to oranda's "dark"
+    Axo,
+    /// Equivalent to oranda's "light"
+    AxoLight,
+}
+
+impl AxomdbookTheme {
+    /// Get the equivalent mdbook theme for this oranda theme
+    ///
+    /// If none exists we won't override themes
+    pub fn from_oranda_theme(oranda_theme: &Theme) -> Option<Self> {
+        use AxomdbookTheme::*;
+        match oranda_theme {
+            Theme::Light => Some(AxoLight),
+            Theme::Dark => Some(Axo),
+            Theme::Hacker => None,
+            Theme::Cupcake => None,
+        }
+    }
+
+    /// Get the dark theme equivalent of this theme
+    ///
+    /// mdbook wants this as a config. Unfortunately it doesn't have
+    /// an equivalent "here's my light mode". Returning None here
+    /// is equivalent to not setting the preference and using
+    /// the default "navy" as your dark mode.
+    pub fn preferred_dark_theme(&self) -> Option<Self> {
+        use AxomdbookTheme::*;
+        match self {
+            Axo => Some(AxomdbookTheme::Axo),
+            AxoLight => Some(AxomdbookTheme::Axo),
+        }
+    }
+
+    /// Get the css class / localStorage value for this theme
+    ///
+    /// **KEEP IN MIND** these values are hardcoded into the
+    /// css/js/hbs files for our custom theme, we need a more complete
+    /// solution that can let these values be injected into the files, I think..?
+    pub fn class(&self) -> &'static str {
+        use AxomdbookTheme::*;
+        match self {
+            Axo => "axo",
+            AxoLight => "axo-light",
+        }
+    }
+}
 
 /// Get a proper absolute path to the mdbook's dir (the one containing book.toml)
 ///
@@ -40,9 +92,13 @@ pub fn mdbook_dir(book_cfg: &MdBookConfig) -> Result<Utf8PathBuf> {
     Ok(pwd.join(&book_cfg.path))
 }
 
-/// Gets whether we want to add the custom oranda/axo themes to mdbooks
-pub fn has_custom_theme(book_cfg: &MdBookConfig) -> bool {
-    book_cfg.theme.unwrap_or(true)
+/// Gets the custom theme to set in an mdbook
+pub fn custom_theme(book_cfg: &MdBookConfig, oranda_theme: &Theme) -> Option<AxomdbookTheme> {
+    if book_cfg.theme.unwrap_or(true) {
+        AxomdbookTheme::from_oranda_theme(oranda_theme)
+    } else {
+        None
+    }
 }
 
 /// Gets the dir where we should write custom theme files
@@ -55,6 +111,7 @@ pub fn custom_theme_dir(_book_cfg: &MdBookConfig, dist: &Utf8Path) -> Result<Utf
 pub fn build_mdbook(
     dist: &Utf8Path,
     book_cfg: &MdBookConfig,
+    oranda_theme: &Theme,
     syntax_theme: &SyntaxTheme,
 ) -> Result<()> {
     Message::new(MessageType::Info, "Building mdbook...").print();
@@ -65,14 +122,18 @@ pub fn build_mdbook(
     let mut md = load_mdbook(&book_dir)?;
 
     // If custom theme is enabled, set that up
-    let custom_theme = has_custom_theme(book_cfg);
+    let custom_theme = custom_theme(book_cfg, oranda_theme);
     let theme_dir = custom_theme_dir(book_cfg, dist)?;
-    if custom_theme {
+    if let Some(theme) = custom_theme {
         init_theme_dir(&theme_dir)?;
-        md.config.set("output.html.default-theme", "axo").unwrap();
         md.config
-            .set("output.html.preferred-dark-theme", "axo")
+            .set("output.html.default-theme", theme.class())
             .unwrap();
+        if let Some(dark_theme) = theme.preferred_dark_theme() {
+            md.config
+                .set("output.html.preferred-dark-theme", dark_theme.class())
+                .unwrap();
+        }
         md.config.set("output.html.theme", &theme_dir).unwrap();
     }
 
@@ -84,7 +145,7 @@ pub fn build_mdbook(
         details: e,
     })?;
 
-    if custom_theme {
+    if custom_theme.is_some() {
         // If custom theme is enabled, add the axo syntax highlighting theme to the output
         add_custom_syntax_theme_to_output(syntax_theme, &build_dir)?;
         // See docs of this function for why we delete this dir
@@ -164,7 +225,7 @@ fn add_custom_syntax_theme_to_output(
     build_dir: &Utf8Path,
 ) -> Result<()> {
     let theme_name = syntax_theme.as_str();
-    let highlight_theme = THEMES
+    let highlight_theme = SYNTAX_THEMES
         .iter()
         .find_map(|(name, contents)| {
             if *name == theme_name {

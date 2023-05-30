@@ -12,7 +12,7 @@ use crate::{
 use oranda::{
     config::Config,
     errors::*,
-    site::mdbook::{has_custom_theme, load_mdbook, mdbook_dir},
+    site::mdbook::{custom_theme, load_mdbook, mdbook_dir},
 };
 
 #[derive(Clone, Debug, Parser)]
@@ -88,7 +88,7 @@ impl Dev {
 
             // If we're not clobbering the theme, also watch the theme dir
             // (note that this may not exist on the fs, mdbook reports the path regardless)
-            if !has_custom_theme(book_cfg) {
+            if custom_theme(book_cfg, &config.styles.theme).is_none() {
                 paths_to_watch.push(md.theme_dir().display().to_string());
             }
         }
