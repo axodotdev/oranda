@@ -66,14 +66,14 @@ pub fn build_mdbook(
 
     // If custom theme is enabled, set that up
     let custom_theme = has_custom_theme(book_cfg);
+    let theme_dir = custom_theme_dir(book_cfg, dist)?;
     if custom_theme {
-        let theme_dir = custom_theme_dir(book_cfg, dist)?;
         init_theme_dir(&theme_dir)?;
         md.config.set("output.html.default-theme", "axo").unwrap();
         md.config
             .set("output.html.preferred-dark-theme", "axo")
             .unwrap();
-        md.config.set("output.html.theme", theme_dir).unwrap();
+        md.config.set("output.html.theme", &theme_dir).unwrap();
     }
 
     // Build the mdbook
@@ -84,9 +84,11 @@ pub fn build_mdbook(
         details: e,
     })?;
 
-    // If custom theme is enabled, add the axo syntax highlighting theme to the output
     if custom_theme {
+        // If custom theme is enabled, add the axo syntax highlighting theme to the output
         add_custom_syntax_theme_to_output(syntax_theme, &build_dir)?;
+        // See docs of this function for why we delete this dir
+        delete_theme_dir(&theme_dir)?;
     }
 
     // Copy the contents to "public/book/"
@@ -121,9 +123,8 @@ fn init_theme_dir(theme_dir: &Utf8Path) -> Result<()> {
     Message::new(MessageType::Info, "Adding oranda mdbook theme...").print();
     tracing::info!("Adding oranda mdbook theme...");
 
-    if theme_dir.exists() {
-        LocalAsset::remove_dir_all(theme_dir.as_str())?;
-    }
+    // Just to be safe, clear out the theme dir in case it still exists
+    delete_theme_dir(theme_dir)?;
 
     let files = vec![
         (THEME_GENERAL_CSS_PATH, THEME_GENERAL_CSS),
@@ -139,6 +140,17 @@ fn init_theme_dir(theme_dir: &Utf8Path) -> Result<()> {
         LocalAsset::write_new_all(contents, path)?;
     }
 
+    Ok(())
+}
+
+/// Delete the custom theme dir
+///
+/// In the current implementation this folder only needs to exist for mdbook
+/// to read during its build, and is otherwise useless. So we should delete
+/// it from ./public/ so that it doesn't end up in prod. It gets generated
+/// in ./public/ because that's a dir we have carte-blanche to mess around in.
+fn delete_theme_dir(theme_dir: &Utf8Path) -> Result<()> {
+    LocalAsset::remove_dir_all(theme_dir.as_str())?;
     Ok(())
 }
 
