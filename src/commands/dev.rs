@@ -125,7 +125,9 @@ impl Dev {
 
         for path in paths_to_watch {
             let path = PathBuf::from(path);
-            watcher.watch(path.as_path(), notify::RecursiveMode::Recursive)?;
+            if path.exists() {
+                watcher.watch(path.as_path(), notify::RecursiveMode::Recursive)?;
+            }
         }
 
         if !self.no_first_build {

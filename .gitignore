@@ -3,6 +3,8 @@ public/
 oranda-debug.log
 # banish macos to the depths of hell
 .DS_Store
+# banish jetbrains as well
+.idea/
 
 # oranda-css
 oranda-css/dist
