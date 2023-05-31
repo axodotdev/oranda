@@ -133,10 +133,17 @@ impl Site {
     pub fn write(self, config: &Config) -> Result<()> {
         let dist = Utf8PathBuf::from(&config.dist_dir);
         for page in self.pages {
-            // FIXME: We have to do some gymnastics here due to `LocalAsset::write_new_all` taking filename and dest
-            // path separately. Hopefully in a future version of axoasset, this only takes one parameter instead of
-            // two, and we can just add the page filename to the dest path and pass it in.
-            let full_path = dist.join(&page.filename);
+            let filename_path = Utf8PathBuf::from(&page.filename);
+            // Prepare to write a "pretty link" for pages that aren't index.html already. This essentially means that we rewrite
+            // the page from "page.html" to "page/index.html", so that it can be loaded as "mysite.com/page" in the browser.
+            let full_path: Utf8PathBuf = if !filename_path.ends_with("index.html") {
+                // FIXME: Can we do anything BUT unwrap here? What's the smart way to deal with a missing filename path portion?
+                let file_stem = filename_path.file_stem().unwrap();
+                let parent = filename_path.parent().unwrap_or("".into());
+                dist.join(parent).join(file_stem).join("index.html")
+            } else {
+                dist.join(filename_path)
+            };
             LocalAsset::write_new_all(&page.contents, full_path)?;
         }
         if let Some(book_cfg) = &config.mdbook {
