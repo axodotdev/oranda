@@ -90,6 +90,9 @@ impl Config {
             if let Some(val) = project.readme_path {
                 self.readme_path = val.to_string();
             }
+            if let Some(val) = project.cargo_dist {
+                self.artifacts.cargo_dist = Some(val);
+            }
         }
     }
 
@@ -127,8 +130,15 @@ impl Config {
             if let Some(val) = custom.social {
                 self.social = Some(val);
             }
-            if let Some(val) = custom.artifacts {
-                self.artifacts = val;
+            if let Some(artifacts) = custom.artifacts {
+                // This value gets merged in a more fine-grain matter
+                // to allow earlier layers to set some values
+                if let Some(val) = artifacts.cargo_dist {
+                    self.artifacts.cargo_dist = Some(val);
+                }
+                if let Some(val) = artifacts.package_managers {
+                    self.artifacts.package_managers = Some(val);
+                }
             }
             if let Some(val) = custom.styles {
                 self.styles = val;
