@@ -15,6 +15,7 @@ pub struct ProjectConfig {
     pub repository: Option<String>,
     pub version: Option<String>,
     pub license: Option<String>,
+    pub readme_path: Option<Utf8PathBuf>,
 }
 
 impl ProjectConfig {
@@ -35,6 +36,7 @@ impl ProjectConfig {
                 repository: package.repository_url.clone(),
                 version: package.version.as_ref().map(|v| v.to_string()),
                 license: package.license.clone(),
+                readme_path: package.readme_file.clone(),
             }))
         } else {
             Ok(None)
