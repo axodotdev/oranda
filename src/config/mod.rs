@@ -40,119 +40,117 @@ pub struct Config {
 
 impl Config {
     pub fn build(config_path: &Utf8PathBuf) -> Result<Config> {
-        //Users can have multiple types of configuration or no configuration at all
+        // Users can have multiple types of configuration or no configuration at all
         //
-        //- Project configuration comes from a project manifest file. We currently
-        //  support `Cargo.toml` and `package.json`, but could support any manifest
-        //  that provided a `name`, `description`, `repository` and `homepage` field.
+        // - Project configuration comes from a project manifest file. We currently
+        //   support `Cargo.toml` and `package.json`, but could support any manifest
+        //   that provided a `name`, `description`, `repository` and `homepage` field.
         //
-        //- Custom configuration comes from a `oranda.config.json` file. If this
-        //  file exists, it has precedence over project configuration, which means
-        //  you could use this file to override fields in your project manifest.
-        //  This file can contain all possible public configuration fields.
-        let default = Config::default();
+        // - Custom configuration comes from a `oranda.config.json` file. If this
+        //   file exists, it has precedence over project configuration, which means
+        //   you could use this file to override fields in your project manifest.
+        //   This file can contain all possible public configuration fields.
+        //
+        // We apply these in layers, with later layers winning over earlier ones.
+        //
+        // Note that several of these config merges do a seemingly-useless `if`
+        // before applying a value. This is intentional to make the code more robust to refactors.
+        //
+        // If new stages are added or better defaults get introduced, we always
+        // want to defer to those values if the layer we're currently applying doesn't have
+        // an opinion on that value, which is what "None" in a config is really expressing.
+        let mut cfg = Config::default();
         let custom = OrandaConfig::load(config_path)?;
         let project = ProjectConfig::load(None)?;
 
-        // if there is no oranda.config file present...
-        if custom.is_none() {
-            // but there is a project manifest file
-            if let Some(project) = project {
-                // return a merge of the default and project config
-                return Ok(Config {
-                    description: project.description,
-                    homepage: project.homepage,
-                    name: project.name,
-                    repository: project.repository,
-                    version: project.version,
-                    license: project.license,
-                    ..Default::default()
-                });
-            } else {
-                // otherwise return the default
-                return Ok(default);
-            }
-        }
+        cfg.apply_project_layer(project);
+        cfg.apply_custom_layer(custom);
 
-        // if there is an oranda.config file
-        if let Some(custom) = custom {
-            // but there is not project manifest
-            if project.is_none() {
-                //return a merge of custom config and default config
-                return Ok(Config {
-                    description: custom.description.unwrap_or(default.description),
-                    dist_dir: custom.dist_dir.unwrap_or(default.dist_dir),
-                    static_dir: custom.static_dir.unwrap_or(default.static_dir),
-                    homepage: Self::project_override(custom.homepage, None, default.homepage),
-                    name: custom.name.unwrap_or(default.name),
-                    no_header: custom.no_header.unwrap_or(default.no_header),
-                    readme_path: custom.readme_path.unwrap_or(default.readme_path),
-                    repository: Self::project_override(custom.repository, None, default.repository),
-                    analytics: custom.analytics,
-                    additional_pages: custom.additional_pages,
-                    social: custom.social,
-                    artifacts: custom.artifacts.unwrap_or(default.artifacts),
-                    styles: custom.styles.unwrap_or(default.styles),
-                    version: None,
-                    license: None,
-                    logo: custom.logo,
-                    favicon: custom.favicon,
-                    path_prefix: custom.path_prefix,
-                    mdbook: None,
-                    changelog: custom.changelog.unwrap_or(default.changelog),
-                });
-            // otherwise both oranda config and project manifest exists
-            } else if let Some(project) = project {
-                // so return a merge of custom > project > default
-                return Ok(Config {
-                    description: custom.description.unwrap_or(project.description),
-                    dist_dir: custom.dist_dir.unwrap_or(default.dist_dir),
-                    static_dir: custom.static_dir.unwrap_or(default.static_dir),
-                    homepage: Self::project_override(
-                        custom.homepage,
-                        project.homepage,
-                        default.homepage,
-                    ),
-                    name: custom.name.unwrap_or(project.name),
-                    no_header: custom.no_header.unwrap_or(default.no_header),
-                    readme_path: custom.readme_path.unwrap_or(default.readme_path),
-                    repository: Self::project_override(
-                        custom.repository,
-                        project.repository,
-                        default.repository,
-                    ),
-                    analytics: custom.analytics,
-                    additional_pages: custom.additional_pages,
-                    social: custom.social,
-                    artifacts: custom.artifacts.unwrap_or(default.artifacts),
-                    styles: custom.styles.unwrap_or(default.styles),
-                    version: custom.version.or(project.version),
-                    license: custom.license.or(project.license),
-                    logo: custom.logo,
-                    favicon: custom.favicon,
-                    path_prefix: custom.path_prefix,
-                    mdbook: custom.mdbook,
-                    changelog: custom.changelog.unwrap_or(default.changelog),
-                });
-            }
-        }
-
-        Err(OrandaError::Other(String::from(
-            "Your config is a bag of bees. Not today, Satan",
-        )))
+        Ok(cfg)
     }
 
-    pub fn project_override(
-        custom: Option<String>,
-        project: Option<String>,
-        default: Option<String>,
-    ) -> Option<String> {
-        if custom.is_some() {
-            custom
-        } else if project.is_some() {
-            project
-        } else {
-            default
+    /// Apply the layer of config we computed from project files
+    fn apply_project_layer(&mut self, project: Option<ProjectConfig>) {
+        if let Some(project) = project {
+            self.name = project.name;
+            self.description = project.description;
+
+            if let Some(val) = project.homepage {
+                self.homepage = Some(val);
+            }
+            if let Some(val) = project.repository {
+                self.repository = Some(val);
+            }
+            if let Some(val) = project.version {
+                self.version = Some(val);
+            }
+            if let Some(val) = project.license {
+                self.license = Some(val);
+            }
+            if let Some(val) = project.readme_path {
+                self.readme_path = val.to_string();
+            }
+        }
+    }
+
+    /// Apply the layer of config we computed from oranda.json
+    fn apply_custom_layer(&mut self, custom: Option<OrandaConfig>) {
+        // Apply the "custom" layer
+        if let Some(custom) = custom {
+            if let Some(val) = custom.description {
+                self.description = val;
+            }
+            if let Some(val) = custom.dist_dir {
+                self.dist_dir = val;
+            }
+            if let Some(val) = custom.static_dir {
+                self.static_dir = val;
+            }
+            if let Some(val) = custom.homepage {
+                self.homepage = Some(val);
+            }
+            if let Some(val) = custom.name {
+                self.name = val;
+            }
+            if let Some(val) = custom.readme_path {
+                self.readme_path = val;
+            }
+            if let Some(val) = custom.repository {
+                self.repository = Some(val);
+            }
+            if let Some(val) = custom.analytics {
+                self.analytics = Some(val);
+            }
+            if let Some(val) = custom.additional_pages {
+                self.additional_pages = Some(val);
+            }
+            if let Some(val) = custom.social {
+                self.social = Some(val);
+            }
+            if let Some(val) = custom.artifacts {
+                self.artifacts = val;
+            }
+            if let Some(val) = custom.styles {
+                self.styles = val;
+            }
+            if let Some(val) = custom.version {
+                self.version = Some(val);
+            }
+            if let Some(val) = custom.logo {
+                self.logo = Some(val);
+            }
+            if let Some(val) = custom.favicon {
+                self.favicon = Some(val);
+            }
+            if let Some(val) = custom.path_prefix {
+                self.path_prefix = Some(val);
+            }
+            if let Some(val) = custom.mdbook {
+                self.mdbook = Some(val);
+            }
+            if let Some(val) = custom.changelog {
+                self.changelog = val;
+            }
         }
     }
 }
