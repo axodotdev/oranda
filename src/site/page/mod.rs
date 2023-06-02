@@ -24,7 +24,8 @@ impl Page {
         config: &Config,
     ) -> Result<Self> {
         let mut body = artifacts::header(context, config)?;
-        let readme = Self::load_and_render_contents(&config.readme_path, &config.syntax_theme)?;
+        let readme =
+            Self::load_and_render_contents(&config.readme_path, &config.styles.syntax_theme)?;
         body.push_str(&readme);
         let os_script = javascript::build_os_script(&config.path_prefix);
         let contents = layout.render(body, Some(os_script));
@@ -35,7 +36,8 @@ impl Page {
     }
 
     pub fn index(layout: &Layout, config: &Config) -> Result<Self> {
-        let body = Self::load_and_render_contents(&config.readme_path, &config.syntax_theme)?;
+        let body =
+            Self::load_and_render_contents(&config.readme_path, &config.styles.syntax_theme)?;
         let contents = layout.render(body, None);
         Ok(Page {
             contents,
@@ -44,7 +46,7 @@ impl Page {
     }
 
     pub fn new_from_file(source: &str, layout: &Layout, config: &Config) -> Result<Self> {
-        let body = Self::load_and_render_contents(source, &config.syntax_theme)?;
+        let body = Self::load_and_render_contents(source, &config.styles.syntax_theme)?;
         let contents = layout.render(body, None);
         Ok(Page {
             contents,

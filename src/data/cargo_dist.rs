@@ -1,4 +1,5 @@
 use axoasset::{Asset, LocalAsset};
+use camino::Utf8PathBuf;
 pub use cargo_dist_schema::{Artifact, ArtifactKind, DistManifest, Release};
 
 use crate::config::Config;
@@ -23,12 +24,16 @@ pub fn get_os(name: &str) -> Option<&str> {
     }
 }
 
+/// Make the source of an installer script available on the server
 pub fn write_installer_source(config: &Config, name: &str, version: &str) -> Result<String> {
-    let download_link = download_link(config, name, version)?;
-    let file_string_future = Asset::load_string(download_link.as_str());
-    let file_string = tokio::runtime::Handle::current().block_on(file_string_future)?;
     let file_path = format!("{}.txt", &name);
-    LocalAsset::write_new(&file_string, &file_path, &config.dist_dir)?;
+    let full_file_path = Utf8PathBuf::from(&config.dist_dir).join(&file_path);
+    if !full_file_path.exists() {
+        let download_link = download_link(config, name, version)?;
+        let file_string_future = Asset::load_string(download_link.as_str());
+        let file_string = tokio::runtime::Handle::current().block_on(file_string_future)?;
+        LocalAsset::write_new(&file_string, &full_file_path)?;
+    }
     Ok(file_path)
 }
 

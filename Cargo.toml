@@ -2,7 +2,7 @@
 name = "oranda"
 description = "🎁 generate beautiful landing pages for your projects"
 repository = "https://github.com/axodotdev/oranda"
-version = "0.0.3"
+version = "0.1.0-prerelease.5"
 edition = "2021"
 authors = ["Axo Developer Co. <hello@axo.dev>"]
 license = "MIT OR Apache-2.0"
@@ -12,8 +12,10 @@ name = "oranda"
 
 [dependencies]
 ammonia = "3"
-axoasset = {version = "0.2.0", features = ["json-serde"] }
+axoasset = { version = "0.3.0", features = ["json-serde", "toml-edit"] }
+axocli = "0.1.0"
 axohtml = "0.5.0"
+axoproject = { version = "0.4.1", default-features = false, features = ["cargo-projects", "npm-projects"] }
 axum = "0.6.2"
 cargo-dist-schema = "=0.0.3"
 chrono = "0.4.23"
@@ -37,8 +39,11 @@ tracing-appender = "0.2"
 tracing-subscriber = "0.3"
 url = "2.3.1"
 camino = "1.1.4"
-axocli = "0.1.0"
 miette = "5.7.0"
+futures-util = "0.3.28"
+mdbook = { version = "0.4.17", default-features = false, features = ["search"] }
+notify = "6.0.0"
+toml_edit = "0.19.9"
 
 [dev-dependencies]
 assert_cmd="2"
@@ -52,7 +57,7 @@ lto = "thin"
 # Config for 'cargo dist'
 [workspace.metadata.dist]
 # The preferred cargo-dist version to use in CI (Cargo.toml SemVer syntax)
-cargo-dist-version = "0.0.6-prerelease.8"
+cargo-dist-version = "0.1.0-prerelease.3"
 # The preferred Rust toolchain to use in CI (rustup toolchain syntax)
 rust-toolchain-version = "stable"
 # CI backends to support (see 'cargo dist generate-ci')

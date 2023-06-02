@@ -6,6 +6,7 @@ use crate::site::link;
 
 use axoasset::LocalAsset;
 use axohtml::{elements::script, html};
+use camino::Utf8Path;
 
 pub struct Analytics {
     pub snippet: Option<Box<script<String>>>,
@@ -23,7 +24,11 @@ impl Analytics {
                     google_script,
                 })
             }
-            _ => Ok(Self {
+            Some(_) => Ok(Self {
+                snippet,
+                google_script: None,
+            }),
+            None => Ok(Self {
                 snippet: None,
                 google_script: None,
             }),
@@ -37,7 +42,7 @@ pub fn build_os_script(path_prefix: &Option<String>) -> String {
     script.to_string()
 }
 
-pub fn write_os_script(dist_dir: &str) -> Result<()> {
-    LocalAsset::write_new(artifacts::SCRIPT, "artifacts.js", dist_dir)?;
+pub fn write_os_script(dist_dir: &Utf8Path) -> Result<()> {
+    LocalAsset::write_new(artifacts::SCRIPT, dist_dir.join("artifacts.js"))?;
     Ok(())
 }

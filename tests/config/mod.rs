@@ -1,23 +1,23 @@
 mod fixtures;
 use super::utils::tokio_utils::TEST_RUNTIME;
+use camino::Utf8Path;
 use fixtures::project_config;
 
-use oranda::config::project::{JavaScript, ProjectConfig, Rust, Type};
+use oranda::config::project::ProjectConfig;
 
 use assert_fs::fixture::{FileWriteStr, PathChild};
 
 #[test]
 fn it_detects_a_js_project() {
     let tempdir = assert_fs::TempDir::new().expect("failed creating tempdir");
+    let temppath = Utf8Path::from_path(tempdir.path()).expect("non-utf8 temp path");
     let package_json = tempdir.child("package.json");
     package_json
         .write_str(project_config::package_json())
         .expect("failed to write package_json");
 
-    assert_eq!(
-        ProjectConfig::detect(&Some(tempdir.path().to_path_buf())),
-        Some(Type::JavaScript(JavaScript {}))
-    );
+    let (ws, _pkg) = ProjectConfig::get_project(temppath).unwrap();
+    assert_eq!(ws.kind, axoproject::WorkspaceKind::Javascript);
     tempdir
         .close()
         .expect("could not successfully delete temporary directory");
@@ -47,15 +47,16 @@ fn it_loads_a_js_project_config() {
 #[test]
 fn it_detects_a_rust_project() {
     let tempdir = assert_fs::TempDir::new().expect("failed creating tempdir");
+    let temppath = Utf8Path::from_path(tempdir.path()).expect("non-utf8 temp path");
     let cargo_toml = tempdir.child("Cargo.toml");
     cargo_toml
         .write_str(project_config::cargo_toml())
         .expect("failed to write cargo toml");
-
-    assert_eq!(
-        ProjectConfig::detect(&Some(tempdir.path().to_path_buf())),
-        Some(Type::Rust(Rust {}))
-    );
+    let main = tempdir.child("src/main.rs");
+    main.write_str(project_config::main_rs())
+        .expect("failed to write main.rs");
+    let (ws, _pkg) = ProjectConfig::get_project(temppath).unwrap();
+    assert_eq!(ws.kind, axoproject::WorkspaceKind::Rust);
     tempdir
         .close()
         .expect("could not successfully delete temporary directory");
@@ -69,6 +70,9 @@ fn it_loads_a_rust_project_config() {
     cargo_toml
         .write_str(project_config::cargo_toml())
         .expect("failed to write cargo toml");
+    let main = tempdir.child("src/main.rs");
+    main.write_str(project_config::main_rs())
+        .expect("failed to write main.rs");
     let config = ProjectConfig::load(Some(tempdir.path().to_path_buf()))
         .expect("failed to load Cargo.toml")
         .unwrap();
@@ -84,11 +88,9 @@ fn it_loads_a_rust_project_config() {
 #[test]
 fn it_can_successfully_not_detect_a_project() {
     let tempdir = assert_fs::TempDir::new().expect("failed creating tempdir");
+    let temppath = Utf8Path::from_path(tempdir.path()).expect("non-utf8 temp path");
 
-    assert_eq!(
-        ProjectConfig::detect(&Some(tempdir.path().to_path_buf())),
-        None
-    );
+    assert!(ProjectConfig::get_project(temppath).is_none());
     tempdir
         .close()
         .expect("could not successfully delete temporary directory");

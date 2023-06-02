@@ -2,7 +2,12 @@
 
 There's lots of ways to install oranda!
 
-## Install Prebuilt Binaries With cargo-binstall
+## The Quickest Way
+
+On the [oranda website][website], there's a one-liner command you can execute for your
+OS that'll download and install oranda for you, without any further hassle!
+
+## Install Prebuilt Binaries With [cargo-binstall]
 
 ```sh
 cargo binstall oranda
@@ -24,25 +29,11 @@ cargo install oranda --locked --profile=dist
 
 [See The Latest Release](https://github.com/axodotdev/oranda/releases/latest)!
 
-
-## Use The Installer Scripts
-
-**NOTE: these installer scripts will install to your cargo-home, the same place cargo install does**
-
-Linux and macOS Shell:
-
-```sh
-curl --proto '=https' --tlsv1.2 -LsSf https://github.com/axodotdev/oranda/releases/latest/download/oranda-installer.sh | sh
-```
-
-Windows PowerShell:
-
-```sh
-irm https://github.com/axodotdev/cargo-dist/releases/latest/download/oranda-installer.ps1 | iex
-```
-
 ## Install With NPM
 
 ```sh
 npm install oranda
 ```
+
+[cargo-binstall]:https://github.com/cargo-bins/cargo-binstall
+[website]: https://opensource.axo.dev/oranda

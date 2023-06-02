@@ -87,7 +87,8 @@ pub fn build_page_preview(
     let tag_name = &release.source.tag_name;
     let title = release.source.name.as_ref().unwrap_or(tag_name);
 
-    let id: axohtml::types::Id = axohtml::types::Id::new(tag_name.clone());
+    // We need to prefix the id with `tag-` to not break on things like "0.14.0" (no v prefix)
+    let id: axohtml::types::Id = axohtml::types::Id::new(format!("tag-{tag_name}"));
     let formatted_date = match DateTime::parse_from_rfc3339(&release.source.published_at) {
         Ok(date) => date.format("%b %e %Y at %R UTC").to_string(),
         Err(_) => release.source.published_at.to_owned(),
@@ -134,7 +135,7 @@ fn build_release_body(release: &Release, config: &Config) -> Result<String> {
         release.source.body.clone().unwrap_or(String::new())
     };
 
-    markdown::to_html(&contents, &config.syntax_theme)
+    markdown::to_html(&contents, &config.styles.syntax_theme)
 }
 
 fn build_prerelease_toggle(has_prereleases: bool) -> Option<Box<div<String>>> {

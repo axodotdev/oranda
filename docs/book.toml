@@ -3,3 +3,6 @@ authors = ["axodotdev"]
 language = "en"
 multilingual = false
 src = "src"
+
+[output.markdown]
+[output.html]

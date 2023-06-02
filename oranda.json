@@ -1,7 +1,10 @@
 {
   "favicon": "https://www.axo.dev/favicon.ico",
   "path_prefix": "oranda",
-  "md_book": "./docs/book/",
+  "mdbook": {
+    "path": "./docs",
+    "theme": true
+  },
   "changelog": true,
   "social": {
     "image": "https://www.axo.dev/meta_small.jpeg",

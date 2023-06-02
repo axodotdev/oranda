@@ -101,19 +101,23 @@ fn build_install_block_for_installer(
     let install_code = build_install_hint_code(data, config)?;
 
     let copy_icon = icons::copy();
-    let hint = get_install_hint(data, config)?;
+    let (copy, src) = get_install_hint(data, config)?;
+
+    let view_source = src.map(|src| {
+        html!(<a class="button primary button" href=(src)>
+                {text!("Source")}
+        </a>)
+    });
 
     Ok(html!(
         <div class="install-code-wrapper">
             {unsafe_text!(install_code)}
             <button
-                data-copy={hint.0}
+                data-copy={copy}
                 class="button primary copy-clipboard-button button">
                 {copy_icon}
             </button>
-            <a class="button primary button" href=(hint.1)>
-                {text!("Source")}
-            </a>
+            {view_source}
         </div>
     ))
 }
@@ -170,7 +174,7 @@ fn build_install_hint_code(data: &InstallerData, config: &Config) -> Result<Stri
     let install_hint = get_install_hint(data, config)?;
 
     let highlighted_code =
-        markdown::syntax_highlight(Some("sh"), &install_hint.0, &config.syntax_theme);
+        markdown::syntax_highlight(Some("sh"), &install_hint.0, &config.styles.syntax_theme);
     match highlighted_code {
         Ok(code) => Ok(code),
         Err(_) => Ok(format!(
@@ -180,7 +184,7 @@ fn build_install_hint_code(data: &InstallerData, config: &Config) -> Result<Stri
     }
 }
 
-fn get_install_hint(data: &InstallerData, config: &Config) -> Result<(String, String)> {
+fn get_install_hint(data: &InstallerData, config: &Config) -> Result<(String, Option<String>)> {
     let hint = data
         .app
         .artifacts
@@ -196,8 +200,15 @@ fn get_install_hint(data: &InstallerData, config: &Config) -> Result<(String, St
 
     if let Some(current_hint) = hint {
         if let (Some(install_hint), Some(name)) = (&current_hint.install_hint, &current_hint.name) {
-            let file_path =
-                cargo_dist::write_installer_source(config, name, &data.app.app_version)?;
+            let file_path = if name.ends_with(".sh") || name.ends_with(".ps1") {
+                Some(cargo_dist::write_installer_source(
+                    config,
+                    name,
+                    &data.app.app_version,
+                )?)
+            } else {
+                None
+            };
             return Ok((install_hint.to_string(), file_path));
         }
     }

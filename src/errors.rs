@@ -1,3 +1,4 @@
+use camino::Utf8PathBuf;
 use miette::Diagnostic;
 use thiserror::Error;
 
@@ -47,7 +48,7 @@ pub enum OrandaError {
     #[error("Failed parsing response when fetching releases from Github.")]
     GithubReleaseParseError {
         #[source]
-        details: reqwest::Error,
+        details: axoasset::AxoassetError,
     },
 
     #[error("Could not find any releases from {repo_owner}/{repo_name} with a cargo-dist compatible `dist-manifest.json`.")]
@@ -70,7 +71,7 @@ pub enum OrandaError {
         details: miette::Report,
     },
 
-    #[error("Could not find a build in {dist_dir}.")]
+    #[error("Could not find a build in {dist_dir}")]
     #[diagnostic(help("Did you remember to run `oranda build`?"))]
     BuildNotFound { dist_dir: String },
 
@@ -87,6 +88,46 @@ pub enum OrandaError {
         #[source]
         details: reqwest::Error,
     },
+
+    #[error("Couldn't load your mdbook at {path}")]
+    MdBookLoad {
+        path: String,
+        #[source]
+        details: mdbook::errors::Error,
+    },
+
+    #[error("Couldn't build your mdbook at {path}")]
+    MdBookBuild {
+        path: String,
+        #[source]
+        details: mdbook::errors::Error,
+    },
+    #[error("We found a potential {kind} project at {manifest_path} but there was an issue")]
+    #[diagnostic(severity = "warn")]
+    BrokenProject {
+        kind: String,
+        manifest_path: Utf8PathBuf,
+        #[diagnostic_source]
+        cause: axoproject::errors::AxoprojectError,
+    },
+    /// This error indicates we tried to deserialize some TOML with toml_edit
+    /// but failed.
+    #[error("Failed to edit toml document")]
+    TomlEdit {
+        /// The SourceFile we were trying to parse
+        #[source_code]
+        source: axoasset::SourceFile,
+        /// The range the error was found on
+        #[label]
+        span: Option<miette::SourceSpan>,
+        /// Details of the error
+        #[source]
+        details: toml_edit::TomlError,
+    },
+
+    #[error("We were unable to watch your filesystem for changes")]
+    #[diagnostic(help = "Make sure that oranda has privileges to set up file watchers!")]
+    FilesystemWatchError(#[from] notify::Error),
 
     #[error("{0}")]
     Other(String),

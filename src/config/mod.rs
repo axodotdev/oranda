@@ -1,19 +1,17 @@
 pub mod artifacts;
-mod oranda;
+mod oranda_config;
 pub mod project;
 pub mod theme;
 
 use artifacts::Artifacts;
+pub use oranda_config::{MdBookConfig, StyleConfig};
 pub mod analytics;
-use crate::config::oranda::{OrandaConfig, Social};
 use crate::errors::*;
-use crate::site::markdown::SyntaxTheme;
 use analytics::Analytics;
 use camino::Utf8PathBuf;
+use oranda_config::{OrandaConfig, Social};
 use project::ProjectConfig;
 use std::collections::HashMap;
-
-use theme::Theme;
 
 #[derive(Debug)]
 pub struct Config {
@@ -24,10 +22,7 @@ pub struct Config {
     pub name: String,
     pub no_header: bool,
     pub readme_path: String,
-    pub theme: Theme,
-    pub additional_css: Vec<String>,
     pub repository: Option<String>,
-    pub syntax_theme: SyntaxTheme,
     pub analytics: Option<Analytics>,
     pub additional_pages: Option<HashMap<String, String>>,
     pub social: Option<Social>,
@@ -37,7 +32,9 @@ pub struct Config {
     pub favicon: Option<String>,
     pub path_prefix: Option<String>,
     pub license: Option<String>,
-    pub md_book: Option<String>,
+    /// The config for using mdbook
+    pub mdbook: Option<MdBookConfig>,
+    pub styles: StyleConfig,
     pub changelog: bool,
 }
 
@@ -90,20 +87,18 @@ impl Config {
                     name: custom.name.unwrap_or(default.name),
                     no_header: custom.no_header.unwrap_or(default.no_header),
                     readme_path: custom.readme_path.unwrap_or(default.readme_path),
-                    theme: custom.theme.unwrap_or(default.theme),
-                    additional_css: custom.additional_css.unwrap_or(default.additional_css),
                     repository: Self::project_override(custom.repository, None, default.repository),
-                    syntax_theme: custom.syntax_theme.unwrap_or(default.syntax_theme),
                     analytics: custom.analytics,
                     additional_pages: custom.additional_pages,
                     social: custom.social,
                     artifacts: custom.artifacts.unwrap_or(default.artifacts),
+                    styles: custom.styles.unwrap_or(default.styles),
                     version: None,
                     license: None,
                     logo: custom.logo,
                     favicon: custom.favicon,
                     path_prefix: custom.path_prefix,
-                    md_book: custom.md_book,
+                    mdbook: None,
                     changelog: custom.changelog.unwrap_or(default.changelog),
                 });
             // otherwise both oranda config and project manifest exists
@@ -121,24 +116,22 @@ impl Config {
                     name: custom.name.unwrap_or(project.name),
                     no_header: custom.no_header.unwrap_or(default.no_header),
                     readme_path: custom.readme_path.unwrap_or(default.readme_path),
-                    theme: custom.theme.unwrap_or(default.theme),
-                    additional_css: custom.additional_css.unwrap_or(default.additional_css),
                     repository: Self::project_override(
                         custom.repository,
                         project.repository,
                         default.repository,
                     ),
-                    syntax_theme: custom.syntax_theme.unwrap_or(default.syntax_theme),
                     analytics: custom.analytics,
                     additional_pages: custom.additional_pages,
                     social: custom.social,
                     artifacts: custom.artifacts.unwrap_or(default.artifacts),
+                    styles: custom.styles.unwrap_or(default.styles),
                     version: custom.version.or(project.version),
                     license: custom.license.or(project.license),
                     logo: custom.logo,
                     favicon: custom.favicon,
                     path_prefix: custom.path_prefix,
-                    md_book: custom.md_book,
+                    mdbook: custom.mdbook,
                     changelog: custom.changelog.unwrap_or(default.changelog),
                 });
             }
@@ -173,21 +166,19 @@ impl Default for Config {
             name: String::from("My Axo project"),
             no_header: false,
             readme_path: String::from("README.md"),
-            theme: Theme::Dark,
-            additional_css: vec![],
             repository: None,
-            syntax_theme: SyntaxTheme::MaterialTheme,
             analytics: None,
             additional_pages: None,
             social: None,
             artifacts: Artifacts::default(),
+            styles: StyleConfig::default(),
             version: None,
             license: None,
             logo: None,
             favicon: None,
             path_prefix: None,
             static_dir: String::from("static"),
-            md_book: None,
+            mdbook: None,
             changelog: false,
         }
     }

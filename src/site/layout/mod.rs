@@ -27,7 +27,7 @@ impl Layout {
     }
 
     pub fn new(config: &Config) -> Result<Self> {
-        let theme = theme::css_class(&config.theme);
+        let theme = theme::css_class(&config.styles.theme);
         let name = &config.name;
         let header = match config.no_header {
             true => None,
@@ -51,12 +51,16 @@ impl Layout {
         };
         let footer = footer::create_footer(config);
 
-        let additional_css = if !config.additional_css.is_empty() {
+        let additional_css = if !config.styles.additional_css.is_empty() {
             Some(css::build_additional(&config.path_prefix))
         } else {
             None
         };
-        let oranda_css = css::build_oranda(&config.dist_dir, &config.path_prefix)?;
+        let oranda_css = css::build_oranda(
+            &config.dist_dir,
+            &config.path_prefix,
+            &config.styles.oranda_css_version,
+        )?;
         let analytics = Analytics::new(config)?;
         let template_html: String = html!(
         <html lang="en" id="oranda" class=theme>

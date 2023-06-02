@@ -1,6 +1,6 @@
 # Social
 
-In order to help with SEO you we have a couple of options you can use and these ones cover the basic SEO functions you may want to add to your site.
+In order to help with SEO, there are a couple of options you can use.
 
 ```json
 {
