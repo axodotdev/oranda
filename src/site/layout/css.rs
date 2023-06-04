@@ -44,7 +44,8 @@ pub fn build_oranda(
             LocalAsset::copy(&path, dist_dir)?;
         }
         Err(_) => {
-            let dest_path = format!("{dist_dir}/oranda-v{oranda_version}.css");
+            let filename = format!("oranda-v{oranda_version}.css");
+            let dest_path = Utf8Path::new(dist_dir).join(filename);
             let oranda_css_response =
                 tokio::runtime::Handle::current().block_on(fetch_oranda(oranda_version))?;
             axoasset::LocalAsset::write_new(&oranda_css_response, dest_path)?;
