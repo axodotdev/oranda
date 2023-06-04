@@ -1995,6 +1995,8 @@ dependencies = [
 [[package]]
 name = "octolotl"
 version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3295bd918b02ec7ade3cf7bf536ac78192ad669dfaa07dc1414008a2c262eb49"
 dependencies = [
  "miette",
  "reqwest",
