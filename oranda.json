@@ -1,10 +1,10 @@
 {
   "favicon": "https://www.axo.dev/favicon.ico",
+  "path_prefix": "oranda",
   "mdbook": {
     "path": "./docs",
     "theme": true
   },
-  "funding": true,
   "changelog": true,
   "social": {
     "image": "https://www.axo.dev/meta_small.jpeg",
