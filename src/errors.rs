@@ -131,7 +131,7 @@ pub enum OrandaError {
 
     #[error("We were unable to watch your filesystem for changes")]
     #[diagnostic(help = "Make sure that oranda has privileges to set up file watchers!")]
-    FilesystemWatchError(#[from] notify::Error),
+    FilesystemWatchError(#[from] notify_debouncer_mini::notify::Error),
 
     #[error("{0}")]
     Other(String),

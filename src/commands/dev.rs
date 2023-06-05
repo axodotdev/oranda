@@ -1,9 +1,10 @@
 use std::path::PathBuf;
+use std::thread::sleep;
+use std::time::Duration;
 
 use axoproject::WorkspaceSearch;
 use camino::Utf8PathBuf;
 use clap::Parser;
-use notify::{event::ModifyKind, EventKind, Watcher};
 
 use crate::{
     commands::{Build, Serve},
@@ -121,45 +122,67 @@ impl Dev {
         .print();
 
         let (tx, rx) = std::sync::mpsc::channel();
-        let mut watcher = notify::RecommendedWatcher::new(tx, notify::Config::default())?;
 
+        // We debounce events so that we don't end up building 5 times in a row because 5 different
+        // filesystem events fired.
+        let mut debouncer = notify_debouncer_mini::new_debouncer(Duration::from_secs(1), None, tx)?;
+        let watcher = debouncer.watcher();
         for path in paths_to_watch {
             let path = PathBuf::from(path);
             // If no path exists, oranda won't work anyways, so there's not much need to let the user know
             // (they'll know either way ;) )
             if path.exists() {
-                watcher.watch(path.as_path(), notify::RecursiveMode::Recursive)?;
+                watcher.watch(
+                    path.as_path(),
+                    notify_debouncer_mini::notify::RecursiveMode::Recursive,
+                )?;
             }
         }
 
         if !self.no_first_build {
             Build::new(self.project_root.clone(), self.config_path.clone()).run()?;
         }
+
         // Spawn the serve process out into a separate thread so that we can loop through received events on this thread
         let _ = std::thread::spawn(move || Serve::new(self.port).run());
-        for res in rx {
-            match res {
-                Ok(event) => {
-                    // We only care about content or name changes, not metadata
-                    if let EventKind::Modify(ModifyKind::Metadata(_)) = event.kind {
-                        continue;
-                    }
-                    Message::new(
-                        MessageType::Info,
-                        &format!("Path(s) {:?} changed, rebuilding...", event.paths),
-                    )
-                    .print();
+        loop {
+            // Wait for all debounced events to arrive
+            let first_event = rx.recv().unwrap();
+            sleep(Duration::from_millis(50));
+            let other_events = rx.try_iter();
 
-                    Build::new(self.project_root.clone(), self.config_path.clone())
-                        .run()
-                        .unwrap();
-                }
-                Err(err) => {
-                    // FIXME: Do we want to do something other than panicking?
-                    panic!("Error while watching for filesystem changes: {:?}", err);
-                }
+            let all_events = std::iter::once(first_event).chain(other_events);
+            // Unpack events into paths
+            let paths: Vec<_> = all_events
+                .filter_map(|event| match event {
+                    Ok(events) => Some(events),
+                    Err(errors) => {
+                        for error in errors {
+                            Message::new(
+                                MessageType::Warning,
+                                &format!("Error while watching for changes: {error}",),
+                            )
+                            .print();
+                            tracing::warn!("Error while watching for changes: {error}",);
+                        }
+                        None
+                    }
+                })
+                .flatten()
+                .map(|event| event.path)
+                .collect();
+
+            if !paths.is_empty() {
+                Message::new(
+                    MessageType::Info,
+                    &format!("Path(s) {:?} changed, rebuilding...", paths),
+                )
+                .print();
+
+                Build::new(self.project_root.clone(), self.config_path.clone())
+                    .run()
+                    .unwrap();
             }
         }
-        Ok(())
     }
 }
