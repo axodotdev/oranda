@@ -1,7 +1,7 @@
 [package]
 name = "oranda"
 description = "🎁 generate beautiful landing pages for your projects"
-repository = "https://github.com/axodotdev/oranda"
+repository = "https://github.com/shadows-withal/example-funding-repo"
 version = "0.1.0-prerelease.5"
 edition = "2021"
 authors = ["Axo Developer Co. <hello@axo.dev>"]

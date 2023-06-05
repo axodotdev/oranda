@@ -27,7 +27,6 @@ pub struct Funding {
     pub ko_fi: Option<String>,
     pub tidelift: Option<String>,
     pub community_bridge: Option<String>,
-    pub otechie: Option<String>,
     pub liberapay: Option<String>,
     pub issuehunt: Option<String>,
     pub custom: Option<Vec<String>>,
@@ -87,12 +86,6 @@ impl Funding {
                 community_bridge
             );
             html.extend(html!(<li>{Self::create_link(&cb_link, icons::get_linux_icon(), "LFX Mentorship")}</li>))
-        }
-
-        if let Some(otechie) = &self.otechie {
-            let otechie_link = format!("https://otechie.com/{}", otechie);
-            // Potential FIXME: Grab an Otechie SVG icon from somewhere (where?)
-            html.extend(html!(<li>{Self::create_link(&otechie_link, icons::get_web_icon(), "Otechie")}</li>))
         }
 
         if let Some(liberapay) = &self.liberapay {
