@@ -1,5 +1,6 @@
 use std::env;
 use std::fs;
+use std::path::{Path, PathBuf};
 
 use crate::errors::*;
 use crate::message::{Message, MessageType};
@@ -43,6 +44,12 @@ pub fn build_oranda(
             let msg = format!("Overriding oranda_css path with {}", &path);
             Message::new(MessageType::Warning, &msg).print();
             LocalAsset::copy(&path, dist_dir)?;
+            let src_path = PathBuf::from(&path);
+            let src_filename = src_path.file_name().unwrap();
+            fs::rename(
+                format!("{dist_dir}/{}", src_filename.to_str().unwrap()),
+                format!("{dist_dir}/{filename}"),
+            )?;
         }
         Err(_) => {
             let oranda_url = format!("https://octolotl.axodotdev.host/downloads/axodotdev/oranda/css-v{oranda_version}/oranda.css");
