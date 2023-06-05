@@ -18,6 +18,7 @@ pub mod markdown;
 pub mod page;
 use page::Page;
 pub mod changelog;
+pub mod funding;
 pub mod mdbook;
 
 #[derive(Debug)]

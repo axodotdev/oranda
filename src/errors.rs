@@ -129,6 +129,17 @@ pub enum OrandaError {
     #[diagnostic(help = "Make sure that oranda has privileges to set up file watchers!")]
     FilesystemWatchError(#[from] notify::Error),
 
+    #[error("Failed to fetch your funding info from GitHub.")]
+    #[diagnostic(help = "Make sure that your funding file is located at `.github/FUNDING.yml`.")]
+    GithubFundingFetchError {
+        #[source]
+        details: reqwest::Error,
+    },
+
+    #[error("Error while parsing FUNDING.yml")]
+    #[diagnostic(help = "Make sure your FUNDING.yml conforms to GitHub's format!")]
+    GithubFundingParseError { details: String },
+
     #[error("{0}")]
     Other(String),
 }
