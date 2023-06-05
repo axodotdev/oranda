@@ -35,7 +35,7 @@ footer {
 }
 
 .funding-list {
-  @apply my-12 w-full grid grid-cols-2 gap-4;
+  @apply my-12 w-full sm:grid grid-cols-2 gap-4;
 }
 
 .funding-list li {
@@ -46,6 +46,10 @@ footer {
   @apply flex gap-2 items-center;
 }
 
+.funding-list li a:hover button {
+  @apply text-slate-100 bg-axo-orange-dark border-axo-orange-dark;
+}
+
 .funding-list .button {
-  @apply block w-auto;
+  @apply block w-auto group-hover:bg-green-500;
 }
