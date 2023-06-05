@@ -18,7 +18,7 @@ pub struct FundingResponse {
 }
 
 /// Contents of the FUNDING.yml file. Needs to follow GitHub's spec, since we serialize from it,
-/// the most accurate resource for this seems to be here: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/displaying-a-sponsor-button-in-your-repository#about-funding-files
+/// the most accurate resource for this seems to be here: <https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/displaying-a-sponsor-button-in-your-repository#about-funding-files>
 #[derive(Serialize, Deserialize, Clone, Default, Debug)]
 pub struct Funding {
     pub github: Option<Vec<String>>,
