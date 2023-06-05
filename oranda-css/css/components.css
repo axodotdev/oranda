@@ -34,13 +34,16 @@ footer {
   @apply mt-8 flex flex-col items-center;
 }
 
-
 .funding-list {
-  @apply flex gap-4 items-center mb-12;
+  @apply mb-12 w-full grid grid-cols-2 gap-4;
 }
 
 .funding-list li {
-  @apply m-0;
+  @apply m-0 mb-4;
+}
+
+.funding-list li a {
+  @apply flex gap-2 items-center;
 }
 
 .funding-list .button {

@@ -5,7 +5,7 @@ use crate::data::github::GithubRepo;
 use crate::errors::{OrandaError, Result};
 use axohtml::dom::UnsafeTextNode;
 use axohtml::types::SpacedList;
-use axohtml::{html, text};
+use axohtml::{html, text, unsafe_text};
 use base64::engine::general_purpose;
 use base64::Engine;
 use serde::{Deserialize, Serialize};
@@ -132,8 +132,13 @@ impl Funding {
         let mut rels = SpacedList::new();
         rels.add("noopener");
         rels.add("noreferrer");
-        let title = format!("Support us on {}", site_name);
-        html!(<a class="button secondary" href=link target="_blank" title=title rel=rels>{icon}</a>)
+        let title = &format!("Support us on {}", site_name);
+        html!(<a href=link target="_blank" title=title rel=rels>
+            <button class="button secondary">
+                {icon}
+            </button>
+            {unsafe_text!(title)}
+        </a>)
     }
 
     fn parse_response(res: FundingResponse) -> Result<Self> {
