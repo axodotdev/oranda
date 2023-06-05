@@ -125,6 +125,8 @@ impl Dev {
 
         for path in paths_to_watch {
             let path = PathBuf::from(path);
+            // If no path exists, oranda won't work anyways, so there's not much need to let the user know
+            // (they'll know either way ;) )
             if path.exists() {
                 watcher.watch(path.as_path(), notify::RecursiveMode::Recursive)?;
             }
