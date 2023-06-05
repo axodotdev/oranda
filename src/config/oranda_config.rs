@@ -2,6 +2,7 @@ use std::collections::HashMap;
 
 use axoasset::SourceFile;
 use camino::Utf8PathBuf;
+use schemars::JsonSchema;
 use serde::Deserialize;
 
 use crate::config::analytics::Analytics;
@@ -15,7 +16,7 @@ use crate::data::funding::FundingType;
 
 use super::{ApplyLayer, ApplyOptExt};
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, JsonSchema)]
 pub struct Social {
     pub image: Option<String>,
     pub image_alt: Option<String>,
@@ -31,7 +32,7 @@ impl ApplyLayer for Social {
 }
 
 /// Config for us building and integrating your mdbook
-#[derive(Debug, Default, Deserialize)]
+#[derive(Debug, Default, Deserialize, JsonSchema)]
 pub struct MdBookConfig {
     /// Path to the mdbook
     ///
@@ -49,7 +50,7 @@ impl ApplyLayer for MdBookConfig {
 }
 
 /// Config related to styling your page
-#[derive(Debug, Default, Deserialize)]
+#[derive(Debug, Default, Deserialize, JsonSchema)]
 pub struct StyleConfig {
     pub theme: Option<Theme>,
     pub syntax_theme: Option<SyntaxTheme>,
@@ -78,7 +79,7 @@ impl StyleConfig {
 }
 
 /// Config for displaying funding information on your page
-#[derive(Debug, Default, Deserialize)]
+#[derive(Debug, Default, Deserialize, JsonSchema)]
 pub struct FundingConfig {
     pub preferred_funding: Option<FundingType>,
 }
@@ -89,7 +90,7 @@ impl ApplyLayer for FundingConfig {
     }
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, JsonSchema)]
 pub struct OrandaConfig {
     pub description: Option<String>,
     pub dist_dir: Option<String>,
@@ -144,7 +145,7 @@ impl OrandaConfig {
 ///
 /// This allows us to have a simple yes/no version of a config while still
 /// allowing for a more advanced version to exist.
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, JsonSchema)]
 #[serde(untagged)]
 pub enum BoolOr<T> {
     /// They gave the simple bool

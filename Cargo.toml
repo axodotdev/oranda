@@ -25,7 +25,6 @@ comrak = "0.17"
 console = "0.15.5"
 fs_extra = "1.3.0"
 lazy_static = "1.4.0"
-linked-hash-map = { version = "0.5.6", features = ["serde_impl"] }
 minifier = "0.2.2"
 octolotl = "0.1.0"
 reqwest = { version = "0.11.13", features = ["blocking", "json"] }
@@ -47,6 +46,8 @@ futures-util = "0.3.28"
 mdbook = { version = "0.4.17", default-features = false, features = ["search"] }
 notify-debouncer-mini = "0.3.0"
 toml_edit = "0.19.9"
+schemars = { version = "0.8.12", features = ["indexmap1"] }
+indexmap = { version = "1.9.3", features = ["serde-1"] }
 
 [dev-dependencies]
 assert_cmd="2"

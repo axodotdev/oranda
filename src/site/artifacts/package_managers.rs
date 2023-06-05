@@ -2,7 +2,7 @@ use crate::config::Config;
 use crate::errors::*;
 use crate::site::icons;
 use crate::site::markdown::{syntax_highlight, SyntaxTheme};
-use linked_hash_map::LinkedHashMap;
+use indexmap::IndexMap;
 
 use axohtml::elements::div;
 use axohtml::{html, text, unsafe_text};
@@ -18,7 +18,7 @@ fn create_package_install_code(code: &str, syntax_theme: &SyntaxTheme) -> String
 // False positive duplicate allocation warning
 // https://github.com/rust-lang/rust-clippy/issues?q=is%3Aissue+redundant_allocation+sort%3Aupdated-desc
 #[allow(clippy::vec_box)]
-pub fn build_list(managers: &LinkedHashMap<String, String>, config: &Config) -> Box<div<String>> {
+pub fn build_list(managers: &IndexMap<String, String>, config: &Config) -> Box<div<String>> {
     let mut list = vec![];
     for (manager, install_code) in managers.iter() {
         list.extend(html!(<li class="list-none"><h5>{text!(manager)}</h5> 
@@ -47,9 +47,9 @@ pub fn build_list(managers: &LinkedHashMap<String, String>, config: &Config) -> 
 
 pub fn build_header(
     config: &Config,
-    package_managers: &LinkedHashMap<String, String>,
+    package_managers: &IndexMap<String, String>,
 ) -> Result<Box<div<String>>> {
-    let (manager, hint) = if let Some((manager, hint)) = package_managers.front() {
+    let (manager, hint) = if let Some((manager, hint)) = package_managers.first() {
         (manager, hint)
     } else {
         return Err(OrandaError::Other(String::from(

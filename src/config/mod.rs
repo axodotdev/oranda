@@ -1,5 +1,5 @@
 pub mod artifacts;
-mod oranda_config;
+pub mod oranda_config;
 pub mod project;
 pub mod theme;
 
