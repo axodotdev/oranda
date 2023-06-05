@@ -58,7 +58,7 @@ pub fn path_prefix(temp_dir: String) -> Config {
         dist_dir: temp_dir,
         path_prefix: Some(String::from("axo")),
         artifacts: Artifacts {
-            cargo_dist: true,
+            cargo_dist: Some(true),
             package_managers: None,
         },
         styles: StyleConfig {
@@ -77,7 +77,7 @@ pub fn cargo_dist(temp_dir: String) -> Config {
     Config {
         dist_dir: temp_dir,
         artifacts: Artifacts {
-            cargo_dist: true,
+            cargo_dist: Some(true),
             package_managers: None,
         },
         repository: Some(String::from("https://github.com/axodotdev/oranda")),
@@ -92,7 +92,7 @@ pub fn package_managers(temp_dir: String) -> Config {
     Config {
         dist_dir: temp_dir,
         artifacts: Artifacts {
-            cargo_dist: false,
+            cargo_dist: Some(false),
             package_managers: Some(package_managers),
         },
         repository: Some(String::from("https://github.com/axodotdev/oranda")),

@@ -43,7 +43,7 @@ impl Site {
         if Self::needs_context(config) {
             match &config.repository {
                 Some(repo_url) => {
-                let context = Context::new(repo_url, config.artifacts.cargo_dist)?;
+                let context = Context::new(repo_url, config.artifacts.cargo_dist())?;
                 if config.artifacts.has_some() {
                     index = Some(Page::index_with_artifacts(&context, &layout_template, config)?);
                     if context.latest_dist_release.is_some()

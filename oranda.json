@@ -12,7 +12,6 @@
     "twitter_account": "@axodotdev"
   },
   "artifacts": {
-    "cargo_dist": true,
     "package_managers": {
       "npm": "npm install @axodotdev/oranda --save-dev",
       "npx": "npx @axodotdev/oranda",
