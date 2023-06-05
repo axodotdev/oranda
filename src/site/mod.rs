@@ -16,7 +16,9 @@ use layout::{css, javascript, Layout};
 pub mod link;
 pub mod markdown;
 pub mod page;
+use crate::site::funding::Funding;
 use page::Page;
+
 pub mod changelog;
 pub mod funding;
 pub mod mdbook;
@@ -44,28 +46,39 @@ impl Site {
         if Self::needs_context(config) {
             match &config.repository {
                 Some(repo_url) => {
-                let context = Context::new(repo_url, config.artifacts.cargo_dist)?;
-                if config.artifacts.has_some() {
-                    index = Some(Page::index_with_artifacts(&context, &layout_template, config)?);
-                    if context.latest_dist_release.is_some()
-                        || config.artifacts.package_managers.is_some()
-                    {
-                        let body = artifacts::page(&context, config)?;
-                        let artifacts_page = Page::new_from_contents(
+                    let context = Context::new(repo_url, config.artifacts.cargo_dist)?;
+                    if config.artifacts.has_some() {
+                        index = Some(Page::index_with_artifacts(&context, &layout_template, config)?);
+                        if context.latest_dist_release.is_some()
+                            || config.artifacts.package_managers.is_some()
+                        {
+                            let body = artifacts::page(&context, config)?;
+                            let artifacts_page = Page::new_from_contents(
+                                body,
+                                "artifacts.html",
+                                &layout_template,
+                                config,
+                            );
+                            pages.push(artifacts_page);
+                        }
+                    }
+                    if config.changelog {
+                        let mut changelog_pages = Self::build_changelog_pages(&context, &layout_template, config)?;
+                        pages.append(&mut changelog_pages);
+                    }
+                    if config.funding {
+                        let funding = Funding::new(&config)?;
+                        let body = funding.page()?;
+                        let page = Page::new_from_contents(
                             body,
-                            "artifacts.html",
+                            "funding.html",
                             &layout_template,
                             config,
                         );
-                        pages.push(artifacts_page);
+                        pages.push(page);
                     }
-                }
-                if config.changelog {
-                    let mut changelog_pages = Self::build_changelog_pages(&context, &layout_template, config)?;
-                    pages.append(&mut changelog_pages);
-                }
-            },
-            None => Err(OrandaError::Other("You have indicated you want to use features that require a repository context. Please add a \"repository\" key and value to your project (such as a package.json or Cargo.toml) or oranda config (oranda.json).".to_string()))?
+                },
+                None => Err(OrandaError::Other("You have indicated you want to use features that require a repository context. Please add a \"repository\" key and value to your project (such as a package.json or Cargo.toml) or oranda config (oranda.json).".to_string()))?
             }
         }
 
@@ -74,7 +87,7 @@ impl Site {
     }
 
     fn needs_context(config: &Config) -> bool {
-        config.artifacts.has_some() || config.changelog
+        config.artifacts.has_some() || config.changelog || config.funding
     }
 
     fn build_additional_pages(

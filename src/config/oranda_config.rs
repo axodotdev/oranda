@@ -67,11 +67,11 @@ pub struct OrandaConfig {
     pub favicon: Option<String>,
     pub path_prefix: Option<String>,
     pub license: Option<String>,
-    /// Config for mdbook
     #[serde(alias = "md_book")]
     pub mdbook: Option<MdBookConfig>,
     pub changelog: Option<bool>,
     pub styles: Option<StyleConfig>,
+    pub funding: Option<bool>,
 }
 
 impl OrandaConfig {

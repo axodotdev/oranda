@@ -36,6 +36,7 @@ pub struct Config {
     pub mdbook: Option<MdBookConfig>,
     pub styles: StyleConfig,
     pub changelog: bool,
+    pub funding: bool,
 }
 
 impl Config {
@@ -100,6 +101,7 @@ impl Config {
                     path_prefix: custom.path_prefix,
                     mdbook: None,
                     changelog: custom.changelog.unwrap_or(default.changelog),
+                    funding: custom.funding.unwrap_or(default.funding),
                 });
             // otherwise both oranda config and project manifest exists
             } else if let Some(project) = project {
@@ -133,6 +135,7 @@ impl Config {
                     path_prefix: custom.path_prefix,
                     mdbook: custom.mdbook,
                     changelog: custom.changelog.unwrap_or(default.changelog),
+                    funding: custom.funding.unwrap_or(default.funding),
                 });
             }
         }
@@ -180,6 +183,7 @@ impl Default for Config {
             static_dir: String::from("static"),
             mdbook: None,
             changelog: false,
+            funding: false,
         }
     }
 }

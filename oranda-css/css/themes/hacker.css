@@ -13,6 +13,10 @@ html.hacker body {
   --hacker-green: #20c20e;
 }
 
+html.hacker .button.secondary {
+  @apply text-slate-300 border-orange-500 hover:bg-orange-500 hover:text-axo-black;
+}
+
 html.hacker h2,
 html.hacker h3,
 html.hacker h4,
@@ -103,4 +107,8 @@ html.hacker .prereleases-toggle input:checked {
 
 html.hacker .releases-nav ul li a {
   @apply hover:decoration-orange-500;
+}
+
+html.hacker .funding-wrapper {
+  @apply items-start;
 }
