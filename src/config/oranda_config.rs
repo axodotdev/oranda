@@ -20,10 +20,12 @@ pub struct Social {
 }
 
 /// Config for us building and integrating your mdbook
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Default, Deserialize)]
 pub struct MdBookConfig {
     /// Path to the mdbook
-    pub path: String,
+    ///
+    /// If not set we will attempt to auto-detect
+    pub path: Option<String>,
     /// Whether to enable the custom oranda/axo theme
     pub theme: Option<bool>,
 }
@@ -68,8 +70,12 @@ pub struct OrandaConfig {
     pub path_prefix: Option<String>,
     pub license: Option<String>,
     /// Config for mdbook
+    ///
+    /// We allow this to be set to just `false` to give the user
+    /// an easy way to force-disable any errant autodetection.
+    /// Setting it to `true` is allowed but equivalent to `None`.
     #[serde(alias = "md_book")]
-    pub mdbook: Option<MdBookConfig>,
+    pub mdbook: Option<BoolOr<MdBookConfig>>,
     pub changelog: Option<bool>,
     pub styles: Option<StyleConfig>,
 }
@@ -93,4 +99,17 @@ impl OrandaConfig {
             }
         }
     }
+}
+
+/// A value or just a boolean
+///
+/// This allows us to have a simple yes/no version of a config while still
+/// allowing for a more advanced version to exist.
+#[derive(Deserialize, Debug)]
+#[serde(untagged)]
+pub enum BoolOr<T> {
+    /// They gave the simple bool
+    Bool(bool),
+    /// They gave a more interesting value
+    Val(T),
 }

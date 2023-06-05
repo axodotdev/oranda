@@ -89,7 +89,11 @@ impl AxomdbookTheme {
 /// should do this mapping for us, when it still knows where oranda.json is!
 pub fn mdbook_dir(book_cfg: &MdBookConfig) -> Result<Utf8PathBuf> {
     let pwd = axoasset::LocalAsset::current_dir()?;
-    Ok(pwd.join(&book_cfg.path))
+    let book_path = book_cfg
+        .path
+        .as_ref()
+        .expect("Had no mdbook.path, but config code didn't disable mdbook?");
+    Ok(pwd.join(book_path))
 }
 
 /// Gets the custom theme to set in an mdbook
