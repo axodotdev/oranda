@@ -67,7 +67,7 @@ impl Site {
                         pages.append(&mut changelog_pages);
                     }
                     if config.funding {
-                        let funding = Funding::new(&config)?;
+                        let funding = Funding::new(config)?;
                         let body = funding.page()?;
                         let page = Page::new_from_contents(
                             body,

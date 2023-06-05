@@ -108,9 +108,7 @@ impl Funding {
 
         if let Some(custom) = &self.custom {
             for link in custom {
-                html.extend(
-                    html!(<li>{Self::create_link(&link, icons::get_web_icon(), &link)}</li>),
-                )
+                html.extend(html!(<li>{Self::create_link(link, icons::get_web_icon(), link)}</li>))
             }
         }
 
