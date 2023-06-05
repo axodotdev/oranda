@@ -1,5 +1,4 @@
 use std::env;
-use std::fs;
 
 use crate::errors::*;
 use crate::message::{Message, MessageType};
@@ -45,14 +44,25 @@ pub fn build_oranda(
             LocalAsset::copy(&path, dist_dir)?;
         }
         Err(_) => {
-            let oranda_url = format!("https://octolotl.axodotdev.host/downloads/axodotdev/oranda/css-v{oranda_version}/oranda.css");
-            let fetched_oranda =
-                tokio::runtime::Handle::current().block_on(Asset::copy(&oranda_url, dist_dir))?;
-            fs::rename(fetched_oranda, format!("{dist_dir}/{filename}"))?;
+            let filename = format!("oranda-v{oranda_version}.css");
+            let dest_path = Utf8Path::new(dist_dir).join(filename);
+            let oranda_css_response =
+                tokio::runtime::Handle::current().block_on(fetch_oranda(oranda_version))?;
+            axoasset::LocalAsset::write_new(&oranda_css_response, dest_path)?;
         }
     };
     let abs_path = crate::site::link::generate(path_prefix, &filename);
     Ok(html!(<link rel="stylesheet" href=abs_path></link>))
+}
+
+async fn fetch_oranda(version: &str) -> Result<String> {
+    let tag = format!("css-v{version}");
+    let oranda_css_request =
+        octolotl::request::ReleaseAsset::new("axodotdev", "oranda", &tag, "oranda.css");
+    Ok(octolotl::Request::send(&oranda_css_request, true)
+        .await?
+        .text()
+        .await?)
 }
 
 pub fn build_additional(path_prefix: &Option<String>) -> Box<link<String>> {

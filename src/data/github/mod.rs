@@ -1,7 +1,6 @@
 use crate::errors::*;
 
 use axoasset::SourceFile;
-use reqwest::{blocking::Response, header::USER_AGENT};
 use serde::{Deserialize, Serialize};
 
 mod repo;
@@ -47,44 +46,11 @@ pub struct GithubReleaseAsset {
 }
 
 impl GithubRelease {
-    pub fn fetch_all(repo: &GithubRepo) -> Result<Vec<GithubRelease>> {
-        let (proxy_url, github_url) = Self::build_urls(repo);
-
-        let releases_response = match Self::fetch(&proxy_url)?.error_for_status() {
-            Ok(res) => Ok(res),
-            // if the proxy fails, fallback to github
-            Err(_) => Self::fetch(&github_url)?.error_for_status(),
-        };
-
-        Self::parse_response(releases_response?)
-    }
-
-    fn build_urls(repo: &GithubRepo) -> (String, String) {
-        let proxy_url = format!(
-            "https://octolotl.axodotdev.host/releases/{}/{}",
-            &repo.owner, &repo.name
-        );
-        let github_url = format!(
-            "https://api.github.com/repos/{}/{}/releases",
-            &repo.owner, &repo.name
-        );
-        (proxy_url, github_url)
-    }
-
-    fn fetch(url: &str) -> Result<Response> {
-        const VERSION: &str = env!("CARGO_PKG_VERSION");
-        let user_agent = format!("oranda-{}", VERSION);
-
-        Ok(reqwest::blocking::Client::new()
-            .get(url)
-            .header(USER_AGENT, user_agent)
-            .send()?)
-    }
-
-    fn parse_response(response: reqwest::blocking::Response) -> Result<Vec<GithubRelease>> {
-        match response.error_for_status() {
+    pub async fn fetch_all(repo: &GithubRepo) -> Result<Vec<GithubRelease>> {
+        let request = octolotl::request::Releases::new(&repo.owner, &repo.name);
+        match octolotl::Request::send(&request, true).await {
             Ok(r) => {
-                let res: serde_json::Value = serde_json::from_str(&r.text()?)?;
+                let res: serde_json::Value = serde_json::from_str(&r.text().await?)?;
                 let pretty_response = serde_json::to_string_pretty(&res)?;
                 Ok(
                     SourceFile::new("", pretty_response)

@@ -26,6 +26,10 @@ pub enum OrandaError {
     AxoAsset(#[from] axoasset::AxoassetError),
 
     #[error(transparent)]
+    #[diagnostic(transparent)]
+    Octolotl(#[from] octolotl::OctolotlError),
+
+    #[error(transparent)]
     Reqwest(#[from] reqwest::Error),
 
     #[error("Failed to create a directory, `{dist_path}` to build your project in.")]
@@ -42,7 +46,7 @@ pub enum OrandaError {
     #[error("Failed fetching releases from Github.")]
     GithubReleasesFetchError {
         #[source]
-        details: reqwest::Error,
+        details: octolotl::OctolotlError,
     },
 
     #[error("Failed parsing response when fetching releases from Github.")]
