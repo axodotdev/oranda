@@ -103,30 +103,13 @@ impl Dev {
             paths_to_watch.push(workspace.manifest_path.into());
         }
 
-        Message::new(
-            MessageType::Info,
-            &format!(
-                "Found {} paths to watch, starting watch...",
-                paths_to_watch.len()
-            ),
-        )
-        .print();
-        tracing::info!(
-            "Found {} paths to watch, starting watch...",
-            paths_to_watch.len()
-        );
-        Message::new(
-            MessageType::Debug,
-            &format!("Files watched: {:?}", paths_to_watch),
-        )
-        .print();
-
         let (tx, rx) = std::sync::mpsc::channel();
 
         // We debounce events so that we don't end up building 5 times in a row because 5 different
         // filesystem events fired.
         let mut debouncer = notify_debouncer_mini::new_debouncer(Duration::from_secs(1), None, tx)?;
         let watcher = debouncer.watcher();
+        let mut existing_paths = vec![];
         for path in paths_to_watch {
             let path = PathBuf::from(path);
             // If no path exists, oranda won't work anyways, so there's not much need to let the user know
@@ -136,8 +119,27 @@ impl Dev {
                     path.as_path(),
                     notify_debouncer_mini::notify::RecursiveMode::Recursive,
                 )?;
+                existing_paths.push(path.clone());
             }
         }
+
+        Message::new(
+            MessageType::Info,
+            &format!(
+                "Found {} paths to watch, starting watch...",
+                existing_paths.len()
+            ),
+        )
+        .print();
+        tracing::info!(
+            "Found {} paths to watch, starting watch...",
+            existing_paths.len()
+        );
+        Message::new(
+            MessageType::Debug,
+            &format!("Files watched: {:?}", existing_paths),
+        )
+        .print();
 
         if !self.no_first_build {
             Build::new(self.project_root.clone(), self.config_path.clone()).run()?;
