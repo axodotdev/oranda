@@ -13,6 +13,8 @@ use oranda_config::{OrandaConfig, Social};
 use project::ProjectConfig;
 use std::collections::HashMap;
 
+use self::oranda_config::BoolOr;
+
 #[derive(Debug)]
 pub struct Config {
     pub description: String,
@@ -65,6 +67,7 @@ impl Config {
 
         cfg.apply_project_layer(project);
         cfg.apply_custom_layer(custom);
+        cfg.find_mdbook();
 
         Ok(cfg)
     }
@@ -155,11 +158,47 @@ impl Config {
             if let Some(val) = custom.path_prefix {
                 self.path_prefix = Some(val);
             }
-            if let Some(val) = custom.mdbook {
-                self.mdbook = Some(val);
-            }
             if let Some(val) = custom.changelog {
                 self.changelog = val;
+            }
+
+            match custom.mdbook {
+                Some(BoolOr::Val(val)) => {
+                    self.mdbook = Some(val);
+                }
+                Some(BoolOr::Bool(false)) => {
+                    // Disable mdbook support
+                    self.mdbook = None;
+                }
+                None | Some(BoolOr::Bool(true)) => {
+                    // Do nothing, use the previous value
+                    //
+                    // (Arguably "true" should mean something like Some(default)
+                    // but that's already the default and we don't want to clobber
+                    // other layers if they have an opinion.)
+                }
+            }
+        }
+    }
+
+    /// If mdbook is enabled but the path isn't set, we try to find it
+    ///
+    /// If we fail, we set mdbook to None to disable it.
+    fn find_mdbook(&mut self) {
+        if let Some(mdbook_cfg) = &mut self.mdbook {
+            if mdbook_cfg.path.is_none() {
+                // Ok time to auto-detect, try these dirs for a book.toml
+                let possible_paths = vec!["./", "./book/", "./docs/"];
+                for book_dir in possible_paths {
+                    let book_path = Utf8PathBuf::from(book_dir).join("book.toml");
+                    if book_path.exists() {
+                        // nice, use it
+                        mdbook_cfg.path = Some(book_dir.to_owned());
+                        return;
+                    }
+                }
+                // We found nothing, disable mdbook
+                self.mdbook = None;
             }
         }
     }
@@ -186,7 +225,8 @@ impl Default for Config {
             favicon: None,
             path_prefix: None,
             static_dir: String::from("static"),
-            mdbook: None,
+            // Later stages can disable mdbook support by setting this to None
+            mdbook: Some(MdBookConfig::default()),
             changelog: false,
         }
     }
