@@ -232,7 +232,6 @@ fn adds_changelog_nav() {
     let config = oranda_config::changelog(temp_dir);
     let layout = Layout::new(&config).unwrap();
     let page = page::index(&config, &layout);
-    dbg!(&page.contents);
     assert!(page.contents.contains("/changelog/"));
 }
 
