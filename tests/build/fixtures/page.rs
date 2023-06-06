@@ -46,7 +46,7 @@ pub fn index(config: &Config, layout: &Layout) -> Page {
 pub fn index_with_artifacts(config: &Config, layout: &Layout) -> Page {
     reset(&config.dist_dir);
     let repo_url = config.repository.as_ref().unwrap();
-    let context = Context::new(repo_url, config.artifacts.cargo_dist).unwrap();
+    let context = Context::new(repo_url, config.artifacts.cargo_dist()).unwrap();
     Page::index_with_artifacts(&context, layout, config).unwrap()
 }
 
@@ -59,7 +59,7 @@ pub fn index_with_warning(config: &Config, layout: &Layout) -> Page {
 pub fn artifacts(config: &Config, layout: &Layout) -> Page {
     reset(&config.dist_dir);
     let repo_url = config.repository.as_ref().unwrap();
-    let context = Context::new(repo_url, config.artifacts.cargo_dist).unwrap();
+    let context = Context::new(repo_url, config.artifacts.cargo_dist()).unwrap();
     let artifacts_content = artifacts::page(&context, config).unwrap();
     Page::new_from_contents(artifacts_content, "artifacts.html", layout, config)
 }
@@ -67,7 +67,7 @@ pub fn artifacts(config: &Config, layout: &Layout) -> Page {
 pub fn changelog(config: &Config, layout: &Layout) -> Page {
     reset(&config.dist_dir);
     let repo_url = config.repository.as_ref().unwrap();
-    let context = Context::new(repo_url, config.artifacts.cargo_dist).unwrap();
+    let context = Context::new(repo_url, config.artifacts.cargo_dist()).unwrap();
     let changelog_content = changelog::build(&context, config).unwrap();
     Page::new_from_contents(changelog_content, "changelog.html", layout, config)
 }

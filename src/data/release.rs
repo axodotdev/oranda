@@ -1,8 +1,8 @@
+use axoasset::SourceFile;
 use cargo_dist_schema::DistManifest;
 
-use crate::data::{cargo_dist, github::GithubRelease};
+use crate::data::{cargo_dist, github::GithubRelease, GithubRepo};
 use crate::errors::*;
-use crate::message::{Message, MessageType};
 
 #[derive(Clone, Debug)]
 pub struct Release {
@@ -11,9 +11,13 @@ pub struct Release {
 }
 
 impl Release {
-    pub async fn new(gh_release: GithubRelease, cargo_dist: bool) -> Result<Self> {
+    pub async fn new(
+        gh_release: GithubRelease,
+        repo: &GithubRepo,
+        cargo_dist: bool,
+    ) -> Result<Self> {
         let manifest = if cargo_dist {
-            Self::fetch_manifest(gh_release.asset_url(cargo_dist::MANIFEST_FILENAME)).await?
+            Self::fetch_manifest(&gh_release, repo).await?
         } else {
             None
         };
@@ -23,24 +27,63 @@ impl Release {
         })
     }
 
-    async fn fetch_manifest(url: Option<&str>) -> Result<Option<DistManifest>> {
-        if let Some(manifest_url) = url {
-            match reqwest::get(manifest_url).await?.error_for_status() {
-                Ok(resp) => match resp.json::<DistManifest>().await {
-                    Ok(manifest) => Ok(Some(manifest)),
-                    Err(e) => {
-                        let msg = format!("Failed to parse dist-manifest at {manifest_url}.\nDetails:{e}\n\nSkipping...");
-                        Message::new(MessageType::Warning, &msg).print();
-                        Ok(None)
-                    }
-                },
-                Err(e) => Err(OrandaError::CargoDistManifestFetchError {
-                    url: manifest_url.to_string(),
-                    status_code: e.status().unwrap_or(reqwest::StatusCode::BAD_REQUEST),
-                }),
-            }
+    async fn fetch_manifest(
+        gh_release: &GithubRelease,
+        repo: &GithubRepo,
+    ) -> Result<Option<DistManifest>> {
+        let tag = &gh_release.tag_name;
+        if gh_release.has_dist_manifest() {
+            let request = octolotl::request::ReleaseAsset::new(
+                &repo.owner,
+                &repo.name,
+                tag,
+                cargo_dist::MANIFEST_FILENAME,
+            );
+            let response = octolotl::Request::send(&request, true)
+                .await?
+                .error_for_status()?;
+
+            Ok(Self::parse_response(response, tag).await?)
         } else {
             Ok(None)
         }
+    }
+
+    async fn parse_response(
+        response: reqwest::Response,
+        tag: &str,
+    ) -> Result<Option<DistManifest>> {
+        let res = response.text().await?;
+        let src = SourceFile::new("dist-manifest.json", res);
+        Ok(match src.deserialize_json::<DistManifest>() {
+            Ok(manifest) => Some(manifest),
+            Err(e) => {
+                // Try partially parsing the manifest to get schema version info
+                let info = cargo_dist_schema::check_version(src.contents());
+                if let Some(info) = info {
+                    if info.format.unsupported() {
+                        // Don't mention it -- nothing's wrong, it's just too old
+                    } else {
+                        let schema_version = info.version.to_string();
+                        let parser_version = cargo_dist_schema::SELF_VERSION.to_owned();
+                        let tag = tag.to_owned();
+                        let err = OrandaError::CargoDistManifestPartial {
+                            schema_version,
+                            parser_version,
+                            tag,
+                            details: e,
+                        };
+                        let report = miette::Report::new(err);
+                        eprintln!("{report:?}");
+                    }
+                } else {
+                    let tag = tag.to_owned();
+                    let err = OrandaError::CargoDistManifestMalformed { tag, details: e };
+                    let report = miette::Report::new(err);
+                    eprintln!("{report:?}");
+                }
+                None
+            }
+        })
     }
 }

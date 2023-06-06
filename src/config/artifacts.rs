@@ -31,13 +31,17 @@ enum ArtifactSystem {
 #[derive(Debug, Default, Deserialize)]
 pub struct Artifacts {
     #[serde(default)]
-    pub cargo_dist: bool,
+    pub cargo_dist: Option<bool>,
     #[serde(default)]
     pub package_managers: Option<LinkedHashMap<String, String>>,
 }
 
 impl Artifacts {
     pub fn has_some(&self) -> bool {
-        self.cargo_dist || self.package_managers.is_some()
+        self.cargo_dist() || self.package_managers.is_some()
+    }
+
+    pub fn cargo_dist(&self) -> bool {
+        self.cargo_dist.unwrap_or(false)
     }
 }

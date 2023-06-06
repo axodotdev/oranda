@@ -1,3 +1,4 @@
+use axoasset::AxoassetError;
 use camino::Utf8PathBuf;
 use miette::Diagnostic;
 use thiserror::Error;
@@ -26,6 +27,10 @@ pub enum OrandaError {
     AxoAsset(#[from] axoasset::AxoassetError),
 
     #[error(transparent)]
+    #[diagnostic(transparent)]
+    Octolotl(#[from] octolotl::OctolotlError),
+
+    #[error(transparent)]
     Reqwest(#[from] reqwest::Error),
 
     #[error("Failed to create a directory, `{dist_path}` to build your project in.")]
@@ -42,7 +47,7 @@ pub enum OrandaError {
     #[error("Failed fetching releases from Github.")]
     GithubReleasesFetchError {
         #[source]
-        details: reqwest::Error,
+        details: octolotl::OctolotlError,
     },
 
     #[error("Failed parsing response when fetching releases from Github.")]
@@ -75,18 +80,25 @@ pub enum OrandaError {
     #[diagnostic(help("Did you remember to run `oranda build`?"))]
     BuildNotFound { dist_dir: String },
 
-    #[error("Encountered an error (status: {status_code}) while fetching your cargo-dist release manifest at {url}.")]
-    #[diagnostic(help("This often occurs when you haven't yet published a GitHub release for the version set in your Cargo.toml. Consider publishing a release or promoting a draft release for the current version, or updating your Cargo.toml to use an already released version."))]
-    CargoDistManifestFetchError {
-        url: String,
-        status_code: reqwest::StatusCode,
+    #[error("Skipping malformed dist-manifest.json for {tag}")]
+    #[diagnostic(severity = "warn")]
+    CargoDistManifestMalformed {
+        tag: String,
+        #[diagnostic_source]
+        details: AxoassetError,
     },
 
-    #[error("Encountered an error parsing your cargo-dist manifest at {url}.")]
-    CargoDistManifestParseError {
-        url: String,
-        #[source]
-        details: reqwest::Error,
+    #[error("Skipping unparseable dist-manifest.json for {tag}")]
+    #[diagnostic(help(
+        "the schema was version {schema_version}, while our parser is version {parser_version}"
+    ))]
+    #[diagnostic(severity = "warn")]
+    CargoDistManifestPartial {
+        schema_version: String,
+        parser_version: String,
+        tag: String,
+        #[diagnostic_source]
+        details: AxoassetError,
     },
 
     #[error("Couldn't load your mdbook at {path}")]
@@ -127,7 +139,7 @@ pub enum OrandaError {
 
     #[error("We were unable to watch your filesystem for changes")]
     #[diagnostic(help = "Make sure that oranda has privileges to set up file watchers!")]
-    FilesystemWatchError(#[from] notify::Error),
+    FilesystemWatchError(#[from] notify_debouncer_mini::notify::Error),
 
     #[error("Failed to fetch your funding info from GitHub.")]
     #[diagnostic(help = "Make sure that your funding file is located at `.github/FUNDING.yml`.")]

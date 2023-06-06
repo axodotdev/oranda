@@ -32,12 +32,13 @@ impl Context {
         repo: &GithubRepo,
         cargo_dist: bool,
     ) -> Result<(Vec<Release>, bool, Option<DistRelease>)> {
-        let gh_releases = GithubRelease::fetch_all(repo)?;
+        let gh_releases =
+            tokio::runtime::Handle::current().block_on(GithubRelease::fetch_all(repo))?;
         let all =
             tokio::runtime::Handle::current().block_on(futures_util::future::try_join_all(
                 gh_releases
                     .into_iter()
-                    .map(|gh_release| Release::new(gh_release, cargo_dist)),
+                    .map(|gh_release| Release::new(gh_release, repo, cargo_dist)),
             ))?;
 
         let mut has_prereleases = false;

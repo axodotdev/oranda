@@ -15,6 +15,8 @@ pub struct ProjectConfig {
     pub repository: Option<String>,
     pub version: Option<String>,
     pub license: Option<String>,
+    pub readme_path: Option<Utf8PathBuf>,
+    pub cargo_dist: Option<bool>,
 }
 
 impl ProjectConfig {
@@ -28,6 +30,13 @@ impl ProjectConfig {
         if let Some((workspace, pkg)) = ProjectConfig::get_project(&start_dir) {
             // Cool we found the best possible match, now extract all the values we care about from it
             let package = workspace.package(pkg);
+
+            // If there's a [workspace.metadata.dist] table, we can auto-enable cargo-dist
+            // If there's no [workspace.metadata] table at all, inconclusive.
+            let cargo_dist = workspace
+                .cargo_metadata_table
+                .as_ref()
+                .map(|t| t.get("dist").is_some());
             Ok(Some(ProjectConfig {
                 name: package.name.clone(),
                 description: package.description.clone().unwrap_or_default(),
@@ -35,6 +44,8 @@ impl ProjectConfig {
                 repository: package.repository_url.clone(),
                 version: package.version.as_ref().map(|v| v.to_string()),
                 license: package.license.clone(),
+                readme_path: package.readme_file.clone(),
+                cargo_dist,
             }))
         } else {
             Ok(None)
