@@ -167,21 +167,20 @@ impl Config {
             }
         }
 
-            match custom.mdbook {
-                Some(BoolOr::Val(val)) => {
-                    self.mdbook = Some(val);
-                }
-                Some(BoolOr::Bool(false)) => {
-                    // Disable mdbook support
-                    self.mdbook = None;
-                }
-                None | Some(BoolOr::Bool(true)) => {
-                    // Do nothing, use the previous value
-                    //
-                    // (Arguably "true" should mean something like Some(default)
-                    // but that's already the default and we don't want to clobber
-                    // other layers if they have an opinion.)
-                }
+        match custom.mdbook {
+            Some(BoolOr::Val(val)) => {
+                self.mdbook = Some(val);
+            }
+            Some(BoolOr::Bool(false)) => {
+                // Disable mdbook support
+                self.mdbook = None;
+            }
+            None | Some(BoolOr::Bool(true)) => {
+                // Do nothing, use the previous value
+                //
+                // (Arguably "true" should mean something like Some(default)
+                // but that's already the default and we don't want to clobber
+                // other layers if they have an opinion.)
             }
         }
     }
