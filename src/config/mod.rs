@@ -125,26 +125,28 @@ impl Config {
                 self.repository = Some(val);
             }
             if let Some(val) = custom.analytics {
-                self.analytics = Some(val);
+                if let Some(orig) = &mut self.analytics {
+                    orig.apply_layer(val);
+                } else {
+                    self.analytics = Some(val);
+                }
             }
             if let Some(val) = custom.additional_pages {
+                // FIXME: should this get merged with e.g. `extend?`
                 self.additional_pages = Some(val);
             }
             if let Some(val) = custom.social {
-                self.social = Some(val);
+                if let Some(orig) = &mut self.social {
+                    orig.apply_layer(val);
+                } else {
+                    self.social = Some(val);
+                }
             }
-            if let Some(artifacts) = custom.artifacts {
-                // This value gets merged in a more fine-grain matter
-                // to allow earlier layers to set some values
-                if let Some(val) = artifacts.cargo_dist {
-                    self.artifacts.cargo_dist = Some(val);
-                }
-                if let Some(val) = artifacts.package_managers {
-                    self.artifacts.package_managers = Some(val);
-                }
+            if let Some(val) = custom.artifacts {
+                self.artifacts.apply_layer(val);
             }
             if let Some(val) = custom.styles {
-                self.styles = val;
+                self.styles.apply_layer(val);
             }
             if let Some(val) = custom.version {
                 self.version = Some(val);
@@ -164,7 +166,11 @@ impl Config {
 
             match custom.mdbook {
                 Some(BoolOr::Val(val)) => {
-                    self.mdbook = Some(val);
+                    if let Some(orig) = &mut self.mdbook {
+                        orig.apply_layer(val);
+                    } else {
+                        self.mdbook = Some(val);
+                    }
                 }
                 Some(BoolOr::Bool(false)) => {
                     // Disable mdbook support

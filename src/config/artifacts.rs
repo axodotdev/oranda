@@ -37,6 +37,17 @@ pub struct Artifacts {
 }
 
 impl Artifacts {
+    /// Merge this value with another layer of itself, preferring the new layer
+    pub fn apply_layer(&mut self, layer: Self) {
+        if let Some(val) = layer.cargo_dist {
+            self.cargo_dist = Some(val);
+        }
+        if let Some(val) = layer.package_managers {
+            // FIXME: should this get merged with e.g. `extend?`
+            self.package_managers = Some(val);
+        }
+    }
+
     pub fn has_some(&self) -> bool {
         self.cargo_dist() || self.package_managers.is_some()
     }

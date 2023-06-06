@@ -19,6 +19,21 @@ pub struct Social {
     pub twitter_account: Option<String>,
 }
 
+impl Social {
+    /// Merge this value with another layer of itself, preferring the new layer
+    pub fn apply_layer(&mut self, layer: Self) {
+        if let Some(val) = layer.image {
+            self.image = Some(val);
+        }
+        if let Some(val) = layer.image_alt {
+            self.image_alt = Some(val);
+        }
+        if let Some(val) = layer.twitter_account {
+            self.twitter_account = Some(val);
+        }
+    }
+}
+
 /// Config for us building and integrating your mdbook
 #[derive(Debug, Default, Deserialize)]
 pub struct MdBookConfig {
@@ -30,23 +45,49 @@ pub struct MdBookConfig {
     pub theme: Option<bool>,
 }
 
+impl MdBookConfig {
+    /// Merge this value with another layer of itself, preferring the new layer
+    pub fn apply_layer(&mut self, layer: Self) {
+        if let Some(val) = layer.path {
+            self.path = Some(val);
+        }
+        if let Some(val) = layer.theme {
+            self.theme = Some(val);
+        }
+    }
+}
+
 /// Config related to styling your page
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Default, Deserialize)]
 pub struct StyleConfig {
-    pub theme: Theme,
-    pub syntax_theme: SyntaxTheme,
+    pub theme: Option<Theme>,
+    pub syntax_theme: Option<SyntaxTheme>,
+    #[serde(default)]
     pub additional_css: Vec<String>,
     pub oranda_css_version: Option<String>,
 }
 
-impl Default for StyleConfig {
-    fn default() -> Self {
-        StyleConfig {
-            theme: Theme::Dark,
-            additional_css: vec![],
-            syntax_theme: SyntaxTheme::MaterialTheme,
-            oranda_css_version: None,
+impl StyleConfig {
+    /// Merge this value with another layer of itself, preferring the new layer
+    pub fn apply_layer(&mut self, layer: Self) {
+        if let Some(val) = layer.theme {
+            self.theme = Some(val);
         }
+        if let Some(val) = layer.syntax_theme {
+            self.syntax_theme = Some(val);
+        }
+        if let Some(val) = layer.oranda_css_version {
+            self.oranda_css_version = Some(val);
+        }
+        self.additional_css.extend(layer.additional_css);
+    }
+    /// Get the theme
+    pub fn theme(&self) -> Theme {
+        self.theme.unwrap_or(Theme::Dark)
+    }
+    /// Get the syntax_theme
+    pub fn syntax_theme(&self) -> SyntaxTheme {
+        self.syntax_theme.unwrap_or(SyntaxTheme::MaterialTheme)
     }
 }
 

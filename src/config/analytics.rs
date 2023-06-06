@@ -34,6 +34,14 @@ pub enum Analytics {
     Fathom(FathomTracking),
     Unami(UnamiTracking),
 }
+impl Analytics {
+    /// Merge this value with another layer of itself, preferring the new layer
+    pub fn apply_layer(&mut self, layer: Self) {
+        // FIXME: this is kinda goofy but there's not an obvious thing to do
+        // if we need to change the enum variant and we care about preserving things
+        *self = layer;
+    }
+}
 
 const GOOGLE_SCRIPT_URL: &str = "https://www.googletagmanager.com/gtag/js";
 const PLAUSIBLE_SCRIPT_URL: &str = "https://plausible.io/js/script.js";

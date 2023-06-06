@@ -27,7 +27,7 @@ impl Layout {
     }
 
     pub fn new(config: &Config) -> Result<Self> {
-        let theme = theme::css_class(&config.styles.theme);
+        let theme = theme::css_class(&config.styles.theme());
         let name = &config.name;
         let header = match config.no_header {
             true => None,
