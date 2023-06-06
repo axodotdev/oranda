@@ -35,7 +35,7 @@ footer {
 }
 
 .funding-list {
-  @apply my-12 w-full sm:grid grid-cols-2 gap-4;
+  @apply my-12 w-full lg:grid grid-cols-2 gap-4;
 }
 
 .funding-list li {
@@ -51,5 +51,5 @@ footer {
 }
 
 .funding-list .button {
-  @apply block w-auto group-hover:bg-green-500;
+  @apply block w-auto group-hover:bg-green-500 mr-2;
 }
