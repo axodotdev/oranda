@@ -15,7 +15,7 @@ struct InstallerData {
 }
 
 pub fn build_header(latest_release: &DistRelease, config: &Config) -> Result<Box<div<String>>> {
-    let downloads_href = link::generate(&config.path_prefix, "artifacts.html");
+    let downloads_href = link::generate(&config.path_prefix, "artifacts/");
 
     let mut html: Vec<Box<div<String>>> = vec![];
     let manifest = &latest_release.manifest;

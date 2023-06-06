@@ -21,7 +21,7 @@ fn it_adds_additional_css() {
     let page = page::index(&config, &layout);
     assert!(page
         .contents
-        .contains("<link href=\"/custom.css\" rel=\"stylesheet\"/>"));
+        .contains(r#"<link href="/custom.css" rel="stylesheet"/>"#));
 }
 
 #[test]
@@ -31,7 +31,7 @@ fn it_renders_changelog_with_no_cargo_dist() {
     let config = oranda_config::changelog(temp_dir);
     let layout = Layout::new(&config).unwrap();
     let page = page::changelog(&config, &layout);
-    assert!(page.contents.contains("<h1>Releases</h1>"));
+    assert!(page.contents.contains(r#"<h1>Releases</h1>"#));
 }
 
 #[test]
@@ -64,7 +64,7 @@ fn it_adds_oranda_css_with_pinned_version() {
     let page = page::index(&config, &layout);
     assert!(page
         .contents
-        .contains("<link href=\"/oranda-v0.0.3.css\" rel=\"stylesheet\"/>"));
+        .contains(r#"<link href="/oranda-v0.0.3.css" rel="stylesheet"/>"#));
 }
 
 #[test]
@@ -74,7 +74,7 @@ fn it_builds_the_site() {
     let config = oranda_config::no_artifacts(temp_dir);
     let layout = Layout::new(&config).unwrap();
     let page = page::index(&config, &layout);
-    assert!(page.contents.contains("<h1>axo</h1>"));
+    assert!(page.contents.contains(r#"<h1>axo</h1>"#));
     assert!(page.contents.contains("custom.css"));
 }
 
@@ -96,7 +96,7 @@ fn reads_theme() {
     let config = oranda_config::no_artifacts(temp_dir);
     let layout = Layout::new(&config).unwrap();
     let page = page::index(&config, &layout);
-    assert!(page.contents.contains("html class=\"dark\""));
+    assert!(page.contents.contains(r#"html class="dark""#));
 }
 
 #[test]
@@ -106,7 +106,7 @@ fn creates_nav() {
     let config = oranda_config::no_artifacts(temp_dir);
     let layout = Layout::new(&config).unwrap();
     let page = page::index(&config, &layout);
-    assert!(page.contents.contains("<nav class=\"nav\"><ul><li><a href=\"/\">Home</a></li><li><a href=\"/README.html\">Another Page</a></li></ul></nav>"));
+    assert!(page.contents.contains(r#"<nav class="nav"><ul><li><a href="/">Home</a></li><li><a href="/README/">Another Page</a></li></ul></nav>"#));
 }
 
 #[test]
@@ -116,7 +116,7 @@ fn creates_nav_no_additional_pages() {
     let config = oranda_config::no_artifacts(temp_dir);
     let layout = Layout::new(&config).unwrap();
     let page = page::index(&config, &layout);
-    assert!(page.contents.contains("<nav class=\"nav\">"));
+    assert!(page.contents.contains(r#"<nav class="nav">"#));
 }
 
 #[test]
@@ -128,7 +128,7 @@ fn creates_footer() {
     let page = page::index(&config, &layout);
     assert!(page
         .contents
-        .contains("<footer class=\"footer\"><span>My Axo project</span></footer>"));
+        .contains(r#"<footer class="footer"><span>My Axo project</span></footer>"#));
 }
 
 #[test]
@@ -140,7 +140,7 @@ fn creates_nav_item() {
     let page = page::index_with_artifacts(&config, &layout);
     assert!(page
         .contents
-        .contains("<li><a href=\"/artifacts.html\">Install</a></li>"));
+        .contains(r#"<li><a href="/artifacts/">Install</a></li>"#));
 }
 
 #[test]
@@ -150,7 +150,7 @@ fn loads_js() {
     let config = oranda_config::cargo_dist(temp_dir);
     let layout = Layout::new(&config).unwrap();
     let page = page::index_with_artifacts(&config, &layout);
-    assert!(page.contents.contains("<script src=\"/artifacts.js\">"));
+    assert!(page.contents.contains(r#"<script src="/artifacts.js">"#));
 }
 
 #[test]
@@ -160,7 +160,7 @@ fn creates_download_for_mac() {
     let config = oranda_config::cargo_dist(temp_dir);
     let layout = Layout::new(&config).unwrap();
     let page = page::index_with_artifacts(&config, &layout);
-    assert!(page.contents.contains("<span class=\"detect\">We have detected you are on <span class=\"detected-os\">mac</span>, are we wrong?</span>"));
+    assert!(page.contents.contains(r#"<span class="detect">We have detected you are on <span class="detected-os">mac</span>, are we wrong?</span>"#));
 }
 
 #[test]
@@ -170,13 +170,13 @@ fn creates_downloads_page() {
     let config = oranda_config::cargo_dist(temp_dir);
     let layout = Layout::new(&config).unwrap();
     let artifacts_page = page::artifacts(&config, &layout);
-    assert!(artifacts_page.contents.contains("<h3>Downloads</h3>"));
+    assert!(artifacts_page.contents.contains(r#"<h3>Downloads</h3>"#));
     assert!(artifacts_page
         .contents
-        .contains("<span>Executable Zip</span><span>x86_64-pc-windows-msvc</span>"));
+        .contains(r#"<span>Executable Zip</span><span>x86_64-pc-windows-msvc</span>"#));
     assert!(artifacts_page
         .contents
-        .contains("<h3>Install via script</h3>"))
+        .contains(r#"<h3>Install via script</h3>"#))
 }
 
 #[test]
@@ -197,7 +197,7 @@ fn creates_copy_to_clipboard_home() {
     let layout = Layout::new(&config).unwrap();
     let page = page::index_with_artifacts(&config, &layout);
     assert!(page.contents.contains("copy-clipboard-button"));
-    assert!(page.contents.contains("installer.sh.txt\">Source</a>"));
+    assert!(page.contents.contains(r#"installer.sh.txt">Source</a>"#));
 }
 
 #[test]
@@ -209,7 +209,7 @@ fn creates_copy_to_clipboard_artifacts() {
     let page = page::artifacts(&config, &layout);
     assert!(page
         .contents
-        .contains("<button class=\"button primary\" data-copy=\"npm install oranda\">"));
+        .contains(r#"<button class="button primary" data-copy="npm install oranda">"#));
 }
 
 #[test]
@@ -222,7 +222,7 @@ fn adds_prefix() {
     assert!(page.contents.contains("<script src=\"/axo/artifacts.js\">"));
     assert!(page
         .contents
-        .contains("<a href=\"/axo/artifacts.html\">View all installation options</a>"))
+        .contains(r#"<a href="/axo/artifacts/">View all installation options</a>"#))
 }
 
 #[test]
@@ -232,7 +232,7 @@ fn adds_changelog_nav() {
     let config = oranda_config::changelog(temp_dir);
     let layout = Layout::new(&config).unwrap();
     let page = page::index(&config, &layout);
-    assert!(page.contents.contains("changelog.html"));
+    assert!(page.contents.contains("/changelog/"));
 }
 
 #[test]
