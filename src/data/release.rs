@@ -3,7 +3,6 @@ use cargo_dist_schema::DistManifest;
 
 use crate::data::{cargo_dist, github::GithubRelease, GithubRepo};
 use crate::errors::*;
-use crate::message::{Message, MessageType};
 
 #[derive(Clone, Debug)]
 pub struct Release {
@@ -54,17 +53,37 @@ impl Release {
         response: reqwest::Response,
         tag: &str,
     ) -> Result<Option<DistManifest>> {
-        let res: serde_json::Value = serde_json::from_str(&response.text().await?)?;
-        let pretty_response = serde_json::to_string_pretty(&res)?;
-        Ok(
-            match SourceFile::new("", pretty_response).deserialize_json::<DistManifest>() {
-                Ok(manifest) => Some(manifest),
-                Err(e) => {
-                    let msg = format!("Failed to parse dist-manifest for release {tag}.\nDetails:{e}\n\nSkipping...");
-                    Message::new(MessageType::Warning, &msg).print();
-                    None
+        let res = response.text().await?;
+        let src = SourceFile::new("dist-manifest.json", res);
+        Ok(match src.deserialize_json::<DistManifest>() {
+            Ok(manifest) => Some(manifest),
+            Err(e) => {
+                // Try partially parsing the manifest to get schema version info
+                let info = cargo_dist_schema::check_version(src.contents());
+                if let Some(info) = info {
+                    if info.format.unsupported() {
+                        // Don't mention it -- nothing's wrong, it's just too old
+                    } else {
+                        let schema_version = info.version.to_string();
+                        let parser_version = cargo_dist_schema::SELF_VERSION.to_owned();
+                        let tag = tag.to_owned();
+                        let err = OrandaError::CargoDistManifestPartial {
+                            schema_version,
+                            parser_version,
+                            tag,
+                            details: e,
+                        };
+                        let report = miette::Report::new(err);
+                        eprintln!("{report:?}");
+                    }
+                } else {
+                    let tag = tag.to_owned();
+                    let err = OrandaError::CargoDistManifestMalformed { tag, details: e };
+                    let report = miette::Report::new(err);
+                    eprintln!("{report:?}");
                 }
-            },
-        )
+                None
+            }
+        })
     }
 }
