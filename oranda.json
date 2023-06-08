@@ -23,5 +23,6 @@
     "plausible": {
       "domain": "opensource.axo.dev"
     }
-  }
+  },
+  "repository": "https://github.com/axodotdev/oranda"
 }
