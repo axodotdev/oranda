@@ -7,15 +7,7 @@ use axohtml::dom::UnsafeTextNode;
 use axohtml::elements::{div, li};
 use axohtml::types::SpacedList;
 use axohtml::{html, text, unsafe_text};
-use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-
-/// Contents of the HTTP response. Serialized from JSON.
-#[derive(Serialize, Deserialize, Default, Clone)]
-pub struct FundingResponse {
-    pub name: String,
-    pub content: String,
-}
 
 /// Generate the standalone funding page.
 pub fn page(config: &Config, funding: &Funding) -> Result<String> {

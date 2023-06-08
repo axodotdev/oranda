@@ -12,7 +12,6 @@ pub struct Funding {
     /// Contents of the FUNDING.yml file.
     pub content: HashMap<FundingType, FundingContent>,
     /// Content read from the optional Markdown file
-    #[serde(skip)]
     pub docs_content: Option<String>,
 }
 
