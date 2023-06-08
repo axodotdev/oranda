@@ -6,7 +6,7 @@ use camino::Utf8PathBuf;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-/// Funding data-struct. 
+/// Funding data-struct.
 #[derive(Serialize, Deserialize, Clone, Default, Debug)]
 pub struct Funding {
     /// Contents of the FUNDING.yml file.

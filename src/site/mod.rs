@@ -68,7 +68,7 @@ impl Site {
                     }
                     if config.funding.is_some() {
                         let funding = Funding::new(config)?;
-                        let body = funding::page(&config, &funding)?;
+                        let body = funding::page(config, &funding)?;
                         let page = Page::new_from_contents(
                             body,
                             "funding.html",

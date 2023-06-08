@@ -28,7 +28,7 @@ pub fn page(config: &Config, funding: &Funding) -> Result<String> {
         funding_items.remove(preferred);
         preferred_funding_section(preferred.clone(), funding.content.clone())
     } else {
-        html!(<div></div>)
+        None
     };
     let regular_html = create_funding_list(funding_items);
     Ok(html!(
@@ -47,17 +47,19 @@ pub fn page(config: &Config, funding: &Funding) -> Result<String> {
 fn preferred_funding_section(
     preferred: FundingType,
     funding: HashMap<FundingType, FundingContent>,
-) -> Box<div<String>> {
-    let element = funding.get(&preferred).cloned().unwrap();
-    let mut hashmap = HashMap::new();
-    hashmap.insert(preferred, element);
-    html!(
+) -> Option<Box<div<String>>> {
+    if let Some(element) = funding.get(&preferred).cloned() {
+        let mut hashmap = HashMap::new();
+        hashmap.insert(preferred, element);
+        Some(html!(
         <div>
             <ul class="funding-list preferred-funding-list">
                 {create_funding_list(hashmap)}
             </ul>
-        </div>
-    )
+        </div>))
+    } else {
+        None
+    }
 }
 
 #[allow(clippy::vec_box)]
