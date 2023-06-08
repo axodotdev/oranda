@@ -72,6 +72,11 @@ impl Dev {
             paths_to_watch.append(&mut include_paths);
         }
 
+        // Watch for the funding.md page
+        if config.funding {
+            paths_to_watch.push("funding.md".into());
+        }
+
         // Watch for additional pages, if we have any
         if config.additional_pages.is_some() {
             let mut additional_pages: Vec<String> =
