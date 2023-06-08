@@ -4,10 +4,9 @@ pub mod project;
 pub mod theme;
 
 use artifacts::Artifacts;
-pub use oranda_config::{MdBookConfig, StyleConfig};
+pub use oranda_config::{FundingConfig, MdBookConfig, StyleConfig};
 pub mod analytics;
-use crate::config::oranda_config::FundingConfig;
-use crate::errors::*;
+use crate::errors::Result;
 use analytics::Analytics;
 use camino::Utf8PathBuf;
 use oranda_config::{OrandaConfig, Social};

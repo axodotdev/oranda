@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use crate::config::artifacts::Artifacts;
-use crate::config::{Config, MdBookConfig};
+use crate::config::{Config, FundingConfig, MdBookConfig};
 use crate::errors::*;
 use crate::message::{Message, MessageType};
 use crate::site::{link, page};
@@ -34,6 +34,7 @@ fn nav(
     artifacts: &Artifacts,
     md_book: &Option<MdBookConfig>,
     changelog: &bool,
+    funding: &Option<FundingConfig>,
 ) -> Result<Box<nav<String>>> {
     Message::new(MessageType::Info, "Building nav...").print();
     let mut html: Vec<Box<li<String>>> = if let Some(prefix) = &path_prefix {
@@ -83,6 +84,16 @@ fn nav(
         html.extend(html!(<li><a href=href>{text!("Docs")}</a></li>));
     };
 
+    if funding.is_some() {
+        Message::new(MessageType::Info, "Adding funding page...").print();
+        let href = if let Some(prefix) = &path_prefix {
+            format!("/{}/{}/", prefix, "funding")
+        } else {
+            format!("/{}/", "funding")
+        };
+        html.extend(html!(<li><a href=href>{text!("Funding")}</a></li>));
+    }
+
     if *changelog {
         Message::new(MessageType::Info, "Adding changelog...").print();
         let href = if let Some(prefix) = &path_prefix {
@@ -120,6 +131,7 @@ pub fn create(config: &Config) -> Result<Box<header<String>>> {
             &config.artifacts,
             &config.mdbook,
             &config.changelog,
+            &config.funding,
         )?)
     } else {
         None
