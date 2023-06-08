@@ -4,45 +4,53 @@ use crate::site::markdown::to_html;
 use axoasset::LocalAsset;
 use camino::Utf8PathBuf;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
-/// Contents of the FUNDING.yml file. Needs to follow GitHub's spec, since we serialize from it,
-/// the most accurate resource for this seems to be here: <https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/displaying-a-sponsor-button-in-your-repository#about-funding-files>
+/// Funding data-struct. 
 #[derive(Serialize, Deserialize, Clone, Default, Debug)]
 pub struct Funding {
-    pub github: Option<Vec<String>>,
-    pub patreon: Option<String>,
-    pub open_collective: Option<String>,
-    pub ko_fi: Option<String>,
-    pub tidelift: Option<String>,
-    pub community_bridge: Option<String>,
-    pub liberapay: Option<String>,
-    pub issuehunt: Option<String>,
-    pub custom: Option<Vec<String>>,
+    /// Contents of the FUNDING.yml file.
+    pub content: HashMap<FundingType, FundingContent>,
     /// Content read from the optional Markdown file
     #[serde(skip)]
     pub docs_content: Option<String>,
 }
 
-/// An enumeration of different supported funding providers.
-#[derive(Serialize, Deserialize, Clone, Debug)]
+/// An enumeration of different supported funding providers. Represents the "key" portion of a
+/// funding.yml entry.
+#[derive(Serialize, Deserialize, Clone, Debug, PartialOrd, PartialEq, Eq, Hash)]
+#[serde(rename_all = "snake_case")]
 pub enum FundingType {
     Github,
     Patreon,
-    #[serde(rename = "open_collective")]
     OpenCollective,
     KoFi,
     Tidelift,
-    #[serde(rename = "community_bridge")]
     CommunityBridge,
     Issuehunt,
+    Liberapay,
     Custom,
+}
+
+/// An enum expressing the different types of values that an entry in FUNDING.yml can have.
+#[derive(Serialize, Deserialize, Clone, Debug)]
+#[serde(untagged)]
+pub enum FundingContent {
+    One(String),
+    Multiple(Vec<String>),
 }
 
 impl Funding {
     /// Creates a new Funding struct by attempting to read from the FUNDING.yml, and the docs file.
     pub fn new(config: &Config) -> Result<Self> {
         let mut funding = match load_funding_file() {
-            Ok(Some(res)) => Ok(parse_response(res)?),
+            Ok(Some(res)) => {
+                let parsed_response = parse_response(res)?;
+                Ok(Self {
+                    content: parsed_response,
+                    docs_content: None,
+                })
+            }
             Ok(None) => Ok(Self::default()),
             Err(e) => Err(e),
         }?;
@@ -78,7 +86,7 @@ fn load_generic_file(path: &str) -> Result<Option<String>> {
     }
 }
 
-fn parse_response(contents: String) -> Result<Funding> {
+fn parse_response(contents: String) -> Result<HashMap<FundingType, FundingContent>> {
     let deserialized_map = serde_yaml::from_str(&contents);
     match deserialized_map {
         Ok(yaml) => Ok(yaml),

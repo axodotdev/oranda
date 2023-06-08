@@ -53,3 +53,19 @@ footer {
 .funding-list .button {
   @apply block w-auto group-hover:bg-green-500 mr-2;
 }
+
+.preferred-funding-list {
+  @apply grid-cols-1;
+}
+
+.preferred-funding-list li a {
+  @apply flex-col text-4xl;
+}
+
+.preferred-funding-list svg {
+  @apply w-12 h-12;
+}
+
+.preferred-funding-list .button {
+  @apply border-0;
+}

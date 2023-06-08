@@ -1,12 +1,14 @@
 mod icons;
 
 use crate::config::Config;
-use crate::data::funding::{load_funding_docs, load_funding_file, Funding};
-use crate::errors::{OrandaError, Result};
+use crate::data::funding::{Funding, FundingContent, FundingType};
+use crate::errors::Result;
 use axohtml::dom::UnsafeTextNode;
+use axohtml::elements::{div, li};
 use axohtml::types::SpacedList;
 use axohtml::{html, text, unsafe_text};
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 /// Contents of the HTTP response. Serialized from JSON.
 #[derive(Serialize, Deserialize, Default, Clone)]
@@ -16,9 +18,52 @@ pub struct FundingResponse {
 }
 
 /// Generate the standalone funding page.
-pub fn page(funding: &Funding) -> Result<String> {
+pub fn page(config: &Config, funding: &Funding) -> Result<String> {
+    let mut funding_items = funding.content.clone();
+    // We've already made sure that we can unwrap on all of these `Option`s
+    let unwrapped_config = config.funding.as_ref().unwrap();
+    let preferred_html = if unwrapped_config.preferred_funding.is_some() {
+        let preferred = unwrapped_config.preferred_funding.as_ref().unwrap();
+        // Remove the preferred item from the rest of the list
+        funding_items.remove(preferred);
+        preferred_funding_section(preferred.clone(), funding.content.clone())
+    } else {
+        html!(<div></div>)
+    };
+    let regular_html = create_funding_list(funding_items);
+    Ok(html!(
+        <div class="funding-wrapper">
+            <h1>{text!("Help fund this project!")}</h1>
+            {preferred_html}
+            {unsafe_text!(funding.docs_content.clone().unwrap_or("".into()))}
+            <ul class="funding-list">
+                {regular_html}
+            </ul>
+        </div>
+    )
+    .to_string())
+}
+
+fn preferred_funding_section(
+    preferred: FundingType,
+    funding: HashMap<FundingType, FundingContent>,
+) -> Box<div<String>> {
+    let element = funding.get(&preferred).cloned().unwrap();
+    let mut hashmap = HashMap::new();
+    hashmap.insert(preferred, element);
+    html!(
+        <div>
+            <ul class="funding-list preferred-funding-list">
+                {create_funding_list(hashmap)}
+            </ul>
+        </div>
+    )
+}
+
+#[allow(clippy::vec_box)]
+fn create_funding_list(funding: HashMap<FundingType, FundingContent>) -> Vec<Box<li<String>>> {
     let mut list_html = vec![];
-    if let Some(github) = &funding.github {
+    if let Some(FundingContent::Multiple(github)) = &funding.get(&FundingType::Github) {
         for link in github {
             let gh_link = format!("https://github.com/sponsors/{}", link);
             list_html
@@ -26,31 +71,32 @@ pub fn page(funding: &Funding) -> Result<String> {
         }
     }
 
-    if let Some(patreon) = &funding.patreon {
+    if let Some(FundingContent::One(patreon)) = &funding.get(&FundingType::Patreon) {
         let patreon_link = format!("https://patreon.com/{}", patreon);
         list_html.extend(
             html!(<li>{create_link(&patreon_link, icons::get_patreon_icon(), "Patreon")}</li>),
         )
     }
 
-    if let Some(open_collective) = &funding.open_collective {
+    if let Some(FundingContent::One(open_collective)) = &funding.get(&FundingType::OpenCollective) {
         let oc_link = format!("https://opencollective.com/{}", open_collective);
         list_html.extend(html!(<li>{create_link(&oc_link, icons::get_open_collective_icon(), "Open Collective")}</li>))
     }
 
-    if let Some(kofi) = &funding.ko_fi {
+    if let Some(FundingContent::One(kofi)) = &funding.get(&FundingType::KoFi) {
         let kofi_link = format!("https://ko-fi.com/{}", kofi);
         list_html.extend(html!(<li>{create_link(&kofi_link, icons::get_kofi_icon(), "Ko-fi")}</li>))
     }
 
-    if let Some(tidelift) = &funding.tidelift {
+    if let Some(FundingContent::One(tidelift)) = &funding.get(&FundingType::Tidelift) {
         let tidelift_link = format!("https://tidelift.com/subscription/pkg/{}", tidelift);
         list_html.extend(
             html!(<li>{create_link(&tidelift_link, icons::get_tidelift_icon(), "Tidelift")}</li>),
         )
     }
 
-    if let Some(community_bridge) = &funding.community_bridge {
+    if let Some(FundingContent::One(community_bridge)) = &funding.get(&FundingType::CommunityBridge)
+    {
         let cb_link = format!(
             "https://crowdfunding.lfx.linuxfoundation.org/projects/{}",
             community_bridge
@@ -60,12 +106,12 @@ pub fn page(funding: &Funding) -> Result<String> {
         )
     }
 
-    if let Some(liberapay) = &funding.liberapay {
+    if let Some(FundingContent::One(liberapay)) = &funding.get(&FundingType::Liberapay) {
         let liberapay_link = format!("https://liberapay.com/{}", liberapay);
         list_html.extend(html!(<li>{create_link(&liberapay_link, icons::get_liberapay_icon(), "Liberapay")}</li>))
     }
 
-    if let Some(issuehunt) = &funding.issuehunt {
+    if let Some(FundingContent::One(issuehunt)) = &funding.get(&FundingType::Issuehunt) {
         let issuehunt_link = format!("https://issuehunt.com/r/{}", issuehunt);
         // FIXME: Get an issuehunt icon from somewhere
         list_html.extend(
@@ -73,22 +119,13 @@ pub fn page(funding: &Funding) -> Result<String> {
         )
     }
 
-    if let Some(custom) = &funding.custom {
+    if let Some(FundingContent::Multiple(custom)) = &funding.get(&FundingType::Custom) {
         for link in custom {
             list_html.extend(html!(<li>{create_link(link, icons::get_web_icon(), link)}</li>))
         }
     }
 
-    Ok(html!(
-        <div class="funding-wrapper">
-            <h1>{text!("Help fund this project!")}</h1>
-            {unsafe_text!(funding.docs_content.clone().unwrap_or("".into()))}
-            <ul class="funding-list">
-                {list_html}
-            </ul>
-        </div>
-    )
-    .to_string())
+    list_html
 }
 
 /// Creates a link element to be used in the funding page.
