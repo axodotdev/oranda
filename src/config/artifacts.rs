@@ -1,6 +1,8 @@
 use linked_hash_map::LinkedHashMap;
 use serde::Deserialize;
 
+use super::{ApplyLayer, ApplyOptExt};
+
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "lowercase")]
 enum ArtifactSystem {
@@ -36,18 +38,15 @@ pub struct Artifacts {
     pub package_managers: Option<LinkedHashMap<String, String>>,
 }
 
-impl Artifacts {
-    /// Merge this value with another layer of itself, preferring the new layer
-    pub fn apply_layer(&mut self, layer: Self) {
-        if let Some(val) = layer.cargo_dist {
-            self.cargo_dist = Some(val);
-        }
-        if let Some(val) = layer.package_managers {
-            // FIXME: should this get merged with e.g. `extend?`
-            self.package_managers = Some(val);
-        }
+impl ApplyLayer for Artifacts {
+    fn apply_layer(&mut self, layer: Self) {
+        self.cargo_dist.apply_opt(layer.cargo_dist);
+        // FIXME: should this get merged with e.g. `extend?`
+        self.package_managers.apply_opt(layer.package_managers);
     }
+}
 
+impl Artifacts {
     pub fn has_some(&self) -> bool {
         self.cargo_dist() || self.package_managers.is_some()
     }

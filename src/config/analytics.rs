@@ -4,6 +4,8 @@ use axohtml::elements::script;
 use axohtml::{html, unsafe_text};
 use serde::Deserialize;
 
+use super::ApplyLayer;
+
 #[derive(Debug, Deserialize)]
 pub struct GoogleTracking {
     pub tracking_id: String,
@@ -34,9 +36,8 @@ pub enum Analytics {
     Fathom(FathomTracking),
     Unami(UnamiTracking),
 }
-impl Analytics {
-    /// Merge this value with another layer of itself, preferring the new layer
-    pub fn apply_layer(&mut self, layer: Self) {
+impl ApplyLayer for Analytics {
+    fn apply_layer(&mut self, layer: Self) {
         // FIXME: this is kinda goofy but there's not an obvious thing to do
         // if we need to change the enum variant and we care about preserving things
         *self = layer;

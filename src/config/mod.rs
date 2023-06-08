@@ -77,25 +77,13 @@ impl Config {
         if let Some(project) = project {
             self.name = project.name;
             self.description = project.description;
-
-            if let Some(val) = project.homepage {
-                self.homepage = Some(val);
-            }
-            if let Some(val) = project.repository {
-                self.repository = Some(val);
-            }
-            if let Some(val) = project.version {
-                self.version = Some(val);
-            }
-            if let Some(val) = project.license {
-                self.license = Some(val);
-            }
-            if let Some(val) = project.readme_path {
-                self.readme_path = val.to_string();
-            }
-            if let Some(val) = project.cargo_dist {
-                self.artifacts.cargo_dist = Some(val);
-            }
+            self.homepage.apply_opt(project.homepage);
+            self.repository.apply_opt(project.repository);
+            self.version.apply_opt(project.version);
+            self.license.apply_opt(project.license);
+            self.readme_path
+                .apply_val(project.readme_path.map(|p| p.to_string()));
+            self.artifacts.cargo_dist.apply_opt(project.cargo_dist);
         }
     }
 
@@ -103,87 +91,25 @@ impl Config {
     fn apply_custom_layer(&mut self, custom: Option<OrandaConfig>) {
         // Apply the "custom" layer
         if let Some(custom) = custom {
-            if let Some(val) = custom.description {
-                self.description = val;
-            }
-            if let Some(val) = custom.dist_dir {
-                self.dist_dir = val;
-            }
-            if let Some(val) = custom.static_dir {
-                self.static_dir = val;
-            }
-            if let Some(val) = custom.homepage {
-                self.homepage = Some(val);
-            }
-            if let Some(val) = custom.name {
-                self.name = val;
-            }
-            if let Some(val) = custom.readme_path {
-                self.readme_path = val;
-            }
-            if let Some(val) = custom.repository {
-                self.repository = Some(val);
-            }
-            if let Some(val) = custom.analytics {
-                if let Some(orig) = &mut self.analytics {
-                    orig.apply_layer(val);
-                } else {
-                    self.analytics = Some(val);
-                }
-            }
-            if let Some(val) = custom.additional_pages {
-                // FIXME: should this get merged with e.g. `extend?`
-                self.additional_pages = Some(val);
-            }
-            if let Some(val) = custom.social {
-                if let Some(orig) = &mut self.social {
-                    orig.apply_layer(val);
-                } else {
-                    self.social = Some(val);
-                }
-            }
-            if let Some(val) = custom.artifacts {
-                self.artifacts.apply_layer(val);
-            }
-            if let Some(val) = custom.styles {
-                self.styles.apply_layer(val);
-            }
-            if let Some(val) = custom.version {
-                self.version = Some(val);
-            }
-            if let Some(val) = custom.logo {
-                self.logo = Some(val);
-            }
-            if let Some(val) = custom.favicon {
-                self.favicon = Some(val);
-            }
-            if let Some(val) = custom.path_prefix {
-                self.path_prefix = Some(val);
-            }
-            if let Some(val) = custom.changelog {
-                self.changelog = val;
-            }
-
-            match custom.mdbook {
-                Some(BoolOr::Val(val)) => {
-                    if let Some(orig) = &mut self.mdbook {
-                        orig.apply_layer(val);
-                    } else {
-                        self.mdbook = Some(val);
-                    }
-                }
-                Some(BoolOr::Bool(false)) => {
-                    // Disable mdbook support
-                    self.mdbook = None;
-                }
-                None | Some(BoolOr::Bool(true)) => {
-                    // Do nothing, use the previous value
-                    //
-                    // (Arguably "true" should mean something like Some(default)
-                    // but that's already the default and we don't want to clobber
-                    // other layers if they have an opinion.)
-                }
-            }
+            self.description.apply_val(custom.description);
+            self.dist_dir.apply_val(custom.dist_dir);
+            self.static_dir.apply_val(custom.static_dir);
+            self.homepage.apply_opt(custom.homepage);
+            self.name.apply_val(custom.name);
+            self.readme_path.apply_val(custom.readme_path);
+            self.repository.apply_opt(custom.repository);
+            self.analytics.apply_layer(custom.analytics);
+            // FIXME: should this get merged with e.g. `extend?`
+            self.additional_pages.apply_opt(custom.additional_pages);
+            self.social.apply_layer(custom.social);
+            self.artifacts.apply_val_layer(custom.artifacts);
+            self.styles.apply_val_layer(custom.styles);
+            self.version.apply_opt(custom.version);
+            self.logo.apply_opt(custom.logo);
+            self.favicon.apply_opt(custom.favicon);
+            self.path_prefix.apply_opt(custom.path_prefix);
+            self.changelog.apply_val(custom.changelog);
+            self.mdbook.apply_bool_layer(custom.mdbook);
         }
     }
 
@@ -234,6 +160,116 @@ impl Default for Config {
             // Later stages can disable mdbook support by setting this to None
             mdbook: Some(MdBookConfig::default()),
             changelog: false,
+        }
+    }
+}
+
+// Utils for merging things
+
+/// Trait for merging a new layer of config
+pub trait ApplyLayer
+where
+    Self: Sized,
+{
+    /// Merges this value with another layer of itself, preferring the new layer
+    fn apply_layer(&mut self, layer: Self);
+
+    /// Merges this value with another layer of itself, preferring the new layer
+    ///
+    /// (asymteric case where the rhs is an Option but we're just A Value)
+    fn apply_val_layer(&mut self, layer: Option<Self>) {
+        if let Some(val) = layer {
+            self.apply_layer(val);
+        }
+    }
+}
+
+/// Blanket impl of merging layers wrapped in Options
+impl<T> ApplyLayer for Option<T>
+where
+    T: ApplyLayer,
+{
+    fn apply_layer(&mut self, layer: Self) {
+        if let Some(val) = layer {
+            if let Some(this) = self {
+                this.apply_layer(val);
+            } else {
+                *self = Some(val);
+            }
+        }
+    }
+}
+
+/// Extension trait to provide apply_bool_layer
+pub trait ApplyBoolLayerExt {
+    type Inner;
+    /// Merge an `Option<Layer>` with an `Option<BoolOr<Layer>>`
+    ///
+    /// There are 3 cases for the rhs:
+    ///
+    /// * Some(Val): override; recursively apply_layer
+    /// * Some(false): manually disabled; set lhs to None
+    /// * Some(true) / None: redundant; do nothing
+    fn apply_bool_layer(&mut self, layer: Option<BoolOr<Self::Inner>>);
+}
+
+impl<T> ApplyBoolLayerExt for Option<T>
+where
+    T: ApplyLayer,
+{
+    type Inner = T;
+    fn apply_bool_layer(&mut self, layer: Option<BoolOr<Self::Inner>>) {
+        match layer {
+            Some(BoolOr::Val(val)) => {
+                self.apply_layer(Some(val));
+            }
+            Some(BoolOr::Bool(false)) => {
+                // Disable this setting
+                *self = None;
+            }
+            None | Some(BoolOr::Bool(true)) => {
+                // Do nothing, use the previous value
+                //
+                // (Arguably "true" should mean something like Some(default)
+                // but that's already the default and we don't want to clobber
+                // other layers if they have an opinion.)
+            }
+        }
+    }
+}
+
+/// Extension trait to provide apply_val
+pub trait ApplyValExt
+where
+    Self: Sized,
+{
+    /// Merges a `T` with an `Option<T>`
+    ///
+    /// Overwrites the lhs if the rhs is Some
+    fn apply_val(&mut self, layer: Option<Self>);
+}
+impl<T> ApplyValExt for T {
+    fn apply_val(&mut self, layer: Option<Self>) {
+        if let Some(val) = layer {
+            *self = val;
+        }
+    }
+}
+
+/// Extension trait to provide apply_opt
+pub trait ApplyOptExt
+where
+    Self: Sized,
+{
+    /// Merges an `Option<T>` with an `Option<T>`
+    ///
+    /// Overwrites the lhs if the rhs is Some
+    fn apply_opt(&mut self, layer: Self);
+}
+impl<T> ApplyOptExt for Option<T> {
+    fn apply_opt(&mut self, layer: Self) {
+        if let Some(val) = layer {
+            *self = Some(val);
         }
     }
 }

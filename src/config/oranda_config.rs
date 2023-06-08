@@ -12,6 +12,8 @@ use crate::site::markdown::SyntaxTheme;
 
 use crate::config::artifacts::Artifacts;
 
+use super::{ApplyLayer, ApplyOptExt};
+
 #[derive(Debug, Deserialize)]
 pub struct Social {
     pub image: Option<String>,
@@ -19,18 +21,11 @@ pub struct Social {
     pub twitter_account: Option<String>,
 }
 
-impl Social {
-    /// Merge this value with another layer of itself, preferring the new layer
-    pub fn apply_layer(&mut self, layer: Self) {
-        if let Some(val) = layer.image {
-            self.image = Some(val);
-        }
-        if let Some(val) = layer.image_alt {
-            self.image_alt = Some(val);
-        }
-        if let Some(val) = layer.twitter_account {
-            self.twitter_account = Some(val);
-        }
+impl ApplyLayer for Social {
+    fn apply_layer(&mut self, layer: Self) {
+        self.image.apply_opt(layer.image);
+        self.image_alt.apply_opt(layer.image_alt);
+        self.twitter_account.apply_opt(layer.twitter_account);
     }
 }
 
@@ -45,15 +40,10 @@ pub struct MdBookConfig {
     pub theme: Option<bool>,
 }
 
-impl MdBookConfig {
-    /// Merge this value with another layer of itself, preferring the new layer
-    pub fn apply_layer(&mut self, layer: Self) {
-        if let Some(val) = layer.path {
-            self.path = Some(val);
-        }
-        if let Some(val) = layer.theme {
-            self.theme = Some(val);
-        }
+impl ApplyLayer for MdBookConfig {
+    fn apply_layer(&mut self, layer: Self) {
+        self.path.apply_opt(layer.path);
+        self.theme.apply_opt(layer.theme)
     }
 }
 
@@ -67,20 +57,15 @@ pub struct StyleConfig {
     pub oranda_css_version: Option<String>,
 }
 
-impl StyleConfig {
-    /// Merge this value with another layer of itself, preferring the new layer
-    pub fn apply_layer(&mut self, layer: Self) {
-        if let Some(val) = layer.theme {
-            self.theme = Some(val);
-        }
-        if let Some(val) = layer.syntax_theme {
-            self.syntax_theme = Some(val);
-        }
-        if let Some(val) = layer.oranda_css_version {
-            self.oranda_css_version = Some(val);
-        }
+impl ApplyLayer for StyleConfig {
+    fn apply_layer(&mut self, layer: Self) {
+        self.theme.apply_opt(layer.theme);
+        self.syntax_theme.apply_opt(layer.syntax_theme);
+        self.oranda_css_version.apply_opt(layer.oranda_css_version);
         self.additional_css.extend(layer.additional_css);
     }
+}
+impl StyleConfig {
     /// Get the theme
     pub fn theme(&self) -> Theme {
         self.theme.unwrap_or(Theme::Dark)
