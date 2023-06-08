@@ -72,9 +72,10 @@ impl Dev {
             paths_to_watch.append(&mut include_paths);
         }
 
-        // Watch for the funding.md page
+        // Watch for the funding.md page and the funding.yml file
         if config.funding.is_some() {
             paths_to_watch.push("funding.md".into());
+            paths_to_watch.push(".github/FUNDING.yml".into());
         }
 
         // Watch for additional pages, if we have any
