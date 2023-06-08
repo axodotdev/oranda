@@ -23,6 +23,7 @@
     - [mdbook or md\_book](#mdbook-or-md_book)
     - [changelog](#changelog)
     - [styles](#styles)
+    - [funding](#funding)
 
 
 `oranda` is designed to work with no configuration- for projects with a
@@ -170,3 +171,10 @@ Enable changelog generation. [More information](./configuration/changelog.md)
 ### styles
 
 [Configuration for custom styles or themes.](./configuration/theme.md)
+
+### funding
+
+> Added in __0.1.0__.
+
+Allows you to tweak or disable oranda's funding page.
+[Read more here.](./configuration/funding.md)
