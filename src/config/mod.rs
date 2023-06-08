@@ -6,6 +6,7 @@ pub mod theme;
 use artifacts::Artifacts;
 pub use oranda_config::{MdBookConfig, StyleConfig};
 pub mod analytics;
+use crate::config::oranda_config::FundingConfig;
 use crate::errors::*;
 use analytics::Analytics;
 use camino::Utf8PathBuf;
@@ -38,7 +39,7 @@ pub struct Config {
     pub mdbook: Option<MdBookConfig>,
     pub styles: StyleConfig,
     pub changelog: bool,
-    pub funding: bool,
+    pub funding: Option<FundingConfig>,
 }
 
 impl Config {
@@ -69,6 +70,7 @@ impl Config {
         cfg.apply_project_layer(project);
         cfg.apply_custom_layer(custom);
         cfg.find_mdbook();
+        cfg.find_funding();
 
         Ok(cfg)
     }
@@ -162,9 +164,6 @@ impl Config {
             if let Some(val) = custom.changelog {
                 self.changelog = val;
             }
-            if let Some(val) = custom.funding {
-                self.funding = val;
-            }
 
             match custom.mdbook {
                 Some(BoolOr::Val(val)) => {
@@ -181,6 +180,16 @@ impl Config {
                     // but that's already the default and we don't want to clobber
                     // other layers if they have an opinion.)
                 }
+            }
+
+            match custom.funding {
+                Some(BoolOr::Val(val)) => {
+                    self.funding = Some(val);
+                }
+                Some(BoolOr::Bool(false)) => {
+                    self.funding = None;
+                }
+                _ => {}
             }
         }
     }
@@ -204,6 +213,18 @@ impl Config {
                 // We found nothing, disable mdbook
                 self.mdbook = None;
             }
+        }
+    }
+
+    /// If we have a FUNDING.yml file, try to find it. If we fail, we disable funding support.
+    fn find_funding(&mut self) {
+        // Try and find the actual FUNDING.yml file first.
+        let funding_path = Utf8PathBuf::from(".github/FUNDING.yml");
+        // We also want to enable funding if there's a funding.md file in the root, so check
+        // for that too.
+        let funding_doc_path = Utf8PathBuf::from("funding.md");
+        if !funding_path.exists() && !funding_doc_path.exists() {
+            self.funding = None;
         }
     }
 }
@@ -232,7 +253,7 @@ impl Default for Config {
             // Later stages can disable mdbook support by setting this to None
             mdbook: Some(MdBookConfig::default()),
             changelog: false,
-            funding: false,
+            funding: Some(FundingConfig::default()),
         }
     }
 }

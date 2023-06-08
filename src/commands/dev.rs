@@ -73,7 +73,7 @@ impl Dev {
         }
 
         // Watch for the funding.md page
-        if config.funding {
+        if config.funding.is_some() {
             paths_to_watch.push("funding.md".into());
         }
 

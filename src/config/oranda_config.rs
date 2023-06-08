@@ -11,6 +11,7 @@ use crate::message::{Message, MessageType};
 use crate::site::markdown::SyntaxTheme;
 
 use crate::config::artifacts::Artifacts;
+use crate::data::funding::FundingType;
 
 #[derive(Debug, Deserialize)]
 pub struct Social {
@@ -50,6 +51,12 @@ impl Default for StyleConfig {
     }
 }
 
+/// Config for displaying funding information on your page
+#[derive(Debug, Default, Deserialize)]
+pub struct FundingConfig {
+    pub preferred_funding: Option<FundingType>,
+}
+
 #[derive(Debug, Deserialize)]
 pub struct OrandaConfig {
     pub description: Option<String>,
@@ -78,7 +85,7 @@ pub struct OrandaConfig {
     pub mdbook: Option<BoolOr<MdBookConfig>>,
     pub changelog: Option<bool>,
     pub styles: Option<StyleConfig>,
-    pub funding: Option<bool>,
+    pub funding: Option<BoolOr<FundingConfig>>,
 }
 
 impl OrandaConfig {

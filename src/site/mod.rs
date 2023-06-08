@@ -16,7 +16,7 @@ use layout::{css, javascript, Layout};
 pub mod link;
 pub mod markdown;
 pub mod page;
-use crate::site::funding::Funding;
+use crate::data::funding::Funding;
 use page::Page;
 
 pub mod changelog;
@@ -66,9 +66,9 @@ impl Site {
                         let mut changelog_pages = Self::build_changelog_pages(&context, &layout_template, config)?;
                         pages.append(&mut changelog_pages);
                     }
-                    if config.funding {
+                    if config.funding.is_some() {
                         let funding = Funding::new(config)?;
-                        let body = funding.page()?;
+                        let body = funding::page(&funding)?;
                         let page = Page::new_from_contents(
                             body,
                             "funding.html",
@@ -87,7 +87,7 @@ impl Site {
     }
 
     fn needs_context(config: &Config) -> bool {
-        config.artifacts.has_some() || config.changelog || config.funding
+        config.artifacts.has_some() || config.changelog || config.funding.is_some()
     }
 
     fn build_additional_pages(
