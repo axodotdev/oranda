@@ -1,13 +1,11 @@
 mod icons;
 
 use crate::config::Config;
-use crate::data::github::GithubRepo;
+use crate::data::funding::load_funding_file;
 use crate::errors::{OrandaError, Result};
 use axohtml::dom::UnsafeTextNode;
 use axohtml::types::SpacedList;
 use axohtml::{html, text, unsafe_text};
-use base64::engine::general_purpose;
-use base64::Engine;
 use serde::{Deserialize, Serialize};
 
 /// Contents of the HTTP response. Serialized from JSON.
@@ -37,8 +35,7 @@ impl Funding {
     /// configuration. Assumes that a repository is set (i.e. unwraps on the repo config key),
     /// so check for existence beforehand.
     pub fn new(config: &Config) -> Result<Self> {
-        let repo = GithubRepo::from_url(&config.repository.clone().unwrap())?;
-        match repo.fetch_funding_yaml() {
+        match load_funding_file() {
             Ok(Some(res)) => Ok(Self::parse_response(res)?),
             Ok(None) => Ok(Self::default()),
             Err(e) => Err(e),
@@ -48,7 +45,6 @@ impl Funding {
     /// Generate the standalone funding page.
     pub fn page(&self) -> Result<String> {
         let mut html = vec![];
-        dbg!(self);
         if let Some(github) = &self.github {
             for link in github {
                 let gh_link = format!("https://github.com/sponsors/{}", link);
@@ -134,20 +130,10 @@ impl Funding {
         </a>)
     }
 
-    fn parse_response(res: FundingResponse) -> Result<Self> {
-        let string_yaml = &general_purpose::STANDARD
-            .decode(res.content.replace('\n', ""))
-            .unwrap();
-        match std::str::from_utf8(string_yaml) {
-            Ok(parsed_yaml) => {
-                let deserialized_map = serde_yaml::from_str(parsed_yaml);
-                match deserialized_map {
-                    Ok(yaml) => Ok(yaml),
-                    Err(e) => Err(OrandaError::GithubFundingParseError {
-                        details: e.to_string(),
-                    }),
-                }
-            }
+    fn parse_response(contents: String) -> Result<Self> {
+        let deserialized_map = serde_yaml::from_str(&contents);
+        match deserialized_map {
+            Ok(yaml) => Ok(yaml),
             Err(e) => Err(OrandaError::GithubFundingParseError {
                 details: e.to_string(),
             }),

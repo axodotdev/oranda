@@ -46,7 +46,6 @@ futures-util = "0.3.28"
 mdbook = { version = "0.4.17", default-features = false, features = ["search"] }
 notify-debouncer-mini = "0.3.0"
 toml_edit = "0.19.9"
-base64 = "0.21.2"
 
 [dev-dependencies]
 assert_cmd="2"

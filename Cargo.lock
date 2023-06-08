@@ -2123,7 +2123,6 @@ dependencies = [
  "axohtml",
  "axoproject",
  "axum",
- "base64",
  "camino",
  "cargo-dist-schema",
  "chrono",
