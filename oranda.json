@@ -16,7 +16,9 @@
       "npm": "npm install @axodotdev/oranda --save-dev",
       "npx": "npx @axodotdev/oranda",
       "crates.io": "cargo install oranda --locked --profile=dist",
-      "binstall": "cargo binstall oranda"
+      "binstall": "cargo binstall oranda",
+      "nix-env": "nix-env -i oranda",
+      "nix flake": "nix profile install github:axodotdev/oranda"
     }
   },
   "analytics": {
