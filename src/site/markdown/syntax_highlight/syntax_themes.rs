@@ -1,5 +1,5 @@
 use serde::Deserialize;
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Deserialize)]
 pub enum SyntaxTheme {
     AgilaClassicOceanicNext,
     AgilaCobalt,

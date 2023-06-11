@@ -135,7 +135,7 @@ fn build_release_body(release: &Release, config: &Config) -> Result<String> {
         release.source.body.clone().unwrap_or(String::new())
     };
 
-    markdown::to_html(&contents, &config.styles.syntax_theme)
+    markdown::to_html(&contents, &config.styles.syntax_theme())
 }
 
 fn build_prerelease_toggle(has_prereleases: bool) -> Option<Box<div<String>>> {

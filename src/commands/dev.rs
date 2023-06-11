@@ -89,7 +89,7 @@ impl Dev {
 
             // If we're not clobbering the theme, also watch the theme dir
             // (note that this may not exist on the fs, mdbook reports the path regardless)
-            if custom_theme(book_cfg, &config.styles.theme).is_none() {
+            if custom_theme(book_cfg, &config.styles.theme()).is_none() {
                 paths_to_watch.push(md.theme_dir().display().to_string());
             }
         }

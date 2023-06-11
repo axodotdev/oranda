@@ -12,11 +12,21 @@ use crate::site::markdown::SyntaxTheme;
 
 use crate::config::artifacts::Artifacts;
 
+use super::{ApplyLayer, ApplyOptExt};
+
 #[derive(Debug, Deserialize)]
 pub struct Social {
     pub image: Option<String>,
     pub image_alt: Option<String>,
     pub twitter_account: Option<String>,
+}
+
+impl ApplyLayer for Social {
+    fn apply_layer(&mut self, layer: Self) {
+        self.image.apply_opt(layer.image);
+        self.image_alt.apply_opt(layer.image_alt);
+        self.twitter_account.apply_opt(layer.twitter_account);
+    }
 }
 
 /// Config for us building and integrating your mdbook
@@ -30,23 +40,39 @@ pub struct MdBookConfig {
     pub theme: Option<bool>,
 }
 
+impl ApplyLayer for MdBookConfig {
+    fn apply_layer(&mut self, layer: Self) {
+        self.path.apply_opt(layer.path);
+        self.theme.apply_opt(layer.theme)
+    }
+}
+
 /// Config related to styling your page
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Default, Deserialize)]
 pub struct StyleConfig {
-    pub theme: Theme,
-    pub syntax_theme: SyntaxTheme,
+    pub theme: Option<Theme>,
+    pub syntax_theme: Option<SyntaxTheme>,
+    #[serde(default)]
     pub additional_css: Vec<String>,
     pub oranda_css_version: Option<String>,
 }
 
-impl Default for StyleConfig {
-    fn default() -> Self {
-        StyleConfig {
-            theme: Theme::Dark,
-            additional_css: vec![],
-            syntax_theme: SyntaxTheme::MaterialTheme,
-            oranda_css_version: None,
-        }
+impl ApplyLayer for StyleConfig {
+    fn apply_layer(&mut self, layer: Self) {
+        self.theme.apply_opt(layer.theme);
+        self.syntax_theme.apply_opt(layer.syntax_theme);
+        self.oranda_css_version.apply_opt(layer.oranda_css_version);
+        self.additional_css.extend(layer.additional_css);
+    }
+}
+impl StyleConfig {
+    /// Get the theme
+    pub fn theme(&self) -> Theme {
+        self.theme.unwrap_or(Theme::Dark)
+    }
+    /// Get the syntax_theme
+    pub fn syntax_theme(&self) -> SyntaxTheme {
+        self.syntax_theme.unwrap_or(SyntaxTheme::MaterialTheme)
     }
 }
 

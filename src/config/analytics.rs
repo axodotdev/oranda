@@ -4,6 +4,8 @@ use axohtml::elements::script;
 use axohtml::{html, unsafe_text};
 use serde::Deserialize;
 
+use super::ApplyLayer;
+
 #[derive(Debug, Deserialize)]
 pub struct GoogleTracking {
     pub tracking_id: String,
@@ -33,6 +35,13 @@ pub enum Analytics {
     Plausible(PlausibleTracking),
     Fathom(FathomTracking),
     Unami(UnamiTracking),
+}
+impl ApplyLayer for Analytics {
+    fn apply_layer(&mut self, layer: Self) {
+        // FIXME: this is kinda goofy but there's not an obvious thing to do
+        // if we need to change the enum variant and we care about preserving things
+        *self = layer;
+    }
 }
 
 const GOOGLE_SCRIPT_URL: &str = "https://www.googletagmanager.com/gtag/js";

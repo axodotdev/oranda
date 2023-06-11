@@ -1,6 +1,6 @@
 use serde::Deserialize;
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum Theme {
     Light,
@@ -9,7 +9,7 @@ pub enum Theme {
     Cupcake,
 }
 
-pub fn css_class(theme: &Theme) -> &str {
+pub fn css_class(theme: &Theme) -> &'static str {
     match theme {
         Theme::Dark => "dark",
         Theme::Hacker => "hacker",
