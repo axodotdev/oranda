@@ -90,7 +90,6 @@ pub struct OrandaConfig {
     pub additional_pages: Option<HashMap<String, String>>,
     pub social: Option<Social>,
     pub artifacts: Option<Artifacts>,
-    pub version: Option<String>,
     pub logo: Option<String>,
     pub favicon: Option<String>,
     pub path_prefix: Option<String>,
