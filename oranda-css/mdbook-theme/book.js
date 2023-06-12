@@ -292,7 +292,7 @@ function playground_text(playground, hidden = true) {
     var stylesheets = {
         ayuHighlight: document.querySelector("[href$='ayu-highlight.css']"),
         tomorrowNight: document.querySelector("[href$='tomorrow-night.css']"),
-        axoHighlight: document.querySelector("[href$='axo-highlight.css']"),
+        orandaHighlight: document.querySelector("[href$='oranda-highlight.css']"),
         highlight: document.querySelector("[href$='highlight.css']"),
     };
 
@@ -317,7 +317,7 @@ function playground_text(playground, hidden = true) {
 
     function get_theme() {
         var theme;
-        try { theme = localStorage.getItem('axomdbook-theme'); } catch (e) { }
+        try { theme = localStorage.getItem('orandamdbook-theme'); } catch (e) { }
         if (theme === null || theme === undefined) {
             return default_theme;
         } else {
@@ -339,8 +339,8 @@ function playground_text(playground, hidden = true) {
         } else if (theme == 'ayu') {
             stylesheets.ayuHighlight.disabled = false;
             ace_theme = "ace/theme/tomorrow_night";
-        } else if (theme == "axo" || theme == "axo-light") {
-            stylesheets.axoHighlight.disabled = false;
+        } else if (theme == "oranda-dark" || theme == "oranda-light") {
+            stylesheets.orandaHighlight.disabled = false;
             ace_theme = "ace/theme/tomorrow_night";
         } else {
             stylesheets.highlight.disabled = false;
@@ -362,8 +362,8 @@ function playground_text(playground, hidden = true) {
         if (store) {
             // We use a custom key here to avoid breaking other mdbooks running on localhost,
             // because they will share localStorage with us, and if they see the selected
-            // theme is "axo" they sadly will crash instead of ignoring it.
-            try { localStorage.setItem('axomdbook-theme', theme); } catch (e) { }
+            // theme is "oranda" they sadly will crash instead of ignoring it.
+            try { localStorage.setItem('orandamdbook-theme', theme); } catch (e) { }
         }
 
         html.classList.remove(previousTheme);

@@ -24,9 +24,35 @@ const THEME_BOOK_JS: &str = include_str!("../../oranda-css/mdbook-theme/book.js"
 const THEME_INDEX_HBS_PATH: &str = "index.hbs";
 const THEME_INDEX_HBS: &str = include_str!("../../oranda-css/mdbook-theme/index.hbs");
 
-const THEME_AXO_HIGHLIGHT_CSS_PATH: &str = "axo-highlight.css";
-const SYNTAX_THEMES: &[(&str, &str)] = &[(
-    "MaterialTheme",
+/// variables.css needs us to substitute this with an entry from MDBOOK_THEMES
+const KEY_ORANDA_VARS: &str = "/*ORANDA-THEME-VARS*/";
+/// index.hbs needs us to substitute this with at least one copy of THEME_BUTTON_HTML_TEMPLATE
+const KEY_ORANDA_BUTTONS: &str = "<!--ORANDA-THEME-BUTTONS-->";
+/// THEME_BUTTON_HTML_TEMPLATE needs us to substitute this with CLASS_ORANDA_DARK or CLASS_ORANDA_LIGHT
+///
+/// (yes mdbook has some magic in it where you use a css class as the id of a button in its dropdowns)
+const KEY_BUTTON_ID: &str = "{{THEME-ID}}";
+/// THEME_BUTTON_HTML_TEMPLATE needs us to substitute this with a user-facing name for the theme
+const KEY_BUTTON_NAME: &str = "{{THEME-NAME}}";
+/// Template for the HTML for a button in the theme selector
+const THEME_BUTTON_HTML_TEMPLATE: &str = r###"                            <li role="none"><button role="menuitem" class="theme" id="{{THEME-ID}}">{{THEME-NAME}}</button></li>"###;
+
+/// the css class used for dark themes
+const CLASS_ORANDA_DARK: &str = "oranda-dark";
+/// the css class used for light themes
+const CLASS_ORANDA_LIGHT: &str = "oranda-light";
+
+// Mappings from AxomdbookThemes to their implementations
+const THEME_IMPL_ORANDA: &str = include_str!("../../oranda-css/mdbook-theme/oranda-themes/axo.css");
+const MDBOOK_THEMES: &[(AxomdbookTheme, &str)] = &[
+    (AxomdbookTheme::Axo, THEME_IMPL_ORANDA),
+    (AxomdbookTheme::AxoLight, THEME_IMPL_ORANDA),
+];
+
+// Mappings from SyntaxThemes to their implementations
+const THEME_AXO_HIGHLIGHT_CSS_PATH: &str = "oranda-highlight.css";
+const SYNTAX_THEMES: &[(SyntaxTheme, &str)] = &[(
+    SyntaxTheme::MaterialTheme,
     include_str!("../../oranda-css/mdbook-theme/highlight-js-themes/base16-material.css"),
 )];
 
@@ -53,30 +79,43 @@ impl AxomdbookTheme {
         }
     }
 
-    /// Get the dark theme equivalent of this theme
-    ///
-    /// mdbook wants this as a config. Unfortunately it doesn't have
-    /// an equivalent "here's my light mode". Returning None here
-    /// is equivalent to not setting the preference and using
-    /// the default "navy" as your dark mode.
-    pub fn preferred_dark_theme(&self) -> Option<Self> {
+    /// Get whether this theme should be presented as a "dark mode" or "light mode"
+    pub fn is_dark(&self) -> bool {
         use AxomdbookTheme::*;
         match self {
-            Axo => Some(AxomdbookTheme::Axo),
-            AxoLight => Some(AxomdbookTheme::Axo),
+            Axo => true,
+            AxoLight => false,
+        }
+    }
+
+    /// If this theme is two-in-one with a "dark mode" and "light mode", then this
+    /// returns the other mode.
+    pub fn twin_theme(&self) -> Option<AxomdbookTheme> {
+        use AxomdbookTheme::*;
+        match self {
+            Axo => Some(AxoLight),
+            AxoLight => Some(Axo),
         }
     }
 
     /// Get the css class / localStorage value for this theme
     ///
     /// **KEEP IN MIND** these values are hardcoded into the
-    /// css/js/hbs files for our custom theme, we need a more complete
-    /// solution that can let these values be injected into the files, I think..?
+    /// css/js/hbs files for our custom theme, so we always use
+    /// the same values, based only on whether the theme is light/dark
     pub fn class(&self) -> &'static str {
+        if self.is_dark() {
+            CLASS_ORANDA_DARK
+        } else {
+            CLASS_ORANDA_LIGHT
+        }
+    }
+
+    pub fn name(&self) -> &'static str {
         use AxomdbookTheme::*;
         match self {
-            Axo => "axo",
-            AxoLight => "axo-light",
+            Axo => "Axo Dark",
+            AxoLight => "Axo Light",
         }
     }
 }
@@ -129,15 +168,24 @@ pub fn build_mdbook(
     let custom_theme = custom_theme(book_cfg, oranda_theme);
     let theme_dir = custom_theme_dir(book_cfg, dist)?;
     if let Some(theme) = custom_theme {
-        init_theme_dir(&theme_dir)?;
+        // Create all the files for our custom theme
+        init_theme_dir(&theme_dir, theme)?;
+
+        // Tell mdbook to default to our theme, forcing both the light and dark modes
+        //
+        // FIXME(#314): for now we force the same theme as both the "light" and "dark" version
+        // to avoid clashes between the main oranda pages and the mdbook when the two
+        // disagree on how "dark mode" is detected. In the future we can/should use twin_theme
+        // to properly set these values.
+        let dark_theme = theme;
         md.config
             .set("output.html.default-theme", theme.class())
             .unwrap();
-        if let Some(dark_theme) = theme.preferred_dark_theme() {
-            md.config
-                .set("output.html.preferred-dark-theme", dark_theme.class())
-                .unwrap();
-        }
+        md.config
+            .set("output.html.preferred-dark-theme", dark_theme.class())
+            .unwrap();
+
+        // Tell mdbook where to find our custom theme
         md.config.set("output.html.theme", &theme_dir).unwrap();
     }
 
@@ -184,20 +232,44 @@ pub fn load_mdbook(book_dir: &Utf8Path) -> Result<MDBook> {
 ///
 /// Note that these files assume you will also call [`add_custom_syntax_theme_to_output`][]
 /// to add axo-highlight.css to the build dir.
-fn init_theme_dir(theme_dir: &Utf8Path) -> Result<()> {
+fn init_theme_dir(theme_dir: &Utf8Path, theme: AxomdbookTheme) -> Result<()> {
     Message::new(MessageType::Info, "Adding oranda mdbook theme...").print();
     tracing::info!("Adding oranda mdbook theme...");
 
     // Just to be safe, clear out the theme dir in case it still exists
     delete_theme_dir(theme_dir)?;
 
+    // Substitute in the css vars for the selected theme
+    let theme_vars = MDBOOK_THEMES
+        .iter()
+        .find_map(
+            |(t, contents)| {
+                if t == &theme {
+                    Some(*contents)
+                } else {
+                    None
+                }
+            },
+        )
+        .expect("failed to find axomdbook theme for mdbook!?");
+    let variables = THEME_VARIABLES_CSS.replace(KEY_ORANDA_VARS, theme_vars);
+
+    // Substitute in buttons for the selected theme
+    let mut buttons = String::new();
+    add_theme_button(&mut buttons, theme);
+    if let Some(twin) = theme.twin_theme() {
+        add_theme_button(&mut buttons, twin);
+    }
+    let index = THEME_INDEX_HBS.replace(KEY_ORANDA_BUTTONS, &buttons);
+
+    // Now write all the files
     let files = vec![
         (THEME_GENERAL_CSS_PATH, THEME_GENERAL_CSS),
-        (THEME_VARIABLES_CSS_PATH, THEME_VARIABLES_CSS),
+        (THEME_VARIABLES_CSS_PATH, &variables),
         (THEME_CHROME_CSS_PATH, THEME_CHROME_CSS),
         (THEME_FONTS_CSS_PATH, THEME_FONTS_CSS),
         (THEME_BOOK_JS_PATH, THEME_BOOK_JS),
-        (THEME_INDEX_HBS_PATH, THEME_INDEX_HBS),
+        (THEME_INDEX_HBS_PATH, &index),
     ];
 
     for (subpath, contents) in files {
@@ -228,11 +300,10 @@ fn add_custom_syntax_theme_to_output(
     syntax_theme: &SyntaxTheme,
     build_dir: &Utf8Path,
 ) -> Result<()> {
-    let theme_name = syntax_theme.as_str();
     let highlight_theme = SYNTAX_THEMES
         .iter()
-        .find_map(|(name, contents)| {
-            if *name == theme_name {
+        .find_map(|(theme, contents)| {
+            if theme == syntax_theme {
                 Some(*contents)
             } else {
                 None
@@ -245,4 +316,15 @@ fn add_custom_syntax_theme_to_output(
         build_dir.join(THEME_AXO_HIGHLIGHT_CSS_PATH),
     )?;
     Ok(())
+}
+
+fn add_theme_button(output: &mut String, theme: AxomdbookTheme) {
+    // Yes we use a class as an id, it's an mdbook thing
+    let id = theme.class();
+    let name = theme.name();
+    let button = THEME_BUTTON_HTML_TEMPLATE
+        .replace(KEY_BUTTON_ID, id)
+        .replace(KEY_BUTTON_NAME, name);
+    output.push_str(&button);
+    output.push('\n');
 }
