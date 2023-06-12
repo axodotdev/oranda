@@ -318,7 +318,7 @@ function playground_text(playground, hidden = true) {
     function get_theme() {
         var theme;
         try { theme = localStorage.getItem('orandamdbook-theme'); } catch (e) { }
-        if (theme === null || theme === undefined) {
+        if (theme === null || theme === undefined || themePopup.querySelector("button#" + theme) === null) {
             return default_theme;
         } else {
             return theme;
