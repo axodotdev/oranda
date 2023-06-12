@@ -27,3 +27,45 @@ footer {
 .repo_banner > a {
   @apply flex justify-center gap-2 items-start hover:text-slate-50 text-slate-50 dark:text-axo-black dark:hover:text-axo-black h-[20px] hover:underline hover:underline-offset-1 dark:hover:decoration-axo-black hover:decoration-slate-50;
 }
+
+/* FUNDING */
+
+.funding-wrapper {
+  @apply mt-8 flex flex-col items-center;
+}
+
+.funding-list {
+  @apply my-12 w-full lg:grid grid-cols-2 gap-4;
+}
+
+.funding-list li {
+  @apply m-0 mb-4;
+}
+
+.funding-list li a {
+  @apply flex gap-2 items-center;
+}
+
+.funding-list li a:hover button {
+  @apply text-slate-100 bg-axo-orange-dark border-axo-orange-dark;
+}
+
+.funding-list .button {
+  @apply block w-auto group-hover:bg-green-500 mr-2;
+}
+
+.preferred-funding-list {
+  @apply grid-cols-1;
+}
+
+.preferred-funding-list li a {
+  @apply flex-col text-4xl;
+}
+
+.preferred-funding-list svg {
+  @apply w-12 h-12;
+}
+
+.preferred-funding-list .button {
+  @apply border-0;
+}

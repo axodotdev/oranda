@@ -4,8 +4,10 @@ use crate::message::{Message, MessageType};
 
 pub mod cargo_dist;
 use cargo_dist::DistRelease;
+pub mod funding;
 pub mod github;
 mod release;
+
 pub use release::Release;
 
 pub struct Context {

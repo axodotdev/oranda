@@ -3,13 +3,18 @@ use crate::errors::*;
 use miette::{miette, IntoDiagnostic};
 use url::Url;
 
+/// Represents a GitHub repository that we can query things about.
 #[derive(Debug, Clone)]
 pub struct GithubRepo {
+    /// The repository owner.
     pub owner: String,
+    /// The repository name.
     pub name: String,
 }
 
 impl GithubRepo {
+    /// Constructs a new Github repository from a "owner/name" string. Notably, this does not check
+    /// whether the repo actually exists.
     pub fn from_url(repo_url: &str) -> Result<Self> {
         let binding =
             Url::parse(repo_url)

@@ -4,7 +4,7 @@ pub mod project;
 pub mod theme;
 
 use artifacts::Artifacts;
-pub use oranda_config::{MdBookConfig, StyleConfig};
+pub use oranda_config::{FundingConfig, MdBookConfig, StyleConfig};
 pub mod analytics;
 use crate::errors::*;
 use analytics::Analytics;
@@ -38,6 +38,7 @@ pub struct Config {
     pub mdbook: Option<MdBookConfig>,
     pub styles: StyleConfig,
     pub changelog: bool,
+    pub funding: Option<FundingConfig>,
 }
 
 impl Config {
@@ -68,6 +69,7 @@ impl Config {
         cfg.apply_project_layer(project);
         cfg.apply_custom_layer(custom);
         cfg.find_mdbook();
+        cfg.find_funding();
 
         Ok(cfg)
     }
@@ -109,6 +111,7 @@ impl Config {
             self.path_prefix.apply_opt(custom.path_prefix);
             self.changelog.apply_val(custom.changelog);
             self.mdbook.apply_bool_layer(custom.mdbook);
+            self.funding.apply_bool_layer(custom.funding);
         }
     }
 
@@ -131,6 +134,18 @@ impl Config {
                 // We found nothing, disable mdbook
                 self.mdbook = None;
             }
+        }
+    }
+
+    /// If we have a FUNDING.yml file, try to find it. If we fail, we disable funding support.
+    fn find_funding(&mut self) {
+        // Try and find the actual FUNDING.yml file first.
+        let funding_path = Utf8PathBuf::from(".github/FUNDING.yml");
+        // We also want to enable funding if there's a funding.md file in the root, so check
+        // for that too.
+        let funding_doc_path = Utf8PathBuf::from("funding.md");
+        if !funding_path.exists() && !funding_doc_path.exists() {
+            self.funding = None;
         }
     }
 }
@@ -159,6 +174,7 @@ impl Default for Config {
             // Later stages can disable mdbook support by setting this to None
             mdbook: Some(MdBookConfig::default()),
             changelog: false,
+            funding: Some(FundingConfig::default()),
         }
     }
 }

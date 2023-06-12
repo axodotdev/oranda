@@ -31,6 +31,7 @@ octolotl = "0.1.0"
 reqwest = { version = "0.11.13", features = ["blocking", "json"] }
 serde = { version = "1.0.144", features = ["derive"] }
 serde_json = { version = "1.0.85" }
+serde_yaml = "0.9.21"
 syntect = "5.0"
 thiserror = "1.0.37"
 tokio = { version = "1.20.1", features = ["full"] }

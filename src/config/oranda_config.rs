@@ -11,6 +11,7 @@ use crate::message::{Message, MessageType};
 use crate::site::markdown::SyntaxTheme;
 
 use crate::config::artifacts::Artifacts;
+use crate::data::funding::FundingType;
 
 use super::{ApplyLayer, ApplyOptExt};
 
@@ -76,6 +77,18 @@ impl StyleConfig {
     }
 }
 
+/// Config for displaying funding information on your page
+#[derive(Debug, Default, Deserialize)]
+pub struct FundingConfig {
+    pub preferred_funding: Option<FundingType>,
+}
+
+impl ApplyLayer for FundingConfig {
+    fn apply_layer(&mut self, layer: Self) {
+        self.preferred_funding.apply_opt(layer.preferred_funding);
+    }
+}
+
 #[derive(Debug, Deserialize)]
 pub struct OrandaConfig {
     pub description: Option<String>,
@@ -103,6 +116,7 @@ pub struct OrandaConfig {
     pub mdbook: Option<BoolOr<MdBookConfig>>,
     pub changelog: Option<bool>,
     pub styles: Option<StyleConfig>,
+    pub funding: Option<BoolOr<FundingConfig>>,
 }
 
 impl OrandaConfig {

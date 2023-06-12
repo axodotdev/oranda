@@ -3,11 +3,13 @@ public/
 oranda-debug.log
 # banish macos to the depths of hell
 .DS_Store
-# banish jetbrains as well
 .idea/
 
 # oranda-css
 oranda-css/dist
+oranda-css/.yarn
+# weirdo yarn feature that dumps files everywhere
+oranda-css/.pnp*
 node_modules
 
 # nix
