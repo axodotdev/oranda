@@ -1,0 +1,65 @@
+.oranda-dark {
+    /* 
+      This part is just defining constants which fringe/oranda-css should probably
+      be injecting into this file. For now, they're hardcoded.
+    */ 
+    --color-hacker-rouge: rgb(245, 112, 112);
+    --color-hacker-orange: rgb(249, 115, 22);
+    --color-hacker-green: rgb(32, 194, 14);
+    --color-hacker-purple: rgb(124, 58, 237);
+    --color-hacker-black: rgb(13, 13, 13);
+    --color-hacker-white: rgb(203, 213, 225);
+    --color-wellish: rgb(38, 50, 56);
+    --color-wellish-light: rgb(73, 96, 108);
+
+    /* 
+      Here we select which colors/fonts to use for this specific theme.
+      This first block calls a lot of the shots, most other definitions just
+      defer to these values.
+    */
+    --bg: var(--color-hacker-black);
+    --fg: var(--color-hacker-white);
+    --well-bg: var(--color-wellish);
+    --well-bg-highlight: var(--color-wellish-light);
+    --title-fg: var(--color-hacker-green);
+    --subtitle-fg: var(--color-hacker-purple);
+    --border-color: var(--color-hacker-orange);
+    --main-font: IBM Plex Mono,monospace;
+    --mono-font: IBM Plex Mono,monospace;
+
+    --sidebar-bg: var(--bg);
+    --sidebar-fg: var(--color-hacker-orange);
+    --sidebar-non-existant: var(--bg);
+    --sidebar-active: var(--color-hacker-purple);
+    --sidebar-spacer: var(--border-color);
+
+    --scrollbar: default;
+
+    --icons: var(--color-hacker-orange);
+    --icons-hover: var(--color-hacker-orange);
+
+    --links: var(--color-hacker-orange);
+    --links-hover: var(--color-hacker-orange);
+
+    --inline-code-color: var(--color-hacker-purple);
+
+    --theme-popup-bg: var(--well-bg);
+    --theme-popup-border: var(--border-color);
+    --theme-hover: var(--well-bg-highlight);
+
+    --quote-bg: var(--bg);
+    --quote-border: var(--border-color);
+
+    --table-border-color: var(--border-color);
+    --table-header-bg: var(--well-bg-highlight);
+    --table-alternate-bg: var(--well-bg);
+
+    --searchbar-border-color: var(--border-color);
+    --searchbar-bg: var(--well-bg);
+    --searchbar-fg: var(--fg);
+    --searchbar-shadow-color: var(--border-color);
+    --searchresults-header-fg: var(--title-fg);
+    --searchresults-border-color: var(--border-color);
+    --searchresults-li-bg: var(--well-bg);
+    --search-mark-bg: var(--well-bg);
+}

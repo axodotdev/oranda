@@ -44,9 +44,15 @@ const CLASS_ORANDA_LIGHT: &str = "oranda-light";
 
 // Mappings from AxomdbookThemes to their implementations
 const THEME_IMPL_ORANDA: &str = include_str!("../../oranda-css/mdbook-theme/oranda-themes/axo.css");
+const THEME_IMPL_HACKER: &str =
+    include_str!("../../oranda-css/mdbook-theme/oranda-themes/hacker.css");
+const THEME_IMPL_CUPCAKE: &str =
+    include_str!("../../oranda-css/mdbook-theme/oranda-themes/cupcake.css");
 const MDBOOK_THEMES: &[(AxomdbookTheme, &str)] = &[
     (AxomdbookTheme::Axo, THEME_IMPL_ORANDA),
     (AxomdbookTheme::AxoLight, THEME_IMPL_ORANDA),
+    (AxomdbookTheme::Hacker, THEME_IMPL_HACKER),
+    (AxomdbookTheme::Cupcake, THEME_IMPL_CUPCAKE),
 ];
 
 // Mappings from SyntaxThemes to their implementations
@@ -63,6 +69,10 @@ pub enum AxomdbookTheme {
     Axo,
     /// Equivalent to oranda's "light"
     AxoLight,
+    /// Equivalent to oranda's "hacker"
+    Hacker,
+    /// Equivalent to oranda's "cupcake"
+    Cupcake,
 }
 
 impl AxomdbookTheme {
@@ -74,8 +84,8 @@ impl AxomdbookTheme {
         match oranda_theme {
             Theme::Light => Some(AxoLight),
             Theme::Dark => Some(Axo),
-            Theme::Hacker => None,
-            Theme::Cupcake => None,
+            Theme::Hacker => Some(Hacker),
+            Theme::Cupcake => Some(Cupcake),
         }
     }
 
@@ -85,6 +95,8 @@ impl AxomdbookTheme {
         match self {
             Axo => true,
             AxoLight => false,
+            Hacker => true,
+            Cupcake => false,
         }
     }
 
@@ -95,6 +107,8 @@ impl AxomdbookTheme {
         match self {
             Axo => Some(AxoLight),
             AxoLight => Some(Axo),
+            Hacker => None,
+            Cupcake => None,
         }
     }
 
@@ -116,6 +130,8 @@ impl AxomdbookTheme {
         match self {
             Axo => "Axo Dark",
             AxoLight => "Axo Light",
+            Hacker => "Hacker",
+            Cupcake => "Cupcake",
         }
     }
 }

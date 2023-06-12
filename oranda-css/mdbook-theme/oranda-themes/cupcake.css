@@ -1,0 +1,62 @@
+.oranda-light {
+    /* 
+      This part is just defining constants which fringe/oranda-css should probably
+      be injecting into this file. For now, they're hardcoded.
+    */ 
+    --color-cupcake-white: rgb(250, 247, 245);
+    --color-cupcake-black: rgb(41, 19, 52);
+    --color-cupcake-faded-black: rgba(41, 19, 52, 0.8);
+    --color-cupcake-blue: rgb(101, 195, 200);
+    --color-cupcake-rouge: rgb(245, 112, 112);
+
+    /* 
+      Here we select which colors/fonts to use for this specific theme.
+      This first block calls a lot of the shots, most other definitions just
+      defer to these values.
+    */
+    --bg: var(--color-cupcake-white);
+    --fg: var(--color-cupcake-faded-black);
+    --well-bg: var(--bg);
+    --well-bg-highlight: var(--color-cupcake-blue);
+    --title-fg: var(--color-cupcake-blue);
+    --subtitle-fg: var(--fg);
+    --border-color: var(--color-cupcake-rouge);
+    --main-font: Inter, sans-serif;
+    --mono-font: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
+
+    --sidebar-bg: var(--bg);
+    --sidebar-fg: var(--fg);
+    --sidebar-non-existant: var(--bg);
+    --sidebar-active: var(--color-cupcake-faded-black);
+    --sidebar-spacer: var(--border-color);
+
+    --scrollbar: default;
+
+    --icons: var(--color-cupcake-black);
+    --icons-hover: var(--color-cupcake-black);
+
+    --links: var(--color-cupcake-black);
+    --links-hover: var(--color-cupcake-black);
+
+    --inline-code-color: var(--color-cupcake-black);
+
+    --theme-popup-bg: var(--well-bg);
+    --theme-popup-border: var(--border-color);
+    --theme-hover: var(--well-bg-highlight);
+
+    --quote-bg: var(--bg);
+    --quote-border: var(--border-color);
+
+    --table-border-color: var(--border-color);
+    --table-header-bg: var(--well-bg-highlight);
+    --table-alternate-bg: var(--well-bg);
+
+    --searchbar-border-color: var(--border-color);
+    --searchbar-bg: var(--well-bg);
+    --searchbar-fg: var(--fg);
+    --searchbar-shadow-color: var(--border-color);
+    --searchresults-header-fg: var(--title-fg);
+    --searchresults-border-color: var(--border-color);
+    --searchresults-li-bg: var(--well-bg);
+    --search-mark-bg: var(--well-bg);
+}
