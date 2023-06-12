@@ -57,7 +57,7 @@ fn preferred_funding_section(
 #[allow(clippy::vec_box)]
 fn create_funding_list(funding: HashMap<FundingType, FundingContent>) -> Vec<Box<li<String>>> {
     let mut list_html = vec![];
-    if let Some(FundingContent::Multiple(github)) = &funding.get(&FundingType::Github) {
+    if let Some(github) = one_or_multiple(&funding.get(&FundingType::Github)) {
         for link in github {
             let gh_link = format!("https://github.com/sponsors/{}", link);
             list_html
@@ -113,13 +113,27 @@ fn create_funding_list(funding: HashMap<FundingType, FundingContent>) -> Vec<Box
         )
     }
 
-    if let Some(FundingContent::Multiple(custom)) = &funding.get(&FundingType::Custom) {
+    if let Some(custom) = one_or_multiple(&funding.get(&FundingType::Custom)) {
         for link in custom {
-            list_html.extend(html!(<li>{create_link(link, icons::get_web_icon(), link)}</li>))
+            list_html.extend(html!(<li>{create_link(&link, icons::get_web_icon(), &link)}</li>))
         }
     }
 
     list_html
+}
+
+/// Handles either one or multiple funding items, and puts them into a Vec.
+fn one_or_multiple(funding: &Option<&FundingContent>) -> Option<Vec<String>> {
+    if funding.is_none() {
+        return None;
+    }
+    let mut vec = vec![];
+    match funding.unwrap() {
+        FundingContent::One(item) => vec.push(item.to_owned()),
+        FundingContent::Multiple(items) => vec.extend(items.to_vec()),
+    }
+
+    Some(vec)
 }
 
 /// Creates a link element to be used in the funding page.
