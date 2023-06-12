@@ -9,7 +9,7 @@ use axohtml::html;
 use camino::Utf8Path;
 use minifier::css;
 
-pub const LATEST_ORANDA_CSS: &str = "0.0.4";
+pub const LATEST_ORANDA_CSS: &str = "0.0.5";
 
 fn concat_minify(css_files: &[String]) -> Result<String> {
     let mut css = String::new();
