@@ -104,7 +104,6 @@ impl Config {
             self.social.apply_layer(custom.social);
             self.artifacts.apply_val_layer(custom.artifacts);
             self.styles.apply_val_layer(custom.styles);
-            self.version.apply_opt(custom.version);
             self.logo.apply_opt(custom.logo);
             self.favicon.apply_opt(custom.favicon);
             self.path_prefix.apply_opt(custom.path_prefix);
