@@ -11,3 +11,6 @@ oranda-css/.yarn
 # weirdo yarn feature that dumps files everywhere
 oranda-css/.pnp*
 node_modules
+
+# nix
+result/

@@ -35,5 +35,18 @@ cargo install oranda --locked --profile=dist
 npm install oranda
 ```
 
+## Install With Nix
+oranda is available in [`nixpkgs`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/misc/oranda/default.nix), and also as a nix flake. This installer is currently experimental, so we don't recommend you use it in production workflows.
+
+On a system with nix installed, you can run
+```sh
+nix-env -i oranda
+```
+
+or to install from GitHub using the flake,
+```sh
+nix profile install github:axodotdev/oranda
+```
+
 [cargo-binstall]:https://github.com/cargo-bins/cargo-binstall
 [website]: https://opensource.axo.dev/oranda

@@ -19,7 +19,7 @@ pub fn build(context: &Context, config: &Config) -> Result<String> {
             ""
         };
 
-        let link = format!("changelog/{}.html", &release.source.tag_name);
+        let link = format!("{}/", &release.source.tag_name);
 
         releases_html.extend(build_page_preview(release, config, true)?);
         releases_nav.extend(
@@ -100,7 +100,7 @@ pub fn build_page_preview(
         "release"
     };
     let link = if is_page {
-        format!("changelog/{}.html", &tag_name)
+        format!("{}/", &tag_name)
     } else {
         format!("#{}", &tag_name)
     };
@@ -135,7 +135,7 @@ fn build_release_body(release: &Release, config: &Config) -> Result<String> {
         release.source.body.clone().unwrap_or(String::new())
     };
 
-    markdown::to_html(&contents, &config.styles.syntax_theme)
+    markdown::to_html(&contents, &config.styles.syntax_theme())
 }
 
 fn build_prerelease_toggle(has_prereleases: bool) -> Option<Box<div<String>>> {

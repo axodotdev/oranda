@@ -38,7 +38,7 @@ fn nav(
 ) -> Result<Box<nav<String>>> {
     Message::new(MessageType::Info, "Building nav...").print();
     let mut html: Vec<Box<li<String>>> = if let Some(prefix) = &path_prefix {
-        let href = format!("/{}", prefix);
+        let href = format!("/{}/", prefix);
         vec![html!(<li><a href=href>"Home"</a></li>)]
     } else {
         vec![html!(<li><a href="/">"Home"</a></li>)]
@@ -51,10 +51,8 @@ fn nav(
                 let file_path = page::source::get_filename(page_path);
 
                 if let Some(file_name) = file_path {
-                    let href = link::generate(
-                        path_prefix,
-                        &format!("{}.html", file_name.to_string_lossy()),
-                    );
+                    let href =
+                        link::generate(path_prefix, &format!("{}/", file_name.to_string_lossy()));
 
                     html.extend(html!(<li><a href=href>{text!(page_name)}</a></li>));
                 } else {
@@ -70,7 +68,7 @@ fn nav(
 
     if artifacts.has_some() {
         Message::new(MessageType::Info, "Adding artifacts page...").print();
-        let href = link::generate(path_prefix, "artifacts.html");
+        let href = link::generate(path_prefix, "artifacts/");
         html.extend(html!(<li><a href=href>{text!("Install")}</a></li>));
     };
 
@@ -97,9 +95,9 @@ fn nav(
     if *changelog {
         Message::new(MessageType::Info, "Adding changelog...").print();
         let href = if let Some(prefix) = &path_prefix {
-            format!("/{}/{}", prefix, "changelog.html")
+            format!("/{}/{}/", prefix, "changelog")
         } else {
-            format!("/{}", "changelog.html")
+            format!("/{}/", "changelog")
         };
         html.extend(html!(<li><a href=href>{text!("Changelog")}</a></li>));
     };
