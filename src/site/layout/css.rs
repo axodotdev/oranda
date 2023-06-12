@@ -32,27 +32,33 @@ pub fn build_oranda(
     oranda_css_version: &Option<String>,
 ) -> Result<Box<link<String>>> {
     let dist_dir = dist_dir;
-    let oranda_version = match oranda_css_version {
+    let version = match oranda_css_version {
         Some(version) => version,
         None => LATEST_ORANDA_CSS,
     };
-    let filename = format!("oranda-v{oranda_version}.css");
+    let filename = fetch_css(dist_dir, version)?;
+    let abs_path = crate::site::link::generate(path_prefix, &filename);
+    Ok(html!(<link rel="stylesheet" href=abs_path></link>))
+}
+
+fn fetch_css(dist_dir: &str, version: &str) -> Result<String> {
     match env::var("ORANDA_CSS") {
         Ok(path) => {
+            let filename = "oranda.css".to_string();
             let msg = format!("Overriding oranda_css path with {}", &path);
             Message::new(MessageType::Warning, &msg).print();
             LocalAsset::copy(&path, dist_dir)?;
+            Ok(filename)
         }
         Err(_) => {
-            let filename = format!("oranda-v{oranda_version}.css");
-            let dest_path = Utf8Path::new(dist_dir).join(filename);
+            let filename = format!("oranda-v{version}.css");
+            let dest_path = Utf8Path::new(dist_dir).join(&filename);
             let oranda_css_response =
-                tokio::runtime::Handle::current().block_on(fetch_oranda(oranda_version))?;
+                tokio::runtime::Handle::current().block_on(fetch_oranda(version))?;
             axoasset::LocalAsset::write_new(&oranda_css_response, dest_path)?;
+            Ok(filename)
         }
-    };
-    let abs_path = crate::site::link::generate(path_prefix, &filename);
-    Ok(html!(<link rel="stylesheet" href=abs_path></link>))
+    }
 }
 
 async fn fetch_oranda(version: &str) -> Result<String> {
