@@ -83,6 +83,12 @@ pub struct FundingConfig {
     pub preferred_funding: Option<FundingType>,
 }
 
+impl ApplyLayer for FundingConfig {
+    fn apply_layer(&mut self, layer: Self) {
+        self.preferred_funding.apply_opt(layer.preferred_funding);
+    }
+}
+
 #[derive(Debug, Deserialize)]
 pub struct OrandaConfig {
     pub description: Option<String>,

@@ -26,6 +26,7 @@ pub fn no_artifacts(temp_dir: String) -> Config {
             ..Default::default()
         },
         mdbook: None,
+        funding: None,
         ..Default::default()
     }
 }
