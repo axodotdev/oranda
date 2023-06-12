@@ -149,7 +149,10 @@ pub enum OrandaError {
     },
 
     #[error("Error while parsing FUNDING.yml")]
-    #[diagnostic(help = "Make sure your FUNDING.yml conforms to GitHub's format!")]
+    #[diagnostic(
+        help = "Make sure your FUNDING.yml conforms to GitHub's format!",
+        url = "https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/displaying-a-sponsor-button-in-your-repository"
+    )]
     GithubFundingParseError { details: String },
 
     #[error("{0}")]
