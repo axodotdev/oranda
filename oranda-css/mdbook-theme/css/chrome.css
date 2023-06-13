@@ -212,14 +212,14 @@ a > .hljs:hover {
 }
 
 /* 
-  axo standard theming is to not include boxes/bgs around inline code.
+  oranda standard theming is to not include boxes/bgs around inline code.
   this overloads values that are normally set by a highlightjs css
   file (*-highlight.css), which we don't want for other themes. There's
   no good way I could find to toggle this with pure vars, so it has to
   be done manually here.
 */
-.axo :not(pre) > .hljs,
-.axo-light :not(pre) > .hljs {
+.oranda-dark :not(pre) > .hljs,
+.oranda-light :not(pre) > .hljs {
     background-color: inherit;
     padding: 0em;
 }

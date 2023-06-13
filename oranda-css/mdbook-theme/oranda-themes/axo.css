@@ -1,0 +1,152 @@
+.oranda-dark {
+    /* 
+      This part is just defining constants that are consistent
+      between both axo themes, which fringe/oranda-css should probably
+      be injecting into this file. For now, they're hardcoded.
+    */ 
+    --color-axo-pink: hsla(326, 100%, 73%, 1);
+    --color-axo-pink-dark: hsla(326, 52%, 58%, 1);
+    --color-axo-orange: hsla(0, 87%, 70%, 1);
+    --color-axo-orange-dark: hsla(356, 75%, 64%, 1);
+    --color-axo-highlighter: hsla(51, 100%, 50%, 1);
+    --color-axo-black: hsla(0, 0%, 5%, 1);
+    /* i think this is defined by fringe, but it didn't have a name so i made this one */
+    --color-axo-purple: rgb(167 139 250);
+    /* fringe builtins */
+    --color-slate-50: #f8fafc;
+    --color-slate-300: #cbd5e1;
+    --color-slate-700: #334155;
+    --color-slate-800: #1e293b;
+    /* another maybe-fringe-no-good-name */
+    --color-wellish: rgb(17 24 39);
+    /* this one is totally made up, idk */
+    --color-wellish-light: rgb(50, 71, 116);
+
+    /* 
+      Here we select which colors/fonts to use for this specific theme.
+      This first block calls a lot of the shots, most other definitions just
+      defer to these values.
+    */
+    --bg: var(--color-axo-black);
+    --fg: var(--color-slate-300);
+    --well-bg: var(--color-wellish);
+    --well-bg-highlight: var(--color-wellish-light);
+    --title-fg: var(--color-axo-pink);
+    --subtitle-fg: var(--color-axo-purple);
+    --border-color: var(--color-slate-700);
+    --main-font: Comfortaa,Comfortaa override,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
+    --mono-font: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;
+
+    --sidebar-bg: var(--bg);
+    --sidebar-fg: var(--fg);
+    --sidebar-non-existant: var(--bg);
+    --sidebar-active: var(--color-axo-pink);
+    --sidebar-spacer: var(--border-color);
+
+    --scrollbar: default;
+
+    --icons: var(--color-axo-orange);
+    --icons-hover: var(--color-axo-pink);
+
+    --links: var(--color-axo-orange);
+    --links-hover: var(--color-axo-pink);
+
+    --inline-code-color: var(--color-axo-purple);
+
+    --theme-popup-bg: var(--well-bg);
+    --theme-popup-border: var(--border-color);
+    --theme-hover: var(--well-bg-highlight);
+
+    --quote-bg: var(--bg);
+    --quote-border: var(--border-color);
+
+    --table-border-color: var(--border-color);
+    --table-header-bg: var(--well-bg-highlight);
+    --table-alternate-bg: var(--well-bg);
+
+    --searchbar-border-color: var(--border-color);
+    --searchbar-bg: var(--well-bg);
+    --searchbar-fg: var(--fg);
+    --searchbar-shadow-color: var(--border-color);
+    --searchresults-header-fg: var(--title-fg);
+    --searchresults-border-color: var(--border-color);
+    --searchresults-li-bg: var(--well-bg);
+    --search-mark-bg: var(--well-bg);
+}
+
+.oranda-light {
+    /* 
+      This part is just defining constants that are consistent
+      between both axo themes, which fringe/oranda-css should probably
+      be injecting into this file. For now, they're hardcoded.
+    */ 
+    --color-axo-pink: hsla(326, 100%, 73%, 1);
+    --color-axo-pink-dark: hsla(326, 52%, 58%, 1);
+    --color-axo-orange: hsla(0, 87%, 70%, 1);
+    --color-axo-orange-dark: hsla(356, 75%, 64%, 1);
+    --color-axo-highlighter: hsla(51, 100%, 50%, 1);
+    --color-axo-black: hsla(0, 0%, 5%, 1);
+    /* i think this is defined by fringe, but it didn't have a name so i made this one */
+    --color-axo-purple: rgb(167 139 250);
+    /* fringe builtins */
+    --color-slate-50: #f8fafc;
+    --color-slate-300: #cbd5e1;
+    --color-slate-500: #64748b;
+    --color-slate-700: #334155;
+    --color-slate-800: #1e293b;
+    /* another maybe-fringe-no-good-name */
+    --color-wellish: rgb(17 24 39);
+    /* this one is totally made up, idk */
+    --color-wellish-light: rgb(50, 71, 116);
+
+    /* 
+      Here we select which colors/fonts to use for this specific theme.
+      This first block calls a lot of the shots, most other definitions just
+      defer to these values.
+    */
+    --bg: var(--color-slate-50);
+    --fg: var(--color-slate-800);
+    --well-bg: var(--color-slate-300);
+    --well-bg-highlight: var(--color-slate-500);
+    --title-fg: var(--color-axo-pink);
+    --subtitle-fg: var(--color-axo-purple);
+    --border-color: var(--color-slate-700);
+    --main-font: Comfortaa,Comfortaa override,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
+    --mono-font: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;
+
+    --sidebar-bg: var(--bg);
+    --sidebar-fg: var(--fg);
+    --sidebar-non-existant: var(--bg);
+    --sidebar-active: var(--color-axo-pink);
+    --sidebar-spacer: var(--border-color);
+
+    --scrollbar: default;
+
+    --icons: var(--color-axo-orange);
+    --icons-hover: var(--color-axo-pink);
+
+    --links: var(--color-axo-orange);
+    --links-hover: var(--color-axo-pink);
+
+    --inline-code-color: var(--color-axo-purple);
+
+    --theme-popup-bg: var(--well-bg);
+    --theme-popup-border: var(--border-color);
+    --theme-hover: var(--well-bg-highlight);
+
+    --quote-bg: var(--bg);
+    --quote-border: var(--border-color);
+
+    --table-border-color: var(--border-color);
+    --table-header-bg: var(--well-bg-highlight);
+    --table-alternate-bg: var(--well-bg);
+
+    --searchbar-border-color: var(--border-color);
+    --searchbar-bg: var(--well-bg);
+    --searchbar-fg: var(--fg);
+    --searchbar-shadow-color: var(--border-color);
+    --searchresults-header-fg: var(--title-fg);
+    --searchresults-border-color: var(--border-color);
+    --searchresults-li-bg: var(--well-bg);
+    --search-mark-bg: var(--well-bg);
+}
