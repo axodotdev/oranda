@@ -1,5 +1,6 @@
+use schemars::JsonSchema;
 use serde::Deserialize;
-#[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Deserialize)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Deserialize, JsonSchema)]
 pub enum SyntaxTheme {
     AgilaClassicOceanicNext,
     AgilaCobalt,

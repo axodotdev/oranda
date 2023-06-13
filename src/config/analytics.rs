@@ -2,33 +2,34 @@ use crate::config::Config;
 use axohtml::elements::script;
 
 use axohtml::{html, unsafe_text};
+use schemars::JsonSchema;
 use serde::Deserialize;
 
 use super::ApplyLayer;
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, JsonSchema)]
 pub struct GoogleTracking {
     pub tracking_id: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, JsonSchema)]
 pub struct FathomTracking {
     pub site: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, JsonSchema)]
 pub struct PlausibleTracking {
     pub domain: String,
     pub script_url: Option<String>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, JsonSchema)]
 pub struct UnamiTracking {
     pub website: String,
     pub script_url: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, JsonSchema)]
 #[serde(rename_all = "lowercase")]
 pub enum Analytics {
     Google(GoogleTracking),

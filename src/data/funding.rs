@@ -2,6 +2,7 @@ use crate::config::Config;
 use crate::errors::{OrandaError, Result};
 use crate::site::markdown::to_html;
 use axoasset::LocalAsset;
+use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
@@ -16,7 +17,7 @@ pub struct Funding {
 
 /// An enumeration of different supported funding providers. Represents the "key" portion of a
 /// funding.yml entry.
-#[derive(Serialize, Deserialize, Clone, Debug, PartialOrd, PartialEq, Eq, Hash)]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialOrd, PartialEq, Eq, Hash, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum FundingType {
     Github,

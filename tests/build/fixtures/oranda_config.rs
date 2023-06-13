@@ -4,7 +4,7 @@ use oranda::config::analytics::{Analytics, PlausibleTracking};
 use oranda::config::artifacts::Artifacts;
 use oranda::config::{Config, StyleConfig};
 
-use linked_hash_map::LinkedHashMap;
+use indexmap::IndexMap;
 
 pub fn no_artifacts(temp_dir: String) -> Config {
     let mut additional_pages = HashMap::new();
@@ -88,7 +88,7 @@ pub fn cargo_dist(temp_dir: String) -> Config {
 }
 
 pub fn package_managers(temp_dir: String) -> Config {
-    let mut package_managers = LinkedHashMap::new();
+    let mut package_managers = IndexMap::new();
     package_managers.insert(String::from("npm"), String::from("npm install oranda"));
     package_managers.insert(String::from("yarn"), String::from("yarn add oranda"));
     Config {

@@ -1,6 +1,7 @@
+use schemars::JsonSchema;
 use serde::Deserialize;
 
-#[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Deserialize)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Deserialize, JsonSchema)]
 #[serde(rename_all = "lowercase")]
 pub enum Theme {
     Light,

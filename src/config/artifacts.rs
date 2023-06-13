@@ -1,9 +1,10 @@
-use linked_hash_map::LinkedHashMap;
+use indexmap::IndexMap;
+use schemars::JsonSchema;
 use serde::Deserialize;
 
 use super::{ApplyLayer, ApplyOptExt};
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, JsonSchema)]
 #[serde(rename_all = "lowercase")]
 enum ArtifactSystem {
     Windows,
@@ -30,12 +31,12 @@ enum ArtifactSystem {
     Freebsd,
 }
 
-#[derive(Debug, Default, Deserialize)]
+#[derive(Debug, Default, Deserialize, JsonSchema)]
 pub struct Artifacts {
     #[serde(default)]
     pub cargo_dist: Option<bool>,
     #[serde(default)]
-    pub package_managers: Option<LinkedHashMap<String, String>>,
+    pub package_managers: Option<IndexMap<String, String>>,
 }
 
 impl ApplyLayer for Artifacts {
