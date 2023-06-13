@@ -2,16 +2,12 @@
   "favicon": "https://www.axo.dev/favicon.ico",
   "path_prefix": "oranda",
   "changelog": true,
-  "mdbook": {
-    "path": "./docs/"
-  },
   "social": {
     "image": "https://www.axo.dev/meta_small.jpeg",
     "image_alt": "axo",
     "twitter_account": "@axodotdev"
   },
   "artifacts": {
-    "cargo_dist": true,
     "package_managers": {
       "npm": "npm install @axodotdev/oranda --save-dev",
       "npx": "npx @axodotdev/oranda",
