@@ -5,6 +5,7 @@
 body,
 html {
   @apply scroll-smooth;
+  font-family: var(--font-face);
 }
 
 *:focus {
