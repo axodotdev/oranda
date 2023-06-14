@@ -1,4 +1,9 @@
 @import url('https://unpkg.com/fixedsys-css/css/fixedsys.css');
+@import url('https://fonts.googleapis.com/css2?family=Cutive+Mono&display=swap');
+
+html.tui main {
+    max-width: 82%;
+}
 
 html.tui ::selection {
   @apply text-axo-black;
@@ -12,10 +17,17 @@ html.tui body {
   font-family: "fixedsys", monospace;
 }
 
+html.tui strong,
 html.tui code,
+html.tui ul,
+html.tui ul li,
 html.tui pre {
   @apply text-zinc-300;
   font-family: "fixedsys", monospace;
+}
+
+html.tui ul li {
+    list-style-type: square;
 }
 
 html.tui .button {
@@ -24,7 +36,7 @@ html.tui .button {
 }
 
 html.tui blockquote {
-    @apply bg-zinc-100 p-2 border-double border-axo-black border-8;
+    @apply bg-zinc-100 p-2 border-double border-axo-black border-8 mb-4;
     box-shadow: 0 0 0 8px #f4f4f5;
 }
 
@@ -49,6 +61,7 @@ html.tui footer {
 html.tui p,
 html.tui table {
   @apply text-zinc-100;
+  font-family: 'Cutive Mono', monospace;
 }
 
 html.tui p {
@@ -101,6 +114,14 @@ html.tui .axo-gradient {
 
 html.tui .nav ul {
   @apply justify-start;
+}
+
+html.tui .nav ul li {
+  list-style-type: none;
+}
+
+html.tui li.list-none {
+  list-style-type: none;
 }
 
 html.tui .button.primary {
