@@ -52,7 +52,7 @@ impl Site {
                             Message::new(MessageType::Warning, "Using cached context...").print();
                             cached
                         }
-                        Err(e) => Err(OrandaError::Other("Failed to read cached context".to_string()))?
+                        Err(e) => Err(OrandaError::CachedContextReadError{ details: Box::new(e) })?
                     }
                 } else {
                     Context::new(repo_url, config.artifacts.cargo_dist())?

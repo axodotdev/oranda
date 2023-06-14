@@ -44,6 +44,12 @@ pub enum OrandaError {
     #[diagnostic(help("Please make sure you give a valid path pointing to a css file."))]
     InvalidOrandaCSSOverride { path: String },
 
+    #[error("Failed to read cached context.")]
+    CachedContextReadError {
+        #[source]
+        details: Box<OrandaError>,
+    },
+
     #[error("Failed fetching releases from Github.")]
     GithubReleasesFetchError {
         #[source]
