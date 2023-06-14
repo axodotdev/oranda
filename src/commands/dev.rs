@@ -153,7 +153,7 @@ impl Dev {
             Build::new(
                 self.project_root.clone(),
                 self.config_path.clone(),
-                self.cached.clone(),
+                self.cached,
             )
             .run()?;
         }
@@ -197,7 +197,7 @@ impl Dev {
                 Build::new(
                     self.project_root.clone(),
                     self.config_path.clone(),
-                    self.cached.clone(),
+                    self.cached,
                 )
                 .run()
                 .unwrap();
