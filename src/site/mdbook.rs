@@ -142,8 +142,8 @@ impl AxomdbookTheme {
     pub fn name(&self) -> &'static str {
         use AxomdbookTheme::*;
         match self {
-            Default => "Default Dark",
-            DefaultLight => "Default Light",
+            Default => "Oranda Dark",
+            DefaultLight => "Oranda Light",
             AxoDark => "Axo Dark",
             AxoLight => "Axo Light",
             Hacker => "Hacker",
