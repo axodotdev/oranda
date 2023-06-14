@@ -2,18 +2,27 @@
   @apply w-40 min-w-max p-3 rounded text-lg cursor-pointer transition disabled:opacity-60 disabled:cursor-default border-2;
 }
 
+/* A mono-color button */
 .button.primary {
-  @apply text-axo-black hover:text-axo-black bg-axo-orange hover:bg-axo-pink border-transparent;
+  @apply border-transparent;
+  color: var(--light-color);
+  background-color: var(--dark-color);
 }
 
+.dark .button.primary {
+  color: var(--dark-color);
+  background-color: var(--light-color);
+}
+
+/* A duo-color button that changes when you hover over it. */
 .button.secondary {
-  @apply text-axo-orange hover:text-slate-100 hover:bg-axo-orange-dark hover:border-axo-orange-dark;
+  color: var(--dark-color);
+  background-color: var(--light-color);
+  border-color: var(--dark-color);
 }
 
-.button.primary-alt {
-  @apply text-slate-100 bg-violet-700 hover:bg-violet-500 border-transparent;
-}
-
-.button.secondary-alt {
-  @apply dark:text-violet-200 text-violet-700 hover:text-slate-100 hover:bg-violet-500 hover:border-violet-500 dark:hover:bg-violet-700 dark:hover:border-violet-700;
+.button.secondary:hover {
+  color: var(--light-color);
+  background-color: var(--dark-color);
+  border-color: var(--light-color);
 }

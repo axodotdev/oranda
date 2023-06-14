@@ -1,4 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;700;900&display=swap");
+@import "variables.css";
+
 @import "base.css";
 @import "utilities.css";
 @import "buttons.css";
@@ -7,6 +9,5 @@
 @import "pages/artifacts.css";
 @import "pages/changelog.css";
 
-@import "themes/axo.css";
 @import "themes/hacker.css";
 @import "themes/cupcake.css";
