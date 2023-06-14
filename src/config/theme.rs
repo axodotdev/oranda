@@ -6,6 +6,10 @@ use serde::Deserialize;
 pub enum Theme {
     Light,
     Dark,
+    #[serde(alias = "axo_light")]
+    AxoLight,
+    #[serde(alias = "axo_dark")]
+    AxoDark,
     Hacker,
     Cupcake,
 }
@@ -13,6 +17,8 @@ pub enum Theme {
 pub fn css_class(theme: &Theme) -> &'static str {
     match theme {
         Theme::Dark => "dark",
+        Theme::AxoLight => "axo",
+        Theme::AxoDark => "dark axo",
         Theme::Hacker => "hacker",
         Theme::Cupcake => "cupcake",
         _ => "light",

@@ -1,0 +1,85 @@
+@import url("https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap");
+
+html.axo {
+    /* Our theme's own colors */
+    --highlight-color: rgb(167 139 250);
+    --axo-orange-color: #F57070;
+    --axo-pink-color: #FF75C3;
+
+    /* Base Oranda theme variables */
+    --dark-color: #141414;
+    --light-color: rgb(203 213 225);
+    --link-color: var(--axo-pink-color);
+    --light-highlight-bg-color: var(--light-color);
+    --light-highlight-fg-color: var(--dark-color);
+    --dark-highlight-bg-color: var(--dark-color);
+    --dark-highlight-fg-color: var(--light-color);
+    --font-face: "Comfortaa", sans-serif;
+}
+
+h1,
+h2,
+h3,
+code {
+    color: var(--highlight-color);
+}
+
+html.axo .button.primary {
+    background-color: var(--link-color);
+}
+
+html.axo footer,
+html.axo .repo_banner {
+    @apply axo-gradient;
+}
+
+html.axo h1.title {
+    @apply axo-gradient-text;
+}
+
+.axo-gradient {
+    background: -webkit-linear-gradient(
+            left,
+            var(--axo-orange-color),
+            var(--axo-pink-color),
+            var(--axo-orange-color)
+    );
+    background-size: 1600px 200px;
+    animation-duration: 3s;
+    animation-name: animation-gradient-title;
+    animation-iteration-count: infinite;
+    animation-fill-mode: forwards;
+}
+
+.text-fill-transparent {
+    -webkit-text-fill-color: transparent;
+}
+
+.axo-gradient-text {
+    @apply text-fill-transparent axo-gradient;
+    background-clip: text;
+}
+
+@media (prefers-reduced-motion) {
+    .axo-gradient {
+        animation-duration: 0s;
+    }
+}
+
+@keyframes slide-in {
+    0% {
+        top: -100vh;
+    }
+    100% {
+        top: 0;
+    }
+}
+
+@keyframes animation-gradient-title {
+    0% {
+        background-position: 0 1600px;
+    }
+    100% {
+        background-position: 1600px 0;
+    }
+}

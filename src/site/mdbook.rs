@@ -43,14 +43,18 @@ const CLASS_ORANDA_DARK: &str = "oranda-dark";
 const CLASS_ORANDA_LIGHT: &str = "oranda-light";
 
 // Mappings from AxomdbookThemes to their implementations
-const THEME_IMPL_ORANDA: &str = include_str!("../../oranda-css/mdbook-theme/oranda-themes/axo.css");
+const THEME_IMPL_DEFAULT: &str =
+    include_str!("../../oranda-css/mdbook-theme/oranda-themes/default.css");
+const THEME_IMPL_AXO: &str = include_str!("../../oranda-css/mdbook-theme/oranda-themes/axo.css");
 const THEME_IMPL_HACKER: &str =
     include_str!("../../oranda-css/mdbook-theme/oranda-themes/hacker.css");
 const THEME_IMPL_CUPCAKE: &str =
     include_str!("../../oranda-css/mdbook-theme/oranda-themes/cupcake.css");
 const MDBOOK_THEMES: &[(AxomdbookTheme, &str)] = &[
-    (AxomdbookTheme::Axo, THEME_IMPL_ORANDA),
-    (AxomdbookTheme::AxoLight, THEME_IMPL_ORANDA),
+    (AxomdbookTheme::Default, THEME_IMPL_DEFAULT),
+    (AxomdbookTheme::DefaultLight, THEME_IMPL_DEFAULT),
+    (AxomdbookTheme::AxoDark, THEME_IMPL_AXO),
+    (AxomdbookTheme::AxoLight, THEME_IMPL_AXO),
     (AxomdbookTheme::Hacker, THEME_IMPL_HACKER),
     (AxomdbookTheme::Cupcake, THEME_IMPL_CUPCAKE),
 ];
@@ -66,8 +70,12 @@ const SYNTAX_THEMES: &[(SyntaxTheme, &str)] = &[(
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum AxomdbookTheme {
     /// Equivalent to oranda's "dark"
-    Axo,
+    Default,
     /// Equivalent to oranda's "light"
+    DefaultLight,
+    /// Equivalent to oranda's "axo_dark"
+    AxoDark,
+    /// Equivalent to oranda's "axo_ight"
     AxoLight,
     /// Equivalent to oranda's "hacker"
     Hacker,
@@ -82,8 +90,10 @@ impl AxomdbookTheme {
     pub fn from_oranda_theme(oranda_theme: &Theme) -> Option<Self> {
         use AxomdbookTheme::*;
         match oranda_theme {
-            Theme::Light => Some(AxoLight),
-            Theme::Dark => Some(Axo),
+            Theme::Light => Some(DefaultLight),
+            Theme::Dark => Some(Default),
+            Theme::AxoDark => Some(AxoDark),
+            Theme::AxoLight => Some(AxoLight),
             Theme::Hacker => Some(Hacker),
             Theme::Cupcake => Some(Cupcake),
         }
@@ -93,7 +103,9 @@ impl AxomdbookTheme {
     pub fn is_dark(&self) -> bool {
         use AxomdbookTheme::*;
         match self {
-            Axo => true,
+            Default => true,
+            DefaultLight => false,
+            AxoDark => true,
             AxoLight => false,
             Hacker => true,
             Cupcake => false,
@@ -105,8 +117,10 @@ impl AxomdbookTheme {
     pub fn twin_theme(&self) -> Option<AxomdbookTheme> {
         use AxomdbookTheme::*;
         match self {
-            Axo => Some(AxoLight),
-            AxoLight => Some(Axo),
+            Default => Some(DefaultLight),
+            DefaultLight => Some(Default),
+            AxoDark => Some(AxoLight),
+            AxoLight => Some(AxoDark),
             Hacker => None,
             Cupcake => None,
         }
@@ -128,7 +142,9 @@ impl AxomdbookTheme {
     pub fn name(&self) -> &'static str {
         use AxomdbookTheme::*;
         match self {
-            Axo => "Axo Dark",
+            Default => "Default Dark",
+            DefaultLight => "Default Light",
+            AxoDark => "Axo Dark",
             AxoLight => "Axo Light",
             Hacker => "Hacker",
             Cupcake => "Cupcake",
