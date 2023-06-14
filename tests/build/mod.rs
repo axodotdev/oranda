@@ -226,6 +226,19 @@ fn adds_prefix() {
 }
 
 #[test]
+fn adds_prefix_with_package_managers() {
+    let _guard = TEST_RUNTIME.enter();
+    let (_t, temp_dir) = temp_build_dir();
+    let config = oranda_config::path_prefix_with_package_managers(temp_dir);
+    let layout = Layout::new(&config).unwrap();
+    let page = page::index_with_artifacts(&config, &layout);
+    assert!(page.contents.contains("<script src=\"/axo/artifacts.js\">"));
+    assert!(page
+        .contents
+        .contains(r#"<a class="download-all" href="/axo/artifacts.html">View all downloads</a>"#));
+}
+
+#[test]
 fn adds_changelog_nav() {
     let _guard = TEST_RUNTIME.enter();
     let (_t, temp_dir) = temp_build_dir();

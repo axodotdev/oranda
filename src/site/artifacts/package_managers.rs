@@ -1,7 +1,7 @@
 use crate::config::Config;
 use crate::errors::*;
-use crate::site::icons;
 use crate::site::markdown::{syntax_highlight, SyntaxTheme};
+use crate::site::{icons, link};
 use indexmap::IndexMap;
 
 use axohtml::elements::div;
@@ -57,12 +57,13 @@ pub fn build_header(
         )));
     };
     let install_code = create_package_install_code(hint.as_str(), &config.styles.syntax_theme());
+    let downloads_href = link::generate(&config.path_prefix, "artifacts.html");
 
     Ok(html!(<div>
     <h4 class="text-center">{text!(format!("Install with {}", manager))}</h4>
     {unsafe_text!(install_code)}
     <div>
-        <a href="/artifacts.html" class="download-all">{text!("View all downloads")}</a>
+        <a href=downloads_href class="download-all">{text!("View all downloads")}</a>
     </div>
 </div>))
 }

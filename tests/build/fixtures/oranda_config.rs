@@ -75,6 +75,29 @@ pub fn path_prefix(temp_dir: String) -> Config {
     }
 }
 
+pub fn path_prefix_with_package_managers(temp_dir: String) -> Config {
+    let mut package_managers = IndexMap::new();
+    package_managers.insert(String::from("npm"), String::from("npm install oranda"));
+    package_managers.insert(String::from("yarn"), String::from("yarn add oranda"));
+    Config {
+        dist_dir: temp_dir,
+        path_prefix: Some(String::from("axo")),
+        artifacts: Artifacts {
+            cargo_dist: Some(false),
+            package_managers: Some(package_managers),
+        },
+        styles: StyleConfig {
+            additional_css: vec![String::from(
+                "https://raw.githubusercontent.com/axodotdev/axii/main/css/main.css",
+            )],
+            ..Default::default()
+        },
+        repository: Some(String::from("https://github.com/axodotdev/oranda")),
+        version: Some(String::from("0.0.1-prerelease2")),
+        ..Default::default()
+    }
+}
+
 pub fn cargo_dist(temp_dir: String) -> Config {
     Config {
         dist_dir: temp_dir,
