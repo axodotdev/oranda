@@ -68,7 +68,7 @@
 .oranda-light {
     /* 
       This part is just defining constants that are consistent
-      between both axo themes, which fringe/oranda-css should probably
+      between both oranda themes, which fringe/oranda-css should probably
       be injecting into this file. For now, they're hardcoded.
     */
     --dark-color: #141414;
