@@ -41,10 +41,10 @@ pub struct ReleaseArtifacts {
     installers: Vec<Installer>,
     /// What installers to use for each target, in descending order
     /// (so recommend the first one, potentially show the others in tabs)
-    targets: BTreeMap<TargetTriple, Vec<InstallIdx>>,
+    targets: BTreeMap<TargetTriple, Vec<InstallerIdx>>,
 }
 
-/// A handle to a File (equivalent to a pointer into [`ReleaseArtifacts::files`][])
+/// A handle to a File (equivalent to a pointer into `ReleaseArtifacts::files`)
 #[derive(Debug, Copy, Clone)]
 pub struct FileIdx(usize);
 
@@ -61,9 +61,9 @@ pub struct File {
     pub infer: bool,
 }
 
-/// A handle to an Installer (equivalent to a pointer into [`ReleaseArtifactsInstallers`][])
+/// A handle to an Installer (equivalent to a pointer into [`ReleaseArtifacts::installers`][])
 #[derive(Debug, Copy, Clone)]
-pub struct InstallIdx(usize);
+pub struct InstallerIdx(usize);
 
 /// A potential installer / installation method for this release
 #[derive(Debug, Clone)]
@@ -132,8 +132,8 @@ impl ReleaseArtifacts {
     }
 
     /// Add an installer to the list
-    pub fn add_installer(&mut self, installer: Installer) -> InstallIdx {
-        let idx = InstallIdx(self.installers.len());
+    pub fn add_installer(&mut self, installer: Installer) -> InstallerIdx {
+        let idx = InstallerIdx(self.installers.len());
         self.installers.push(installer);
         idx
     }
@@ -155,18 +155,18 @@ impl ReleaseArtifacts {
         (0..self.files.len()).map(FileIdx)
     }
     /// Get an installer
-    pub fn installer(&self, idx: InstallIdx) -> &Installer {
+    pub fn installer(&self, idx: InstallerIdx) -> &Installer {
         &self.installers[idx.0]
     }
     /// Get all installers
-    pub fn installers(&self) -> impl Iterator<Item = (InstallIdx, &Installer)> {
+    pub fn installers(&self) -> impl Iterator<Item = (InstallerIdx, &Installer)> {
         self.installers
             .iter()
             .enumerate()
-            .map(|(idx, ins)| (InstallIdx(idx), ins))
+            .map(|(idx, ins)| (InstallerIdx(idx), ins))
     }
     /// Get all target -> installer mappings
-    pub fn targets(&self) -> &BTreeMap<TargetTriple, Vec<InstallIdx>> {
+    pub fn targets(&self) -> &BTreeMap<TargetTriple, Vec<InstallerIdx>> {
         &self.targets
     }
 
