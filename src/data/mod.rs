@@ -1,7 +1,10 @@
+use crate::config::artifacts::Artifacts;
 use crate::data::github::{GithubRelease, GithubRepo};
 use crate::errors::*;
 use crate::message::{Message, MessageType};
 
+pub mod artifact_inference;
+pub mod artifacts;
 pub mod cargo_dist;
 use cargo_dist::DistRelease;
 pub mod funding;
@@ -18,10 +21,11 @@ pub struct Context {
 }
 
 impl Context {
-    pub fn new(repo_url: &str, cargo_dist: bool) -> Result<Self> {
+    pub fn new(repo_url: &str, artifacts_config: &Artifacts) -> Result<Self> {
         let repo = GithubRepo::from_url(repo_url)?;
         let (releases, has_prereleases, latest_dist_release) =
-            Self::fetch_all_releases(&repo, cargo_dist)?;
+            Self::fetch_all_releases(&repo, artifacts_config)?;
+
         Ok(Self {
             repo,
             releases,
@@ -33,7 +37,7 @@ impl Context {
     #[allow(clippy::unnecessary_unwrap)]
     pub fn fetch_all_releases(
         repo: &GithubRepo,
-        cargo_dist: bool,
+        artifacts_config: &Artifacts,
     ) -> Result<(Vec<Release>, bool, Option<DistRelease>)> {
         let gh_releases =
             tokio::runtime::Handle::current().block_on(GithubRelease::fetch_all(repo))?;
@@ -41,7 +45,7 @@ impl Context {
             tokio::runtime::Handle::current().block_on(futures_util::future::try_join_all(
                 gh_releases
                     .into_iter()
-                    .map(|gh_release| Release::new(gh_release, repo, cargo_dist)),
+                    .map(|gh_release| Release::new(gh_release, repo, artifacts_config)),
             ))?;
 
         let mut has_prereleases = false;
@@ -65,7 +69,7 @@ impl Context {
 
             // Special handling of dist-manifest.json
             if release.manifest.is_some() {
-                if cargo_dist {
+                if artifacts_config.cargo_dist() {
                     // cargo-dist is enabled, so we want to find the latest stable release
                     // or, failing that, the latest prerelease.
                     if is_prerelease {
