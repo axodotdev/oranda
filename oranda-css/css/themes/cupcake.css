@@ -104,3 +104,7 @@ html.cupcake .releases-nav ul {
 html.cupcake div.table .th {
   color: var(--primary);
 }
+
+html.cupcake .artifact-header h4 {
+  color: var(--light-color);
+}

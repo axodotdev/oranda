@@ -21,6 +21,16 @@ const extend = {
   listStyleType,
   maxWidth,
   backgroundImage,
+  colors: {
+    "axo-pink": "hsla(326, 100%, 73%, 1)",
+    "axo-pink-dark": "hsla(326, 52%, 58%, 1)",
+    "axo-orange": "hsla(0, 87%, 70%, 1)",
+    "axo-orange-dark": "hsla(356, 75%, 64%, 1)",
+    "axo-highlighter": "hsla(51, 100%, 50%, 1)",
+    "axo-black": "hsla(0, 0%, 8%, 1)",
+    "axo-light-gray": "hsla(0, 0%, 93%, 1)",
+    "axo-dark-gray": "hsla(0, 0%, 35%, 1)"
+  },
 };
 
 const extractColorVars = (themeColors, colorGroup = "") =>

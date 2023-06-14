@@ -1,5 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&display=swap");
 
+:root {
+  --light-highlight-bg-color: var(--dark-highlight-bg-color);
+  --light-highlight-fg-color: var(--dark-highlight-fg-color);
+}
+
 html.hacker ::selection {
   @apply text-axo-black;
   background-color: var(--hacker-green);
@@ -27,7 +32,7 @@ html.hacker h6 {
 
 html.hacker .repo_banner > a,
 html.hacker footer {
-  @apply text-axo-black;
+  color: var(--light-color);
 }
 
 html.hacker p,
@@ -87,6 +92,7 @@ html.hacker .button.primary {
 
 html.hacker .artifact-header > h4 {
   @apply text-left;
+  color: var(--light-color);
 }
 
 html.hacker .releases-nav ul li a {
