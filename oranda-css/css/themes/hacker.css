@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&display=swap");
 
-:root {
+html.hacker {
   --light-highlight-bg-color: var(--dark-highlight-bg-color);
   --light-highlight-fg-color: var(--dark-highlight-fg-color);
 }
