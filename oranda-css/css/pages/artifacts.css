@@ -11,11 +11,18 @@
 }
 
 .artifacts {
-  @apply flex gap-2 items-center flex-col mb-16;
+  @apply flex gap-2 items-center flex-col mb-16 p-5;
+  color: var(--light-highlight-fg-color);
+  background-color: var(--light-highlight-bg-color);
+}
+
+.dark .artifacts {
+  color: var(--dark-highlight-fg-color);
+  background-color: var(--dark-highlight-bg-color);
 }
 
 .detect {
-  @apply text-center text-slate-500 pr-2 md:pr-0;
+  @apply text-center pr-2 md:pr-0;
 }
 
 .detect + a {
@@ -31,7 +38,7 @@
 }
 
 .artifact-header > h4 {
-  @apply text-center -mb-2;
+  @apply text-center -mb-2 font-bold;
 }
 
 .artifact-header {
@@ -59,7 +66,7 @@
 }
 
 .install-code-wrapper > .button.copy-clipboard-button {
-  @apply rounded-none border-r-axo-black border-r-2;
+  @apply rounded-none;
 }
 
 .published-date {

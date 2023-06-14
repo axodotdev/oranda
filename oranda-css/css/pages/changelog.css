@@ -25,11 +25,19 @@
 }
 
 .releases-nav {
-  @apply top-12 sticky self-start  w-max;
+  @apply top-12 sticky self-start w-max;
 }
 
 .release > h2 {
   @apply mt-0;
+}
+
+.release > h2 a {
+  color: var(--dark-color);
+}
+
+.dark .release > h2 a {
+  color: var(--light-color);
 }
 
 .releases-list {
@@ -42,19 +50,31 @@
 }
 
 .releases-nav ul {
-  @apply list-none m-0 flex flex-col gap-2 border-l-4 border-l-gray-800 pl-4;
+  @apply list-none m-0 flex flex-col gap-2 border-l-4 pl-4;
+  border-color: var(--dark-color);
 }
+
+.dark .releases-nav ul {
+  border: var(--light-color);
+}
+
 .releases-nav ul li {
   @apply m-0 relative ml-1 text-sm;
 }
 
 .releases-nav ul li:before {
   content: "";
-  @apply h-1 w-4 block absolute dark:bg-gray-800 bg-slate-300 top-1/2 -left-5 -translate-y-1/2;
+  @apply h-1 w-4 block absolute top-1/2 -left-5 -translate-y-1/2;
+  background-color: var(--dark-color);
+}
+
+.dark .releases-nav ul li:before {
+  background-color: var(--light-color);
 }
 
 .releases-nav ul li a {
-  @apply text-slate-800 dark:text-slate-300 decoration-transparent hover:decoration-axo-orange-dark underline-offset-2 underline;
+  @apply decoration-transparent underline-offset-2 hover:underline;
+  color: var(--dark-color);
 }
 
 .release-info {
@@ -66,7 +86,8 @@
 }
 
 .prereleases-toggle input {
-  @apply h-5 w-5 rounded text-axo-orange-dark focus:ring-axo-orange transition dark:bg-slate-800 dark:border-gray-700 bg-slate-200 border-gray-400;
+  @apply h-5 w-5 rounded;
+  color: var(--dark-color);
 }
 
 .prereleases-toggle label {

@@ -1,7 +1,14 @@
 /* FOOTER */
 
 footer {
-  @apply axo-gradient text-slate-50 flex w-full justify-between px-4 py-2 text-xs items-center;
+  @apply flex w-full justify-between px-4 py-2 text-xs items-center;
+  background-color: var(--dark-color);
+  color: var(--light-color);
+}
+
+.dark footer {
+  color: var(--dark-color);
+  background-color: var(--light-color);
 }
 
 /* NAV */
@@ -21,7 +28,14 @@ footer {
 /* REPO BANNER */
 
 .repo_banner {
-  @apply axo-gradient py-1.5;
+  @apply py-1.5;
+  color: var(--light-color);
+  background-color: var(--dark-color);
+}
+
+.dark .repo_banner {
+  color: var(--dark-color);
+  background-color: var(--light-color);
 }
 
 .repo_banner > a {
@@ -48,10 +62,19 @@ footer {
 
 .funding-list li a:hover button {
   @apply text-slate-100 bg-axo-orange-dark border-axo-orange-dark;
+  color: var(--light-color);
+  background-color: var(--dark-color);
+  border-color: var(--light-color);
+}
+
+.dark .funding-list li a:hover button {
+  color: var(--dark-color);
+  background-color: var(--light-color);
+  border-color: var(--dark-color);
 }
 
 .funding-list .button {
-  @apply block w-auto group-hover:bg-green-500 mr-2;
+  @apply block w-auto  mr-2;
 }
 
 .preferred-funding-list {
@@ -59,7 +82,7 @@ footer {
 }
 
 .preferred-funding-list li a {
-  @apply flex-col text-4xl;
+  @apply flex-col text-4xl font-bold;
 }
 
 .preferred-funding-list svg {

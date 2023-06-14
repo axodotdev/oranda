@@ -1,29 +1,7 @@
 @tailwind utilities;
 
-@keyframes slide-in {
-  0% {
-    top: -100vh;
-  }
-  100% {
-    top: 0;
-  }
-}
-
-@keyframes animation-gradient-title {
-  0% {
-    background-position: 0 1600px;
-  }
-  100% {
-    background-position: 1600px 0;
-  }
-}
-
 .oblique {
   font-style: oblique;
-}
-
-.text-fill-axo-pink {
-  -webkit-text-fill-color: var(--color-axo-pink);
 }
 
 .well-color {
@@ -34,60 +12,26 @@
   @apply hidden;
 }
 
-.axo-gradient {
-  background: -webkit-linear-gradient(
-    left,
-    var(--color-axo-orange),
-    var(--color-axo-pink),
-    var(--color-axo-orange)
-  );
-  background-size: 1600px 200px;
-  animation-duration: 3s;
-  animation-name: animation-gradient-title;
-  animation-iteration-count: infinite;
-  animation-fill-mode: forwards;
-}
-
 @media (prefers-reduced-motion) {
   .axo-gradient {
     animation-duration: 0s;
   }
 }
 
-.axo-gradient-text {
-  @apply text-fill-transparent axo-gradient;
-  background-clip: text;
-}
-
-.text-fill-axo-orange {
-  -webkit-text-fill-color: var(--color-axo-orange);
-}
-.text-fill-axo-orange-dark {
-  -webkit-text-fill-color: var(--color-axo-orange-dark);
-}
-
-.text-fill-slate-900 {
-  -webkit-text-fill-color: var(--color-slate-900);
-}
-
-.text-fill-transparent {
-  -webkit-text-fill-color: transparent;
-}
-
 .heading-1 {
-  @apply text-3xl sm:text-6xl leading-tight font-bold text-axo-pink mb-8;
+  @apply text-3xl sm:text-6xl leading-tight font-black mb-8;
 }
 
 .heading-2 {
-  @apply text-2xl sm:text-5xl leading-tight font-bold text-violet-600 dark:text-violet-400 mb-6;
+  @apply text-2xl sm:text-5xl leading-tight font-bold mb-6;
 }
 
 .heading-3 {
-  @apply text-2xl sm:text-4xl leading-tight text-axo-pink mb-4;
+  @apply text-2xl sm:text-4xl leading-tight font-bold mb-4;
 }
 
 .heading-4 {
-  @apply text-2xl sm:text-3xl leading-tight text-violet-600 dark:text-violet-400 mb-4;
+  @apply text-2xl sm:text-3xl leading-tight mb-4;
 }
 .heading-5 {
   @apply text-xl sm:text-2xl leading-tight text-slate-700 dark:text-slate-200 font-bold mb-4;
