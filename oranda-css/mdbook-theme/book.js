@@ -315,9 +315,29 @@ function playground_text(playground, hidden = true) {
         themeToggleButton.focus();
     }
 
+    function checkThemeCacheValidity() {
+        // We use the display name of the default_theme to determine if the oranda
+        // user has changed the default theme. If they have, we invalidate the stored
+        // theme so that we'll revert back to the default_theme.
+        var oldLabel;
+        try {
+            oldLabel = localStorage.getItem('orandamdbook-theme-default-label');
+        } catch (e) { }
+        var curLabel = themePopup.querySelector("button#" + default_theme).innerText;
+
+        if (oldLabel != curLabel) {
+            // Default changed, toss everything
+            localStorage.removeItem('orandamdbook-theme')
+        }
+        // Remember the current default label
+        localStorage.setItem('orandamdbook-theme-default-label', curLabel);
+    }
+
     function get_theme() {
+        checkThemeCacheValidity();
         var theme;
         try { theme = localStorage.getItem('orandamdbook-theme'); } catch (e) { }
+
         if (theme === null || theme === undefined || themePopup.querySelector("button#" + theme) === null) {
             return default_theme;
         } else {
