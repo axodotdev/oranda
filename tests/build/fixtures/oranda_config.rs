@@ -2,9 +2,9 @@ use std::collections::HashMap;
 
 use indexmap::IndexMap;
 
+use oranda::config::oranda_config::{AnalyticsConfig, ArtifactsConfig, StyleConfig};
 use oranda::config::Config;
-use oranda::config::oranda_config::{ArtifactsConfig, AnalyticsConfig, StyleConfig};
-use oranda::config::oranda_config::analytics::PlausibleTracking;
+use oranda::site::javascript::analytics::Plausible;
 
 pub fn no_artifacts(temp_dir: String) -> Config {
     let mut additional_pages = HashMap::new();
@@ -138,7 +138,7 @@ pub fn analytics_plausible(temp_dir: String) -> Config {
     Config {
         dist_dir: temp_dir,
         repository: Some(String::from("https://github.com/axodotdev/oranda")),
-        analytics: Some(AnalyticsConfig::Plausible(PlausibleTracking {
+        analytics: Some(AnalyticsConfig::Plausible(Plausible {
             domain: "opensource.axo.dev".into(),
             script_url: None,
         })),

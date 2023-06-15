@@ -9,7 +9,8 @@ use crate::data::{funding::Funding, Context};
 use crate::errors::*;
 use crate::message::{Message, MessageType};
 
-use layout::{css, javascript, Layout};
+pub use layout::javascript;
+use layout::{css, Layout};
 use page::Page;
 
 pub mod artifacts;

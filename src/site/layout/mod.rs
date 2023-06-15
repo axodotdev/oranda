@@ -9,7 +9,7 @@ mod footer;
 mod head;
 mod header;
 pub mod javascript;
-use javascript::Analytics;
+use javascript::analytics::Analytics;
 
 #[derive(Debug)]
 pub struct Layout {
@@ -62,7 +62,7 @@ impl Layout {
             &config.path_prefix,
             &config.styles.oranda_css_version,
         )?;
-        let analytics = Analytics::new(&config.analytics)?;
+        let analytics = Analytics::new(&config.analytics);
         let template_html: String = html!(
         <html lang="en" id="oranda" class=theme>
             <head>
