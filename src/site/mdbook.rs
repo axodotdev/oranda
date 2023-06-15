@@ -2,11 +2,10 @@ use axoasset::LocalAsset;
 use camino::{Utf8Path, Utf8PathBuf};
 use mdbook::MDBook;
 
-use crate::config::theme::Theme;
 use crate::config::MdBookConfig;
 use crate::errors::*;
 use crate::message::{Message, MessageType};
-use crate::site::Site;
+use crate::site::{oranda_theme::OrandaTheme, Site};
 
 use super::markdown::SyntaxTheme;
 
@@ -87,15 +86,15 @@ impl AxomdbookTheme {
     /// Get the equivalent mdbook theme for this oranda theme
     ///
     /// If none exists we won't override themes
-    pub fn from_oranda_theme(oranda_theme: &Theme) -> Option<Self> {
+    pub fn from_oranda_theme(oranda_theme: &OrandaTheme) -> Option<Self> {
         use AxomdbookTheme::*;
         match oranda_theme {
-            Theme::Light => Some(DefaultLight),
-            Theme::Dark => Some(Default),
-            Theme::AxoDark => Some(AxoDark),
-            Theme::AxoLight => Some(AxoLight),
-            Theme::Hacker => Some(Hacker),
-            Theme::Cupcake => Some(Cupcake),
+            OrandaTheme::Light => Some(DefaultLight),
+            OrandaTheme::Dark => Some(Default),
+            OrandaTheme::AxoDark => Some(AxoDark),
+            OrandaTheme::AxoLight => Some(AxoLight),
+            OrandaTheme::Hacker => Some(Hacker),
+            OrandaTheme::Cupcake => Some(Cupcake),
         }
     }
 
@@ -168,7 +167,7 @@ pub fn mdbook_dir(book_cfg: &MdBookConfig) -> Result<Utf8PathBuf> {
 }
 
 /// Gets the custom theme to set in an mdbook
-pub fn custom_theme(book_cfg: &MdBookConfig, oranda_theme: &Theme) -> Option<AxomdbookTheme> {
+pub fn custom_theme(book_cfg: &MdBookConfig, oranda_theme: &OrandaTheme) -> Option<AxomdbookTheme> {
     if book_cfg.theme.unwrap_or(true) {
         AxomdbookTheme::from_oranda_theme(oranda_theme)
     } else {
@@ -186,7 +185,7 @@ pub fn custom_theme_dir(_book_cfg: &MdBookConfig, dist: &Utf8Path) -> Result<Utf
 pub fn build_mdbook(
     dist: &Utf8Path,
     book_cfg: &MdBookConfig,
-    oranda_theme: &Theme,
+    oranda_theme: &OrandaTheme,
     syntax_theme: &SyntaxTheme,
 ) -> Result<()> {
     Message::new(MessageType::Info, "Building mdbook...").print();

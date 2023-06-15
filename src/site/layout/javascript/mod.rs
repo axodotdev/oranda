@@ -1,6 +1,6 @@
 mod artifacts;
 
-use crate::config::{analytics, Config};
+use crate::config::AnalyticsConfig;
 use crate::errors::*;
 use crate::site::link;
 
@@ -14,24 +14,27 @@ pub struct Analytics {
 }
 
 impl Analytics {
-    pub fn new(config: &Config) -> Result<Self> {
-        let snippet = analytics::snippet(config);
-        match &config.analytics {
-            Some(analytics::Analytics::Google(g)) => {
-                let google_script = Some(g.get_script());
-                Ok(Self {
+    pub fn new(config: &Option<AnalyticsConfig>) -> Result<Self> {
+        if let Some(analytics) = config {
+            let snippet = Some(analytics.snippet());
+            match analytics {
+                AnalyticsConfig::Google(g) => {
+                    let google_script = Some(g.get_script());
+                    Ok(Self {
+                        snippet,
+                        google_script,
+                    })
+                }
+                _ => Ok(Self {
                     snippet,
-                    google_script,
-                })
+                    google_script: None,
+                }),
             }
-            Some(_) => Ok(Self {
-                snippet,
-                google_script: None,
-            }),
-            None => Ok(Self {
+        } else {
+            Ok(Self {
                 snippet: None,
                 google_script: None,
-            }),
+            })
         }
     }
 }
