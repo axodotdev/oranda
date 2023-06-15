@@ -212,7 +212,7 @@ impl ReleaseArtifacts {
     }
 }
 
-/// Take an installer preference an uniformly apply it to every given TargetTriple
+/// Take an installer preference and uniformly apply it to every given TargetTriple
 ///
 /// If the array is empty, we take this to mean "for all possible target triples"
 pub fn preference_to_targets(
