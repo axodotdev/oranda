@@ -1,6 +1,7 @@
 use axoasset::{Asset, LocalAsset};
 use camino::Utf8PathBuf;
 pub use cargo_dist_schema::{Artifact, ArtifactKind, DistManifest, Release};
+use serde::{Deserialize, Serialize};
 
 use crate::config::Config;
 use crate::data::github::GithubRelease;
@@ -8,7 +9,7 @@ use crate::errors::*;
 
 pub const MANIFEST_FILENAME: &str = "dist-manifest.json";
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct DistRelease {
     pub manifest: DistManifest,
     pub source: GithubRelease,

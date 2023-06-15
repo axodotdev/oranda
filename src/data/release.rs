@@ -1,10 +1,11 @@
 use axoasset::SourceFile;
 use cargo_dist_schema::DistManifest;
+use serde::{Deserialize, Serialize};
 
 use crate::data::{cargo_dist, github::GithubRelease, GithubRepo};
 use crate::errors::*;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Release {
     pub manifest: Option<DistManifest>,
     pub source: GithubRelease,

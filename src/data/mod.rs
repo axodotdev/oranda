@@ -1,3 +1,6 @@
+use axoasset::LocalAsset;
+use serde::{Deserialize, Serialize};
+
 use crate::data::github::{GithubRelease, GithubRepo};
 use crate::errors::*;
 use crate::message::{Message, MessageType};
@@ -10,6 +13,7 @@ mod release;
 
 pub use release::Release;
 
+#[derive(Deserialize, Serialize)]
 pub struct Context {
     pub repo: GithubRepo,
     pub releases: Vec<Release>,
@@ -22,12 +26,26 @@ impl Context {
         let repo = GithubRepo::from_url(repo_url)?;
         let (releases, has_prereleases, latest_dist_release) =
             Self::fetch_all_releases(&repo, cargo_dist)?;
-        Ok(Self {
+        let context = Self {
             repo,
             releases,
             has_prereleases,
             latest_dist_release,
-        })
+        };
+        context.write_cache()?;
+        Ok(context)
+    }
+
+    fn write_cache(&self) -> Result<()> {
+        let context_cache = serde_json::to_string(self)?;
+        LocalAsset::write_new_all(&context_cache, "./.oranda-cache/context.json")?;
+        Ok(())
+    }
+
+    pub fn read_cache() -> Result<Self> {
+        let json = LocalAsset::load_string("./.oranda-cache/context.json")?;
+        let context: Context = serde_json::from_str(&json)?;
+        Ok(context)
     }
 
     #[allow(clippy::unnecessary_unwrap)]
