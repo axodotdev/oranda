@@ -326,3 +326,25 @@ fn infer_label_for_script(file: &File) -> String {
             .to_owned()
     }
 }
+
+pub fn triple_to_display_name(name: &str) -> Option<&str> {
+    match name.trim() {
+        TARGET_X86_LINUX_GNU => Some("x86 Linux"),
+        TARGET_X64_LINUX_GNU => Some("x64 Linux"),
+        TARGET_ARM64_LINUX_GNU => Some("arm64 Linux"),
+
+        TARGET_X86_LINUX_MUSL => Some("x86 musl Linux"),
+        TARGET_X64_LINUX_MUSL => Some("x64 musl Linux"),
+        TARGET_ARM64_LINUX_MUSL => Some("arm64 musl Linux"),
+
+        TARGET_X86_WINDOWS => Some("x86 Windows"),
+        TARGET_X64_WINDOWS => Some("x64 Windows"),
+        TARGET_ARM64_WINDOWS => Some("arm64 Windows"),
+
+        TARGET_X86_MAC => Some("x86 macOS"),
+        TARGET_X64_MAC => Some("x64 macOS"),
+        TARGET_ARM64_MAC => Some("arm64 macOS"),
+
+        _ => None,
+    }
+}

@@ -4,8 +4,8 @@ use axohtml::elements::{div, tr};
 use axohtml::{html, text};
 
 use crate::config::Config;
+use crate::data::artifact_inference::triple_to_display_name;
 use crate::data::artifacts::InstallMethod;
-use crate::data::cargo_dist::get_os;
 use crate::data::Release;
 use crate::errors::*;
 
@@ -27,7 +27,7 @@ pub fn build(release: &Release, _config: &Config) -> Result<Box<div<String>>> {
                 installer
                     .targets
                     .keys()
-                    .map(|s| get_os(s))
+                    .map(|s| triple_to_display_name(s))
                     .collect::<Vec<_>>(),
             ),
         );

@@ -1,58 +1,11 @@
 use camino::Utf8PathBuf;
-pub use cargo_dist_schema::{Artifact, ArtifactKind, DistManifest, Release};
-
-use crate::config::Config;
-use crate::data::github::GithubRelease;
-use crate::errors::*;
+pub use cargo_dist_schema::{ArtifactKind, DistManifest};
 
 use super::artifacts::{
     preference_to_targets, InstallMethod, Installer, InstallerPreference, ReleaseArtifacts,
 };
 
 pub const MANIFEST_FILENAME: &str = "dist-manifest.json";
-
-#[derive(Clone, Debug)]
-pub struct DistRelease {
-    pub manifest: DistManifest,
-    pub source: GithubRelease,
-}
-
-pub fn get_os(name: &str) -> Option<&str> {
-    match name.trim() {
-        "x86_64-unknown-linux-gnu" => Some("x64 Linux"),
-        "x86_64-apple-darwin" => Some("x64 macOS"),
-        "aarch64-apple-darwin" => Some("arm64 macOS"),
-        "x86_64-pc-windows-msvc" => Some("x64 Windows"),
-        &_ => None,
-    }
-}
-
-pub fn get_kind_string(kind: &ArtifactKind) -> String {
-    match kind {
-        ArtifactKind::ExecutableZip => String::from("Executable Zip"),
-        ArtifactKind::Symbols => String::from("Symbols"),
-        ArtifactKind::Installer => String::from("Installer"),
-        _ => String::from("Unknown"),
-    }
-}
-
-pub fn download_link(config: &Config, name: &str, version: &str) -> Result<String> {
-    if let Some(repo) = &config.repository {
-        let version_to_use = if version.contains('v') {
-            version.split('v').collect::<Vec<&str>>()[1]
-        } else {
-            version
-        };
-        Ok(format!(
-            "{}/releases/download/v{}/{}",
-            repo, version_to_use, name
-        ))
-    } else {
-        Err(OrandaError::Other(
-            "Repository is mandatory for the cargo dist option".to_owned(),
-        ))
-    }
-}
 
 impl ReleaseArtifacts {
     /// Incorporate data from cargo-dist into the ReleaseArtifacts
