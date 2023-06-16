@@ -149,6 +149,9 @@ function onArchChange(evt) {
         firstContentChild.classList.remove("hidden");
         firstTabChild.classList.add("selected");
     }
+    // Hide "no OS detected" message
+    const noDetectEl = document.querySelector(".no-autodetect");
+    noDetectEl.classList.add("hidden");
 }
 
 function onTabClick(evt) {
@@ -177,7 +180,6 @@ let hit = Array.from(document.querySelectorAll(`.arch[data-arch]`)).find(
     (a) => a.attributes["data-arch"].value.includes(os)
 );
 
-let backupButton = document.querySelector(".backup-download");
 if (hit) {
     hit.classList.remove("hidden");
     const selectEl = document.querySelector("#install-arch-select");
@@ -187,7 +189,8 @@ if (hit) {
     firstContentChild.classList.remove("hidden");
     firstTabChild.classList.add("selected");
 } else {
-    backupButton.classList.remove("hidden");
+    const noDetectEl = document.querySelector(".no-autodetect");
+    noDetectEl.classList.remove("hidden");
 }
 
 let copyButtons = Array.from(document.querySelectorAll("[data-copy]"));

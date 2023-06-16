@@ -37,6 +37,7 @@ pub fn build_header(release: &Release, config: &Config) -> Result<Box<div<String
     Ok(html!(
     <div class="artifacts" data-tag=tag>
         {html}
+        <div class="no-autodetect hidden">{text!("We weren't able to detect your OS.")}</div>
         <div class="arch-select hidden">
             {text!("Select your platform manually:")} {selector}
         </div>
@@ -148,12 +149,17 @@ fn content_list(
 /// Build the arch selector.
 fn selector_html(platforms: &Platforms) -> Box<select<String>> {
     let mut options = vec![];
+    options.push(html!(<option disabled=true selected=true value="">{text!("")}</option>));
     for (target, _) in platforms {
         let os_name = triple_to_display_name(target).unwrap();
         options.push(html!(<option value=target>{text!(os_name.to_owned())}</option>));
     }
 
-    html!(<select id="install-arch-select">{options}</select>)
+    html!(
+        <select id="install-arch-select">
+            {options}
+        </select>
+    )
 }
 
 /// Only grab platforms that we can actually provide downloadable files for.
