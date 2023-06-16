@@ -2,7 +2,9 @@ use std::collections::HashMap;
 
 use indexmap::IndexMap;
 
-use oranda::config::oranda_config::{AnalyticsConfig, ArtifactsConfig, StyleConfig};
+use oranda::config::oranda_config::{
+    artifacts::PackageManagersConfig, AnalyticsConfig, ArtifactsConfig, StyleConfig,
+};
 use oranda::config::Config;
 use oranda::site::javascript::analytics::Plausible;
 
@@ -75,16 +77,29 @@ pub fn path_prefix(temp_dir: String) -> Config {
     }
 }
 
+fn build_package_managers() -> PackageManagersConfig {
+    let mut preferred = IndexMap::new();
+    preferred.insert(String::from("npm"), String::from("npm install oranda"));
+    preferred.insert(String::from("yarn"), String::from("yarn add oranda"));
+    let mut additional = IndexMap::new();
+    additional.insert(String::from("cargo"), String::from("cargo install oranda"));
+    additional.insert(
+        String::from("binstall"),
+        String::from("cargo binstall oranda"),
+    );
+    PackageManagersConfig {
+        preferred: Some(preferred),
+        additional: Some(additional),
+    }
+}
+
 pub fn path_prefix_with_package_managers(temp_dir: String) -> Config {
-    let mut package_managers = IndexMap::new();
-    package_managers.insert(String::from("npm"), String::from("npm install oranda"));
-    package_managers.insert(String::from("yarn"), String::from("yarn add oranda"));
     Config {
         dist_dir: temp_dir,
         path_prefix: Some(String::from("axo")),
         artifacts: ArtifactsConfig {
             cargo_dist: Some(false),
-            package_managers: Some(package_managers),
+            package_managers: Some(build_package_managers()),
         },
         styles: StyleConfig {
             additional_css: vec![String::from(
@@ -111,14 +126,11 @@ pub fn cargo_dist(temp_dir: String) -> Config {
 }
 
 pub fn package_managers(temp_dir: String) -> Config {
-    let mut package_managers = IndexMap::new();
-    package_managers.insert(String::from("npm"), String::from("npm install oranda"));
-    package_managers.insert(String::from("yarn"), String::from("yarn add oranda"));
     Config {
         dist_dir: temp_dir,
         artifacts: ArtifactsConfig {
             cargo_dist: Some(false),
-            package_managers: Some(package_managers),
+            package_managers: Some(build_package_managers()),
         },
         repository: Some(String::from("https://github.com/axodotdev/oranda")),
         ..Default::default()
