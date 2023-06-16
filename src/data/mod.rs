@@ -1,4 +1,4 @@
-use crate::config::artifacts::Artifacts;
+use crate::config::ArtifactsConfig;
 use crate::data::github::{GithubRelease, GithubRepo};
 use crate::errors::*;
 use crate::message::{Message, MessageType};
@@ -21,7 +21,7 @@ pub struct Context {
 }
 
 impl Context {
-    pub fn new(repo_url: &str, artifacts_config: &Artifacts) -> Result<Self> {
+    pub fn new(repo_url: &str, artifacts_config: &ArtifactsConfig) -> Result<Self> {
         let repo = GithubRepo::from_url(repo_url)?;
         let (releases, has_prereleases, has_artifacts, latest_release) =
             Self::fetch_all_releases(&repo, artifacts_config)?;
@@ -51,7 +51,7 @@ impl Context {
     #[allow(clippy::unnecessary_unwrap)]
     pub fn fetch_all_releases(
         repo: &GithubRepo,
-        artifacts_config: &Artifacts,
+        artifacts_config: &ArtifactsConfig,
     ) -> Result<(Vec<Release>, bool, bool, Option<usize>)> {
         let gh_releases =
             tokio::runtime::Handle::current().block_on(GithubRelease::fetch_all(repo))?;

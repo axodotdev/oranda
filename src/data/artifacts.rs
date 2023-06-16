@@ -19,7 +19,7 @@ use camino::Utf8PathBuf;
 use indexmap::IndexMap;
 use serde::{Serialize, Serializer};
 
-use crate::config::artifacts::Artifacts;
+use crate::config::ArtifactsConfig;
 use crate::config::Config;
 use crate::errors::*;
 
@@ -194,7 +194,7 @@ impl ReleaseArtifacts {
     }
 
     /// Add custom package manager values from the config
-    pub fn add_package_managers(&mut self, config: &Artifacts) {
+    pub fn add_package_managers(&mut self, config: &ArtifactsConfig) {
         if let Some(package_managers) = &config.package_managers {
             // If we have a custom item for "npm" or "npx", then supress any entries
             // from earlier layers like cargo-dist that were also trying to specify this

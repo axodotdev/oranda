@@ -6,7 +6,8 @@ use crate::errors::*;
 use crate::site::link;
 
 pub mod analytics;
-mod artifacts;
+
+const ARTIFACTS_SCRIPT_SOURCE: &str = include_str!("./artifacts.js");
 
 pub fn build_os_script(path_prefix: &Option<String>) -> String {
     let script_url = link::generate(path_prefix, "artifacts.js");

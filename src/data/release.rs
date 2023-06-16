@@ -1,7 +1,7 @@
 use axoasset::SourceFile;
 use cargo_dist_schema::DistManifest;
 
-use crate::config::artifacts::Artifacts;
+use crate::config::ArtifactsConfig;
 use crate::data::{cargo_dist, github::GithubRelease, GithubRepo};
 use crate::errors::*;
 
@@ -18,7 +18,7 @@ impl Release {
     pub async fn new(
         gh_release: GithubRelease,
         repo: &GithubRepo,
-        artifacts_config: &Artifacts,
+        artifacts_config: &ArtifactsConfig,
     ) -> Result<Self> {
         let manifest = if artifacts_config.cargo_dist() {
             Self::fetch_manifest(&gh_release, repo).await?
