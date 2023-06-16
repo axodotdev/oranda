@@ -1,4 +1,3 @@
-use axoasset::{Asset, LocalAsset};
 use camino::Utf8PathBuf;
 pub use cargo_dist_schema::{Artifact, ArtifactKind, DistManifest, Release};
 
@@ -20,25 +19,12 @@ pub struct DistRelease {
 
 pub fn get_os(name: &str) -> Option<&str> {
     match name.trim() {
-        "x86_64-unknown-linux-gnu" => Some("linux"),
-        "x86_64-apple-darwin" => Some("mac"),
-        "aarch64-apple-darwin" => Some("arm mac"),
-        "x86_64-pc-windows-msvc" => Some("windows"),
+        "x86_64-unknown-linux-gnu" => Some("x64 Linux"),
+        "x86_64-apple-darwin" => Some("x64 macOS"),
+        "aarch64-apple-darwin" => Some("arm64 macOS"),
+        "x86_64-pc-windows-msvc" => Some("x64 Windows"),
         &_ => None,
     }
-}
-
-/// Make the source of an installer script available on the server
-pub fn write_installer_source(config: &Config, name: &str, version: &str) -> Result<String> {
-    let file_path = format!("{}.txt", &name);
-    let full_file_path = Utf8PathBuf::from(&config.dist_dir).join(&file_path);
-    if !full_file_path.exists() {
-        let download_link = download_link(config, name, version)?;
-        let file_string_future = Asset::load_string(download_link.as_str());
-        let file_string = tokio::runtime::Handle::current().block_on(file_string_future)?;
-        LocalAsset::write_new(&file_string, &full_file_path)?;
-    }
-    Ok(file_path)
 }
 
 pub fn get_kind_string(kind: &ArtifactKind) -> String {
@@ -85,31 +71,48 @@ impl ReleaseArtifacts {
             }
 
             for (id, artifact) in manifest.artifacts_for_release(app) {
+                let label;
                 let method;
                 let preference;
                 let file = artifact.name.as_ref().and_then(|n| self.file_idx(n));
+
+                // If this artifact has a checksum, register it
+                let checksum_file = artifact.checksum.as_ref().and_then(|n| self.file_idx(n));
+                if let Some(file) = file {
+                    self.file_mut(file).checksum_file = checksum_file;
+                }
+
                 match artifact.kind {
                     ArtifactKind::ExecutableZip => {
                         // Skip this if the file is somehow missing
                         let Some(file) = file else {
                             continue;
                         };
+                        label = if id.ends_with(".zip") {
+                            "zip".to_owned()
+                        } else {
+                            "tarball".to_owned()
+                        };
                         method = InstallMethod::Download { file };
                         preference = InstallerPreference::Archive;
                     }
                     ArtifactKind::Installer => {
-                        // If this is missing then this is an information-only installer, with no actual file
-                        // (e.g. just a string saying "install with `npm -i my-app`"). As of this writing
-                        // this is not a thing that cargo-dist *can* produce, but this field is optional
-                        // precisely so that it can support this in the future. So if we pretend it's a thing
-                        // now, we'll Just Work if it ever does become a thing.
                         if let Some(install_hint) = &artifact.install_hint {
                             // If there's an install-hint, assume this is something we're telling them to run
+                            //
+                            // Special hack: demote npm-packages, which cargo-dist presents kind of weird
+                            let file = if id.contains("npm-package") {
+                                preference = InstallerPreference::Custom;
+                                None
+                            } else {
+                                preference = InstallerPreference::Script;
+                                file
+                            };
+
                             method = InstallMethod::Run {
                                 file,
                                 run_hint: install_hint.clone(),
                             };
-                            preference = InstallerPreference::Script;
                         } else if let Some(file) = file {
                             // If there's no install-hint, but there is a proper file name, just suggest downloading it
                             // while assuming this is some kind of custom installer
@@ -119,6 +122,15 @@ impl ReleaseArtifacts {
                             // Must be some new cargo-dist thing we don't understand, move along
                             continue;
                         };
+                        label = if id.ends_with(".sh") {
+                            "shell".to_owned()
+                        } else if id.ends_with(".ps1") {
+                            "powershell".to_owned()
+                        } else if id.contains("npm-package") {
+                            "npm".to_owned()
+                        } else {
+                            Utf8PathBuf::from(id).extension().unwrap_or(id).to_owned()
+                        };
                     }
                     _ => {
                         // We don't care about these *yet*
@@ -126,16 +138,13 @@ impl ReleaseArtifacts {
                         continue;
                     }
                 };
-                // Use the installer's description as a label, otherwise use the id..?
-                let label = artifact
-                    .description
-                    .clone()
-                    .unwrap_or_else(|| id.to_owned());
                 let targets = preference_to_targets(artifact.target_triples.clone(), preference);
                 let installer = Installer {
                     label,
+                    description: artifact.description.clone().unwrap_or_default(),
                     targets,
                     method,
+                    ignore: false,
                 };
                 self.add_installer(installer);
 

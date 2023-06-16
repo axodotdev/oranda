@@ -50,6 +50,11 @@ impl Release {
         })
     }
 
+    /// Gets whether any platform has actual targets to suggest
+    pub fn has_installers(&self) -> bool {
+        !self.artifacts.installers_by_target().is_empty()
+    }
+
     async fn fetch_manifest(
         gh_release: &GithubRelease,
         repo: &GithubRepo,

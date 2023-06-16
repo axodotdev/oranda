@@ -119,7 +119,7 @@ const EXT_SCRIPT_POWERSHELL: &str = ".ps1";
 
 const KNOWN_WINDOWS_SCRIPT_EXTS: &[&str] = &[EXT_SCRIPT_POWERSHELL];
 const KNOWN_UNIX_SCRIPT_EXTS: &[&str] = &[EXT_SCRIPT_SHELL];
-const KNOWN_SCRIPT_EXTS: &[&str] = &[EXT_SCRIPT_SHELL, EXT_SCRIPT_POWERSHELL];
+pub(crate) const KNOWN_SCRIPT_EXTS: &[&str] = &[EXT_SCRIPT_SHELL, EXT_SCRIPT_POWERSHELL];
 
 impl ReleaseArtifacts {
     /// Infer installers/artifacts based solely on file names
@@ -148,6 +148,11 @@ impl ReleaseArtifacts {
                 }
             }
 
+            let label;
+            let description = String::new();
+            let method;
+            let preference;
+
             // Try to detect what kind of file this is
             if file.name.contains("install")
                 && KNOWN_SCRIPT_EXTS.iter().any(|ext| file.name.ends_with(ext))
@@ -159,21 +164,12 @@ impl ReleaseArtifacts {
                     targets = infer_targets_for_script(file);
                 }
                 let run_hint = infer_run_hint_for_script(file);
-                // Use the file extension as a label..?
-                let label = Utf8PathBuf::from(&file.name)
-                    .extension()
-                    .unwrap()
-                    .to_owned();
-                let targets = preference_to_targets(targets, InstallerPreference::Script);
-                let installer = Installer {
-                    label,
-                    targets,
-                    method: InstallMethod::Run {
-                        file: Some(file_idx),
-                        run_hint,
-                    },
+                label = infer_label_for_script(file);
+                preference = InstallerPreference::Script;
+                method = InstallMethod::Run {
+                    file: Some(file_idx),
+                    run_hint,
                 };
-                self.add_installer(installer);
             } else if KNOWN_BUNDLE_EXTS.iter().any(|ext| file.name.contains(ext)) {
                 // Looks like an installer bundle! Recommend a download.
                 //
@@ -184,18 +180,9 @@ impl ReleaseArtifacts {
                 if targets.is_empty() {
                     targets = infer_targets_for_bundle(file);
                 }
-                // Use the file extension as a label..?
-                let label = Utf8PathBuf::from(&file.name)
-                    .extension()
-                    .unwrap()
-                    .to_owned();
-                let targets = preference_to_targets(targets, InstallerPreference::Native);
-                let installer = Installer {
-                    label,
-                    targets,
-                    method: InstallMethod::Download { file: file_idx },
-                };
-                self.add_installer(installer);
+                label = infer_label_for_bundle(file);
+                preference = InstallerPreference::Native;
+                method = InstallMethod::Download { file: file_idx };
             } else if KNOWN_ARCHIVE_EXTS
                 .iter()
                 .copied()
@@ -208,19 +195,23 @@ impl ReleaseArtifacts {
                 if targets.is_empty() {
                     continue;
                 }
-                // Use the file extension as a label..?
-                let label = Utf8PathBuf::from(&file.name)
-                    .extension()
-                    .unwrap()
-                    .to_owned();
-                let targets = preference_to_targets(targets, InstallerPreference::Archive);
-                let installer = Installer {
-                    label,
-                    targets,
-                    method: InstallMethod::Download { file: file_idx },
-                };
-                self.add_installer(installer);
+                label = infer_label_for_archive(file);
+                preference = InstallerPreference::Archive;
+                method = InstallMethod::Download { file: file_idx };
+            } else {
+                // Nothing we recognize
+                continue;
             }
+
+            let targets = preference_to_targets(targets, preference);
+            let installer = Installer {
+                label,
+                description,
+                targets,
+                method,
+                ignore: false,
+            };
+            self.add_installer(installer);
         }
     }
 }
@@ -287,21 +278,51 @@ fn infer_targets_for_script(file: &File) -> Vec<TargetTriple> {
 fn infer_run_hint_for_script(file: &File) -> String {
     if file.name.ends_with(EXT_SCRIPT_POWERSHELL) {
         format!(
-            r###"```shell
-curl --proto '=https' --tlsv1.2 -LsSf {} | sh
-```"###,
+            "curl --proto '=https' --tlsv1.2 -LsSf {} | sh",
             file.download_url
         )
     } else if file.name.ends_with(EXT_SCRIPT_SHELL) {
-        format!(
-            r###"```shell
-irm {} | iex
-```"###,
-            file.download_url
-        )
+        format!("irm {} | iex", file.download_url)
     } else {
         unimplemented!(
             "Looks like someone added a new kind of script but didn't add a run hint for it?"
         );
+    }
+}
+
+/// Infer the label for a bundle
+fn infer_label_for_bundle(file: &File) -> String {
+    // For now just use the extension
+    Utf8PathBuf::from(&file.name)
+        .extension()
+        .unwrap()
+        .to_owned()
+}
+
+/// Infer the label for a tarball/zip
+fn infer_label_for_archive(file: &File) -> String {
+    // For now just use the extension
+    if EXTS_FOR_RAR.iter().any(|ext| file.name.ends_with(ext)) {
+        "rar".to_owned()
+    } else if EXTS_FOR_7ZIP.iter().any(|ext| file.name.ends_with(ext)) {
+        "7zip".to_owned()
+    } else if EXTS_FOR_ZIP.iter().any(|ext| file.name.ends_with(ext)) {
+        "zip".to_owned()
+    } else {
+        "tarball".to_owned()
+    }
+}
+
+/// Infer the label to curl|sh a script
+fn infer_label_for_script(file: &File) -> String {
+    if file.name.ends_with(EXT_SCRIPT_POWERSHELL) {
+        "powershell".to_owned()
+    } else if file.name.ends_with(EXT_SCRIPT_SHELL) {
+        "shell".to_owned()
+    } else {
+        Utf8PathBuf::from(&file.name)
+            .extension()
+            .unwrap()
+            .to_owned()
     }
 }

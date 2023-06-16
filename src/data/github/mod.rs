@@ -83,8 +83,9 @@ impl ReleaseArtifacts {
             let file = File {
                 name: asset.name.clone(),
                 download_url: asset.browser_download_url.clone(),
-                // By default we want to infer things about files, but other things can set this to false
-                // to say "I've handled this".
+                // The rest of these are filled in later
+                view_path: None,
+                checksum_file: None,
                 infer: true,
             };
             self.add_file(file);
