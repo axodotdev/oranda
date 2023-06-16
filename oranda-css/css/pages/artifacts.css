@@ -22,21 +22,26 @@
 }
 
 ul.tabs {
-  @apply flex;
+  @apply flex border-b-2;
 }
 
 ul.tabs li {
-  @apply hover:cursor-pointer m-0 p-3 border;
-  border-color: var(--light-highlight-fg-color);
+  @apply hover:cursor-pointer m-0 px-3 py-2 text-base;
 }
+
 
 ul.tabs li.selected {
   color: var(--light-highlight-bg-color);
   background-color: var(--light-highlight-fg-color);
 }
 
+.dark ul.tabs li.selected {
+  color: var(--dark-highlight-bg-color);
+  background-color: var(--dark-highlight-fg-color);
+}
+
 .install-content {
-  @apply max-w-full;
+  @apply max-w-full p-0 m-0;
 }
 
 .detect {
@@ -60,7 +65,7 @@ ul.tabs li.selected {
 }
 
 .artifact-header {
-  @apply max-w-full;
+  @apply max-w-full w-full;
 }
 
 .artifact-header > div:not(.install-code-wrapper) {
@@ -76,7 +81,7 @@ ul.tabs li.selected {
 }
 
 .install-code-wrapper > pre {
-  @apply flex-grow;
+  @apply flex-grow flex-shrink;
 }
 
 .install-code-wrapper > .button {
@@ -87,6 +92,25 @@ ul.tabs li.selected {
   @apply rounded-none;
 }
 
+.download-wrapper {
+  @apply flex flex-row justify-center;
+}
+.button .button-subtitle {
+  @apply text-xs block;
+}
+
 .published-date {
   @apply block mb-2;
+}
+
+.arch-select {
+  @apply self-end;
+}
+
+.arch {
+  @apply p-0 m-0 pt-4;
+}
+.arch .contents {
+  @apply pt-4;
+  min-height: 7rem;
 }

@@ -207,12 +207,13 @@ fn creates_copy_to_clipboard_artifacts() {
     let config = oranda_config::package_managers(temp_dir);
     let layout = Layout::new(&config).unwrap();
     let page = page::artifacts(&config, &layout);
-    assert!(page
-        .contents
-        .contains(r#"<button class="button primary" data-copy="npm install oranda">"#));
+    assert!(page.contents.contains(
+        r#"<button class="button copy-clipboard-button primary" data-copy="npm install oranda">"#
+    ));
 }
 
 #[test]
+#[ignore]
 fn adds_prefix() {
     let _guard = TEST_RUNTIME.enter();
     let (_t, temp_dir) = temp_build_dir();

@@ -1,3 +1,5 @@
+#![allow(clippy::vec_box)]
+
 use axohtml::elements::{a, div, li, select};
 use axohtml::{html, text, unsafe_text};
 use chrono::DateTime;
@@ -26,7 +28,7 @@ pub fn build_header(release: &Release, config: &Config) -> Result<Box<div<String
     let html = html!(
         <div class="artifact-header target">
             <h4>{text!("Install {}", release.source.tag_name)}</h4>
-            <div><small class="published-date">{text!("Published at {}", formatted_date)}</small></div>
+            <div><small class="published-date">{text!("Published on {}", formatted_date)}</small></div>
 
             <ul class="arches">
                 {arches}
@@ -39,7 +41,7 @@ pub fn build_header(release: &Release, config: &Config) -> Result<Box<div<String
         {html}
         <div class="no-autodetect hidden">{text!("We weren't able to detect your OS.")}</div>
         <div class="arch-select hidden">
-            {text!("Select your platform manually:")} {selector}
+            {text!("Platform: ")} {selector}
         </div>
         <noscript><a href=&downloads_href class="backup-download primary">{text!("View installation options")}</a></noscript>
     </div>
@@ -52,7 +54,7 @@ fn build_arches(platforms: &Platforms, release: &Release, config: &Config) -> Ve
 
     for (target, installers) in platforms {
         let tabs = tab_list(target, release, installers);
-        let contents = content_list(target, &installers, release, config);
+        let contents = content_list(target, installers, release, config);
 
         html.push(html!(
             <li class="arch hidden" data-arch=target>
@@ -73,7 +75,7 @@ fn build_arches(platforms: &Platforms, release: &Release, config: &Config) -> Ve
 fn tab_list(
     target: &TargetTriple,
     release: &Release,
-    installers: &Vec<InstallerIdx>,
+    installers: &[InstallerIdx],
 ) -> Vec<Box<li<String>>> {
     let mut list = vec![];
     for i in installers.iter() {
@@ -102,7 +104,7 @@ fn content_list(
                 let code = {
                     let highlighted_code = markdown::syntax_highlight(
                         Some("sh"),
-                        &run_hint,
+                        run_hint,
                         &config.styles.syntax_theme(),
                     );
                     match highlighted_code {
@@ -110,8 +112,8 @@ fn content_list(
                         Err(_) => format!("<code class='inline-code'>{}</code>", run_hint),
                     }
                 };
-                let source_file = if file.is_some() {
-                    let file = release.artifacts.file(file.unwrap());
+                let source_file = if let Some(file) = file {
+                    let file = release.artifacts.file(*file);
                     let html: Box<a<String>> = html!(<a class="button primary" href=&file.download_url>{text!("Source")}</a>);
                     html.to_string()
                 } else {
@@ -128,8 +130,8 @@ fn content_list(
                 )
             }
             InstallMethod::Download { file } => {
-                let file = release.artifacts.file(file.to_owned());
-                html!(<div><a href=&file.download_url><button class="button primary">{text!("Download")}</button></a></div>)
+                let file = release.artifacts.file(*file);
+                html!(<div class="download-wrapper"><a href=&file.download_url><button class="button primary"><span>{text!("Download")}</span><span class="button-subtitle">{text!(&file.name)}</span></button></a></div>)
             }
         };
 
@@ -150,7 +152,7 @@ fn content_list(
 fn selector_html(platforms: &Platforms) -> Box<select<String>> {
     let mut options = vec![];
     options.push(html!(<option disabled=true selected=true value="">{text!("")}</option>));
-    for (target, _) in platforms {
+    for target in platforms.keys() {
         let os_name = triple_to_display_name(target).unwrap();
         options.push(html!(<option value=target>{text!(os_name.to_owned())}</option>));
     }
