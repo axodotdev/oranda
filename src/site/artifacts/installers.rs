@@ -45,7 +45,7 @@ pub fn build_header(release: &Release, config: &Config) -> Result<Box<div<String
     ))
 }
 
-/// Build the tab and content HTML for one arch.
+/// Build the tab and content HTML for all arches.
 fn build_arches(platforms: &Platforms, release: &Release, config: &Config) -> Vec<Box<li<String>>> {
     let mut html = vec![];
 
@@ -68,6 +68,7 @@ fn build_arches(platforms: &Platforms, release: &Release, config: &Config) -> Ve
     html
 }
 
+/// Build tabs for one arch/triple.
 fn tab_list(
     target: &TargetTriple,
     release: &Release,
@@ -84,6 +85,7 @@ fn tab_list(
     list
 }
 
+/// Build content for one arch/triple.
 fn content_list(
     target: &TargetTriple,
     installers: &Vec<InstallerIdx>,
@@ -143,6 +145,7 @@ fn content_list(
     list
 }
 
+/// Build the arch selector.
 fn selector_html(platforms: &Platforms) -> Box<select<String>> {
     let mut options = vec![];
     for (target, _) in platforms {
