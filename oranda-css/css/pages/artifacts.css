@@ -21,6 +21,24 @@
   background-color: var(--dark-highlight-bg-color);
 }
 
+ul.tabs {
+  @apply flex;
+}
+
+ul.tabs li {
+  @apply hover:cursor-pointer m-0 p-3 border;
+  border-color: var(--light-highlight-fg-color);
+}
+
+ul.tabs li.selected {
+  color: var(--light-highlight-bg-color);
+  background-color: var(--light-highlight-fg-color);
+}
+
+.install-content {
+  @apply max-w-full;
+}
+
 .detect {
   @apply text-center pr-2 md:pr-0;
 }
