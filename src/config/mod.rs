@@ -136,13 +136,21 @@ impl Config {
 
     /// If we have a FUNDING.yml file, try to find it. If we fail, we disable funding support.
     fn find_funding(&mut self) {
-        // Try and find the actual FUNDING.yml file first.
-        let funding_path = Utf8PathBuf::from(".github/FUNDING.yml");
-        // We also want to enable funding if there's a funding.md file in the root, so check
-        // for that too.
-        let funding_doc_path = Utf8PathBuf::from("funding.md");
-        if !funding_path.exists() && !funding_doc_path.exists() {
-            self.funding = None;
+        if let Some(funding_cfg) = &mut self.funding {
+            if funding_cfg.path.is_none() {
+                // Ok time to auto-detect, try these files
+                let possible_paths = vec!["./.github/FUNDING.yml", "funding.md"];
+                for funding_file in possible_paths {
+                    let funding_path = Utf8PathBuf::from(funding_file);
+                    if funding_path.exists() {
+                        // nice, use it
+                        funding_cfg.path = Some(funding_path.to_string());
+                        return;
+                    }
+                }
+                // We found nothing, disable funding
+                self.funding = None;
+            }
         }
     }
 }
