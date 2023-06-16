@@ -1,19 +1,16 @@
-pub mod artifacts;
-pub mod oranda_config;
-pub mod project;
-pub mod theme;
-
-use artifacts::Artifacts;
-pub use oranda_config::{FundingConfig, MdBookConfig, StyleConfig};
-pub mod analytics;
-use crate::errors::*;
-use analytics::Analytics;
-use camino::Utf8PathBuf;
-use oranda_config::{OrandaConfig, Social};
-use project::ProjectConfig;
 use std::collections::HashMap;
 
-use self::oranda_config::BoolOr;
+use camino::Utf8PathBuf;
+
+pub mod oranda_config;
+pub mod project;
+
+use crate::errors::*;
+pub use oranda_config::{
+    AnalyticsConfig, ArtifactsConfig, BoolOr, FundingConfig, MdBookConfig, OrandaConfig,
+    SocialConfig, StyleConfig,
+};
+use project::ProjectConfig;
 
 #[derive(Debug)]
 pub struct Config {
@@ -25,10 +22,10 @@ pub struct Config {
     pub no_header: bool,
     pub readme_path: String,
     pub repository: Option<String>,
-    pub analytics: Option<Analytics>,
+    pub analytics: Option<AnalyticsConfig>,
     pub additional_pages: Option<HashMap<String, String>>,
-    pub social: Option<Social>,
-    pub artifacts: Artifacts,
+    pub social: Option<SocialConfig>,
+    pub artifacts: ArtifactsConfig,
     pub version: Option<String>,
     pub logo: Option<String>,
     pub favicon: Option<String>,
@@ -163,7 +160,7 @@ impl Default for Config {
             analytics: None,
             additional_pages: None,
             social: None,
-            artifacts: Artifacts::default(),
+            artifacts: ArtifactsConfig::default(),
             styles: StyleConfig::default(),
             version: None,
             license: None,

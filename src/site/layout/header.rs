@@ -1,7 +1,6 @@
 use std::collections::HashMap;
 
-use crate::config::artifacts::Artifacts;
-use crate::config::{Config, FundingConfig, MdBookConfig};
+use crate::config::{ArtifactsConfig, Config, FundingConfig, MdBookConfig};
 use crate::errors::*;
 use crate::message::{Message, MessageType};
 use crate::site::{link, page};
@@ -31,7 +30,7 @@ async fn fetch_logo(
 fn nav(
     additional_pages: &Option<HashMap<String, String>>,
     path_prefix: &Option<String>,
-    artifacts: &Artifacts,
+    artifacts: &ArtifactsConfig,
     md_book: &Option<MdBookConfig>,
     changelog: &bool,
     funding: &Option<FundingConfig>,

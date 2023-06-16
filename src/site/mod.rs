@@ -5,23 +5,24 @@ use axoasset::LocalAsset;
 use camino::{Utf8Path, Utf8PathBuf};
 
 use crate::config::Config;
-use crate::data::Context;
+use crate::data::{funding::Funding, Context};
 use crate::errors::*;
 use crate::message::{Message, MessageType};
 
-pub mod artifacts;
-pub mod icons;
-pub mod layout;
-use layout::{css, javascript, Layout};
-pub mod link;
-pub mod markdown;
-pub mod page;
-use crate::data::funding::Funding;
+pub use layout::javascript;
+use layout::{css, Layout};
 use page::Page;
 
+pub mod artifacts;
 pub mod changelog;
 pub mod funding;
+pub mod icons;
+pub mod layout;
+pub mod link;
+pub mod markdown;
 pub mod mdbook;
+pub mod oranda_theme;
+pub mod page;
 
 #[derive(Debug)]
 pub struct Site {

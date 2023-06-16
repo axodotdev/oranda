@@ -1,14 +1,15 @@
 use axohtml::{html, text};
 
-use crate::config::{theme, Config};
+use crate::config::Config;
 use crate::errors::*;
+use crate::site::oranda_theme::OrandaTheme;
 
 pub mod css;
 mod footer;
 mod head;
 mod header;
 pub mod javascript;
-use javascript::Analytics;
+use javascript::analytics::Analytics;
 
 #[derive(Debug)]
 pub struct Layout {
@@ -27,7 +28,7 @@ impl Layout {
     }
 
     pub fn new(config: &Config) -> Result<Self> {
-        let theme = theme::css_class(&config.styles.theme());
+        let theme = OrandaTheme::css_class(&config.styles.theme());
         let name = &config.name;
         let header = match config.no_header {
             true => None,
@@ -61,7 +62,7 @@ impl Layout {
             &config.path_prefix,
             &config.styles.oranda_css_version,
         )?;
-        let analytics = Analytics::new(config)?;
+        let analytics = Analytics::new(&config.analytics);
         let template_html: String = html!(
         <html lang="en" id="oranda" class=theme>
             <head>

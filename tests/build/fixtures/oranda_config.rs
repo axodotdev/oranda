@@ -1,10 +1,10 @@
 use std::collections::HashMap;
 
-use oranda::config::analytics::{Analytics, PlausibleTracking};
-use oranda::config::artifacts::Artifacts;
-use oranda::config::{Config, StyleConfig};
-
 use indexmap::IndexMap;
+
+use oranda::config::oranda_config::{AnalyticsConfig, ArtifactsConfig, StyleConfig};
+use oranda::config::Config;
+use oranda::site::javascript::analytics::Plausible;
 
 pub fn no_artifacts(temp_dir: String) -> Config {
     let mut additional_pages = HashMap::new();
@@ -59,7 +59,7 @@ pub fn path_prefix(temp_dir: String) -> Config {
     Config {
         dist_dir: temp_dir,
         path_prefix: Some(String::from("axo")),
-        artifacts: Artifacts {
+        artifacts: ArtifactsConfig {
             cargo_dist: Some(true),
             package_managers: None,
         },
@@ -82,7 +82,7 @@ pub fn path_prefix_with_package_managers(temp_dir: String) -> Config {
     Config {
         dist_dir: temp_dir,
         path_prefix: Some(String::from("axo")),
-        artifacts: Artifacts {
+        artifacts: ArtifactsConfig {
             cargo_dist: Some(false),
             package_managers: Some(package_managers),
         },
@@ -101,7 +101,7 @@ pub fn path_prefix_with_package_managers(temp_dir: String) -> Config {
 pub fn cargo_dist(temp_dir: String) -> Config {
     Config {
         dist_dir: temp_dir,
-        artifacts: Artifacts {
+        artifacts: ArtifactsConfig {
             cargo_dist: Some(true),
             package_managers: None,
         },
@@ -116,7 +116,7 @@ pub fn package_managers(temp_dir: String) -> Config {
     package_managers.insert(String::from("yarn"), String::from("yarn add oranda"));
     Config {
         dist_dir: temp_dir,
-        artifacts: Artifacts {
+        artifacts: ArtifactsConfig {
             cargo_dist: Some(false),
             package_managers: Some(package_managers),
         },
@@ -138,7 +138,7 @@ pub fn analytics_plausible(temp_dir: String) -> Config {
     Config {
         dist_dir: temp_dir,
         repository: Some(String::from("https://github.com/axodotdev/oranda")),
-        analytics: Some(Analytics::Plausible(PlausibleTracking {
+        analytics: Some(AnalyticsConfig::Plausible(Plausible {
             domain: "opensource.axo.dev".into(),
             script_url: None,
         })),
