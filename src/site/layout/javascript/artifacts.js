@@ -120,8 +120,9 @@ function getOS() {
 let os = getOS();
 window.os = os;
 
-// Hydrate selector with events
+// Unhide and hydrate selector with events
 const selector = document.querySelector("#install-arch-select");
+document.querySelector(".arch-select").classList.remove("hidden");
 selector.addEventListener("change", onArchChange);
 
 // Hydrate tab buttons with events

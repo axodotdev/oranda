@@ -37,10 +37,10 @@ pub fn build_header(release: &Release, config: &Config) -> Result<Box<div<String
     Ok(html!(
     <div class="artifacts" data-tag=tag>
         {html}
-        <div class="arch-select">
+        <div class="arch-select hidden">
             {text!("Select your platform manually:")} {selector}
         </div>
-        <a href=&downloads_href class="hidden backup-download primary">{text!("View installation options")}</a>
+        <noscript><a href=&downloads_href class="backup-download primary">{text!("View installation options")}</a></noscript>
     </div>
     ))
 }
