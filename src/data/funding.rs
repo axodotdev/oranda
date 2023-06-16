@@ -44,7 +44,7 @@ impl Funding {
     /// Creates a new Funding struct by attempting to read from the FUNDING.yml, and the docs file.
     pub fn new(config: &Config) -> Result<Self> {
         let path_to_funding = Self::path(&config.funding);
-        let mut funding = match LocalAsset::load_string(path_to_funding) {
+        let mut funding = match LocalAsset::load_string(&path_to_funding) {
             Ok(res) => {
                 let parsed_response = parse_response(res)?;
                 Self {
@@ -52,7 +52,14 @@ impl Funding {
                     docs_content: None,
                 }
             }
-            Err(_) => Self::default(),
+            Err(e) => {
+                let warning = OrandaError::FundingLoadFailed {
+                    path: path_to_funding,
+                    details: e,
+                };
+                eprintln!("{:?}", miette::Report::new(warning));
+                Self::default()
+            }
         };
         if let Ok(res) = LocalAsset::load_string("funding.md") {
             let html = to_html(&res, &config.styles.syntax_theme())?;
