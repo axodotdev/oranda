@@ -5,28 +5,21 @@ console.log("hello!")
  */
 
 let options = {
-    windows: "pc-windows",
-    windows64: "64-pc-windows",
-    windowsArm: "arm-pc-windows",
+    windows64: "x86_64-pc-windows",
+    windows32: "i686-pc-windows",
+    windowsArm: "aarch64-pc-windows",
 
-    mac: "apple-darwin",
-    macPc: "apple-ppc",
-    mac32: "apple-32",
-    macSilicon: "apple-silicon",
+    mac64: "x86_64-apple",
+    mac32: "i686-apple",
+    macSilicon: "aarch64-apple",
 
-    linux: "unknown-linux",
-    linuxUbuntu: "linux-ubuntu",
-    linuxDebian: "linux-debian",
-    linuxMandriva: "linux-mandriva",
-    linuxRedhat: "linux-redhat",
-    linuxFedora: "linux-fedora",
-    linuxSuse: "linux-suse",
-    linuxGentoo: "linux-gentoo",
+    linux64: "x86_64-unknown-linux",
+    linux32: "i686-unknown-linux",
+    linuxArm: "aarch64-unknown-linux",
 
-    ios: "ios",
-    android: "linux-android",
-
-    freebsd: "freebsd",
+    // ios: "ios",
+    // android: "linux-android",
+    // freebsd: "freebsd",
 };
 
 function isAppleSilicon() {
@@ -48,7 +41,7 @@ function isAppleSilicon() {
 }
 
 function getOS() {
-    var OS = options.windows.default;
+    var OS = options.windows64.default;
     var userAgent = navigator.userAgent;
     var platform = navigator.platform;
 
@@ -89,15 +82,13 @@ function getOS() {
 
     //MacOS, MacOS X, macOS
     if (navigator.appVersion.includes("Mac")) {
-        if (platform.includes("MacPPC") || platform.includes("PowerPC")) {
-            OS = options.macPpc;
-        } else if (
+        if (
             navigator.userAgent.includes("OS X 10.5") ||
             navigator.userAgent.includes("OS X 10.6")
         ) {
             OS = options.mac32;
         } else {
-            OS = options.mac;
+            OS = options.mac64;
 
             const isSilicon = isAppleSilicon();
             if (isSilicon) {
@@ -108,28 +99,20 @@ function getOS() {
 
     // linux
     if (platform.includes("Linux")) {
-        if (navigator.userAgent.toLocaleLowerCase().includes("ubuntu"))
-            OS = options.linux_ubuntu;
-        else if (userAgent.includes("Debian")) OS = options.linuxDebian;
-        else if (userAgent.includes("Android")) OS = options.android;
-        else if (userAgent.includes("Mandriva")) OS = options.linuxMandriva;
-        else if (userAgent.includes("Red Hat")) OS = options.linuxRedhat;
-        else if (userAgent.includes("Fedora")) OS = options.linuxFedora;
-        else if (userAgent.includes("SUSE")) OS = options.linuxSuse;
-        else if (userAgent.includes("Gentoo")) OS = options.linuxGentoo;
-        else OS = options.linux;
+        OS = options.linux64;
+        // FIXME: Can we find out whether linux 32-bit or ARM are used?
     }
 
-    if (
-        userAgent.includes("iPad") ||
-        userAgent.includes("iPhone") ||
-        userAgent.includes("iPod")
-    ) {
-        OS = options.ios;
-    }
-    if (platform.toLocaleLowerCase().includes("freebsd")) {
-        OS = options.freebsd;
-    }
+    // if (
+    //     userAgent.includes("iPad") ||
+    //     userAgent.includes("iPhone") ||
+    //     userAgent.includes("iPod")
+    // ) {
+    //     OS = options.ios;
+    // }
+    // if (platform.toLocaleLowerCase().includes("freebsd")) {
+    //     OS = options.freebsd;
+    // }
 
     return OS;
 }
@@ -189,45 +172,43 @@ function onTabClick(evt) {
     }
 }
 
-// let hit = Array.from(document.querySelectorAll(".target[data-targets]")).find(
-//     (a) => a.attributes["data-targets"].value.includes(os)
-// );
-// let backupButton = document.querySelector(".backup-download");
-// if (hit) {
-//     hit.classList.remove("hidden");
-// } else {
-//     if (window.os === options.macSilicon) {
-//         const macDownloadButtons = Array.from(
-//             document.querySelectorAll(".target[data-targets]")
-//         ).find((a) => a.attributes["data-targets"].value.includes(options.mac));
-//         if (macDownloadButtons) {
-//             macDownloadButtons.classList.remove("hidden");
-//         }
-//     } else if (backupButton) {
-//         backupButton.classList.remove("hidden");
-//     }
-// }
-//
-// let copyButtons = Array.from(document.querySelectorAll("[data-copy]"));
-// if (copyButtons.length) {
-//     copyButtons.forEach(function (element) {
-//         element.addEventListener("click", () => {
-//             navigator.clipboard.writeText(element.attributes["data-copy"].value);
-//         });
-//     });
-// }
-//
-// // Toggle for pre releases
-// const checkbox = document.getElementById("show-prereleases");
-//
-// if (checkbox) {
-//     checkbox.addEventListener("click", () => {
-//         const all = document.getElementsByClassName("pre-release");
-//
-//         if (all) {
-//             for (var item of all) {
-//                 item.classList.toggle("hidden");
-//             }
-//         }
-//     });
-// }
+let hit = Array.from(document.querySelectorAll(`.arch[data-arch]`)).find(
+    (a) => a.attributes["data-arch"].value.includes(os)
+);
+
+let backupButton = document.querySelector(".backup-download");
+if (hit) {
+    hit.classList.remove("hidden");
+    const selectEl = document.querySelector("#install-arch-select");
+    selectEl.value = hit.dataset.arch;
+    const firstContentChild= hit.querySelector(".install-content:first-of-type");
+    const firstTabChild= hit.querySelector(".install-tab:first-of-type");
+    firstContentChild.classList.remove("hidden");
+    firstTabChild.classList.add("selected");
+} else {
+    backupButton.classList.remove("hidden");
+}
+
+let copyButtons = Array.from(document.querySelectorAll("[data-copy]"));
+if (copyButtons.length) {
+    copyButtons.forEach(function (element) {
+        element.addEventListener("click", () => {
+            navigator.clipboard.writeText(element.attributes["data-copy"].value);
+        });
+    });
+}
+
+// Toggle for pre releases
+const checkbox = document.getElementById("show-prereleases");
+
+if (checkbox) {
+    checkbox.addEventListener("click", () => {
+        const all = document.getElementsByClassName("pre-release");
+
+        if (all) {
+            for (var item of all) {
+                item.classList.toggle("hidden");
+            }
+        }
+    });
+}
