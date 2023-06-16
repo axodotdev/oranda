@@ -8,10 +8,12 @@ use crate::data::funding::FundingType;
 #[derive(Debug, Default, Deserialize, JsonSchema)]
 pub struct FundingConfig {
     pub preferred_funding: Option<FundingType>,
+    pub path: Option<String>,
 }
 
 impl ApplyLayer for FundingConfig {
     fn apply_layer(&mut self, layer: Self) {
         self.preferred_funding.apply_opt(layer.preferred_funding);
+        self.path.apply_opt(layer.path);
     }
 }

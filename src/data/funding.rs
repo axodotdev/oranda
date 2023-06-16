@@ -1,7 +1,8 @@
-use crate::config::Config;
+use crate::config::{Config, FundingConfig};
 use crate::errors::{OrandaError, Result};
 use crate::site::markdown::to_html;
 use axoasset::LocalAsset;
+use camino::{Utf8Path, Utf8PathBuf};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
@@ -42,7 +43,8 @@ pub enum FundingContent {
 impl Funding {
     /// Creates a new Funding struct by attempting to read from the FUNDING.yml, and the docs file.
     pub fn new(config: &Config) -> Result<Self> {
-        let mut funding = match LocalAsset::load_string(".github/FUNDING.yml") {
+        let path_to_funding = Self::path(&config.funding);
+        let mut funding = match LocalAsset::load_string(path_to_funding) {
             Ok(res) => {
                 let parsed_response = parse_response(res)?;
                 Self {
@@ -58,6 +60,18 @@ impl Funding {
         }
 
         Ok(funding)
+    }
+
+    fn path(config: &Option<FundingConfig>) -> Utf8PathBuf {
+        const FUNDING_FILENAME: &str = "FUNDING.yml";
+        const FUNDING_FILEPATH: &str = "./github";
+
+        if let Some(cfg) = config {
+            if let Some(path) = &cfg.path {
+                return Utf8Path::new(&path).into();
+            }
+        }
+        Utf8Path::new(FUNDING_FILEPATH).join(FUNDING_FILENAME)
     }
 }
 
