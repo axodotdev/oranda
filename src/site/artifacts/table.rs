@@ -40,13 +40,11 @@ pub fn build(release: &Release, _config: &Config) -> Result<Box<div<String>>> {
 
     // Add the headings
     {
-        // FIXME: move this "padding: 1rem" to oranda-css
-        // (it's there for the old div.table class stuff but not for normal <th> elements)
         let mut row = vec![];
-        row.push(html!(<th style="padding: 1rem">{text!("File")}</th>));
-        row.push(html!(<th style="padding: 1rem">{text!("Platform")}</th>));
+        row.push(html!(<th>{text!("File")}</th>));
+        row.push(html!(<th>{text!("Platform")}</th>));
         if has_checksum_files {
-            row.push(html!(<th style="padding: 1rem">{text!("Checksum")}</th>));
+            row.push(html!(<th>{text!("Checksum")}</th>));
         }
         table.push(html!(<tr>{row}</tr>));
     }
