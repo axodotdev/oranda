@@ -190,6 +190,7 @@ if (hit) {
     firstTabChild.classList.add("selected");
 } else {
     const noDetectEl = document.querySelector(".no-autodetect");
+    noDetectEl.innerHTML = `We detected you're on ${os} but there don't seem to be installers for that, try the Platforms dropdown?`
     noDetectEl.classList.remove("hidden");
 }
 
