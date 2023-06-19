@@ -198,7 +198,10 @@ if (hit) {
 } else {
     const noDetectEl = document.querySelector(".no-autodetect");
     if (noDetectEl) {
-        noDetectEl.innerHTML = `We detected you're on ${os} but there don't seem to be installers for that, try the Platforms dropdown?`
+        const noDetectElDetails = document.querySelector(".no-autodetect-details");
+        if (noDetectElDetails) {
+            noDetectElDetails.innerHTML = `We detected you're on ${os} but there don't seem to be installers for that. `
+        }
         noDetectEl.classList.remove("hidden");
     }
 }

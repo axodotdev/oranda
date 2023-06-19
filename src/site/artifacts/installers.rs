@@ -47,7 +47,7 @@ pub fn build_header(release: &Release, config: &Config) -> Result<Box<div<String
         None
     } else {
         Some(
-            html!(<noscript><a href=&downloads_href class="backup-download primary">{text!("View installation options")}</a></noscript>),
+            html!(<noscript><a href=&downloads_href class="backup-download primary">{text!("View all installation options")}</a></noscript>),
         )
     };
     // If there's only one platform we don't need dropdowns
@@ -70,9 +70,12 @@ pub fn build_header(release: &Release, config: &Config) -> Result<Box<div<String
     let no_autodetect = if one_platform {
         None
     } else {
-        Some(
-            html!(<div class="no-autodetect hidden">{text!("We weren't able to detect your OS.")}</div>),
-        )
+        Some(html!(
+        <div class="no-autodetect hidden">
+            <span class="no-autodetect-details">{text!("We weren't able to detect your OS. ")}</span>
+            <a href=&downloads_href class="backup-download primary">{text!("View all installation options.")}</a>
+        </div>
+        ))
     };
     Ok(html!(
     <div class="artifacts" data-tag=tag>
