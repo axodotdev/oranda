@@ -66,7 +66,6 @@ impl Config {
         cfg.apply_project_layer(project);
         cfg.apply_custom_layer(custom);
         cfg.find_mdbook();
-        cfg.find_funding();
 
         Ok(cfg)
     }
@@ -130,26 +129,6 @@ impl Config {
                 }
                 // We found nothing, disable mdbook
                 self.mdbook = None;
-            }
-        }
-    }
-
-    /// If we have a FUNDING.yml file, try to find it. If we fail, we disable funding support.
-    fn find_funding(&mut self) {
-        if let Some(funding_cfg) = &mut self.funding {
-            if funding_cfg.path.is_none() {
-                // Ok time to auto-detect, try these files
-                let possible_paths = vec!["./.github/FUNDING.yml", "funding.md"];
-                for funding_file in possible_paths {
-                    let funding_path = Utf8PathBuf::from(funding_file);
-                    if funding_path.exists() {
-                        // nice, use it
-                        funding_cfg.path = Some(funding_path.to_string());
-                        return;
-                    }
-                }
-                // We found nothing, disable funding
-                self.funding = None;
             }
         }
     }
