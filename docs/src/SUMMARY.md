@@ -17,4 +17,5 @@
     - [`mdbook` support](./configuration/mdbook.md)
     - [Social](./configuration/social.md)
     - [Theming](./configuration/theme.md)
+      - [Theme Previews](./configuration/theme/previews.md)
     - [Funding](./configuration/funding.md)
