@@ -8,6 +8,8 @@ use crate::site::layout::{javascript, Layout};
 use crate::site::markdown::{self, SyntaxTheme};
 
 use axoasset::SourceFile;
+use axohtml::elements::div;
+use axohtml::{html, unsafe_text};
 
 pub mod source;
 
@@ -71,7 +73,14 @@ impl Page {
     fn load_and_render_contents(source: &str, syntax_theme: &SyntaxTheme) -> Result<String> {
         let source = SourceFile::load_local(source)?;
         let contents = source.contents();
-        markdown::to_html(contents, syntax_theme)
+        markdown::to_html(contents, syntax_theme).map(|html| {
+            let html: Box<div<String>> = html!(
+                <div class="rendered-markdown">
+                    {unsafe_text!(html)}
+                </div>
+            );
+            html.to_string()
+        })
     }
 
     pub fn filename(source: &str) -> String {
