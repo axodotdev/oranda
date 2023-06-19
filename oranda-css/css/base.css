@@ -178,7 +178,7 @@ blockquote {
 }
 
 main {
-  @apply mx-auto my-24 lg:max-w-3xl max-w-[80%];
+  @apply mx-auto my-24 lg:max-w-4xl max-w-[80%];
 }
 
 .github-icon {
