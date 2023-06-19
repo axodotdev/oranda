@@ -128,6 +128,11 @@ li {
   @apply list-none;
 }
 
+.rendered-markdown ul,
+.rendered-markdown li {
+  @apply list-disc;
+}
+
 li {
   @apply sm:ml-8 ml-4 mb-4;
 }
