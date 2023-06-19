@@ -6,7 +6,7 @@ use chrono::DateTime;
 use std::collections::HashMap;
 
 use crate::config::Config;
-use crate::data::artifact_inference::triple_to_display_name;
+use crate::data::artifacts::inference::triple_to_display_name;
 use crate::data::artifacts::{FileIdx, InstallMethod, InstallerIdx, TargetTriple};
 use crate::data::Release;
 use crate::errors::*;

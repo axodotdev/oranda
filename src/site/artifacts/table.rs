@@ -4,7 +4,7 @@ use axohtml::elements::{div, tr};
 use axohtml::{html, text};
 
 use crate::config::Config;
-use crate::data::artifact_inference::triple_to_display_name;
+use crate::data::artifacts::inference::triple_to_display_name;
 use crate::data::artifacts::InstallMethod;
 use crate::data::Release;
 use crate::errors::*;

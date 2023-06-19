@@ -3,7 +3,6 @@ use crate::data::github::{GithubRelease, GithubRepo};
 use crate::errors::*;
 use crate::message::{Message, MessageType};
 
-pub mod artifact_inference;
 pub mod artifacts;
 pub mod cargo_dist;
 pub mod funding;
@@ -13,26 +12,27 @@ mod release;
 pub use release::Release;
 
 pub struct Context {
+    /// Info from Github
     pub repo: GithubRepo,
+    /// All of the releases, currently from newest to oldest
     pub releases: Vec<Release>,
+    /// Whether any of the 'releases` are prereleases
+    ///
+    /// (enables extra UI)
     pub has_prereleases: bool,
+    /// Index into `releases` for the "best" latest release
+    ///
+    /// (e.g. prefers stable releases over prereleases)
     pub latest_release: Option<usize>,
+    /// Whether any of the `releases` have anything useful for
+    /// the artifacts subsystem.
     pub has_artifacts: bool,
 }
 
 impl Context {
     pub fn new(repo_url: &str, artifacts_config: &ArtifactsConfig) -> Result<Self> {
         let repo = GithubRepo::from_url(repo_url)?;
-        let (releases, has_prereleases, has_artifacts, latest_release) =
-            Self::fetch_all_releases(&repo, artifacts_config)?;
-
-        Ok(Self {
-            repo,
-            releases,
-            has_prereleases,
-            has_artifacts,
-            latest_release,
-        })
+        Self::fetch_all_releases(repo, artifacts_config)
     }
 
     /// Get the latest release, if it exists
@@ -46,26 +46,19 @@ impl Context {
             .and_then(|idx| self.releases.get_mut(idx))
     }
 
-    /// Fetch and process all the Github Releases
-    ///
-    /// Returned values are:
-    ///
-    /// * list of releases (newest to oldest)
-    /// * whether there are any prereleases (enables more complex UI)
-    /// * whether there are any artifacts (enables more complex UI)
-    /// * the release that should be considered "latest" (shown on the front page)
+    /// Fetch and process all the Github Releases to produce a final result
     #[allow(clippy::unnecessary_unwrap)]
     pub fn fetch_all_releases(
-        repo: &GithubRepo,
+        repo: GithubRepo,
         artifacts_config: &ArtifactsConfig,
-    ) -> Result<(Vec<Release>, bool, bool, Option<usize>)> {
+    ) -> Result<Self> {
         let gh_releases =
-            tokio::runtime::Handle::current().block_on(GithubRelease::fetch_all(repo))?;
+            tokio::runtime::Handle::current().block_on(GithubRelease::fetch_all(&repo))?;
         let all =
             tokio::runtime::Handle::current().block_on(futures_util::future::try_join_all(
                 gh_releases
                     .into_iter()
-                    .map(|gh_release| Release::new(gh_release, repo, artifacts_config)),
+                    .map(|gh_release| Release::new(gh_release, &repo, artifacts_config)),
             ))?;
 
         // Walk through all the releases (from newest to oldest) to find the latest ones
@@ -151,6 +144,13 @@ impl Context {
             .or(latest_stable_release)
             .or(latest_dist_prerelease)
             .or(latest_prerelease);
-        Ok((all, has_prereleases, has_artifacts, latest_release))
+
+        Ok(Self {
+            repo,
+            releases: all,
+            has_prereleases,
+            has_artifacts,
+            latest_release,
+        })
     }
 }
