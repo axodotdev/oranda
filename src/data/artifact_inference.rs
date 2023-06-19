@@ -345,6 +345,8 @@ pub fn triple_to_display_name(name: &str) -> Option<&str> {
         TARGET_X64_MAC => Some("x64 macOS"),
         TARGET_ARM64_MAC => Some("arm64 macOS"),
 
+        "all" => Some("All Platforms"),
+
         _ => None,
     }
 }

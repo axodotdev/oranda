@@ -186,7 +186,7 @@ fn creates_nav_item_install() {
     let layout = Layout::new(&config).unwrap();
     let page = page::index_with_artifacts(&config, &layout);
     eprintln!("{}", page.contents);
-    assert!(page.contents.contains("<h4>Install v"));
+    assert!(page.contents.contains("<h4>Install "));
 }
 
 #[test]

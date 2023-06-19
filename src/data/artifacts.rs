@@ -74,7 +74,7 @@ pub struct File {
 }
 
 /// A handle to an Installer (equivalent to a pointer into [`ReleaseArtifacts::installers`][])
-#[derive(Debug, Copy, Clone, Serialize)]
+#[derive(Debug, Copy, Clone, PartialEq, PartialOrd, Eq, Ord, Serialize)]
 pub struct InstallerIdx(pub usize);
 
 /// A potential installer / installation method for this release

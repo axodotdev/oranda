@@ -97,7 +97,7 @@ fn build_arches(platforms: &Platforms, release: &Release, config: &Config) -> Ve
         let tabs = if installers.len() == 1 {
             None
         } else {
-            let tabs = tab_list(target, release, installers);
+            let tabs = tab_list(target, release, installers, one_platform);
             Some(html!(<ul class="tabs">
                 {tabs}
             </ul>))
@@ -125,14 +125,22 @@ fn tab_list(
     target: &TargetTriple,
     release: &Release,
     installers: &[InstallerIdx],
+    one_platform: bool,
 ) -> Vec<Box<li<String>>> {
     let mut list = vec![];
+    let mut is_first = true;
     for i in installers.iter() {
         let installer = release.artifacts.installer(i.to_owned());
         let string_idx = i.0.to_string();
+        let classes = if one_platform && is_first {
+            "install-tab selected"
+        } else {
+            "install-tab"
+        };
         list.push(
-            html!(<li class="install-tab" data-id=string_idx data-triple=target>{text!(installer.label.clone())}</li>),
-        )
+            html!(<li class=classes data-id=string_idx data-triple=target>{text!(installer.label.clone())}</li>),
+        );
+        is_first = false;
     }
     list
 }
@@ -234,6 +242,7 @@ fn selector_html(platforms: &Platforms) -> Box<select<String>> {
 
 /// Only grab platforms that we can actually provide downloadable files for.
 fn filter_platforms(release: &Release) -> Platforms {
+    // First try to select platforms with downloadable artifacts
     let mut platforms = HashMap::new();
     for (target, installer) in release.artifacts.installers_by_target().iter() {
         let has_valid_installer = installer.iter().any(|i| {
@@ -245,5 +254,32 @@ fn filter_platforms(release: &Release) -> Platforms {
         }
     }
 
-    platforms
+    // If that produce non-empty results, great!
+    if !platforms.is_empty() {
+        return platforms;
+    }
+    eprintln!("taking universal path");
+
+    // Otherwise, only show things that are on every platform
+    let mut universal_installers = vec![];
+    if let Some((_, installers)) = release.artifacts.installers_by_target().iter().next() {
+        for installer in installers {
+            if release
+                .artifacts
+                .installers_by_target()
+                .iter()
+                .all(|(_, installers)| installers.contains(installer))
+            {
+                universal_installers.push(*installer);
+            }
+        }
+    }
+    if !universal_installers.is_empty() {
+        let mut platforms = Platforms::default();
+        platforms.insert("all".to_owned(), universal_installers);
+        return platforms;
+    }
+
+    // Otherwise it's empty, oh well
+    Platforms::default()
 }
