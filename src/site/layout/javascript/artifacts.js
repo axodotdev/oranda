@@ -1,5 +1,3 @@
-console.log("hello!")
-
 /* Code modified from the blender website
  * https://www.blender.org/wp-content/themes/bthree/assets/js/get_os.js?x82196
  */
@@ -121,9 +119,14 @@ let os = getOS();
 window.os = os;
 
 // Unhide and hydrate selector with events
-const selector = document.querySelector("#install-arch-select");
-document.querySelector(".arch-select").classList.remove("hidden");
-selector.addEventListener("change", onArchChange);
+const archSelect = document.querySelector(".arch-select");
+if (archSelect) {
+    archSelect.classList.remove("hidden");
+    const selector = document.querySelector("#install-arch-select");
+    if (selector) {
+        selector.addEventListener("change", onArchChange);
+    }
+}
 
 // Hydrate tab buttons with events
 Array.from(document.querySelectorAll(".install-tab[data-id]")).forEach((tab) => {
@@ -147,7 +150,9 @@ function onArchChange(evt) {
         const firstContentChild = newContentEl.querySelector(".install-content:first-of-type");
         const firstTabChild = newContentEl.querySelector(".install-tab:first-of-type");
         firstContentChild.classList.remove("hidden");
-        firstTabChild.classList.add("selected");
+        if (firstTabChild) {
+            firstTabChild.classList.add("selected");
+        }
     }
     // Hide "no OS detected" message
     const noDetectEl = document.querySelector(".no-autodetect");
@@ -184,14 +189,18 @@ if (hit) {
     hit.classList.remove("hidden");
     const selectEl = document.querySelector("#install-arch-select");
     selectEl.value = hit.dataset.arch;
-    const firstContentChild= hit.querySelector(".install-content:first-of-type");
-    const firstTabChild= hit.querySelector(".install-tab:first-of-type");
+    const firstContentChild = hit.querySelector(".install-content:first-of-type");
+    const firstTabChild = hit.querySelector(".install-tab:first-of-type");
     firstContentChild.classList.remove("hidden");
-    firstTabChild.classList.add("selected");
+    if (firstTabChild) {
+        firstTabChild.classList.add("selected");
+    }
 } else {
     const noDetectEl = document.querySelector(".no-autodetect");
-    noDetectEl.innerHTML = `We detected you're on ${os} but there don't seem to be installers for that, try the Platforms dropdown?`
-    noDetectEl.classList.remove("hidden");
+    if (noDetectEl) {
+        noDetectEl.innerHTML = `We detected you're on ${os} but there don't seem to be installers for that, try the Platforms dropdown?`
+        noDetectEl.classList.remove("hidden");
+    }
 }
 
 let copyButtons = Array.from(document.querySelectorAll("[data-copy]"));
