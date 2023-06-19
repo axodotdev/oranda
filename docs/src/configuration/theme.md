@@ -1,13 +1,13 @@
 # Theming
 
-> **Caveat empor!** Theme configuration is _weird_ right now, and will probably be changed in the future.
-
 ## Predefined themes
 
 Oranda comes with four default themes:
 
 - Light
 - Dark
+- Axo Light (`axo_light` or `axolight`)
+- Axo Dark (`axo_dark` or `axodark`)
 - Hacker
 - Cupcake
 
