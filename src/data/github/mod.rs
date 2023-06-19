@@ -6,6 +6,8 @@ use serde::{Deserialize, Serialize};
 mod repo;
 pub use repo::GithubRepo;
 
+use super::artifacts::{File, ReleaseArtifacts};
+
 /// From the GitHub Rest API
 /// as documented here: <https://docs.github.com/en/rest/releases/releases?apiVersion=2022-11-28>
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -72,5 +74,21 @@ impl GithubRelease {
             }
         }
         None
+    }
+}
+
+impl ReleaseArtifacts {
+    pub fn add_github(&mut self, release: &GithubRelease) {
+        for asset in &release.assets {
+            let file = File {
+                name: asset.name.clone(),
+                download_url: asset.browser_download_url.clone(),
+                // The rest of these are filled in later
+                view_path: None,
+                checksum_file: None,
+                infer: true,
+            };
+            self.add_file(file);
+        }
     }
 }

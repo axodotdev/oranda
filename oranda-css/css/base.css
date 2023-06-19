@@ -80,6 +80,7 @@ table {
 
 table th {
   @apply text-left uppercase;
+  padding: 1rem;
 }
 
 table td {

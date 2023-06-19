@@ -12,6 +12,23 @@ pub struct PackageManagersConfig {
     pub additional: Option<IndexMap<String, String>>,
 }
 
+impl PackageManagersConfig {
+    pub fn has(&self, key: &str) -> bool {
+        self.preferred
+            .as_ref()
+            .map(|p| p.contains_key(key))
+            .unwrap_or(false)
+            || self
+                .additional
+                .as_ref()
+                .map(|p| p.contains_key(key))
+                .unwrap_or(false)
+    }
+    pub fn has_npm(&self) -> bool {
+        self.has("npm") || self.has("npx")
+    }
+}
+
 impl ApplyLayer for PackageManagersConfig {
     fn apply_layer(&mut self, layer: Self) {
         self.preferred.apply_opt(layer.preferred);

@@ -1,218 +1,285 @@
-use axohtml::elements::div;
+#![allow(clippy::vec_box)]
+
+use axohtml::elements::{a, div, li, select};
 use axohtml::{html, text, unsafe_text};
-use cargo_dist_schema::{Artifact as DistArtifact, DistManifest, Release as DistApp};
 use chrono::DateTime;
+use std::collections::HashMap;
 
 use crate::config::Config;
-use crate::data::cargo_dist::{self, DistRelease};
+use crate::data::artifacts::inference::triple_to_display_name;
+use crate::data::artifacts::{FileIdx, InstallMethod, InstallerIdx, TargetTriple};
+use crate::data::Release;
 use crate::errors::*;
 use crate::site::{icons, link, markdown};
 
-struct InstallerData {
-    app: DistApp,
-    manifest: DistManifest,
-    artifact: DistArtifact,
-}
+type Platforms = HashMap<TargetTriple, Vec<InstallerIdx>>;
 
-pub fn build_header(latest_release: &DistRelease, config: &Config) -> Result<Box<div<String>>> {
+pub fn build_header(release: &Release, config: &Config) -> Result<Box<div<String>>> {
     let downloads_href = link::generate(&config.path_prefix, "artifacts/");
-
-    let mut html: Vec<Box<div<String>>> = vec![];
-    let manifest = &latest_release.manifest;
-    for app in manifest.releases.iter() {
-        for artifact_id in app.artifacts.iter() {
-            let artifact = &manifest.artifacts[artifact_id];
-            if let cargo_dist::ArtifactKind::ExecutableZip = artifact.kind {
-                let mut targets = String::new();
-                for targ in artifact.target_triples.iter() {
-                    targets.push_str(format!("{} ", targ).as_str());
-                }
-                let detect_html = match cargo_dist::get_os(targets.as_str()) {
-                    Some(os) => {
-                        html!(
-                            <span class="detect">{text!("We have detected you are on ")}
-                                <span class="detected-os">{text!(os)}</span>
-                            {text!(", are we wrong?")}
-                            </span>)
-                    }
-                    None => {
-                        html!(<span class="detect">{text!("We couldn't detect the system you are using.")}</span>)
-                    }
-                };
-                let data = InstallerData {
-                    app: app.to_owned(),
-                    manifest: manifest.to_owned(),
-                    artifact: artifact.to_owned(),
-                };
-                let install_code_block = build_install_block(&data, config);
-                let title = format!("Install v{}", app.app_version);
-                let formatted_date =
-                    match DateTime::parse_from_rfc3339(&latest_release.source.published_at) {
-                        Ok(date) => date.format("%b %e %Y at %R UTC").to_string(),
-                        Err(_) => latest_release.source.published_at.to_owned(),
-                    };
-                let date_published = format!("Published at {}", formatted_date);
-                html.extend(html!(
-                    <div class="hidden target artifact-header" data-targets=&targets>
-                        <h4>{text!(title)}</h4>
-                        <div>
-                            <small class="published-date">{text!(date_published)}</small>
-                        </div>
-                        {install_code_block}
-                        <div>
-                            {detect_html}
-                            <a href=&downloads_href>{text!("View all installation options")}</a>
-                        </div>
-                    </div>
-                ));
-            }
-        }
+    let tag = &release.source.tag_name;
+    let platforms_we_want = filter_platforms(release);
+    if platforms_we_want.is_empty() {
+        return Ok(html!(<div></div>));
     }
+    let one_platform = platforms_we_want.len() == 1;
 
+    let formatted_date = match DateTime::parse_from_rfc3339(&release.source.published_at) {
+        Ok(date) => date.format("%b %e %Y at %R UTC").to_string(),
+        Err(_) => release.source.published_at.to_owned(),
+    };
+
+    let arches = build_arches(&platforms_we_want, release, config);
+    let selector = selector_html(&platforms_we_want);
+
+    let html = html!(
+        <div class="artifact-header target">
+            <h4>{text!("Install {}", release.source.tag_name)}</h4>
+            <div><small class="published-date">{text!("Published on {}", formatted_date)}</small></div>
+
+            <ul class="arches">
+                {arches}
+            </ul>
+        </div>
+    );
+
+    // If there's only one platform we don't need scripts
+    let noscript = if one_platform {
+        None
+    } else {
+        Some(
+            html!(<noscript><a href=&downloads_href class="backup-download primary">{text!("View all installation options")}</a></noscript>),
+        )
+    };
+    // If there's only one platform we don't need dropdowns
+    let selector = if one_platform {
+        let target = platforms_we_want.keys().next().unwrap();
+        if target == "all" {
+            // If we think this is a universal setup, don't mention platforms
+            None
+        } else {
+            // Otherwise mention the platform
+            let os_name = triple_to_display_name(target).unwrap();
+            let desc = format!("Platform: {os_name}");
+            Some(html!(<div class="arch-select">{text!(desc)}</div>))
+        }
+    } else {
+        Some(html!(<div class="arch-select hidden">
+            {text!("Platform: ")} {selector}
+        </div>))
+    };
+    let no_autodetect = if one_platform {
+        None
+    } else {
+        Some(html!(
+        <div class="no-autodetect hidden">
+            <span class="no-autodetect-details">{text!("We weren't able to detect your OS. ")}</span>
+            <a href=&downloads_href class="backup-download primary">{text!("View all installation options.")}</a>
+        </div>
+        ))
+    };
     Ok(html!(
-    <div class="artifacts">
+    <div class="artifacts" data-tag=tag>
         {html}
-        <a href=&downloads_href class="hidden backup-download business-button primary">{text!("View installation options")}</a>
+        {no_autodetect}
+        {selector}
+        {noscript}
     </div>
     ))
 }
 
-fn build_install_block(data: &InstallerData, config: &Config) -> Result<Box<div<String>>> {
-    // If there's an installer that covers that, prefer it
-    if let Ok(install_block) = build_install_block_for_installer(data, config) {
-        return Ok(install_block);
+/// Build the tab and content HTML for all arches.
+fn build_arches(platforms: &Platforms, release: &Release, config: &Config) -> Vec<Box<li<String>>> {
+    let mut html = vec![];
+    let one_platform = platforms.len() == 1;
+
+    for (target, installers) in platforms {
+        // If there's only one installer, no need for tabs
+        let tabs = if installers.len() == 1 {
+            None
+        } else {
+            let tabs = tab_list(target, release, installers, one_platform);
+            Some(html!(<ul class="tabs">
+                {tabs}
+            </ul>))
+        };
+
+        let contents = content_list(target, installers, release, config, one_platform);
+
+        // If there's only one entry, make it visible by default (noscript friendly)
+        let classes = if one_platform { "arch" } else { "arch hidden" };
+        html.push(html!(
+            <li class=classes data-arch=target>
+                {tabs}
+                <ul class="contents">
+                    {contents}
+                </ul>
+            </li>
+        ));
     }
 
-    // Otherwise, just link the artifact
-    let name = &data.artifact.name.as_ref().unwrap();
-    let url = cargo_dist::download_link(config, name, &data.app.app_version)?;
-    Ok(html!(
-        <div class="install-code-wrapper">
-            <a href=url>{text!("Download {}", name)}</a>
-        </div>
-    ))
+    html
 }
 
-/// Tries to recommend an installer that installs the given artifact
-fn build_install_block_for_installer(
-    data: &InstallerData,
-    config: &Config,
-) -> Result<Box<div<String>>> {
-    let install_code = build_install_hint_code(data, config)?;
-
-    let copy_icon = icons::copy();
-    let (copy, src) = get_install_hint(data, config)?;
-
-    let view_source = src.map(|src| {
-        html!(<a class="button primary button" href=(src)>
-                {text!("Source")}
-        </a>)
-    });
-
-    Ok(html!(
-        <div class="install-code-wrapper">
-            {unsafe_text!(install_code)}
-            <button
-                data-copy={copy}
-                class="button primary copy-clipboard-button button">
-                {copy_icon}
-            </button>
-            {view_source}
-        </div>
-    ))
-}
-
-// False positive duplicate allocation warning
-// https://github.com/rust-lang/rust-clippy/issues?q=is%3Aissue+redundant_allocation+sort%3Aupdated-desc
-#[allow(clippy::vec_box)]
-pub fn build_list(release: &DistRelease, config: &Config) -> Result<Box<div<String>>> {
+/// Build tabs for one arch/triple.
+fn tab_list(
+    target: &TargetTriple,
+    release: &Release,
+    installers: &[InstallerIdx],
+    one_platform: bool,
+) -> Vec<Box<li<String>>> {
     let mut list = vec![];
-    let manifest = &release.manifest;
-    for app in manifest.releases.iter() {
-        for artifact_id in app.artifacts.iter() {
-            let artifact = &manifest.artifacts[artifact_id];
-            if let cargo_dist::ArtifactKind::ExecutableZip = artifact.kind {
-                let mut targets = String::new();
-                for targ in artifact.target_triples.iter() {
-                    targets.push_str(format!("{} ", targ).as_str());
-                }
+    let mut is_first = true;
+    for i in installers.iter() {
+        let installer = release.artifacts.installer(i.to_owned());
+        let string_idx = i.0.to_string();
+        let classes = if one_platform && is_first {
+            "install-tab selected"
+        } else {
+            "install-tab"
+        };
+        list.push(
+            html!(<li class=classes data-id=string_idx data-triple=target>{text!(installer.label.clone())}</li>),
+        );
+        is_first = false;
+    }
+    list
+}
 
-                let title = match artifact.description.clone() {
-                    Some(desc) => desc,
-                    None => match cargo_dist::get_os(targets.as_str()) {
-                        Some(os) => String::from(os),
-                        None => targets,
-                    },
-                };
-                let data = InstallerData {
-                    app: app.to_owned(),
-                    artifact: artifact.to_owned(),
-                    manifest: manifest.to_owned(),
-                };
-                let install_code_block = build_install_block(&data, config);
-                list.extend(html!(
-                    <li class="list-none">
-                        <h5 class="capitalize">{text!(title)}</h5>
-                        {install_code_block}
-                    </li>
-                ))
+/// Build content for one arch/triple.
+fn content_list(
+    target: &TargetTriple,
+    installers: &Vec<InstallerIdx>,
+    release: &Release,
+    config: &Config,
+    one_platform: bool,
+) -> Vec<Box<li<String>>> {
+    let mut list = vec![];
+    let mut is_first = true;
+    for idx in installers {
+        let installer = release.artifacts.installer(idx.to_owned());
+
+        let html = match &installer.method {
+            InstallMethod::Run { file, run_hint } => run_html(*file, run_hint, release, config),
+            InstallMethod::Download { file } => {
+                let file = release.artifacts.file(*file);
+                html!(<div class="download-wrapper"><a href=&file.download_url><button class="button primary"><span>{text!("Download")}</span><span class="button-subtitle">{text!(&file.name)}</span></button></a></div>)
+            }
+        };
+
+        // If there's only one platform, auto-show
+        let classes = if one_platform && is_first {
+            "install-content"
+        } else {
+            "install-content hidden"
+        };
+        let string_idx = idx.0.to_string();
+        let html = html!(
+            <li data-id=string_idx data-triple=target class=classes>
+                {html}
+            </li>
+        );
+
+        list.push(html);
+        is_first = false;
+    }
+
+    list
+}
+
+/// Get the html for an InstallMethod::Run
+pub fn run_html(
+    file: Option<FileIdx>,
+    run_hint: &str,
+    release: &Release,
+    config: &Config,
+) -> Box<div<String>> {
+    let code = {
+        let highlighted_code =
+            markdown::syntax_highlight(Some("sh"), run_hint, &config.styles.syntax_theme());
+        match highlighted_code {
+            Ok(code) => code,
+            Err(_) => format!("<code class='inline-code'>{}</code>", run_hint),
+        }
+    };
+    let source_file = if let Some(file) = file {
+        let file = release.artifacts.file(file);
+        let url = if let Some(view_path) = &file.view_path {
+            link::generate(&config.path_prefix, view_path)
+        } else {
+            file.download_url.clone()
+        };
+        let html: Box<a<String>> = html!(<a class="button primary" href=&url>{text!("Source")}</a>);
+        html.to_string()
+    } else {
+        String::new()
+    };
+    let icon = icons::copy();
+
+    html!(
+        <div class="install-code-wrapper">
+            {unsafe_text!(code)}
+            <button class="button copy-clipboard-button primary" data-copy=run_hint>{icon}</button>
+            {unsafe_text!(source_file)}
+        </div>
+    )
+}
+
+/// Build the arch selector.
+fn selector_html(platforms: &Platforms) -> Box<select<String>> {
+    let mut options = vec![];
+    options.push(html!(<option disabled=true selected=true value="">{text!("")}</option>));
+    for target in platforms.keys() {
+        let os_name = triple_to_display_name(target).unwrap();
+        options.push(html!(<option value=target>{text!(os_name.to_owned())}</option>));
+    }
+
+    html!(
+        <select id="install-arch-select">
+            {options}
+        </select>
+    )
+}
+
+/// Only grab platforms that we can actually provide downloadable files for.
+fn filter_platforms(release: &Release) -> Platforms {
+    // First try to select platforms with downloadable artifacts
+    let mut platforms = HashMap::new();
+    for (target, installer) in release.artifacts.installers_by_target().iter() {
+        let has_valid_installer = installer.iter().any(|i| {
+            let installer = release.artifacts.installer(i.to_owned());
+            matches!(installer.method, InstallMethod::Download { file: _ })
+        });
+        if has_valid_installer {
+            platforms.insert(target.clone(), installer.to_vec());
+        }
+    }
+
+    // If that produce non-empty results, great!
+    if !platforms.is_empty() {
+        return platforms;
+    }
+    eprintln!("taking universal path");
+
+    // Otherwise, only show things that are on every platform
+    let mut universal_installers = vec![];
+    if let Some((_, installers)) = release.artifacts.installers_by_target().iter().next() {
+        for installer in installers {
+            if release
+                .artifacts
+                .installers_by_target()
+                .iter()
+                .all(|(_, installers)| installers.contains(installer))
+            {
+                universal_installers.push(*installer);
             }
         }
     }
-
-    Ok(html!(
-    <div>
-        <h3>{text!("Install via script")}</h3>
-        <ul>
-            {list}
-        </ul>
-    </div>
-    ))
-}
-
-fn build_install_hint_code(data: &InstallerData, config: &Config) -> Result<String> {
-    let install_hint = get_install_hint(data, config)?;
-
-    let highlighted_code =
-        markdown::syntax_highlight(Some("sh"), &install_hint.0, &config.styles.syntax_theme());
-    match highlighted_code {
-        Ok(code) => Ok(code),
-        Err(_) => Ok(format!(
-            "<code class='inline-code'>{}</code>",
-            install_hint.0
-        )),
+    if !universal_installers.is_empty() {
+        let mut platforms = Platforms::default();
+        platforms.insert("all".to_owned(), universal_installers);
+        return platforms;
     }
-}
 
-fn get_install_hint(data: &InstallerData, config: &Config) -> Result<(String, Option<String>)> {
-    let hint = data
-        .app
-        .artifacts
-        .iter()
-        .map(|artifact_id| &data.manifest.artifacts[artifact_id])
-        .find(|artifact| {
-            artifact.install_hint.is_some()
-                && artifact
-                    .target_triples
-                    .iter()
-                    .any(|h| data.artifact.target_triples.iter().any(|item| item == h))
-        });
-
-    if let Some(current_hint) = hint {
-        if let (Some(install_hint), Some(name)) = (&current_hint.install_hint, &current_hint.name) {
-            let file_path = if name.ends_with(".sh") || name.ends_with(".ps1") {
-                Some(cargo_dist::write_installer_source(
-                    config,
-                    name,
-                    &data.app.app_version,
-                )?)
-            } else {
-                None
-            };
-            return Ok((install_hint.to_string(), file_path));
-        }
-    }
-    Err(OrandaError::Other(
-        "There has been an issue getting your install hint, are you using cargo dist?".to_string(),
-    ))
+    // Otherwise it's empty, oh well
+    Platforms::default()
 }

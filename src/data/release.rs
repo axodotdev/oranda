@@ -1,30 +1,58 @@
 use axoasset::SourceFile;
 use cargo_dist_schema::DistManifest;
 
+use crate::config::ArtifactsConfig;
 use crate::data::{cargo_dist, github::GithubRelease, GithubRepo};
 use crate::errors::*;
+
+use super::artifacts::ReleaseArtifacts;
 
 #[derive(Clone, Debug)]
 pub struct Release {
     pub manifest: Option<DistManifest>,
     pub source: GithubRelease,
+    pub artifacts: ReleaseArtifacts,
 }
 
 impl Release {
     pub async fn new(
         gh_release: GithubRelease,
         repo: &GithubRepo,
-        cargo_dist: bool,
+        artifacts_config: &ArtifactsConfig,
     ) -> Result<Self> {
-        let manifest = if cargo_dist {
+        let manifest = if artifacts_config.cargo_dist() {
             Self::fetch_manifest(&gh_release, repo).await?
         } else {
             None
         };
+
+        // Compute the artifacts for this release
+        //
+        // In the future with multi-tenant oranda support, this None
+        // can be replaced with the name of the app we want to focus in on
+        let mut artifacts = ReleaseArtifacts::new(None);
+
+        // Add data from various sources
+        artifacts.add_github(&gh_release);
+        if let Some(manifest) = &manifest {
+            artifacts.add_cargo_dist(manifest);
+        }
+        artifacts.add_package_managers(artifacts_config);
+        artifacts.add_inference();
+
+        // Compute the final result
+        artifacts.select_installers();
+
         Ok(Self {
             manifest,
             source: gh_release,
+            artifacts,
         })
+    }
+
+    /// Gets whether any platform has actual targets to suggest
+    pub fn has_installers(&self) -> bool {
+        !self.artifacts.installers_by_target().is_empty()
     }
 
     async fn fetch_manifest(

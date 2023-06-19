@@ -47,21 +47,19 @@ impl Site {
         if Self::needs_context(config) {
             match &config.repository {
                 Some(repo_url) => {
-                    let context = Context::new(repo_url, config.artifacts.cargo_dist())?;
-                    if config.artifacts.has_some() {
+                    let mut context = Context::new(repo_url, &config.artifacts)?;
+                    // FIXME: change the config so that you can set `artifacts: false` and disable this?
+                    if context.latest().is_some() {
+                        context.latest_mut().unwrap().artifacts.make_scripts_viewable(config)?;
                         index = Some(Page::index_with_artifacts(&context, &layout_template, config)?);
-                        if context.latest_dist_release.is_some()
-                            || config.artifacts.package_managers.is_some()
-                        {
-                            let body = artifacts::page(&context, config)?;
-                            let artifacts_page = Page::new_from_contents(
-                                body,
-                                "artifacts.html",
-                                &layout_template,
-                                config,
-                            );
-                            pages.push(artifacts_page);
-                        }
+                        let body = artifacts::page(&context, config)?;
+                        let artifacts_page = Page::new_from_contents(
+                            body,
+                            "artifacts.html",
+                            &layout_template,
+                            config,
+                        );
+                        pages.push(artifacts_page);
                     }
                     if config.changelog {
                         let mut changelog_pages = Self::build_changelog_pages(&context, &layout_template, config)?;

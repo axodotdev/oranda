@@ -26,3 +26,12 @@
   background-color: var(--dark-color);
   border-color: var(--light-color);
 }
+
+select {
+  color: var(--dark-color);
+  background-color: var(--light-color);
+}
+.dark select {
+  color: var(--light-color);
+  background-color: var(--dark-color);
+}
