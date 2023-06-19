@@ -2,7 +2,8 @@ use camino::Utf8PathBuf;
 pub use cargo_dist_schema::{ArtifactKind, DistManifest};
 
 use super::artifacts::{
-    preference_to_targets, InstallMethod, Installer, InstallerPreference, ReleaseArtifacts,
+    preference_to_targets, DisplayPreference, InstallMethod, Installer, InstallerPreference,
+    ReleaseArtifacts,
 };
 
 pub const MANIFEST_FILENAME: &str = "dist-manifest.json";
@@ -97,7 +98,7 @@ impl ReleaseArtifacts {
                     description: artifact.description.clone().unwrap_or_default(),
                     targets,
                     method,
-                    ignore: false,
+                    display: DisplayPreference::Preferred,
                 };
                 self.add_installer(installer);
 

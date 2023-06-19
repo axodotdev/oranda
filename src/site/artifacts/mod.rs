@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use crate::config::Config;
-use crate::data::artifacts::InstallMethod;
+use crate::data::artifacts::{DisplayPreference, InstallMethod};
 use crate::data::{Context, Release};
 use crate::errors::*;
 
@@ -40,6 +40,10 @@ pub fn scripts(release: &Release, config: &Config) -> Result<Vec<Box<div<String>
     // We only display runnable scripts here
     let mut scripts = HashMap::new();
     for (_, installer) in release.artifacts.installers() {
+        // Hide installers that should be hidden
+        if installer.display == DisplayPreference::Hidden {
+            continue;
+        }
         let InstallMethod::Run { .. } = &installer.method else {
             continue;
         };

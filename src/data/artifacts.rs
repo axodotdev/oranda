@@ -92,7 +92,7 @@ pub struct Installer {
     /// Whether this installer should be ignored by select_installers
     /// (if true, the installer is effectively deleted, but we want to keep indices stable)
     #[serde(skip)]
-    pub ignore: bool,
+    pub display: DisplayPreference,
 }
 
 /// How much an installer should be preferred (descending order)
@@ -108,6 +108,17 @@ pub enum InstallerPreference {
     Custom,
     /// Just a tarball containing the binary
     Archive,
+}
+
+/// Where to show the installer
+#[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize)]
+pub enum DisplayPreference {
+    /// Show everywhere
+    Preferred,
+    /// Show only on the install page
+    Additional,
+    /// Hide it
+    Hidden,
 }
 
 /// Different methods of installation recommendation
@@ -198,32 +209,29 @@ impl ReleaseArtifacts {
         if let Some(package_managers) = &config.package_managers {
             // If we have a custom item for "npm" or "npx", then supress any entries
             // from earlier layers like cargo-dist that were also trying to specify this
-            if package_managers
-                .keys()
-                .any(|label| label == "npm" || label == "npx")
-            {
+            if package_managers.has_npm() {
                 if let Some(installer) = self
                     .installers
                     .iter_mut()
                     .find(|installer| installer.label == "npm")
                 {
-                    installer.ignore = true;
+                    installer.display = DisplayPreference::Hidden;
                 }
             }
 
-            for (label, script) in package_managers {
-                let run_hint = script.to_owned();
-                let installer = Installer {
-                    label: label.to_owned(),
-                    description: String::new(),
-                    targets: preference_to_targets(vec![], InstallerPreference::Custom),
-                    method: InstallMethod::Run {
-                        file: None,
-                        run_hint,
-                    },
-                    ignore: false,
-                };
-                self.add_installer(installer);
+            if let Some(scripts) = &package_managers.preferred {
+                for (label, script) in scripts {
+                    let mut installer = simple_run_installer(label, script);
+                    installer.display = DisplayPreference::Preferred;
+                    self.add_installer(installer);
+                }
+            }
+            if let Some(scripts) = &package_managers.additional {
+                for (label, script) in scripts {
+                    let mut installer = simple_run_installer(label, script);
+                    installer.display = DisplayPreference::Additional;
+                    self.add_installer(installer);
+                }
             }
         }
     }
@@ -234,7 +242,8 @@ impl ReleaseArtifacts {
             // Gather up all the installers into an array
             let mut installers = vec![];
             for (idx, installer) in self.installers() {
-                if installer.ignore {
+                // Only the premo installers go here
+                if installer.display != DisplayPreference::Preferred {
                     continue;
                 }
                 if let Some(preference) = installer.targets.get(target) {
@@ -313,4 +322,18 @@ fn write_source(config: &Config, file: &File) -> Result<String> {
         LocalAsset::write_new(&file_string, &full_file_path)?;
     }
     Ok(file_path)
+}
+
+fn simple_run_installer(label: &str, script: &str) -> Installer {
+    let run_hint = script.to_owned();
+    Installer {
+        label: label.to_owned(),
+        description: String::new(),
+        targets: preference_to_targets(vec![], InstallerPreference::Custom),
+        method: InstallMethod::Run {
+            file: None,
+            run_hint,
+        },
+        display: DisplayPreference::Preferred,
+    }
 }

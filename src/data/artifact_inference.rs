@@ -209,7 +209,7 @@ impl ReleaseArtifacts {
                 description,
                 targets,
                 method,
-                ignore: false,
+                display: DisplayPreference::Preferred,
             };
             self.add_installer(installer);
         }
