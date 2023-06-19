@@ -46,7 +46,10 @@ pub fn index(config: &Config, layout: &Layout) -> Page {
 pub fn index_with_artifacts(config: &Config, layout: &Layout) -> Page {
     reset(&config.dist_dir);
     let repo_url = config.repository.as_ref().unwrap();
-    let context = Context::new(repo_url, &config.artifacts).unwrap();
+    let mut context = Context::new(repo_url, &config.artifacts).unwrap();
+    if let Some(latest) = context.latest_mut() {
+        latest.artifacts.make_scripts_viewable(config).unwrap();
+    }
     Page::index_with_artifacts(&context, layout, config).unwrap()
 }
 
