@@ -35,6 +35,10 @@ pub fn build(release: &Release, _config: &Config) -> Result<Box<div<String>>> {
     let mut files: Vec<_> = files.into_iter().collect();
     files.sort_by_key(|(_, (f, _))| &f.name);
 
+    if files.is_empty() {
+        return Ok(html!(<div>{text!("No Additional Downloads")}</div>));
+    }
+
     // If any files have checksums, add a column for that
     let has_checksum_files = files.iter().any(|(_, (f, _))| f.checksum_file.is_some());
 

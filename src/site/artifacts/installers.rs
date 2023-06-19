@@ -7,7 +7,7 @@ use std::collections::HashMap;
 
 use crate::config::Config;
 use crate::data::artifact_inference::triple_to_display_name;
-use crate::data::artifacts::{InstallMethod, InstallerIdx, TargetTriple};
+use crate::data::artifacts::{FileIdx, InstallMethod, InstallerIdx, TargetTriple};
 use crate::data::Release;
 use crate::errors::*;
 use crate::site::{icons, link, markdown};
@@ -151,35 +151,7 @@ fn content_list(
         let installer = release.artifacts.installer(idx.to_owned());
 
         let html = match &installer.method {
-            InstallMethod::Run { file, run_hint } => {
-                let code = {
-                    let highlighted_code = markdown::syntax_highlight(
-                        Some("sh"),
-                        run_hint,
-                        &config.styles.syntax_theme(),
-                    );
-                    match highlighted_code {
-                        Ok(code) => code,
-                        Err(_) => format!("<code class='inline-code'>{}</code>", run_hint),
-                    }
-                };
-                let source_file = if let Some(file) = file {
-                    let file = release.artifacts.file(*file);
-                    let html: Box<a<String>> = html!(<a class="button primary" href=&file.download_url>{text!("Source")}</a>);
-                    html.to_string()
-                } else {
-                    String::new()
-                };
-                let icon = icons::copy();
-
-                html!(
-                    <div class="install-code-wrapper">
-                        {unsafe_text!(code)}
-                        <button class="button copy-clipboard-button primary" data-copy=run_hint>{icon}</button>
-                        {unsafe_text!(source_file)}
-                    </div>
-                )
-            }
+            InstallMethod::Run { file, run_hint } => run_html(*file, run_hint, release, config),
             InstallMethod::Download { file } => {
                 let file = release.artifacts.file(*file);
                 html!(<div class="download-wrapper"><a href=&file.download_url><button class="button primary"><span>{text!("Download")}</span><span class="button-subtitle">{text!(&file.name)}</span></button></a></div>)
@@ -204,6 +176,40 @@ fn content_list(
     }
 
     list
+}
+
+/// Get the html for an InstallMethod::Run
+pub fn run_html(
+    file: Option<FileIdx>,
+    run_hint: &str,
+    release: &Release,
+    config: &Config,
+) -> Box<div<String>> {
+    let code = {
+        let highlighted_code =
+            markdown::syntax_highlight(Some("sh"), run_hint, &config.styles.syntax_theme());
+        match highlighted_code {
+            Ok(code) => code,
+            Err(_) => format!("<code class='inline-code'>{}</code>", run_hint),
+        }
+    };
+    let source_file = if let Some(file) = file {
+        let file = release.artifacts.file(file);
+        let html: Box<a<String>> =
+            html!(<a class="button primary" href=&file.download_url>{text!("Source")}</a>);
+        html.to_string()
+    } else {
+        String::new()
+    };
+    let icon = icons::copy();
+
+    html!(
+        <div class="install-code-wrapper">
+            {unsafe_text!(code)}
+            <button class="button copy-clipboard-button primary" data-copy=run_hint>{icon}</button>
+            {unsafe_text!(source_file)}
+        </div>
+    )
 }
 
 /// Build the arch selector.
