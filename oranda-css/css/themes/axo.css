@@ -8,7 +8,6 @@ html.axo {
 
     /* Base Oranda theme variables */
     --dark-color: #141414;
-    --light-color: rgb(203 213 225);
     --link-color: var(--axo-pink-color);
     --light-highlight-bg-color: var(--light-color);
     --light-highlight-fg-color: var(--dark-color);
