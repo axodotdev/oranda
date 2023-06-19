@@ -55,7 +55,7 @@
 }
 
 .dark .releases-nav ul {
-  border: var(--light-color);
+  border-color: var(--light-color);
 }
 
 .releases-nav ul li {
@@ -75,6 +75,10 @@
 .releases-nav ul li a {
   @apply decoration-transparent underline-offset-2 hover:underline;
   color: var(--dark-color);
+}
+
+.dark .releases-nav ul li a {
+  color: var(--light-color);
 }
 
 .release-info {
