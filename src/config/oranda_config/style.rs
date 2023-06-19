@@ -1,7 +1,7 @@
 use schemars::JsonSchema;
 use serde::Deserialize;
 
-use crate::config::{ApplyLayer, ApplyOptExt};
+use crate::config::{ApplyLayer, ApplyOptExt, ApplyValExt};
 use crate::site::{markdown::SyntaxTheme, oranda_theme::OrandaTheme};
 
 /// Config related to styling your page
@@ -19,7 +19,7 @@ impl ApplyLayer for StyleConfig {
         self.theme.apply_opt(layer.theme);
         self.syntax_theme.apply_opt(layer.syntax_theme);
         self.oranda_css_version.apply_opt(layer.oranda_css_version);
-        self.additional_css.extend(layer.additional_css);
+        self.additional_css.apply_val(Some(layer.additional_css));
     }
 }
 impl StyleConfig {
