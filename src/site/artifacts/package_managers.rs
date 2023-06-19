@@ -47,9 +47,9 @@ pub fn build_list(managers: &IndexMap<String, String>, config: &Config) -> Box<d
 
 pub fn build_header(
     config: &Config,
-    package_managers: &IndexMap<String, String>,
+    preferred_package_managers: &IndexMap<String, String>,
 ) -> Result<Box<div<String>>> {
-    let (manager, hint) = if let Some((manager, hint)) = package_managers.first() {
+    let (manager, hint) = if let Some((manager, hint)) = preferred_package_managers.first() {
         (manager, hint)
     } else {
         return Err(OrandaError::Other(String::from(

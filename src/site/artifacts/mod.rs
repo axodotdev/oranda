@@ -35,16 +35,28 @@ pub fn page(context: &Context, config: &Config) -> Result<String> {
             (None, None)
         };
 
-    let package_manager_list = artifacts
-        .package_managers
-        .as_ref()
-        .map(|managers| package_managers::build_list(managers, config));
+    let (preferred_package_manager_list, additional_package_manager_list) =
+        if let Some(package_managers) = &artifacts.package_managers {
+            (
+                package_managers
+                    .preferred
+                    .as_ref()
+                    .map(|managers| package_managers::build_list(managers, config)),
+                package_managers
+                    .additional
+                    .as_ref()
+                    .map(|managers| package_managers::build_list(managers, config)),
+            )
+        } else {
+            (None, None)
+        };
 
     Ok(html!(
         <div>
             <div class="package-managers-downloads">
             {installer_list}
-            {package_manager_list}
+            {preferred_package_manager_list}
+            {additional_package_manager_list}
         </div>
         <div>
             {artifact_table}
@@ -62,7 +74,9 @@ pub fn header(context: &Context, config: &Config) -> Result<String> {
         }
     }
     if let Some(package_managers) = &artifacts.package_managers {
-        return Ok(package_managers::build_header(config, package_managers)?.to_string());
+        if let Some(preferred) = &package_managers.preferred {
+            return Ok(package_managers::build_header(config, preferred)?.to_string());
+        }
     }
     Err(OrandaError::Other(
         "Can't have artifacts header with no artifacts".to_string(),

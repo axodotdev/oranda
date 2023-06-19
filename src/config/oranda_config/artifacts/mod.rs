@@ -1,8 +1,11 @@
-use indexmap::IndexMap;
 use schemars::JsonSchema;
 use serde::Deserialize;
 
 use crate::config::{ApplyLayer, ApplyOptExt};
+
+pub use package_managers::PackageManagersConfig;
+
+mod package_managers;
 
 #[derive(Debug, Deserialize, JsonSchema)]
 #[serde(rename_all = "lowercase")]
@@ -36,7 +39,7 @@ pub struct ArtifactsConfig {
     #[serde(default)]
     pub cargo_dist: Option<bool>,
     #[serde(default)]
-    pub package_managers: Option<IndexMap<String, String>>,
+    pub package_managers: Option<PackageManagersConfig>,
 }
 
 impl ApplyLayer for ArtifactsConfig {

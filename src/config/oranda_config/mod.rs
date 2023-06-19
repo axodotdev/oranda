@@ -16,7 +16,7 @@ pub use social::SocialConfig;
 pub use style::StyleConfig;
 
 pub mod analytics;
-mod artifacts;
+pub mod artifacts;
 mod funding;
 mod mdbook_config;
 mod social;
