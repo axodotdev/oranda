@@ -128,7 +128,7 @@ fn creates_footer() {
     let page = page::index(&config, &layout);
     assert!(page
         .contents
-        .contains(r#"<footer class="footer"><span>My Axo project</span></footer>"#));
+        .contains(r#"<footer><span>My Axo project</span></footer>"#));
 }
 
 #[test]

@@ -128,6 +128,11 @@ li {
   @apply list-none;
 }
 
+.rendered-markdown ul,
+.rendered-markdown li {
+  @apply list-disc;
+}
+
 li {
   @apply sm:ml-8 ml-4 mb-4;
 }
@@ -164,12 +169,8 @@ hr {
   @apply text-center my-20 border border-dashed w-64 md:w-96 m-auto;
 }
 
-a > img {
-  @apply inline-block m-0;
-}
-
 img {
-  @apply my-16 sm:ml-8;
+  @apply m-auto;
 }
 
 blockquote {
@@ -178,7 +179,7 @@ blockquote {
 }
 
 main {
-  @apply mx-auto my-24 lg:max-w-3xl max-w-[80%];
+  @apply mx-auto my-24 lg:max-w-4xl max-w-[80%];
 }
 
 .github-icon {
