@@ -18,12 +18,12 @@ fn create_package_install_code(code: &str, syntax_theme: &SyntaxTheme) -> String
 // False positive duplicate allocation warning
 // https://github.com/rust-lang/rust-clippy/issues?q=is%3Aissue+redundant_allocation+sort%3Aupdated-desc
 #[allow(clippy::vec_box)]
-pub fn build_list(managers: &IndexMap<String, String>, config: &Config) -> Box<div<String>> {
+pub fn build_list(managers: &IndexMap<String, String>, syntax_theme: &SyntaxTheme) -> Box<div<String>> {
     let mut list = vec![];
     for (manager, install_code) in managers.iter() {
         list.extend(html!(<li class="list-none"><h5>{text!(manager)}</h5> 
         <div class="install-code-wrapper">
-        {unsafe_text!(create_package_install_code(install_code, &config.styles.syntax_theme()))}
+        {unsafe_text!(create_package_install_code(install_code, syntax_theme))}
         <button
             data-copy={install_code}
             class="button primary button">
@@ -56,7 +56,7 @@ pub fn build_header(
             "You are using package managers but none is present, please add one.",
         )));
     };
-    let install_code = create_package_install_code(hint.as_str(), &config.styles.syntax_theme());
+    let install_code = create_package_install_code(hint.as_str(), &config.styles.syntax_theme);
     let downloads_href = link::generate(&config.build.path_prefix, "artifacts.html");
 
     Ok(html!(<div>

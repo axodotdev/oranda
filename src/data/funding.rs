@@ -53,7 +53,7 @@ impl Funding {
             Err(_) => Self::default(),
         };
         if let Ok(res) = LocalAsset::load_string("funding.md") {
-            let html = to_html(&res, &config.styles.syntax_theme())?;
+            let html = to_html(&res, &config.styles.syntax_theme)?;
             funding.docs_content = Some(html);
         }
 

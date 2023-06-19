@@ -28,7 +28,7 @@ impl Layout {
     }
 
     pub fn new(config: &Config) -> Result<Self> {
-        let theme = OrandaTheme::css_class(&config.styles.theme());
+        let theme = OrandaTheme::css_class(&config.styles.theme);
         let name = &config.name;
         let header = match config.no_header {
             true => None,

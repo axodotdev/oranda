@@ -29,14 +29,10 @@ fn concat_minify(css_files: &[String]) -> Result<String> {
 pub fn build_oranda(
     dist_dir: &str,
     path_prefix: &Option<String>,
-    oranda_css_version: &Option<String>,
+    oranda_css_version: &str,
 ) -> Result<Box<link<String>>> {
     let dist_dir = dist_dir;
-    let version = match oranda_css_version {
-        Some(version) => version,
-        None => LATEST_ORANDA_CSS,
-    };
-    let filename = fetch_css(dist_dir, version)?;
+    let filename = fetch_css(dist_dir, oranda_css_version)?;
     let abs_path = crate::site::link::generate(path_prefix, &filename);
     Ok(html!(<link rel="stylesheet" href=abs_path></link>))
 }

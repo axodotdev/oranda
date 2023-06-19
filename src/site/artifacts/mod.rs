@@ -41,11 +41,11 @@ pub fn page(context: &Context, config: &Config) -> Result<String> {
                 package_managers
                     .preferred
                     .as_ref()
-                    .map(|managers| package_managers::build_list(managers, config)),
+                    .map(|managers| package_managers::build_list(managers, &config.styles.syntax_theme)),
                 package_managers
                     .additional
                     .as_ref()
-                    .map(|managers| package_managers::build_list(managers, config)),
+                    .map(|managers| package_managers::build_list(managers, &config.styles.syntax_theme)),
             )
         } else {
             (None, None)
