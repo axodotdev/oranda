@@ -27,10 +27,10 @@ pub fn get_os(name: &str) -> Option<&str> {
 /// Make the source of an installer script available on the server
 pub fn write_installer_source(config: &Config, name: &str, version: &str) -> Result<String> {
     let file_path = format!("{}.txt", &name);
-    let full_file_path = Utf8PathBuf::from(&config.dist_dir).join(&file_path);
+    let full_file_path = Utf8PathBuf::from(&config.build.dist_dir).join(&file_path);
     if !full_file_path.exists() {
-        let download_link = download_link(config, name, version)?;
-        let file_string_future = Asset::load_string(download_link.as_str());
+        let download_link = download_link(&config.repository, name, version)?;
+        let file_string_future = Asset::load_string(&download_link);
         let file_string = tokio::runtime::Handle::current().block_on(file_string_future)?;
         LocalAsset::write_new(&file_string, &full_file_path)?;
     }
@@ -46,8 +46,8 @@ pub fn get_kind_string(kind: &ArtifactKind) -> String {
     }
 }
 
-pub fn download_link(config: &Config, name: &str, version: &str) -> Result<String> {
-    if let Some(repo) = &config.repository {
+pub fn download_link(repository: &Option<String>, name: &str, version: &str) -> Result<String> {
+    if let Some(repo) = repository {
         let version_to_use = if version.contains('v') {
             version.split('v').collect::<Vec<&str>>()[1]
         } else {

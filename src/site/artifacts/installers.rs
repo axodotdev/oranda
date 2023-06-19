@@ -15,7 +15,7 @@ struct InstallerData {
 }
 
 pub fn build_header(latest_release: &DistRelease, config: &Config) -> Result<Box<div<String>>> {
-    let downloads_href = link::generate(&config.path_prefix, "artifacts/");
+    let downloads_href = link::generate(&config.build.path_prefix, "artifacts/");
 
     let mut html: Vec<Box<div<String>>> = vec![];
     let manifest = &latest_release.manifest;
@@ -85,7 +85,7 @@ fn build_install_block(data: &InstallerData, config: &Config) -> Result<Box<div<
 
     // Otherwise, just link the artifact
     let name = &data.artifact.name.as_ref().unwrap();
-    let url = cargo_dist::download_link(config, name, &data.app.app_version)?;
+    let url = cargo_dist::download_link(&config.repository, name, &data.app.app_version)?;
     Ok(html!(
         <div class="install-code-wrapper">
             <a href=url>{text!("Download {}", name)}</a>

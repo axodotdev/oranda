@@ -57,7 +57,7 @@ pub fn build_header(
         )));
     };
     let install_code = create_package_install_code(hint.as_str(), &config.styles.syntax_theme());
-    let downloads_href = link::generate(&config.path_prefix, "artifacts.html");
+    let downloads_href = link::generate(&config.build.path_prefix, "artifacts.html");
 
     Ok(html!(<div>
     <h4 class="text-center">{text!(format!("Install with {}", manager))}</h4>

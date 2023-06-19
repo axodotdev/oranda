@@ -31,7 +31,7 @@ pub struct Site {
 
 impl Site {
     pub fn build(config: &Config) -> Result<Site> {
-        Self::clean_dist_dir(&config.dist_dir)?;
+        Self::clean_dist_dir(&config.build.dist_dir)?;
 
         let mut pages = vec![];
         let layout_template = Layout::new(config)?;
@@ -146,7 +146,7 @@ impl Site {
     }
 
     pub fn write(self, config: &Config) -> Result<()> {
-        let dist = Utf8PathBuf::from(&config.dist_dir);
+        let dist = Utf8PathBuf::from(&config.build.dist_dir);
         for page in self.pages {
             let filename_path = Utf8PathBuf::from(&page.filename);
             // Prepare to write a "pretty link" for pages that aren't index.html already. This essentially means that we rewrite
@@ -169,8 +169,8 @@ impl Site {
                 &config.styles.syntax_theme(),
             )?;
         }
-        if Path::new(&config.static_dir).exists() {
-            Self::copy_static(&dist, &config.static_dir)?;
+        if Path::new(&config.build.static_dir).exists() {
+            Self::copy_static(&dist, &config.build.static_dir)?;
         }
         javascript::write_os_script(&dist)?;
 

@@ -7,17 +7,16 @@ pub mod project;
 
 use crate::errors::*;
 pub use oranda_config::{
-    AnalyticsConfig, ArtifactsConfig, BoolOr, FundingConfig, MdBookConfig, OrandaConfig,
-    SocialConfig, StyleConfig,
+    AnalyticsConfig, ArtifactsConfig, BoolOr, BuildConfig, FundingConfig, MdBookConfig,
+    OrandaConfig, SocialConfig, StyleConfig,
 };
 use project::ProjectConfig;
 
 #[derive(Debug)]
 pub struct Config {
     pub description: String,
-    pub dist_dir: String,
+    pub build: BuildConfig,
     pub homepage: Option<String>,
-    pub static_dir: String,
     pub name: String,
     pub no_header: bool,
     pub readme_path: String,
@@ -29,7 +28,6 @@ pub struct Config {
     pub version: Option<String>,
     pub logo: Option<String>,
     pub favicon: Option<String>,
-    pub path_prefix: Option<String>,
     pub license: Option<String>,
     /// The config for using mdbook
     pub mdbook: Option<MdBookConfig>,
@@ -91,8 +89,7 @@ impl Config {
         // Apply the "custom" layer
         if let Some(custom) = custom {
             self.description.apply_val(custom.description);
-            self.dist_dir.apply_val(custom.dist_dir);
-            self.static_dir.apply_val(custom.static_dir);
+            self.build.apply_val_layer(custom.build);
             self.homepage.apply_opt(custom.homepage);
             self.name.apply_val(custom.name);
             self.readme_path.apply_val(custom.readme_path);
@@ -105,7 +102,6 @@ impl Config {
             self.styles.apply_val_layer(custom.styles);
             self.logo.apply_opt(custom.logo);
             self.favicon.apply_opt(custom.favicon);
-            self.path_prefix.apply_opt(custom.path_prefix);
             self.changelog.apply_val(custom.changelog);
             self.mdbook.apply_bool_layer(custom.mdbook);
             self.funding.apply_bool_layer(custom.funding);
@@ -151,7 +147,7 @@ impl Default for Config {
     fn default() -> Self {
         Config {
             description: String::new(),
-            dist_dir: String::from("public"),
+            build: BuildConfig::default(),
             homepage: None,
             name: String::from("My Axo project"),
             no_header: false,
@@ -166,8 +162,6 @@ impl Default for Config {
             license: None,
             logo: None,
             favicon: None,
-            path_prefix: None,
-            static_dir: String::from("static"),
             // Later stages can disable mdbook support by setting this to None
             mdbook: Some(MdBookConfig::default()),
             changelog: false,

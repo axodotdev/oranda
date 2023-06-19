@@ -44,8 +44,8 @@ impl Layout {
         let favicon = if let Some(favicon) = config.favicon.clone() {
             Some(head::get_favicon(
                 favicon,
-                config.dist_dir.clone(),
-                &config.path_prefix,
+                config.build.dist_dir.clone(),
+                &config.build.path_prefix,
             )?)
         } else {
             None
@@ -53,13 +53,13 @@ impl Layout {
         let footer = footer::create_footer(config);
 
         let additional_css = if !config.styles.additional_css.is_empty() {
-            Some(css::build_additional(&config.path_prefix))
+            Some(css::build_additional(&config.build.path_prefix))
         } else {
             None
         };
         let oranda_css = css::build_oranda(
-            &config.dist_dir,
-            &config.path_prefix,
+            &config.build.dist_dir,
+            &config.build.path_prefix,
             &config.styles.oranda_css_version,
         )?;
         let analytics = Analytics::new(&config.analytics);

@@ -10,6 +10,7 @@ use crate::message::{Message, MessageType};
 
 pub use analytics::AnalyticsConfig;
 pub use artifacts::ArtifactsConfig;
+pub use build::BuildConfig;
 pub use funding::FundingConfig;
 pub use mdbook_config::MdBookConfig;
 pub use social::SocialConfig;
@@ -17,6 +18,7 @@ pub use style::StyleConfig;
 
 pub mod analytics;
 pub mod artifacts;
+mod build;
 mod funding;
 mod mdbook_config;
 mod social;
@@ -25,10 +27,9 @@ mod style;
 #[derive(Debug, Deserialize, JsonSchema)]
 pub struct OrandaConfig {
     pub description: Option<String>,
-    pub dist_dir: Option<String>,
-    pub static_dir: Option<String>,
     pub homepage: Option<String>,
     pub name: Option<String>,
+    pub build: Option<BuildConfig>,
     pub no_header: Option<bool>,
     pub readme_path: Option<String>,
     pub repository: Option<String>,
@@ -38,7 +39,6 @@ pub struct OrandaConfig {
     pub artifacts: Option<ArtifactsConfig>,
     pub logo: Option<String>,
     pub favicon: Option<String>,
-    pub path_prefix: Option<String>,
     pub license: Option<String>,
     /// Config for mdbook
     ///

@@ -10,7 +10,7 @@ use axohtml::elements::{div, header, img, li, nav};
 use axohtml::{html, text};
 
 fn get_logo(logo: String, config: &Config) -> Result<Box<img<String>>> {
-    let fetched_logo = fetch_logo(&config.dist_dir, logo, &config.name);
+    let fetched_logo = fetch_logo(&config.build.dist_dir, logo, &config.name);
 
     tokio::runtime::Handle::current().block_on(fetched_logo)
 }
@@ -124,7 +124,7 @@ pub fn create(config: &Config) -> Result<Box<header<String>>> {
     {
         Some(nav(
             &config.additional_pages,
-            &config.path_prefix,
+            &config.build.path_prefix,
             &config.artifacts,
             &config.mdbook,
             &config.changelog,

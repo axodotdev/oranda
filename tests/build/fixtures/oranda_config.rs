@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use indexmap::IndexMap;
 
 use oranda::config::oranda_config::{
-    artifacts::PackageManagersConfig, AnalyticsConfig, ArtifactsConfig, StyleConfig,
+    artifacts::PackageManagersConfig, AnalyticsConfig, ArtifactsConfig, BuildConfig, StyleConfig,
 };
 use oranda::config::Config;
 use oranda::site::javascript::analytics::Plausible;
@@ -15,7 +15,7 @@ pub fn no_artifacts(temp_dir: String) -> Config {
         "https://raw.githubusercontent.com/axodotdev/oranda/main/README.md".to_string(),
     );
     Config {
-        dist_dir: temp_dir,
+        build: BuildConfig::new(Some(temp_dir), None, None),
         description: String::from("you axolotl questions"),
         readme_path: String::from(
             "https://raw.githubusercontent.com/axodotdev/oranda/main/README.md",
@@ -40,7 +40,7 @@ pub fn pinned_css(temp_dir: String) -> Config {
         "https://raw.githubusercontent.com/axodotdev/oranda/main/README.md".to_string(),
     );
     Config {
-        dist_dir: temp_dir,
+        build: BuildConfig::new(Some(temp_dir), None, None),
         description: String::from("you axolotl questions"),
         readme_path: String::from(
             "https://raw.githubusercontent.com/axodotdev/oranda/main/README.md",
@@ -59,8 +59,7 @@ pub fn pinned_css(temp_dir: String) -> Config {
 
 pub fn path_prefix(temp_dir: String) -> Config {
     Config {
-        dist_dir: temp_dir,
-        path_prefix: Some(String::from("axo")),
+        build: BuildConfig::new(Some(temp_dir), None, Some(String::from("axo"))),
         artifacts: ArtifactsConfig {
             cargo_dist: Some(true),
             package_managers: None,
@@ -95,8 +94,7 @@ fn build_package_managers() -> PackageManagersConfig {
 
 pub fn path_prefix_with_package_managers(temp_dir: String) -> Config {
     Config {
-        dist_dir: temp_dir,
-        path_prefix: Some(String::from("axo")),
+        build: BuildConfig::new(Some(temp_dir), None, Some(String::from("axo"))),
         artifacts: ArtifactsConfig {
             cargo_dist: Some(false),
             package_managers: Some(build_package_managers()),
@@ -115,7 +113,7 @@ pub fn path_prefix_with_package_managers(temp_dir: String) -> Config {
 
 pub fn cargo_dist(temp_dir: String) -> Config {
     Config {
-        dist_dir: temp_dir,
+        build: BuildConfig::new(Some(temp_dir), None, None),
         artifacts: ArtifactsConfig {
             cargo_dist: Some(true),
             package_managers: None,
@@ -127,7 +125,7 @@ pub fn cargo_dist(temp_dir: String) -> Config {
 
 pub fn package_managers(temp_dir: String) -> Config {
     Config {
-        dist_dir: temp_dir,
+        build: BuildConfig::new(Some(temp_dir), None, None),
         artifacts: ArtifactsConfig {
             cargo_dist: Some(false),
             package_managers: Some(build_package_managers()),
@@ -139,7 +137,7 @@ pub fn package_managers(temp_dir: String) -> Config {
 
 pub fn changelog(temp_dir: String) -> Config {
     Config {
-        dist_dir: temp_dir,
+        build: BuildConfig::new(Some(temp_dir), None, None),
         repository: Some(String::from("https://github.com/axodotdev/oranda")),
         changelog: true,
         ..Default::default()
@@ -148,7 +146,7 @@ pub fn changelog(temp_dir: String) -> Config {
 
 pub fn analytics_plausible(temp_dir: String) -> Config {
     Config {
-        dist_dir: temp_dir,
+        build: BuildConfig::new(Some(temp_dir), None, None),
         repository: Some(String::from("https://github.com/axodotdev/oranda")),
         analytics: Some(AnalyticsConfig::Plausible(Plausible {
             domain: "opensource.axo.dev".into(),

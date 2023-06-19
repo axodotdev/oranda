@@ -27,19 +27,20 @@ impl Serve {
         Message::new(MessageType::Info, "Running serve...").print();
         tracing::info!("Running serve...");
         let config = Config::build(&Utf8PathBuf::from("./oranda.json"))?;
-        if Utf8Path::new(&config.dist_dir).is_dir() {
-            let msg = format!("Found build in {} directory...", &config.dist_dir);
+        let dist_dir = &config.build.dist_dir;
+        if Utf8Path::new(dist_dir).is_dir() {
+            let msg = format!("Found build in {} directory...", dist_dir);
             Message::new(MessageType::Info, &msg).print();
-            if let Some(prefix) = config.path_prefix {
+            if let Some(prefix) = config.build.path_prefix {
                 tracing::debug!("`path_prefix` configured: {}", &prefix);
-                self.serve_prefix(&config.dist_dir, &prefix)?;
+                self.serve_prefix(dist_dir, &prefix)?;
             } else {
-                self.serve(&config.dist_dir)?;
+                self.serve(dist_dir)?;
             }
             Ok(())
         } else {
             Err(OrandaError::BuildNotFound {
-                dist_dir: config.dist_dir.to_string(),
+                dist_dir: dist_dir.to_string(),
             })
         }
     }

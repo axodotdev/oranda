@@ -12,7 +12,7 @@ pub fn build(release: DistRelease, config: &Config) -> Result<Box<div<String>>> 
         for artifact_id in app.artifacts.iter() {
             let artifact = &manifest.artifacts[artifact_id];
             if let Some(name) = artifact.name.clone() {
-                let url = cargo_dist::download_link(config, &name, &app.app_version)?;
+                let url = cargo_dist::download_link(&config.repository, &name, &app.app_version)?;
                 let kind = cargo_dist::get_kind_string(&artifact.kind);
                 let targets: &String = &artifact.target_triples.clone().into_iter().collect();
                 table.extend(vec![
