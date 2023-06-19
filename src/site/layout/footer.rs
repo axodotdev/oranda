@@ -23,7 +23,7 @@ pub fn create_footer(config: &Config) -> Box<footer<String>> {
     );
 
     html!(
-        <footer class="footer">
+        <footer>
             {repository}
             <span>{text!(text)}</span>
         </footer>
