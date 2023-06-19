@@ -4,28 +4,26 @@ use serde::Deserialize;
 use crate::config::{ApplyLayer, ApplyOptExt, ApplyValExt};
 
 /// Config related to styling your page
-#[derive(Debug, Deserialize, JsonSchema)]
+#[derive(Debug)]
 pub struct BuildConfig {
-    #[serde(default = "dist_dir_default")]
     pub dist_dir: String,
-    #[serde(default = "static_dir_default")]
     pub static_dir: String,
     pub path_prefix: Option<String>,
 }
 
-fn dist_dir_default() -> String {
-    "dist".to_string()
-}
-
-fn static_dir_default() -> String {
-    "static".to_string()
+/// User facing options related to styling your page
+#[derive(Debug, Deserialize, JsonSchema)]
+pub struct BuildOpts {
+    pub dist_dir: Option<String>,
+    pub static_dir: Option<String>,
+    pub path_prefix: Option<String>,
 }
 
 impl Default for BuildConfig {
     fn default() -> Self {
         Self {
-            dist_dir: dist_dir_default(),
-            static_dir: static_dir_default(),
+            dist_dir: "dist".to_string(),
+            static_dir: "static".to_string(),
             path_prefix: None,
         }
     }
