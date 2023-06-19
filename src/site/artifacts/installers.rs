@@ -195,8 +195,12 @@ pub fn run_html(
     };
     let source_file = if let Some(file) = file {
         let file = release.artifacts.file(file);
-        let html: Box<a<String>> =
-            html!(<a class="button primary" href=&file.download_url>{text!("Source")}</a>);
+        let url = if let Some(view_path) = &file.view_path {
+            link::generate(&config.path_prefix, view_path)
+        } else {
+            file.download_url.clone()
+        };
+        let html: Box<a<String>> = html!(<a class="button primary" href=&url>{text!("Source")}</a>);
         html.to_string()
     } else {
         String::new()

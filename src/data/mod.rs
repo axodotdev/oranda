@@ -40,6 +40,12 @@ impl Context {
         self.latest_release.and_then(|idx| self.releases.get(idx))
     }
 
+    /// Mutably get the latest release, if it exists
+    pub fn latest_mut(&mut self) -> Option<&mut Release> {
+        self.latest_release
+            .and_then(|idx| self.releases.get_mut(idx))
+    }
+
     /// Fetch and process all the Github Releases
     ///
     /// Returned values are:

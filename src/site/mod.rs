@@ -47,9 +47,10 @@ impl Site {
         if Self::needs_context(config) {
             match &config.repository {
                 Some(repo_url) => {
-                    let context = Context::new(repo_url, &config.artifacts)?;
+                    let mut context = Context::new(repo_url, &config.artifacts)?;
                     // FIXME: change the config so that you can set `artifacts: false` and disable this?
                     if context.latest().is_some() {
+                        context.latest_mut().unwrap().artifacts.make_scripts_viewable(config)?;
                         index = Some(Page::index_with_artifacts(&context, &layout_template, config)?);
                         let body = artifacts::page(&context, config)?;
                         let artifacts_page = Page::new_from_contents(
