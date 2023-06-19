@@ -36,7 +36,7 @@ pub struct OrandaConfig {
     pub analytics: Option<AnalyticsConfig>,
     pub additional_pages: Option<HashMap<String, String>>,
     pub social: Option<SocialConfig>,
-    pub artifacts: Option<ArtifactsConfig>,
+    pub artifacts: Option<ArtifactsOpts>,
     pub logo: Option<String>,
     pub favicon: Option<String>,
     pub license: Option<String>,

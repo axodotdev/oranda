@@ -26,7 +26,7 @@ pub fn page(context: &Context, config: &Config) -> Result<String> {
     let release = &context.latest_dist_release;
 
     let (installer_list, artifact_table) =
-        if let Some(release) = has_valid_setup(artifacts.cargo_dist(), release) {
+        if let Some(release) = has_valid_setup(artifacts.cargo_dist, release) {
             (
                 Some(installers::build_list(&release, config)?),
                 Some(table::build(release, config)?),
@@ -68,7 +68,7 @@ pub fn page(context: &Context, config: &Config) -> Result<String> {
 
 pub fn header(context: &Context, config: &Config) -> Result<String> {
     let artifacts = &config.artifacts;
-    if artifacts.cargo_dist() {
+    if artifacts.cargo_dist {
         if let Some(release) = &context.latest_dist_release {
             return Ok(installers::build_header(release, config)?.to_string());
         }

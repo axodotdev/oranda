@@ -34,18 +34,23 @@ enum ArtifactSystem {
     Freebsd,
 }
 
-#[derive(Debug, Default, Deserialize, JsonSchema)]
-pub struct ArtifactsConfig {
+#[derive(Debug, Deserialize, JsonSchema)]
+pub struct ArtifactsOpts {
     #[serde(default)]
     pub cargo_dist: Option<bool>,
     #[serde(default)]
     pub package_managers: Option<PackageManagersConfig>,
 }
 
+#[derive(Debug, Default)]
+pub struct ArtifactsConfig {
+    pub cargo_dist: bool,
+    pub package_managers: Option<PackageManagersConfig>,
+}
+
 impl ApplyLayer for ArtifactsConfig {
     fn apply_layer(&mut self, layer: Self) {
         self.cargo_dist.apply_opt(layer.cargo_dist);
-        // FIXME: should this get merged with e.g. `extend?`
         self.package_managers.apply_opt(layer.package_managers);
     }
 }
@@ -53,9 +58,5 @@ impl ApplyLayer for ArtifactsConfig {
 impl ArtifactsConfig {
     pub fn has_some(&self) -> bool {
         self.cargo_dist() || self.package_managers.is_some()
-    }
-
-    pub fn cargo_dist(&self) -> bool {
-        self.cargo_dist.unwrap_or(false)
     }
 }

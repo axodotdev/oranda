@@ -21,7 +21,7 @@ pub struct Config {
     pub no_header: bool,
     pub readme_path: String,
     pub repository: Option<String>,
-    pub analytics: Option<AnalyticsConfig>,
+    pub analytics: AnalyticsConfig,
     pub additional_pages: Option<HashMap<String, String>>,
     pub social: Option<SocialConfig>,
     pub artifacts: ArtifactsConfig,
@@ -95,7 +95,6 @@ impl Config {
             self.readme_path.apply_val(custom.readme_path);
             self.repository.apply_opt(custom.repository);
             self.analytics.apply_layer(custom.analytics);
-            // FIXME: should this get merged with e.g. `extend?`
             self.additional_pages.apply_opt(custom.additional_pages);
             self.social.apply_layer(custom.social);
             self.artifacts.apply_val_layer(custom.artifacts);
