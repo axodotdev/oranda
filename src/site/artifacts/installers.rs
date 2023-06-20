@@ -195,7 +195,7 @@ pub fn run_html(
 ) -> Box<div<String>> {
     let code = {
         let highlighted_code =
-            markdown::syntax_highlight(Some("sh"), run_hint, &config.styles.syntax_theme());
+            markdown::syntax_highlight(Some("sh"), run_hint, &config.styles.syntax_theme);
         match highlighted_code {
             Ok(code) => code,
             Err(_) => format!("<code class='inline-code'>{}</code>", run_hint),

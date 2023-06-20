@@ -28,7 +28,7 @@ impl Layout {
     }
 
     pub fn new(config: &Config) -> Result<Self> {
-        let theme = OrandaTheme::css_class(&config.styles.theme());
+        let theme = OrandaTheme::css_class(&config.styles.theme);
         let name = &config.name;
         let header = match config.no_header {
             true => None,
@@ -60,7 +60,7 @@ impl Layout {
         let oranda_css = css::build_oranda(
             &config.dist_dir,
             &config.path_prefix,
-            &config.styles.oranda_css_version,
+            &config.styles.oranda_css_tag,
         )?;
         let analytics = Analytics::new(&config.analytics);
         let template_html: String = html!(

@@ -163,8 +163,8 @@ impl Site {
             mdbook::build_mdbook(
                 &dist,
                 book_cfg,
-                &config.styles.theme(),
-                &config.styles.syntax_theme(),
+                &config.styles.theme,
+                &config.styles.syntax_theme,
             )?;
         }
         if Path::new(&config.static_dir).exists() {

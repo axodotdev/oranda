@@ -13,7 +13,7 @@ pub use artifacts::ArtifactsConfig;
 pub use funding::FundingConfig;
 pub use mdbook_config::MdBookConfig;
 pub use social::SocialConfig;
-pub use style::StyleConfig;
+pub use style::{StyleConfig, StyleOpts};
 
 pub mod analytics;
 pub mod artifacts;
@@ -48,7 +48,7 @@ pub struct OrandaConfig {
     #[serde(alias = "md_book")]
     pub mdbook: Option<BoolOr<MdBookConfig>>,
     pub changelog: Option<bool>,
-    pub styles: Option<StyleConfig>,
+    pub styles: Option<StyleOpts>,
     pub funding: Option<BoolOr<FundingConfig>>,
 }
 
