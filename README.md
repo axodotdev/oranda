@@ -8,7 +8,7 @@
 
 [![crates.io](https://img.shields.io/crates/v/oranda.svg)](https://crates.io/crates/oranda)
 [![CI](https://github.com/axodotdev/oranda/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/axodotdev/oranda/actions/workflows/ci.yml)
-[![release](https://github.com/axodotdev/oranda/actions/workflows/release.yml/badge.svg?branch=main)](https://github.com/axodotdev/oranda/actions/workflows/release.yml)
+[![release](https://github.com/axodotdev/oranda/actions/workflows/release.yml/badge.svg)](https://github.com/axodotdev/oranda/actions/workflows/release.yml)
 [![web](https://github.com/axodotdev/oranda/actions/workflows/web.yml/badge.svg?branch=main)](https://github.com/axodotdev/oranda/actions/workflows/web.yml)
 
 `oranda` is an opinionated static-site generator that is designed for developers
@@ -27,6 +27,8 @@ To install `oranda`, please visit the [`oranda` website][website]- which is gene
 [website]: https://axodotdev.github.io/oranda
 
 </div>
+
+![](https://http.cat/101)
 
 ## Quickstart
 
