@@ -10,13 +10,12 @@
   "artifacts": {
     "package_managers": {
       "preferred": {
-        "crates.io": "cargo install oranda --locked --profile=dist",
-        "npm": "npm install @axodotdev/oranda --save-dev",
-        "binstall": "cargo binstall oranda"
+        "cargo": "cargo install oranda --locked --profile=dist",
+        "npm": "npm install @axodotdev/oranda --save-dev"
       },
       "additional": {
+        "binstall": "cargo binstall oranda",
         "npx": "npx @axodotdev/oranda",
-        "crates.io": "cargo install oranda --locked --profile=dist",
         "nix-env": "nix-env -i oranda",
         "nix flake": "nix profile install github:axodotdev/oranda"
       }
