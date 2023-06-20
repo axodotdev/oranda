@@ -9,13 +9,21 @@
   },
   "artifacts": {
     "package_managers": {
-      "npm": "npm install @axodotdev/oranda --save-dev",
-      "npx": "npx @axodotdev/oranda",
-      "crates.io": "cargo install oranda --locked --profile=dist",
-      "binstall": "cargo binstall oranda",
-      "nix-env": "nix-env -i oranda",
-      "nix flake": "nix profile install github:axodotdev/oranda"
+      "preferred": {
+        "crates.io": "cargo install oranda --locked --profile=dist",
+        "npm": "npm install @axodotdev/oranda --save-dev",
+        "binstall": "cargo binstall oranda"
+      },
+      "additional": {
+        "npx": "npx @axodotdev/oranda",
+        "crates.io": "cargo install oranda --locked --profile=dist",
+        "nix-env": "nix-env -i oranda",
+        "nix flake": "nix profile install github:axodotdev/oranda"
+      }
     }
+  },
+  "styles": {
+    "theme": "axodark"
   },
   "analytics": {
     "plausible": {
