@@ -1,0 +1,33 @@
+name: Project Gallery
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  
+jobs:
+  web:
+    name: project-gallery
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: swatinem/rust-cache@v2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install wrangler
+        run: npm install -g wrangler
+
+      - name: Install oranda
+        run: |
+          curl --proto '=https' --tlsv1.2 -LsSf https://github.com/axodotdev/oranda/releases/download/v0.1.0-prerelease.7/oranda-installer.sh | sh
+
+      - name: Build and deploy cargo-new example
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+            cd project-gallery/cargo-new && oranda build
+            wrangler pages deploy public --project-name cargo-new
