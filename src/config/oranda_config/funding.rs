@@ -26,8 +26,8 @@ impl FundingConfig {
     // see if we can find a FUNDING.yml, if so update the config path
 
     /// If we have a FUNDING.yml file, try to find it. If we fail, we disable funding support.
-    pub fn find_paths(real_this: &mut Option<Self>) -> Result<()> {
-        let Some(this) = real_this else {
+    pub fn find_paths(config: &mut Option<Self>) -> Result<()> {
+        let Some(this) = config else {
             return Ok(())
         };
 
@@ -46,17 +46,17 @@ impl FundingConfig {
             }
         }
 
-        let missing_important_things = this.yml_path.is_none() && this.md_path.is_none();
-        let customized_other_things = this.preferred_funding.is_some();
-        if missing_important_things {
+        let cant_find_files = this.yml_path.is_none() && this.md_path.is_none();
+        let has_user_config = this.preferred_funding.is_some();
+        if cant_find_files {
             // The config is unusable.
             //
             // * If the user customized stuff, error out because they clearly wanted this to work
             // * Otherwise, just disable the feature
-            if customized_other_things {
+            if has_user_config {
                 return Err(OrandaError::FundingConfigInvalid);
             } else {
-                *real_this = None;
+                *config = None;
             }
         }
         Ok(())
