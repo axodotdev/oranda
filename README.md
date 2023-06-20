@@ -28,8 +28,6 @@ To install `oranda`, please visit the [`oranda` website][website]- which is gene
 
 </div>
 
-![](https://http.cat/101)
-
 ## Quickstart
 
 ```sh
