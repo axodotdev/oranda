@@ -159,6 +159,12 @@ pub enum OrandaError {
     #[diagnostic(help = "You can manually specify md_path or yml_path in your funding config")]
     FundingConfigInvalid,
 
+    #[error("Couldn't find your mdbook configuration")]
+    #[diagnostic(
+        help = "You can manually specify the path to your `book.toml` in your documenation config"
+    )]
+    MdBookConfigInvalid,
+
     #[error("Error while parsing FUNDING.yml")]
     #[diagnostic(
         help = "Make sure your FUNDING.yml conforms to GitHub's format!",

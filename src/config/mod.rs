@@ -7,8 +7,8 @@ pub mod project;
 
 use crate::errors::*;
 pub use oranda_config::{
-    AnalyticsConfig, ArtifactsConfig, BoolOr, FundingConfig, MdBookConfig, OrandaConfig,
-    SocialConfig, StyleConfig,
+    AnalyticsConfig, ArtifactsConfig, BoolOr, FundingConfig, MdBookConfig, MdBookOpts,
+    OrandaConfig, SocialConfig, StyleConfig,
 };
 use project::ProjectConfig;
 
@@ -65,8 +65,8 @@ impl Config {
 
         cfg.apply_project_layer(project);
         cfg.apply_custom_layer(custom);
-        cfg.find_mdbook();
         FundingConfig::find_paths(&mut cfg.funding)?;
+        MdBookOpts::find(&mut cfg.mdbook)?;
 
         Ok(cfg)
     }
@@ -109,28 +109,6 @@ impl Config {
             self.changelog.apply_val(custom.changelog);
             self.mdbook.apply_bool_layer(custom.mdbook);
             self.funding.apply_bool_layer(custom.funding);
-        }
-    }
-
-    /// If mdbook is enabled but the path isn't set, we try to find it
-    ///
-    /// If we fail, we set mdbook to None to disable it.
-    fn find_mdbook(&mut self) {
-        if let Some(mdbook_cfg) = &mut self.mdbook {
-            if mdbook_cfg.path.is_none() {
-                // Ok time to auto-detect, try these dirs for a book.toml
-                let possible_paths = vec!["./", "./book/", "./docs/"];
-                for book_dir in possible_paths {
-                    let book_path = Utf8PathBuf::from(book_dir).join("book.toml");
-                    if book_path.exists() {
-                        // nice, use it
-                        mdbook_cfg.path = Some(book_dir.to_owned());
-                        return;
-                    }
-                }
-                // We found nothing, disable mdbook
-                self.mdbook = None;
-            }
         }
     }
 }

@@ -11,7 +11,7 @@ use crate::message::{Message, MessageType};
 pub use analytics::AnalyticsConfig;
 pub use artifacts::ArtifactsConfig;
 pub use funding::FundingConfig;
-pub use mdbook_config::MdBookConfig;
+pub use mdbook_config::{MdBookConfig, MdBookOpts};
 pub use social::SocialConfig;
 pub use style::{StyleConfig, StyleOpts};
 
@@ -46,7 +46,7 @@ pub struct OrandaConfig {
     /// an easy way to force-disable any errant autodetection.
     /// Setting it to `true` is allowed but equivalent to `None`.
     #[serde(alias = "md_book")]
-    pub mdbook: Option<BoolOr<MdBookConfig>>,
+    pub mdbook: Option<BoolOr<MdBookOpts>>,
     pub changelog: Option<bool>,
     pub styles: Option<StyleOpts>,
     pub funding: Option<BoolOr<FundingConfig>>,
