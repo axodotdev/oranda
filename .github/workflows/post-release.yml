@@ -14,7 +14,7 @@ on:
 
 # Alright, let's do it!
 jobs:
-  web:
+  schema:
     name: Add schema to release
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -32,3 +32,25 @@ jobs:
           curl --proto '=https' --tlsv1.2 -LsSf https://github.com/axodotdev/oranda/releases/download/${{ github.event.workflow_run.head_branch }}/oranda-installer.sh | sh
           oranda config-schema > oranda-config-schema.json 
           gh release upload ${{ github.event.workflow_run.head_branch }} oranda-config-schema.json
+  
+  css:
+    name: Add css to release
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - id: build-css
+        run: |
+          cd oranda-css
+          yarn install
+          # Run tailwind build
+          yarn run build
+          ls dist
+          echo "built css!"
+          # Upload css to the Github Release™
+          gh release upload ${{ github.event.workflow_run.head_branch }} dist/oranda.css
+          echo "uploaded css!"

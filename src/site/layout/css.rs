@@ -9,7 +9,7 @@ use axohtml::html;
 use camino::Utf8Path;
 use minifier::css;
 
-pub const LATEST_ORANDA_CSS: &str = "0.0.6";
+pub const ORANDA_CSS: &str = include_str!("../../../oranda-css/dist/oranda.css");
 
 fn concat_minify(css_files: &[String]) -> Result<String> {
     let mut css = String::new();
@@ -32,39 +32,40 @@ pub fn build_oranda(
     oranda_css_version: &Option<String>,
 ) -> Result<Box<link<String>>> {
     let dist_dir = dist_dir;
-    let version = match oranda_css_version {
-        Some(version) => version,
-        None => LATEST_ORANDA_CSS,
-    };
-    let filename = fetch_css(dist_dir, version)?;
+    let filename = fetch_css(dist_dir, oranda_css_version.as_deref())?;
     let abs_path = crate::site::link::generate(path_prefix, &filename);
     Ok(html!(<link rel="stylesheet" href=abs_path></link>))
 }
 
-fn fetch_css(dist_dir: &str, version: &str) -> Result<String> {
+fn fetch_css(dist_dir: &str, version: Option<&str>) -> Result<String> {
+    let filename;
     match env::var("ORANDA_CSS") {
         Ok(path) => {
-            let filename = "oranda.css".to_string();
+            filename = "oranda.css".to_string();
             let msg = format!("Overriding oranda_css path with {}", &path);
             Message::new(MessageType::Warning, &msg).print();
             LocalAsset::copy(&path, dist_dir)?;
-            Ok(filename)
         }
         Err(_) => {
-            let filename = format!("oranda-v{version}.css");
-            let dest_path = Utf8Path::new(dist_dir).join(&filename);
-            let oranda_css_response =
-                tokio::runtime::Handle::current().block_on(fetch_oranda(version))?;
-            axoasset::LocalAsset::write_new(&oranda_css_response, dest_path)?;
-            Ok(filename)
+            if let Some(version) = version {
+                filename = format!("oranda-{version}.css");
+                let dest_path = Utf8Path::new(dist_dir).join(&filename);
+                let oranda_css_response =
+                    tokio::runtime::Handle::current().block_on(fetch_oranda(version))?;
+                axoasset::LocalAsset::write_new(&oranda_css_response, dest_path)?;
+            } else {
+                filename = "oranda.css".to_string();
+                let dest_path = Utf8Path::new(dist_dir).join(&filename);
+                axoasset::LocalAsset::write_new(ORANDA_CSS, dest_path)?;
+            }
         }
     }
+    Ok(filename)
 }
 
 async fn fetch_oranda(version: &str) -> Result<String> {
-    let tag = format!("css-v{version}");
     let oranda_css_request =
-        octolotl::request::ReleaseAsset::new("axodotdev", "oranda", &tag, "oranda.css");
+        octolotl::request::ReleaseAsset::new("axodotdev", "oranda", version, "oranda.css");
     Ok(octolotl::Request::send(&oranda_css_request, true)
         .await?
         .text()

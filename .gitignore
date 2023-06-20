@@ -6,7 +6,6 @@ oranda-debug.log
 .idea/
 
 # oranda-css
-oranda-css/dist
 oranda-css/.yarn
 # weirdo yarn feature that dumps files everywhere
 oranda-css/.pnp*
