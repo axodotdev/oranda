@@ -9,6 +9,7 @@
     - [build](./cli/build.md)
     - [serve](./cli/serve.md)
     - [dev](./cli/dev.md)
+- [Tips and Tricks](./tips.md)
 - [Configuration](./configuration.md)
     - [Artifacts & `cargo-dist`](./configuration/artifacts.md)
     - [Additional Pages](./configuration/additional-pages.md)
