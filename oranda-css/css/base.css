@@ -171,7 +171,15 @@ hr {
 }
 
 img {
-  @apply m-auto;
+  @apply inline;
+}
+
+/*
+  In Markdown, you'll want standalone images to live in their own paragraph - which is why we can target only these
+  standalone images and center them probably.
+ */
+p > img:only-child {
+  @apply block m-auto;
 }
 
 blockquote {
