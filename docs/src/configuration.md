@@ -3,27 +3,26 @@
 - [Configuration](#configuration)
   - [Manifest file: `oranda.json`](#manifest-file-orandajson)
   - [Configuration options](#configuration-options)
-    - [name](#name)
-    - [description](#description)
-    - [dist\_dir](#dist_dir)
-    - [homepage](#homepage)
-    - [static\_dir](#static_dir)
-    - [no\_header](#no_header)
-    - [readme\_path](#readme_path)
-    - [repository](#repository)
-    - [analytics](#analytics)
-    - [additional\_pages](#additional_pages)
-    - [social](#social)
-    - [artifacts](#artifacts)
-    - [version](#version)
-    - [logo](#logo)
-    - [favicon](#favicon)
-    - [path\_prefix](#path_prefix)
-    - [license](#license)
-    - [mdbook or md\_book](#mdbook-or-md_book)
-    - [changelog](#changelog)
-    - [styles](#styles)
-    - [funding](#funding)
+    - [name](#name) - the name of your application
+    - [description](#description) - the description of your application
+    - [dist\_dir](#dist_dir) - what directory to put built files into
+    - [homepage](#homepage) - your project's homepage
+    - [static\_dir](#static_dir) - what directory should be used as base for any static assets
+    - [no\_header](#no_header) - don't render the site headers
+    - [readme\_path](#readme_path) - custom path to your project's readme file
+    - [repository](#repository) - your project's source repository
+    - [analytics](#analytics) - automatically insert analytics snippets for several providers
+    - [additional\_pages](#additional_pages) - render additional markdown pages
+    - [social](#social) - configuration for SEO/social network meta tags
+    - [artifacts](#artifacts) - configuration for displaying downloadable artifacts/installers
+    - [logo](#logo) - custom site logo
+    - [favicon](#favicon) - custom site favicon
+    - [path\_prefix](#path_prefix) - if serving the site on a web server subfolder, use this path prefix
+    - [license](#license) - your project's license
+    - [mdbook or md\_book](#mdbook-or-md_book) - let us render a mdbook site for you
+    - [changelog](#changelog) - configuration to extract your changelog from github
+    - [styles](#styles) - theme settings and additional css
+    - [funding](#funding) - configuration for rendering a site related to project funding methods
 
 
 `oranda` is designed to work with no configuration- for projects with a
@@ -134,12 +133,6 @@ An object of additional Markdown pages that you'd like to be included. All of th
 
 Configuration for enabling downloadable artifacts, as well as the `cargo-dist`integration.
 [More information](./configuration/artifacts.md)
-
-### version
-
-> **Note:** This option might change or get removed in the future.
-
-Not currently used.
 
 ### logo
 
