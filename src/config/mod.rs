@@ -66,6 +66,7 @@ impl Config {
         cfg.apply_project_layer(project);
         cfg.apply_custom_layer(custom);
         cfg.find_mdbook();
+        FundingConfig::find_paths(&mut cfg.funding)?;
 
         Ok(cfg)
     }

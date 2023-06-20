@@ -42,25 +42,30 @@ pub enum FundingContent {
 impl Funding {
     /// Creates a new Funding struct by attempting to read from the FUNDING.yml, and the docs file.
     pub fn new(funding_cfg: &FundingConfig, style_cfg: &StyleConfig) -> Result<Self> {
-        let path_to_funding = funding_cfg.path.as_ref().expect("if not specified or autodetected, this feature should have been disabled, this is a bug");
-        let mut funding = match LocalAsset::load_string(path_to_funding) {
-            Ok(res) => {
-                let parsed_response = parse_response(res)?;
-                Self {
-                    content: parsed_response,
-                    docs_content: None,
+        let mut funding = if let Some(yml_path) = &funding_cfg.yml_path {
+            match LocalAsset::load_string(yml_path) {
+                Ok(res) => {
+                    let parsed_response = parse_response(res)?;
+                    Self {
+                        content: parsed_response,
+                        docs_content: None,
+                    }
+                }
+                Err(e) => {
+                    let warning = OrandaError::FundingLoadFailed {
+                        path: yml_path.into(),
+                        details: e,
+                    };
+                    eprintln!("{:?}", miette::Report::new(warning));
+                    Self::default()
                 }
             }
-            Err(e) => {
-                let warning = OrandaError::FundingLoadFailed {
-                    path: path_to_funding.into(),
-                    details: e,
-                };
-                eprintln!("{:?}", miette::Report::new(warning));
-                Self::default()
-            }
+        } else {
+            Self::default()
         };
-        if let Ok(res) = LocalAsset::load_string("funding.md") {
+
+        if let Some(md_path) = &funding_cfg.md_path {
+            let res = LocalAsset::load_string(md_path)?;
             let html = to_html(&res, &style_cfg.syntax_theme())?;
             funding.docs_content = Some(html);
         }

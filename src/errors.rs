@@ -155,6 +155,10 @@ pub enum OrandaError {
         details: reqwest::Error,
     },
 
+    #[error("Couldn't find your FUNDING.yml or funding.md")]
+    #[diagnostic(help = "You can manually specify md_path or yml_path in your funding config")]
+    FundingConfigInvalid,
+
     #[error("Error while parsing FUNDING.yml")]
     #[diagnostic(
         help = "Make sure your FUNDING.yml conforms to GitHub's format!",
