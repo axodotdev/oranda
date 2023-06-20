@@ -122,6 +122,13 @@ pub enum OrandaError {
         #[diagnostic_source]
         cause: axoproject::errors::AxoprojectError,
     },
+    #[error("Failed to loading funding details at {path}")]
+    #[diagnostic(severity = "warn")]
+    FundingLoadFailed {
+        path: Utf8PathBuf,
+        #[diagnostic_source]
+        details: axoasset::AxoassetError,
+    },
     /// This error indicates we tried to deserialize some TOML with toml_edit
     /// but failed.
     #[error("Failed to edit toml document")]
@@ -147,6 +154,10 @@ pub enum OrandaError {
         #[source]
         details: reqwest::Error,
     },
+
+    #[error("Couldn't find your FUNDING.yml or funding.md")]
+    #[diagnostic(help = "You can manually specify md_path or yml_path in your funding config")]
+    FundingConfigInvalid,
 
     #[error("Error while parsing FUNDING.yml")]
     #[diagnostic(

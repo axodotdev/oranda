@@ -65,8 +65,8 @@ impl Site {
                         let mut changelog_pages = Self::build_changelog_pages(&context, &layout_template, config)?;
                         pages.append(&mut changelog_pages);
                     }
-                    if config.funding.is_some() {
-                        let funding = Funding::new(config)?;
+                    if let Some(funding_cfg) = &config.funding {
+                        let funding = Funding::new(funding_cfg, &config.styles)?;
                         let body = funding::page(config, &funding)?;
                         let page = Page::new_from_contents(
                             body,

@@ -1,4 +1,4 @@
-use crate::config::Config;
+use crate::config::{FundingConfig, StyleConfig};
 use crate::errors::{OrandaError, Result};
 use crate::site::markdown::to_html;
 use axoasset::LocalAsset;
@@ -41,19 +41,32 @@ pub enum FundingContent {
 
 impl Funding {
     /// Creates a new Funding struct by attempting to read from the FUNDING.yml, and the docs file.
-    pub fn new(config: &Config) -> Result<Self> {
-        let mut funding = match LocalAsset::load_string(".github/FUNDING.yml") {
-            Ok(res) => {
-                let parsed_response = parse_response(res)?;
-                Self {
-                    content: parsed_response,
-                    docs_content: None,
+    pub fn new(funding_cfg: &FundingConfig, style_cfg: &StyleConfig) -> Result<Self> {
+        let mut funding = if let Some(yml_path) = &funding_cfg.yml_path {
+            match LocalAsset::load_string(yml_path) {
+                Ok(res) => {
+                    let parsed_response = parse_response(res)?;
+                    Self {
+                        content: parsed_response,
+                        docs_content: None,
+                    }
+                }
+                Err(e) => {
+                    let warning = OrandaError::FundingLoadFailed {
+                        path: yml_path.into(),
+                        details: e,
+                    };
+                    eprintln!("{:?}", miette::Report::new(warning));
+                    Self::default()
                 }
             }
-            Err(_) => Self::default(),
+        } else {
+            Self::default()
         };
-        if let Ok(res) = LocalAsset::load_string("funding.md") {
-            let html = to_html(&res, &config.styles.syntax_theme())?;
+
+        if let Some(md_path) = &funding_cfg.md_path {
+            let res = LocalAsset::load_string(md_path)?;
+            let html = to_html(&res, &style_cfg.syntax_theme())?;
             funding.docs_content = Some(html);
         }
 
