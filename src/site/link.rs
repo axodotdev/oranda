@@ -20,5 +20,11 @@ pub fn generate(path_prefix: &Option<String>, file_name: &str) -> String {
             part.as_str().as_bytes(),
         ));
     }
+
+    // re-add a trailing slash if original input had it
+    if file_name.ends_with('/') {
+        output.push('/');
+    }
+
     output
 }
