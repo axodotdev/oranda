@@ -48,39 +48,37 @@ impl Site {
         let mut index = None;
 
         if Self::needs_context(config) {
-            match &config.project.repository {
-                Some(repo_url) => {
-                    let mut context = Context::new(repo_url, &config.components.artifacts)?;
-                    // FIXME: change the config so that you can set `artifacts: false` and disable this?
-                    if context.latest().is_some() {
-                        context.latest_mut().unwrap().artifacts.make_scripts_viewable(config)?;
-                        index = Some(Page::index_with_artifacts(&context, &layout_template, config)?);
-                        let body = artifacts::page(&context, config)?;
-                        let artifacts_page = Page::new_from_contents(
-                            body,
-                            "artifacts.html",
-                            &layout_template,
-                            config,
-                        );
-                        pages.push(artifacts_page);
-                    }
-                    if config.components.changelog {
-                        let mut changelog_pages = Self::build_changelog_pages(&context, &layout_template, config)?;
-                        pages.append(&mut changelog_pages);
-                    }
-                    if let Some(funding_cfg) = &config.components.funding {
-                        let funding = Funding::new(funding_cfg, &config.styles)?;
-                        let body = funding::page(config, &funding)?;
-                        let page = Page::new_from_contents(
-                            body,
-                            "funding.html",
-                            &layout_template,
-                            config,
-                        );
-                        pages.push(page);
-                    }
-                },
-                None => Err(OrandaError::Other("You have indicated you want to use features that require a repository context. Please add a \"repository\" key and value to your project (such as a package.json or Cargo.toml) or oranda config (oranda.json).".to_string()))?
+            let mut context = match &config.project.repository {
+                Some(repo_url) => Context::new_github(repo_url, config)?,
+                None => Context::new_current(config)?,
+            };
+            // FIXME: change the config so that you can set `artifacts: false` and disable this?
+            if context.latest().is_some() {
+                context
+                    .latest_mut()
+                    .unwrap()
+                    .artifacts
+                    .make_scripts_viewable(config)?;
+                index = Some(Page::index_with_artifacts(
+                    &context,
+                    &layout_template,
+                    config,
+                )?);
+                let body = artifacts::page(&context, config)?;
+                let artifacts_page =
+                    Page::new_from_contents(body, "artifacts.html", &layout_template, config);
+                pages.push(artifacts_page);
+            }
+            if config.components.changelog {
+                let mut changelog_pages =
+                    Self::build_changelog_pages(&context, &layout_template, config)?;
+                pages.append(&mut changelog_pages);
+            }
+            if let Some(funding_cfg) = &config.components.funding {
+                let funding = Funding::new(funding_cfg, &config.styles)?;
+                let body = funding::page(config, &funding)?;
+                let page = Page::new_from_contents(body, "funding.html", &layout_template, config);
+                pages.push(page);
             }
         }
 

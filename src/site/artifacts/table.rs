@@ -36,7 +36,7 @@ pub fn build(release: &Release, _config: &Config) -> Result<Box<div<String>>> {
     files.sort_by_key(|(_, (f, _))| &f.name);
 
     if files.is_empty() {
-        return Ok(html!(<div>{text!("No Additional Downloads")}</div>));
+        return Ok(html!(<div><h3>{text!("No Downloads")}</h3></div>));
     }
 
     // If any files have checksums, add a column for that

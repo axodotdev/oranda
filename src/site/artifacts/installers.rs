@@ -2,7 +2,6 @@
 
 use axohtml::elements::{a, div, li, select};
 use axohtml::{html, text, unsafe_text};
-use chrono::DateTime;
 use std::collections::HashMap;
 
 use crate::config::Config;
@@ -16,26 +15,24 @@ type Platforms = HashMap<TargetTriple, Vec<InstallerIdx>>;
 
 pub fn build_header(release: &Release, config: &Config) -> Result<Box<div<String>>> {
     let downloads_href = link::generate(&config.build.path_prefix, "artifacts/");
-    let tag = &release.source.tag_name;
+    let tag = release.source.version_tag();
     let platforms_we_want = filter_platforms(release);
     if platforms_we_want.is_empty() {
         return Ok(html!(<div></div>));
     }
     let one_platform = platforms_we_want.len() == 1;
 
-    let formatted_date = match DateTime::parse_from_rfc3339(&release.source.published_at) {
-        Ok(date) => date.format("%b %e %Y at %R UTC").to_string(),
-        Err(_) => release.source.published_at.to_owned(),
-    };
+    let date_html = release.source.formatted_date().map(|date| {
+        html!(<div><small class="published-date">{text!("Published on {}", date)}</small></div>)
+    });
 
     let arches = build_arches(&platforms_we_want, release, config);
     let selector = selector_html(&platforms_we_want);
 
-    let html = html!(
+    let main_html = html!(
         <div class="artifact-header target">
-            <h4>{text!("Install {}", release.source.tag_name)}</h4>
-            <div><small class="published-date">{text!("Published on {}", formatted_date)}</small></div>
-
+            <h4>{text!("Install {}", tag)}</h4>
+            {date_html}
             <ul class="arches">
                 {arches}
             </ul>
@@ -79,7 +76,7 @@ pub fn build_header(release: &Release, config: &Config) -> Result<Box<div<String
     };
     Ok(html!(
     <div class="artifacts" data-tag=tag>
-        {html}
+        {main_html}
         {no_autodetect}
         {selector}
         {noscript}

@@ -1,5 +1,6 @@
-use crate::config::ArtifactsConfig;
+use crate::config::{ArtifactsConfig, Config};
 use crate::data::github::{GithubRelease, GithubRepo};
+use crate::data::release::CurrentStateRelease;
 use crate::errors::*;
 use crate::message::{Message, MessageType};
 
@@ -11,9 +12,12 @@ mod release;
 
 pub use release::Release;
 
+use self::release::ReleaseSource;
+
+#[derive(Debug)]
 pub struct Context {
     /// Info from Github
-    pub repo: GithubRepo,
+    pub repo: Option<GithubRepo>,
     /// All of the releases, currently from newest to oldest
     pub releases: Vec<Release>,
     /// Whether any of the 'releases` are prereleases
@@ -30,9 +34,29 @@ pub struct Context {
 }
 
 impl Context {
-    pub fn new(repo_url: &str, artifacts_config: &ArtifactsConfig) -> Result<Self> {
+    /// Make a Context with a faux-release for the current project state
+    pub fn new_current(config: &Config) -> Result<Self> {
+        let releases =
+            tokio::runtime::Handle::current().block_on(Self::make_current_release(None, config))?;
+        Ok(Self::with_releases(
+            None,
+            releases,
+            &config.components.artifacts,
+        ))
+    }
+    /// Get releases using github
+    pub fn new_github(repo_url: &str, config: &Config) -> Result<Self> {
         let repo = GithubRepo::from_url(repo_url)?;
-        Self::fetch_all_releases(repo, artifacts_config)
+        let mut releases = Self::fetch_all_releases(&repo, &config.components.artifacts)?;
+        if releases.is_empty() {
+            releases = tokio::runtime::Handle::current()
+                .block_on(Self::make_current_release(Some(&repo), config))?;
+        }
+        Ok(Self::with_releases(
+            Some(repo),
+            releases,
+            &config.components.artifacts,
+        ))
     }
 
     /// Get the latest release, if it exists
@@ -47,20 +71,29 @@ impl Context {
     }
 
     /// Fetch and process all the Github Releases to produce a final result
-    #[allow(clippy::unnecessary_unwrap)]
     pub fn fetch_all_releases(
-        repo: GithubRepo,
+        repo: &GithubRepo,
         artifacts_config: &ArtifactsConfig,
-    ) -> Result<Self> {
+    ) -> Result<Vec<Release>> {
         let gh_releases =
-            tokio::runtime::Handle::current().block_on(GithubRelease::fetch_all(&repo))?;
-        let all =
-            tokio::runtime::Handle::current().block_on(futures_util::future::try_join_all(
-                gh_releases
-                    .into_iter()
-                    .map(|gh_release| Release::new(gh_release, &repo, artifacts_config)),
-            ))?;
+            tokio::runtime::Handle::current().block_on(GithubRelease::fetch_all(repo))?;
+        let all = tokio::runtime::Handle::current().block_on(
+            futures_util::future::try_join_all(gh_releases.into_iter().map(|gh_release| {
+                Release::new(
+                    ReleaseSource::Github(gh_release),
+                    Some(repo),
+                    artifacts_config,
+                )
+            })),
+        )?;
+        Ok(all)
+    }
 
+    fn with_releases(
+        repo: Option<GithubRepo>,
+        releases: Vec<Release>,
+        artifacts_config: &ArtifactsConfig,
+    ) -> Self {
         // Walk through all the releases (from newest to oldest) to find the latest ones
         //
         // FIXME?: I think this is essentially deferring to Release Date over Version Number.
@@ -75,13 +108,13 @@ impl Context {
         let mut latest_stable_release = None;
         let mut latest_prerelease = None;
 
-        for (idx, release) in all.iter().enumerate() {
+        for (idx, release) in releases.iter().enumerate() {
             // Make note of whether anything has artifacts
             if release.has_installers() {
                 has_artifacts = true;
             }
 
-            let is_prerelease = release.source.prerelease;
+            let is_prerelease = release.source.is_prerelease();
             // Make note of whether we've found prereleases or stable releases yet
             if is_prerelease {
                 if !has_prereleases {
@@ -120,13 +153,15 @@ impl Context {
         // If we found a stable cargo-dist release, but there's even newer stable releases
         // that don't use cargo-dist, we're going to prefer the cargo-dist one, but we should
         // warn the user that things are wonky
-        if latest_dist_stable_release.is_some()
-            && latest_dist_stable_release != latest_stable_release
+        if let (Some(dist_latest), Some(latest)) =
+            (latest_dist_stable_release, latest_stable_release)
         {
-            let dist_rel = &all[latest_dist_stable_release.unwrap()].source.tag_name;
-            let stable_rel = &all[latest_stable_release.unwrap()].source.tag_name;
-            let msg = format!("You have newer stable Github Releases ({}) than your latest cargo-dist Release ({}). Is this intended? (We're going to prefer the cargo-dist one.)", stable_rel, dist_rel);
-            Message::new(MessageType::Warning, &msg).print();
+            if latest_dist_stable_release != latest_stable_release {
+                let dist_rel = &releases[dist_latest].source.version_tag();
+                let stable_rel = &releases[latest].source.version_tag();
+                let msg = format!("You have newer stable Github Releases ({}) than your latest cargo-dist Release ({}). Is this intended? (We're going to prefer the cargo-dist one.)", stable_rel, dist_rel);
+                Message::new(MessageType::Warning, &msg).print();
+            }
         }
 
         // To select the latest release, we use the following priority: (first valid entry wins)
@@ -145,12 +180,29 @@ impl Context {
             .or(latest_dist_prerelease)
             .or(latest_prerelease);
 
-        Ok(Self {
+        Self {
             repo,
-            releases: all,
+            releases,
             has_prereleases,
             has_artifacts,
             latest_release,
-        })
+        }
+    }
+
+    async fn make_current_release(
+        repo: Option<&GithubRepo>,
+        config: &Config,
+    ) -> Result<Vec<Release>> {
+        let release = Release::new(
+            ReleaseSource::CurrentState(CurrentStateRelease {
+                version: config.project.version.to_owned(),
+                date: None,
+                prerelease: false,
+            }),
+            repo,
+            &config.components.artifacts,
+        )
+        .await?;
+        Ok(vec![release])
     }
 }
