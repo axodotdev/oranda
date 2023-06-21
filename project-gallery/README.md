@@ -16,4 +16,4 @@ browse or contribute a community example you can visit the
 [file an issue]: https://github.com/axodotdev/oranda/issues/new
 
 [cargo-new-repo]: https://github.com/axodotdev/oranda/tree/main/project-gallery/cargo-new
-[cargo-new-web]:
+[cargo-new-web]: https://cargo-new.gallery.axodotdev.host/
