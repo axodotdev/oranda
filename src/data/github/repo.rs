@@ -25,16 +25,23 @@ impl GithubRepo {
                 })?;
         let segment_list = binding.path_segments().map(|c| c.collect::<Vec<_>>());
         if let Some(segments) = segment_list {
-            if segments.len() == 2 {
-                return Ok(Self {
-                    owner: segments[0].to_string(),
-                    name: segments[1].to_string(),
-                });
+            if segments.len() >= 2 {
+                let owner = segments[0].to_string();
+                let name = segments[1].to_string();
+                let rest_is_empty = segments.iter().skip(2).all(|s| s.trim().is_empty());
+                if rest_is_empty {
+                    return Ok(Self { owner, name });
+                } else {
+                    return Err(OrandaError::RepoParseError {
+                        repo: binding.to_string(),
+                        details: miette!("This URL has more parts than we expected"),
+                    });
+                }
             }
         }
         Err(OrandaError::RepoParseError {
             repo: binding.to_string(),
-            details: miette!("This URL is not structured the expected way, expected more segments"),
+            details: miette!("This URL has less parts than we expected"),
         })
     }
 }
