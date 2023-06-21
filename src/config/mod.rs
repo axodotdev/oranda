@@ -23,9 +23,7 @@ pub use components::{
     ArtifactsConfig, ArtifactsLayer, ComponentConfig, ComponentLayer, FundingConfig, FundingLayer,
     MdBookConfig, MdBookLayer, PackageManagersConfig, PackageManagersLayer,
 };
-pub use marketing::{
-    AnalyticsConfig, AnalyticsLayer, MarketingConfig, MarketingLayer, SocialConfig, SocialLayer,
-};
+pub use marketing::{AnalyticsConfig, MarketingConfig, MarketingLayer, SocialConfig, SocialLayer};
 
 pub use project::{ProjectConfig, ProjectLayer};
 pub use style::{StyleConfig, StyleLayer};
@@ -49,6 +47,9 @@ impl Config {
     pub fn build(config_path: &Utf8PathBuf) -> Result<Config> {
         // Users can have multiple types of configuration or no configuration at all
         //
+        // - Default configuration comes from Config::default and the recursive Default
+        //   impls on the other `*Config` structs.
+        //
         // - Project configuration comes from a project manifest file. We currently
         //   support `Cargo.toml` and `package.json`, but could support any manifest
         //   that provided a `name`, `description`, `repository` and `homepage` field.
@@ -58,6 +59,10 @@ impl Config {
         //   you could use this file to override fields in your project manifest.
         //   This file can contain all possible public configuration fields.
         //
+        // - Auto-detect layer is just a convention where configs have an opportunity
+        //   to try to find missing values, erroring out if they fail while the user
+        //   was clearly trying to enable the feature.
+        //
         // We apply these in layers, with later layers winning over earlier ones.
         //
         // Note that several of these config merges do a seemingly-useless `if`
@@ -66,15 +71,17 @@ impl Config {
         // If new stages are added or better defaults get introduced, we always
         // want to defer to those values if the layer we're currently applying doesn't have
         // an opinion on that value, which is what "None" in a config is really expressing.
-        let mut cfg = Config::default();
         let custom = OrandaConfig::load(config_path)?;
         let project = AxoprojectConfig::load(None)?;
 
+        // default layer
+        let mut cfg = Config::default();
+        // axoproject layer
         cfg.apply_project_layer(project);
+        // oranda.json layer
         cfg.apply_custom_layer(custom);
-        cfg.find_mdbook();
-        FundingConfig::find_paths(&mut cfg.components.funding)?;
-
+        // auto-detect layer
+        cfg.apply_autodetect_layer()?;
         Ok(cfg)
     }
 
@@ -94,36 +101,29 @@ impl Config {
 
     /// Apply the layer of config we computed from oranda.json
     fn apply_custom_layer(&mut self, layer: Option<OrandaConfig>) {
-        // Apply the "custom" layer
         if let Some(layer) = layer {
-            self.project.apply_layer(layer.project);
-            self.build.apply_layer(layer.build);
-            self.marketing.apply_layer(layer.marketing);
-            self.styles.apply_layer(layer.styles);
-            self.components.apply_layer(layer.components);
+            // This is intentionally written slightly cumbersome to make you update this
+            let OrandaConfig {
+                project,
+                build,
+                marketing,
+                styles,
+                components,
+            } = layer;
+            self.project.apply_val_layer(project);
+            self.build.apply_val_layer(build);
+            self.marketing.apply_val_layer(marketing);
+            self.styles.apply_val_layer(styles);
+            self.components.apply_val_layer(components);
         }
     }
 
-    /// If mdbook is enabled but the path isn't set, we try to find it
-    ///
-    /// If we fail, we set mdbook to None to disable it.
-    fn find_mdbook(&mut self) {
-        if let Some(mdbook_cfg) = &mut self.components.mdbook {
-            if mdbook_cfg.path.is_none() {
-                // Ok time to auto-detect, try these dirs for a book.toml
-                let possible_paths = vec!["./", "./book/", "./docs/"];
-                for book_dir in possible_paths {
-                    let book_path = Utf8PathBuf::from(book_dir).join("book.toml");
-                    if book_path.exists() {
-                        // nice, use it
-                        mdbook_cfg.path = Some(book_dir.to_owned());
-                        return;
-                    }
-                }
-                // We found nothing, disable mdbook
-                self.components.mdbook = None;
-            }
-        }
+    /// Apply the layer of config that does auto-detection of missing values
+    fn apply_autodetect_layer(&mut self) -> Result<()> {
+        MdBookConfig::find_paths(&mut self.components.mdbook)?;
+        FundingConfig::find_paths(&mut self.components.funding)?;
+
+        Ok(())
     }
 }
 
@@ -163,33 +163,21 @@ where
     }
 }
 
-/// Blanket impl of merging layers wrapped in Options
-impl<T> ApplyLayer for Option<T>
-where
-    T: ApplyLayer,
-{
-    type Layer = Option<T::Layer>;
-    fn apply_layer(&mut self, layer: Self::Layer) {
-        if let Some(val) = layer {
-            if let Some(this) = self {
-                this.apply_layer(val);
-            } else {
-                // Drop the value
-            }
-        }
-    }
-}
-
 /// Extension trait to provide apply_bool_layer
 pub trait ApplyBoolLayerExt {
     type Inner;
     /// Merge an `Option<Layer>` with an `Option<BoolOr<Layer>>`
     ///
-    /// There are 3 cases for the rhs:
+    /// There are 3 cases for the rhs (layer):
     ///
     /// * Some(Val): override; recursively apply_layer
     /// * Some(false): manually disabled; set lhs to None
     /// * Some(true) / None: redundant; do nothing
+    ///
+    /// There are 2 cases for the lhs (self):
+    ///
+    /// * Some: still live, can be overriden/merged
+    /// * None: permanently disabled, rhs will be ignored
     fn apply_bool_layer(&mut self, layer: Option<BoolOr<Self::Inner>>);
 }
 
@@ -201,7 +189,11 @@ where
     fn apply_bool_layer(&mut self, layer: Option<BoolOr<Self::Inner>>) {
         match layer {
             Some(BoolOr::Val(val)) => {
-                self.apply_layer(Some(val));
+                if let Some(this) = self {
+                    this.apply_layer(val);
+                } else {
+                    // If self is None, then
+                }
             }
             Some(BoolOr::Bool(false)) => {
                 // Disable this setting

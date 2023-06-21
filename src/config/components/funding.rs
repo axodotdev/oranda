@@ -48,6 +48,7 @@ impl ApplyLayer for FundingConfig {
 impl FundingConfig {
     /// If we have a FUNDING.yml file, try to find it. If we fail, we disable funding support.
     pub fn find_paths(config: &mut Option<Self>) -> Result<()> {
+        // If this is None, we were force-disabled and shouldn't auto-detect
         let Some(this) = config else {
             return Ok(())
         };

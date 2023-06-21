@@ -11,15 +11,15 @@ use super::{BuildLayer, ComponentLayer, MarketingLayer, ProjectLayer, StyleLayer
 #[derive(Debug, Deserialize, JsonSchema)]
 pub struct OrandaConfig {
     /// Info about the project/application
-    pub project: ProjectLayer,
+    pub project: Option<ProjectLayer>,
     /// Info about the build/output
-    pub build: BuildLayer,
+    pub build: Option<BuildLayer>,
     /// Info about social/marketing/analytics
-    pub marketing: MarketingLayer,
+    pub marketing: Option<MarketingLayer>,
     /// Info about layout/themes
-    pub styles: StyleLayer,
+    pub styles: Option<StyleLayer>,
     /// Additional optional components
-    pub components: ComponentLayer,
+    pub components: Option<ComponentLayer>,
 }
 
 impl OrandaConfig {

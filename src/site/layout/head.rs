@@ -11,28 +11,19 @@ use axohtml::html;
 #[allow(clippy::vec_box)]
 pub fn create_social_cards(config: &Config) -> Vec<Box<meta<String>>> {
     let mut html = vec![];
-    match config.marketing.social.as_ref() {
-        Some(social) => {
-            if let Some(image) = social.image.as_ref() {
-                html.extend(html!(<meta name="twitter:card" content="summary_large_image"/>));
+    if let Some(image) = config.marketing.social.image.as_ref() {
+        html.extend(html!(<meta name="twitter:card" content="summary_large_image"/>));
 
-                html.extend(html!(<meta property="og:image" content=image />));
-            };
-            if let Some(image_alt) = social.image_alt.as_ref() {
-                html.extend(html!(<meta property="og:image:alt" content=image_alt />));
-            }
-
-            if let Some(twitter_account) = social.twitter_account.as_ref() {
-                html.extend(html!(<meta name="twitter:creator" content=twitter_account/>));
-                html.extend(html!(<meta name="twitter:site" content=twitter_account/>));
-            };
-
-            Some(())
-        }
-
-        None => None,
+        html.extend(html!(<meta property="og:image" content=image />));
     };
+    if let Some(image_alt) = config.marketing.social.image_alt.as_ref() {
+        html.extend(html!(<meta property="og:image:alt" content=image_alt />));
+    }
 
+    if let Some(twitter_account) = config.marketing.social.twitter_account.as_ref() {
+        html.extend(html!(<meta name="twitter:creator" content=twitter_account/>));
+        html.extend(html!(<meta name="twitter:site" content=twitter_account/>));
+    };
     html
 }
 

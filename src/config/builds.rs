@@ -5,7 +5,7 @@ use serde::Deserialize;
 use super::{ApplyLayer, ApplyOptExt, ApplyValExt};
 
 #[derive(Debug)]
-/// Information about how the pages should be built
+/// Information about how the pages should be built (complete version)
 pub struct BuildConfig {
     /// Relative path to the dir where build output should be placed
     pub dist_dir: String,
@@ -23,7 +23,7 @@ pub struct BuildConfig {
     pub additional_pages: IndexMap<String, String>,
 }
 #[derive(Debug, Deserialize, JsonSchema)]
-/// Information about how the pages should be built
+/// Information about how the pages should be built (partial version used by oranda.json)
 pub struct BuildLayer {
     /// Relative path to the dir where build output should be placed
     pub dist_dir: Option<String>,
