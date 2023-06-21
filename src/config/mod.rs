@@ -1,41 +1,48 @@
-use std::collections::HashMap;
+// We very intentionally manually implement Default a lot in this submodule
+// to keep things very explicit and clear
+#![allow(clippy::derivable_impls)]
 
 use camino::Utf8PathBuf;
-
-pub mod oranda_config;
-pub mod project;
+use schemars::JsonSchema;
+use serde::Deserialize;
 
 use crate::errors::*;
-pub use oranda_config::{
-    AnalyticsConfig, ArtifactsConfig, BoolOr, FundingConfig, MdBookConfig, OrandaConfig,
-    SocialConfig, StyleConfig,
-};
-use project::ProjectConfig;
 
+pub mod axoproject;
+mod builds;
+mod components;
+mod marketing;
+pub mod oranda_config;
+pub mod project;
+pub mod style;
+
+pub use self::axoproject::AxoprojectConfig;
+pub use self::oranda_config::OrandaConfig;
+pub use builds::{BuildConfig, BuildLayer};
+pub use components::{
+    ArtifactsConfig, ArtifactsLayer, ComponentConfig, ComponentLayer, FundingConfig, FundingLayer,
+    MdBookConfig, MdBookLayer, PackageManagersConfig, PackageManagersLayer,
+};
+pub use marketing::{
+    AnalyticsConfig, AnalyticsLayer, MarketingConfig, MarketingLayer, SocialConfig, SocialLayer,
+};
+
+pub use project::{ProjectConfig, ProjectLayer};
+pub use style::{StyleConfig, StyleLayer};
+
+/// Top-level mega-config
 #[derive(Debug)]
 pub struct Config {
-    pub description: String,
-    pub dist_dir: String,
-    pub homepage: Option<String>,
-    pub static_dir: String,
-    pub name: String,
-    pub no_header: bool,
-    pub readme_path: String,
-    pub repository: Option<String>,
-    pub analytics: Option<AnalyticsConfig>,
-    pub additional_pages: Option<HashMap<String, String>>,
-    pub social: Option<SocialConfig>,
-    pub artifacts: ArtifactsConfig,
-    pub version: Option<String>,
-    pub logo: Option<String>,
-    pub favicon: Option<String>,
-    pub path_prefix: Option<String>,
-    pub license: Option<String>,
-    /// The config for using mdbook
-    pub mdbook: Option<MdBookConfig>,
+    /// Info about the project/application
+    pub project: ProjectConfig,
+    /// Info about the build/output
+    pub build: BuildConfig,
+    /// Info about social/marketing/analytics
+    pub marketing: MarketingConfig,
+    /// Info about layout/themes
     pub styles: StyleConfig,
-    pub changelog: bool,
-    pub funding: Option<FundingConfig>,
+    /// Additional optional components
+    pub components: ComponentConfig,
 }
 
 impl Config {
@@ -61,54 +68,39 @@ impl Config {
         // an opinion on that value, which is what "None" in a config is really expressing.
         let mut cfg = Config::default();
         let custom = OrandaConfig::load(config_path)?;
-        let project = ProjectConfig::load(None)?;
+        let project = AxoprojectConfig::load(None)?;
 
         cfg.apply_project_layer(project);
         cfg.apply_custom_layer(custom);
         cfg.find_mdbook();
-        FundingConfig::find_paths(&mut cfg.funding)?;
+        FundingConfig::find_paths(&mut cfg.components.funding)?;
 
         Ok(cfg)
     }
 
     /// Apply the layer of config we computed from project files
-    fn apply_project_layer(&mut self, project: Option<ProjectConfig>) {
-        if let Some(project) = project {
-            self.name = project.name;
-            self.description = project.description;
-            self.homepage.apply_opt(project.homepage);
-            self.repository.apply_opt(project.repository);
-            self.version.apply_opt(project.version);
-            self.license.apply_opt(project.license);
-            self.readme_path
-                .apply_val(project.readme_path.map(|p| p.to_string()));
-            self.artifacts.cargo_dist.apply_opt(project.cargo_dist);
+    fn apply_project_layer(&mut self, layer: Option<AxoprojectConfig>) {
+        if let Some(layer) = layer {
+            // This is intentionally written slightly cumbersome to make you update this
+            let AxoprojectConfig {
+                project,
+                cargo_dist,
+            } = layer;
+
+            self.project.apply_layer(project);
+            self.components.artifacts.cargo_dist.apply_val(cargo_dist);
         }
     }
 
     /// Apply the layer of config we computed from oranda.json
-    fn apply_custom_layer(&mut self, custom: Option<OrandaConfig>) {
+    fn apply_custom_layer(&mut self, layer: Option<OrandaConfig>) {
         // Apply the "custom" layer
-        if let Some(custom) = custom {
-            self.description.apply_val(custom.description);
-            self.dist_dir.apply_val(custom.dist_dir);
-            self.static_dir.apply_val(custom.static_dir);
-            self.homepage.apply_opt(custom.homepage);
-            self.name.apply_val(custom.name);
-            self.readme_path.apply_val(custom.readme_path);
-            self.repository.apply_opt(custom.repository);
-            self.analytics.apply_layer(custom.analytics);
-            // FIXME: should this get merged with e.g. `extend?`
-            self.additional_pages.apply_opt(custom.additional_pages);
-            self.social.apply_layer(custom.social);
-            self.artifacts.apply_val_layer(custom.artifacts);
-            self.styles.apply_val_layer(custom.styles);
-            self.logo.apply_opt(custom.logo);
-            self.favicon.apply_opt(custom.favicon);
-            self.path_prefix.apply_opt(custom.path_prefix);
-            self.changelog.apply_val(custom.changelog);
-            self.mdbook.apply_bool_layer(custom.mdbook);
-            self.funding.apply_bool_layer(custom.funding);
+        if let Some(layer) = layer {
+            self.project.apply_layer(layer.project);
+            self.build.apply_layer(layer.build);
+            self.marketing.apply_layer(layer.marketing);
+            self.styles.apply_layer(layer.styles);
+            self.components.apply_layer(layer.components);
         }
     }
 
@@ -116,7 +108,7 @@ impl Config {
     ///
     /// If we fail, we set mdbook to None to disable it.
     fn find_mdbook(&mut self) {
-        if let Some(mdbook_cfg) = &mut self.mdbook {
+        if let Some(mdbook_cfg) = &mut self.components.mdbook {
             if mdbook_cfg.path.is_none() {
                 // Ok time to auto-detect, try these dirs for a book.toml
                 let possible_paths = vec!["./", "./book/", "./docs/"];
@@ -129,7 +121,7 @@ impl Config {
                     }
                 }
                 // We found nothing, disable mdbook
-                self.mdbook = None;
+                self.components.mdbook = None;
             }
         }
     }
@@ -138,28 +130,11 @@ impl Config {
 impl Default for Config {
     fn default() -> Self {
         Config {
-            description: String::new(),
-            dist_dir: String::from("public"),
-            homepage: None,
-            name: String::from("My Axo project"),
-            no_header: false,
-            readme_path: String::from("README.md"),
-            repository: None,
-            analytics: None,
-            additional_pages: None,
-            social: None,
-            artifacts: ArtifactsConfig::default(),
+            project: ProjectConfig::default(),
+            build: BuildConfig::default(),
+            marketing: MarketingConfig::default(),
             styles: StyleConfig::default(),
-            version: None,
-            license: None,
-            logo: None,
-            favicon: None,
-            path_prefix: None,
-            static_dir: String::from("static"),
-            // Later stages can disable mdbook support by setting this to None
-            mdbook: Some(MdBookConfig::default()),
-            changelog: false,
-            funding: Some(FundingConfig::default()),
+            components: ComponentConfig::default(),
         }
     }
 }
@@ -171,13 +146,17 @@ pub trait ApplyLayer
 where
     Self: Sized,
 {
+    /// The much more Option-ridden version of this config
+    /// that can be repeatedly layerd with options
+    type Layer;
+
     /// Merges this value with another layer of itself, preferring the new layer
-    fn apply_layer(&mut self, layer: Self);
+    fn apply_layer(&mut self, layer: Self::Layer);
 
     /// Merges this value with another layer of itself, preferring the new layer
     ///
     /// (asymteric case where the rhs is an Option but we're just A Value)
-    fn apply_val_layer(&mut self, layer: Option<Self>) {
+    fn apply_val_layer(&mut self, layer: Option<Self::Layer>) {
         if let Some(val) = layer {
             self.apply_layer(val);
         }
@@ -189,12 +168,13 @@ impl<T> ApplyLayer for Option<T>
 where
     T: ApplyLayer,
 {
-    fn apply_layer(&mut self, layer: Self) {
+    type Layer = Option<T::Layer>;
+    fn apply_layer(&mut self, layer: Self::Layer) {
         if let Some(val) = layer {
             if let Some(this) = self {
                 this.apply_layer(val);
             } else {
-                *self = Some(val);
+                // Drop the value
             }
         }
     }
@@ -217,7 +197,7 @@ impl<T> ApplyBoolLayerExt for Option<T>
 where
     T: ApplyLayer,
 {
-    type Inner = T;
+    type Inner = T::Layer;
     fn apply_bool_layer(&mut self, layer: Option<BoolOr<Self::Inner>>) {
         match layer {
             Some(BoolOr::Val(val)) => {
@@ -272,4 +252,17 @@ impl<T> ApplyOptExt for Option<T> {
             *self = Some(val);
         }
     }
+}
+
+/// A value or just a boolean
+///
+/// This allows us to have a simple yes/no version of a config while still
+/// allowing for a more advanced version to exist.
+#[derive(Deserialize, Debug, JsonSchema)]
+#[serde(untagged)]
+pub enum BoolOr<T> {
+    /// They gave the simple bool
+    Bool(bool),
+    /// They gave a more interesting value
+    Val(T),
 }

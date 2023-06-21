@@ -208,33 +208,27 @@ impl ReleaseArtifacts {
 
     /// Add custom package manager values from the config
     pub fn add_package_managers(&mut self, config: &ArtifactsConfig) {
-        if let Some(package_managers) = &config.package_managers {
-            // If we have a custom item for "npm" or "npx", then supress any entries
-            // from earlier layers like cargo-dist that were also trying to specify this
-            if package_managers.has_npm() {
-                if let Some(installer) = self
-                    .installers
-                    .iter_mut()
-                    .find(|installer| installer.label == "npm")
-                {
-                    installer.display = DisplayPreference::Hidden;
-                }
+        // If we have a custom item for "npm" or "npx", then supress any entries
+        // from earlier layers like cargo-dist that were also trying to specify this
+        if config.package_managers.has_npm() {
+            if let Some(installer) = self
+                .installers
+                .iter_mut()
+                .find(|installer| installer.label == "npm")
+            {
+                installer.display = DisplayPreference::Hidden;
             }
+        }
+        for (label, script) in &config.package_managers.preferred {
+            let mut installer = simple_run_installer(label, script);
+            installer.display = DisplayPreference::Preferred;
+            self.add_installer(installer);
+        }
 
-            if let Some(scripts) = &package_managers.preferred {
-                for (label, script) in scripts {
-                    let mut installer = simple_run_installer(label, script);
-                    installer.display = DisplayPreference::Preferred;
-                    self.add_installer(installer);
-                }
-            }
-            if let Some(scripts) = &package_managers.additional {
-                for (label, script) in scripts {
-                    let mut installer = simple_run_installer(label, script);
-                    installer.display = DisplayPreference::Additional;
-                    self.add_installer(installer);
-                }
-            }
+        for (label, script) in &config.package_managers.additional {
+            let mut installer = simple_run_installer(label, script);
+            installer.display = DisplayPreference::Additional;
+            self.add_installer(installer);
         }
     }
 
@@ -317,7 +311,7 @@ where
 /// Make the source of a file available on the server
 fn write_source(config: &Config, file: &File) -> Result<String> {
     let file_path = format!("{}.txt", &file.name);
-    let full_file_path = Utf8PathBuf::from(&config.dist_dir).join(&file_path);
+    let full_file_path = Utf8PathBuf::from(&config.build.dist_dir).join(&file_path);
     if !full_file_path.exists() {
         let file_string_future = RemoteAsset::load_string(&file.download_url);
         let file_string = tokio::runtime::Handle::current().block_on(file_string_future)?;

@@ -13,7 +13,7 @@ use std::collections::HashMap;
 pub fn page(config: &Config, funding: &Funding) -> Result<String> {
     let mut funding_items = funding.content.clone();
     // We've already made sure that we can unwrap on all of these `Option`s
-    let unwrapped_config = config.funding.as_ref().unwrap();
+    let unwrapped_config = config.components.funding.as_ref().unwrap();
     let preferred_html = if unwrapped_config.preferred_funding.is_some() {
         let preferred = unwrapped_config.preferred_funding.as_ref().unwrap();
         // Remove the preferred item from the rest of the list

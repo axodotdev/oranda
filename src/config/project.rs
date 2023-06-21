@@ -2,32 +2,114 @@ use std::path::PathBuf;
 
 use axoproject::{PackageIdx, WorkspaceInfo, WorkspaceSearch};
 use camino::{Utf8Path, Utf8PathBuf};
+use schemars::JsonSchema;
 use serde::Deserialize;
 
 use crate::errors::*;
 use crate::message::{Message, MessageType};
 
-#[derive(Debug, Deserialize, Eq, PartialEq)]
+use super::{ApplyLayer, ApplyOptExt, ApplyValExt};
+
+/// Information about the project (complete version)
+#[derive(Debug)]
 pub struct ProjectConfig {
+    /// Name of the project
     pub name: String,
-    pub description: String,
-    pub homepage: Option<String>,
-    pub repository: Option<String>,
+    /// Current version of the project(?)
     pub version: Option<String>,
+    /// Brief description of the project
+    pub description: Option<String>,
+    /// URL to the homepage of the project
+    pub homepage: Option<String>,
+    /// URL to the repository of the project
+    ///
+    /// If this is of the form `https://github.com/$USER/$PROJECT/` we can
+    /// enable more advanced Github support
+    pub repository: Option<String>,
+    /// Relative path to the README of this project
+    ///
+    /// This is non-Optional because the README is the core thing we always require
+    pub readme_path: String,
+    /// License of the project (probably SPDX format)
     pub license: Option<String>,
-    pub readme_path: Option<Utf8PathBuf>,
+}
+
+/// Information about the project (partial version used by oranda.json)
+#[derive(Debug, Deserialize, JsonSchema)]
+pub struct ProjectLayer {
+    /// Name of the project
+    pub name: Option<String>,
+    /// Current version of the project(?)
+    pub version: Option<String>,
+    /// Brief description of the project
+    pub description: Option<String>,
+    /// URL to the homepage of the project
+    pub homepage: Option<String>,
+    /// URL to the repository of the project
+    ///
+    /// If this is of the form `https://github.com/$USER/$PROJECT/` we can
+    /// enable more advanced Github support
+    pub repository: Option<String>,
+    /// Relative path to the README of this project
+    pub readme_path: Option<String>,
+    /// License of the project (probably SPDX format)
+    pub license: Option<String>,
+}
+
+impl Default for ProjectConfig {
+    fn default() -> Self {
+        ProjectConfig {
+            name: "My Oranda Project".to_owned(),
+            version: None,
+            description: None,
+            homepage: None,
+            repository: None,
+            readme_path: "README.md".to_owned(),
+            license: None,
+        }
+    }
+}
+
+impl ApplyLayer for ProjectConfig {
+    type Layer = ProjectLayer;
+    fn apply_layer(&mut self, layer: Self::Layer) {
+        // This is intentionally written slightly cumbersome to make you update this
+        let ProjectLayer {
+            name,
+            version,
+            description,
+            homepage,
+            repository,
+            readme_path,
+            license,
+        } = layer;
+
+        // Always overwrite
+        self.name.apply_val(name);
+        self.version.apply_opt(version);
+        self.description.apply_opt(description);
+        self.homepage.apply_opt(homepage);
+        self.repository.apply_opt(repository);
+        self.readme_path.apply_val(readme_path);
+        self.license.apply_opt(license);
+    }
+}
+
+#[derive(Debug)]
+pub struct ProjectInfo {
+    pub project: ProjectLayer,
     pub cargo_dist: Option<bool>,
 }
 
-impl ProjectConfig {
-    pub fn load(project_root: Option<PathBuf>) -> Result<Option<ProjectConfig>> {
+impl ProjectInfo {
+    pub fn load(project_root: Option<PathBuf>) -> Result<Option<ProjectInfo>> {
         // Start in the project root, or failing that current dir
         let start_dir = project_root.unwrap_or_else(|| {
             std::env::current_dir().expect("couldn't get current working dir!?")
         });
         let start_dir = Utf8PathBuf::from_path_buf(start_dir).expect("project path isn't utf8!?");
 
-        if let Some((workspace, pkg)) = ProjectConfig::get_project(&start_dir) {
+        if let Some((workspace, pkg)) = ProjectInfo::get_project(&start_dir) {
             // Cool we found the best possible match, now extract all the values we care about from it
             let package = workspace.package(pkg);
 
@@ -37,14 +119,16 @@ impl ProjectConfig {
                 .cargo_metadata_table
                 .as_ref()
                 .map(|t| t.get("dist").is_some());
-            Ok(Some(ProjectConfig {
-                name: package.name.clone(),
-                description: package.description.clone().unwrap_or_default(),
-                homepage: package.homepage_url.clone(),
-                repository: package.repository_url.clone(),
-                version: package.version.as_ref().map(|v| v.to_string()),
-                license: package.license.clone(),
-                readme_path: package.readme_file.clone(),
+            Ok(Some(ProjectInfo {
+                project: ProjectLayer {
+                    name: Some(package.name.clone()),
+                    description: package.description.clone(),
+                    homepage: package.homepage_url.clone(),
+                    repository: package.repository_url.clone(),
+                    version: package.version.as_ref().map(|v| v.to_string()),
+                    license: package.license.clone(),
+                    readme_path: package.readme_file.as_ref().map(|v| v.to_string()),
+                },
                 cargo_dist,
             }))
         } else {

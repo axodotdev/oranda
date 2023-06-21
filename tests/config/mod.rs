@@ -3,7 +3,7 @@ use super::utils::tokio_utils::TEST_RUNTIME;
 use camino::Utf8Path;
 use fixtures::project_config;
 
-use oranda::config::project::ProjectConfig;
+use oranda::config::project::ProjectInfo;
 
 use assert_fs::fixture::{FileWriteStr, PathChild};
 
@@ -16,7 +16,7 @@ fn it_detects_a_js_project() {
         .write_str(project_config::package_json())
         .expect("failed to write package_json");
 
-    let (ws, _pkg) = ProjectConfig::get_project(temppath).unwrap();
+    let (ws, _pkg) = ProjectInfo::get_project(temppath).unwrap();
     assert_eq!(ws.kind, axoproject::WorkspaceKind::Javascript);
     tempdir
         .close()
@@ -32,13 +32,13 @@ fn it_loads_a_js_project_config() {
         .write_str(project_config::package_json())
         .expect("failed to write package_json");
 
-    let config = ProjectConfig::load(Some(tempdir.path().to_path_buf()))
+    let config = ProjectInfo::load(Some(tempdir.path().to_path_buf()))
         .expect("failed to load package.json")
         .unwrap();
 
-    assert_eq!(config.name, "axo");
-    assert_eq!(config.description, ">o_o<");
-    assert_eq!(config.homepage, None);
+    assert_eq!(config.project.name, Some("axo".to_owned()));
+    assert_eq!(config.project.description, Some(">o_o<".to_owned()));
+    assert_eq!(config.project.homepage, None);
     tempdir
         .close()
         .expect("could not successfully delete temporary directory");
@@ -55,7 +55,7 @@ fn it_detects_a_rust_project() {
     let main = tempdir.child("src/main.rs");
     main.write_str(project_config::main_rs())
         .expect("failed to write main.rs");
-    let (ws, _pkg) = ProjectConfig::get_project(temppath).unwrap();
+    let (ws, _pkg) = ProjectInfo::get_project(temppath).unwrap();
     assert_eq!(ws.kind, axoproject::WorkspaceKind::Rust);
     tempdir
         .close()
@@ -73,13 +73,13 @@ fn it_loads_a_rust_project_config() {
     let main = tempdir.child("src/main.rs");
     main.write_str(project_config::main_rs())
         .expect("failed to write main.rs");
-    let config = ProjectConfig::load(Some(tempdir.path().to_path_buf()))
+    let config = ProjectInfo::load(Some(tempdir.path().to_path_buf()))
         .expect("failed to load Cargo.toml")
         .unwrap();
 
-    assert_eq!(config.name, "axo");
-    assert_eq!(config.description, "blublublub");
-    assert_eq!(config.version, Some("0.0.0".to_string()));
+    assert_eq!(config.project.name, Some("axo".to_owned()));
+    assert_eq!(config.project.description, Some("blublublub".to_owned()));
+    assert_eq!(config.project.version, Some("0.0.0".to_string()));
     tempdir
         .close()
         .expect("could not successfully delete temporary directory");
@@ -90,7 +90,7 @@ fn it_can_successfully_not_detect_a_project() {
     let tempdir = assert_fs::TempDir::new().expect("failed creating tempdir");
     let temppath = Utf8Path::from_path(tempdir.path()).expect("non-utf8 temp path");
 
-    assert!(ProjectConfig::get_project(temppath).is_none());
+    assert!(ProjectInfo::get_project(temppath).is_none());
     tempdir
         .close()
         .expect("could not successfully delete temporary directory");

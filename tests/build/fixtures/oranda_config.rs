@@ -1,56 +1,73 @@
-use std::collections::HashMap;
-
 use indexmap::IndexMap;
 
-use oranda::config::oranda_config::{
-    artifacts::PackageManagersConfig, AnalyticsConfig, ArtifactsConfig, StyleConfig,
+use oranda::config::{
+    AnalyticsConfig, ArtifactsConfig, BuildConfig, ComponentConfig, Config, MarketingConfig,
+    PackageManagersConfig, ProjectConfig, StyleConfig,
 };
-use oranda::config::Config;
 use oranda::site::javascript::analytics::Plausible;
 
 pub fn no_artifacts(temp_dir: String) -> Config {
-    let mut additional_pages = HashMap::new();
+    let mut additional_pages = IndexMap::new();
     additional_pages.insert(
         "Another Page".to_string(),
         "https://raw.githubusercontent.com/axodotdev/oranda/main/README.md".to_string(),
     );
     Config {
-        dist_dir: temp_dir,
-        description: String::from("you axolotl questions"),
-        readme_path: String::from(
-            "https://raw.githubusercontent.com/axodotdev/oranda/main/README.md",
-        ),
-        additional_pages: Some(additional_pages),
+        project: ProjectConfig {
+            description: Some(String::from("you axolotl questions")),
+            readme_path: String::from(
+                "https://raw.githubusercontent.com/axodotdev/oranda/main/README.md",
+            ),
+            ..Default::default()
+        },
+        build: BuildConfig {
+            dist_dir: temp_dir,
+            additional_pages,
+            ..Default::default()
+        },
         styles: StyleConfig {
             additional_css: vec![String::from(
                 "https://raw.githubusercontent.com/axodotdev/axii/main/css/main.css",
             )],
             ..Default::default()
         },
-        mdbook: None,
-        funding: None,
+        components: ComponentConfig {
+            mdbook: None,
+            funding: None,
+            artifacts: ArtifactsConfig {
+                cargo_dist: false,
+                package_managers: PackageManagersConfig::default(),
+            },
+            ..Default::default()
+        },
         ..Default::default()
     }
 }
 
 pub fn pinned_css(temp_dir: String) -> Config {
-    let mut additional_pages = HashMap::new();
+    let mut additional_pages = IndexMap::new();
     additional_pages.insert(
         "Another Page".to_string(),
         "https://raw.githubusercontent.com/axodotdev/oranda/main/README.md".to_string(),
     );
     Config {
-        dist_dir: temp_dir,
-        description: String::from("you axolotl questions"),
-        readme_path: String::from(
-            "https://raw.githubusercontent.com/axodotdev/oranda/main/README.md",
-        ),
-        additional_pages: Some(additional_pages),
+        project: ProjectConfig {
+            description: Some(String::from("you axolotl questions")),
+            readme_path: String::from(
+                "https://raw.githubusercontent.com/axodotdev/oranda/main/README.md",
+            ),
+            ..Default::default()
+        },
+        build: BuildConfig {
+            dist_dir: temp_dir,
+            additional_pages,
+            ..Default::default()
+        },
         styles: StyleConfig {
             additional_css: vec![String::from(
                 "https://raw.githubusercontent.com/axodotdev/axii/main/css/main.css",
             )],
-            oranda_css_version: Some("0.0.3".to_string()),
+            oranda_css_version: "css-v0.0.3".to_string(),
             ..Default::default()
         },
         ..Default::default()
@@ -59,11 +76,22 @@ pub fn pinned_css(temp_dir: String) -> Config {
 
 pub fn path_prefix(temp_dir: String) -> Config {
     Config {
-        dist_dir: temp_dir,
-        path_prefix: Some(String::from("axo")),
-        artifacts: ArtifactsConfig {
-            cargo_dist: Some(true),
-            package_managers: None,
+        project: ProjectConfig {
+            repository: Some(String::from("https://github.com/axodotdev/oranda")),
+            version: Some(String::from("0.0.1-prerelease2")),
+            ..Default::default()
+        },
+        build: BuildConfig {
+            dist_dir: temp_dir,
+            path_prefix: Some(String::from("axo")),
+            ..Default::default()
+        },
+        components: ComponentConfig {
+            artifacts: ArtifactsConfig {
+                cargo_dist: true,
+                ..Default::default()
+            },
+            ..Default::default()
         },
         styles: StyleConfig {
             additional_css: vec![String::from(
@@ -71,8 +99,6 @@ pub fn path_prefix(temp_dir: String) -> Config {
             )],
             ..Default::default()
         },
-        repository: Some(String::from("https://github.com/axodotdev/oranda")),
-        version: Some(String::from("0.0.1-prerelease2")),
         ..Default::default()
     }
 }
@@ -88,18 +114,29 @@ fn build_package_managers() -> PackageManagersConfig {
         String::from("cargo binstall oranda"),
     );
     PackageManagersConfig {
-        preferred: Some(preferred),
-        additional: Some(additional),
+        preferred,
+        additional,
     }
 }
 
 pub fn path_prefix_with_package_managers(temp_dir: String) -> Config {
     Config {
-        dist_dir: temp_dir,
-        path_prefix: Some(String::from("axo")),
-        artifacts: ArtifactsConfig {
-            cargo_dist: Some(false),
-            package_managers: Some(build_package_managers()),
+        project: ProjectConfig {
+            repository: Some(String::from("https://github.com/axodotdev/oranda")),
+            version: Some(String::from("0.0.1-prerelease2")),
+            ..Default::default()
+        },
+        build: BuildConfig {
+            dist_dir: temp_dir,
+            path_prefix: Some(String::from("axo")),
+            ..Default::default()
+        },
+        components: ComponentConfig {
+            artifacts: ArtifactsConfig {
+                cargo_dist: false,
+                package_managers: build_package_managers(),
+            },
+            ..Default::default()
         },
         styles: StyleConfig {
             additional_css: vec![String::from(
@@ -107,53 +144,88 @@ pub fn path_prefix_with_package_managers(temp_dir: String) -> Config {
             )],
             ..Default::default()
         },
-        repository: Some(String::from("https://github.com/axodotdev/oranda")),
-        version: Some(String::from("0.0.1-prerelease2")),
+
         ..Default::default()
     }
 }
 
 pub fn cargo_dist(temp_dir: String) -> Config {
     Config {
-        dist_dir: temp_dir,
-        artifacts: ArtifactsConfig {
-            cargo_dist: Some(true),
-            package_managers: None,
+        project: ProjectConfig {
+            repository: Some(String::from("https://github.com/axodotdev/oranda")),
+            ..Default::default()
         },
-        repository: Some(String::from("https://github.com/axodotdev/oranda")),
+        build: BuildConfig {
+            dist_dir: temp_dir,
+            ..Default::default()
+        },
+        components: ComponentConfig {
+            artifacts: ArtifactsConfig {
+                cargo_dist: true,
+                ..Default::default()
+            },
+            ..Default::default()
+        },
         ..Default::default()
     }
 }
 
 pub fn package_managers(temp_dir: String) -> Config {
     Config {
-        dist_dir: temp_dir,
-        artifacts: ArtifactsConfig {
-            cargo_dist: Some(false),
-            package_managers: Some(build_package_managers()),
+        project: ProjectConfig {
+            repository: Some(String::from("https://github.com/axodotdev/oranda")),
+            ..Default::default()
         },
-        repository: Some(String::from("https://github.com/axodotdev/oranda")),
+        build: BuildConfig {
+            dist_dir: temp_dir,
+            ..Default::default()
+        },
+        components: ComponentConfig {
+            artifacts: ArtifactsConfig {
+                package_managers: build_package_managers(),
+                ..Default::default()
+            },
+            ..Default::default()
+        },
         ..Default::default()
     }
 }
 
 pub fn changelog(temp_dir: String) -> Config {
     Config {
-        dist_dir: temp_dir,
-        repository: Some(String::from("https://github.com/axodotdev/oranda")),
-        changelog: true,
+        project: ProjectConfig {
+            repository: Some(String::from("https://github.com/axodotdev/oranda")),
+            ..Default::default()
+        },
+        build: BuildConfig {
+            dist_dir: temp_dir,
+            ..Default::default()
+        },
+        components: ComponentConfig {
+            changelog: true,
+            ..Default::default()
+        },
         ..Default::default()
     }
 }
 
 pub fn analytics_plausible(temp_dir: String) -> Config {
     Config {
-        dist_dir: temp_dir,
-        repository: Some(String::from("https://github.com/axodotdev/oranda")),
-        analytics: Some(AnalyticsConfig::Plausible(Plausible {
-            domain: "opensource.axo.dev".into(),
-            script_url: None,
-        })),
+        project: ProjectConfig {
+            repository: Some(String::from("https://github.com/axodotdev/oranda")),
+            ..Default::default()
+        },
+        build: BuildConfig {
+            dist_dir: temp_dir,
+            ..Default::default()
+        },
+        marketing: MarketingConfig {
+            analytics: Some(AnalyticsConfig::Plausible(Plausible {
+                domain: "opensource.axo.dev".into(),
+                script_url: None,
+            })),
+            ..Default::default()
+        },
         ..Default::default()
     }
 }

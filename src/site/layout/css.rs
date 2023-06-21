@@ -9,8 +9,6 @@ use axohtml::html;
 use camino::Utf8Path;
 use minifier::css;
 
-pub const LATEST_ORANDA_CSS: &str = "0.0.7";
-
 fn concat_minify(css_files: &[String]) -> Result<String> {
     let mut css = String::new();
     for file in css_files {
@@ -29,19 +27,15 @@ fn concat_minify(css_files: &[String]) -> Result<String> {
 pub fn build_oranda(
     dist_dir: &str,
     path_prefix: &Option<String>,
-    oranda_css_version: &Option<String>,
+    release_tag: &str,
 ) -> Result<Box<link<String>>> {
     let dist_dir = dist_dir;
-    let version = match oranda_css_version {
-        Some(version) => version,
-        None => LATEST_ORANDA_CSS,
-    };
-    let filename = fetch_css(dist_dir, version)?;
+    let filename = fetch_css(dist_dir, release_tag)?;
     let abs_path = crate::site::link::generate(path_prefix, &filename);
     Ok(html!(<link rel="stylesheet" href=abs_path></link>))
 }
 
-fn fetch_css(dist_dir: &str, version: &str) -> Result<String> {
+fn fetch_css(dist_dir: &str, release_tag: &str) -> Result<String> {
     match env::var("ORANDA_CSS") {
         Ok(path) => {
             let filename = "oranda.css".to_string();
@@ -51,20 +45,19 @@ fn fetch_css(dist_dir: &str, version: &str) -> Result<String> {
             Ok(filename)
         }
         Err(_) => {
-            let filename = format!("oranda-v{version}.css");
+            let filename = format!("oranda-{release_tag}.css");
             let dest_path = Utf8Path::new(dist_dir).join(&filename);
             let oranda_css_response =
-                tokio::runtime::Handle::current().block_on(fetch_oranda(version))?;
+                tokio::runtime::Handle::current().block_on(fetch_oranda(release_tag))?;
             axoasset::LocalAsset::write_new(&oranda_css_response, dest_path)?;
             Ok(filename)
         }
     }
 }
 
-async fn fetch_oranda(version: &str) -> Result<String> {
-    let tag = format!("css-v{version}");
+async fn fetch_oranda(release_tag: &str) -> Result<String> {
     let oranda_css_request =
-        octolotl::request::ReleaseAsset::new("axodotdev", "oranda", &tag, "oranda.css");
+        octolotl::request::ReleaseAsset::new("axodotdev", "oranda", release_tag, "oranda.css");
     Ok(octolotl::Request::send(&oranda_css_request, true)
         .await?
         .text()

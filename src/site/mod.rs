@@ -1,8 +1,8 @@
-use std::collections::HashMap;
 use std::path::Path;
 
 use axoasset::LocalAsset;
 use camino::{Utf8Path, Utf8PathBuf};
+use indexmap::IndexMap;
 
 use crate::config::Config;
 use crate::data::{funding::Funding, Context};
@@ -31,23 +31,26 @@ pub struct Site {
 
 impl Site {
     pub fn build(config: &Config) -> Result<Site> {
-        Self::clean_dist_dir(&config.dist_dir)?;
+        Self::clean_dist_dir(&config.build.dist_dir)?;
 
         let mut pages = vec![];
         let layout_template = Layout::new(config)?;
 
-        if let Some(files) = &config.additional_pages {
-            let mut additional_pages =
-                Self::build_additional_pages(files, &layout_template, config)?;
+        if !config.build.additional_pages.is_empty() {
+            let mut additional_pages = Self::build_additional_pages(
+                &config.build.additional_pages,
+                &layout_template,
+                config,
+            )?;
             pages.append(&mut additional_pages);
         }
 
         let mut index = None;
 
         if Self::needs_context(config) {
-            match &config.repository {
+            match &config.project.repository {
                 Some(repo_url) => {
-                    let mut context = Context::new(repo_url, &config.artifacts)?;
+                    let mut context = Context::new(repo_url, &config.components.artifacts)?;
                     // FIXME: change the config so that you can set `artifacts: false` and disable this?
                     if context.latest().is_some() {
                         context.latest_mut().unwrap().artifacts.make_scripts_viewable(config)?;
@@ -61,11 +64,11 @@ impl Site {
                         );
                         pages.push(artifacts_page);
                     }
-                    if config.changelog {
+                    if config.components.changelog {
                         let mut changelog_pages = Self::build_changelog_pages(&context, &layout_template, config)?;
                         pages.append(&mut changelog_pages);
                     }
-                    if let Some(funding_cfg) = &config.funding {
+                    if let Some(funding_cfg) = &config.components.funding {
                         let funding = Funding::new(funding_cfg, &config.styles)?;
                         let body = funding::page(config, &funding)?;
                         let page = Page::new_from_contents(
@@ -86,11 +89,13 @@ impl Site {
     }
 
     fn needs_context(config: &Config) -> bool {
-        config.artifacts.has_some() || config.changelog || config.funding.is_some()
+        config.components.artifacts.has_some()
+            || config.components.changelog
+            || config.components.funding.is_some()
     }
 
     fn build_additional_pages(
-        files: &HashMap<String, String>,
+        files: &IndexMap<String, String>,
         layout_template: &Layout,
         config: &Config,
     ) -> Result<Vec<Page>> {
@@ -144,7 +149,7 @@ impl Site {
     }
 
     pub fn write(self, config: &Config) -> Result<()> {
-        let dist = Utf8PathBuf::from(&config.dist_dir);
+        let dist = Utf8PathBuf::from(&config.build.dist_dir);
         for page in self.pages {
             let filename_path = Utf8PathBuf::from(&page.filename);
             // Prepare to write a "pretty link" for pages that aren't index.html already. This essentially means that we rewrite
@@ -159,16 +164,16 @@ impl Site {
             };
             LocalAsset::write_new_all(&page.contents, full_path)?;
         }
-        if let Some(book_cfg) = &config.mdbook {
+        if let Some(book_cfg) = &config.components.mdbook {
             mdbook::build_mdbook(
                 &dist,
                 book_cfg,
-                &config.styles.theme(),
-                &config.styles.syntax_theme(),
+                &config.styles.theme,
+                &config.styles.syntax_theme,
             )?;
         }
-        if Path::new(&config.static_dir).exists() {
-            Self::copy_static(&dist, &config.static_dir)?;
+        if Path::new(&config.build.static_dir).exists() {
+            Self::copy_static(&dist, &config.build.static_dir)?;
         }
         javascript::write_os_script(&dist)?;
 
