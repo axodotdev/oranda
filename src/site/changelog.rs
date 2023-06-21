@@ -1,7 +1,6 @@
 use axohtml::elements::{div, li, section};
 use axohtml::html;
 use axohtml::{text, unsafe_text};
-use chrono::DateTime;
 
 use crate::config::Config;
 use crate::data::{Context, Release};
@@ -13,17 +12,17 @@ pub fn build(context: &Context, config: &Config) -> Result<String> {
     let mut releases_nav: Vec<Box<li<String>>> = vec![];
 
     for release in context.releases.iter() {
-        let classnames = if release.source.prerelease {
+        let classnames = if release.source.is_prerelease() {
             "pre-release hidden"
         } else {
             ""
         };
 
-        let link = format!("{}/", &release.source.tag_name);
+        let link = format!("{}/", &release.source.version_tag());
 
         releases_html.extend(build_page_preview(release, config, true)?);
         releases_nav.extend(
-            html!(<li class=classnames><a href=link>{text!(&release.source.tag_name)}</a></li>),
+            html!(<li class=classnames><a href=link>{text!(release.source.version_tag())}</a></li>),
         )
     }
 
@@ -51,7 +50,7 @@ pub fn build_all(context: &Context, config: &Config) -> Result<Vec<(String, Stri
     let mut releases = vec![];
     for release in context.releases.iter() {
         releases.push((
-            release.source.tag_name.clone(),
+            release.source.version_tag().to_owned(),
             build_single_release(config, release)?,
         ))
     }
@@ -64,13 +63,12 @@ pub fn build_single_release(config: &Config, release: &Release) -> Result<String
     let preview = build_page_preview(release, config, false);
     let title = release
         .source
-        .name
-        .as_ref()
-        .unwrap_or(&release.source.tag_name);
+        .name()
+        .unwrap_or(release.source.version_tag());
 
     Ok(html!(
          <div>
-            <h1>{text!(title)}</h1>
+            <h1>{text!("{}", title)}</h1>
             <div class="releases-body">
                 {preview}
             </div>
@@ -84,17 +82,20 @@ pub fn build_page_preview(
     config: &Config,
     is_page: bool,
 ) -> Result<Box<section<String>>> {
-    let tag_name = &release.source.tag_name;
-    let title = release.source.name.as_ref().unwrap_or(tag_name);
+    let tag_name = release.source.version_tag();
+    let title = release.source.name().unwrap_or(tag_name);
 
     // We need to prefix the id with `tag-` to not break on things like "0.14.0" (no v prefix)
     let id: axohtml::types::Id = axohtml::types::Id::new(format!("tag-{tag_name}"));
-    let formatted_date = match DateTime::parse_from_rfc3339(&release.source.published_at) {
-        Ok(date) => date.format("%b %e %Y at %R UTC").to_string(),
-        Err(_) => release.source.published_at.to_owned(),
-    };
+    let date_html = release.source.formatted_date().map(|date| {
+        html!(
+            <span class="flex items-center gap-2">
+                {icons::date()}{text!(&date)}
+            </span>
+        )
+    });
 
-    let classnames = if release.source.prerelease {
+    let classnames = if release.source.is_prerelease() {
         "release pre-release hidden"
     } else {
         "release"
@@ -114,9 +115,7 @@ pub fn build_page_preview(
                 <span class="flex items-center gap-2">
                     {icons::tag()}{text!(tag_name)}
                 </span>
-                <span class="flex items-center gap-2">
-                    {icons::date()}{text!(&formatted_date)}
-                </span>
+                {date_html}
             </div>
             <div class="release-body mb-6">
                 {unsafe_text!(body)}
@@ -127,12 +126,9 @@ pub fn build_page_preview(
 
 fn build_release_body(release: &Release, config: &Config) -> Result<String> {
     let contents = if let Some(manifest) = &release.manifest {
-        manifest
-            .announcement_changelog
-            .clone()
-            .unwrap_or(String::new())
+        manifest.announcement_changelog.clone().unwrap_or_default()
     } else {
-        release.source.body.clone().unwrap_or(String::new())
+        release.source.body().unwrap_or_default().to_owned()
     };
 
     markdown::to_html(&contents, &config.styles.syntax_theme)

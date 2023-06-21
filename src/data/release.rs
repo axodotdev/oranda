@@ -1,5 +1,6 @@
 use axoasset::SourceFile;
 use cargo_dist_schema::DistManifest;
+use chrono::DateTime;
 
 use crate::config::ArtifactsConfig;
 use crate::data::{cargo_dist, github::GithubRelease, GithubRepo};
@@ -7,22 +8,96 @@ use crate::errors::*;
 
 use super::artifacts::ReleaseArtifacts;
 
+#[allow(clippy::large_enum_variant)]
+#[derive(Debug, Clone)]
+pub enum ReleaseSource {
+    Github(GithubRelease),
+    CurrentState(CurrentStateRelease),
+}
+
+#[derive(Debug, Clone)]
+pub struct CurrentStateRelease {
+    pub version: Option<String>,
+    pub date: Option<String>,
+    pub prerelease: bool,
+}
+
+impl ReleaseSource {
+    /// Get a freeform string that identifies a version/release.
+    ///
+    /// Can be things like "0.1.0", "v0.1.0", or "css-v0.1.0".
+    pub fn version_tag(&self) -> &str {
+        match self {
+            ReleaseSource::Github(src) => &src.tag_name,
+            ReleaseSource::CurrentState(src) => src.version.as_deref().unwrap_or("current"),
+        }
+    }
+
+    /// Whether this is a prerelease
+    pub fn is_prerelease(&self) -> bool {
+        match self {
+            ReleaseSource::Github(src) => src.prerelease,
+            ReleaseSource::CurrentState(src) => src.prerelease,
+        }
+    }
+
+    /// The date this was published (can be anything, but we do optionally try to parse/format it)
+    pub fn date(&self) -> Option<&str> {
+        match self {
+            ReleaseSource::Github(src) => Some(src.published_at.as_str()),
+            ReleaseSource::CurrentState(src) => src.date.as_deref(),
+        }
+    }
+
+    /// Get a pretty formatted version of the date
+    pub fn formatted_date(&self) -> Option<String> {
+        self.date().map(|date| {
+            if let Ok(parsed_date) = DateTime::parse_from_rfc3339(date) {
+                parsed_date.format("%b %e %Y at %R UTC").to_string()
+            } else {
+                date.to_owned()
+            }
+        })
+    }
+
+    /// The display name of the release
+    pub fn name(&self) -> Option<&str> {
+        match self {
+            ReleaseSource::Github(src) => src.name.as_deref(),
+            ReleaseSource::CurrentState(_src) => None,
+        }
+    }
+
+    /// Get the body of the release (notes/description)
+    pub(crate) fn body(&self) -> Option<&str> {
+        match self {
+            ReleaseSource::Github(src) => src.body.as_deref(),
+            ReleaseSource::CurrentState(_src) => None,
+        }
+    }
+}
+
 #[derive(Clone, Debug)]
 pub struct Release {
     pub manifest: Option<DistManifest>,
-    pub source: GithubRelease,
+    pub source: ReleaseSource,
     pub artifacts: ReleaseArtifacts,
 }
 
 impl Release {
     pub async fn new(
-        gh_release: GithubRelease,
-        repo: &GithubRepo,
+        source: ReleaseSource,
+        repo: Option<&GithubRepo>,
         artifacts_config: &ArtifactsConfig,
     ) -> Result<Self> {
-        let manifest = if artifacts_config.cargo_dist {
-            Self::fetch_manifest(&gh_release, repo).await?
+        let manifest = if let (ReleaseSource::Github(gh_release), Some(repo)) = (&source, repo) {
+            if artifacts_config.cargo_dist {
+                Self::fetch_manifest(gh_release, repo).await?
+            } else {
+                None
+            }
         } else {
+            // FIXME: warn if cargo-dist enabled?
             None
         };
 
@@ -33,7 +108,9 @@ impl Release {
         let mut artifacts = ReleaseArtifacts::new(None);
 
         // Add data from various sources
-        artifacts.add_github(&gh_release);
+        if let ReleaseSource::Github(gh_release) = &source {
+            artifacts.add_github(gh_release);
+        }
         if let Some(manifest) = &manifest {
             artifacts.add_cargo_dist(manifest);
         }
@@ -45,7 +122,7 @@ impl Release {
 
         Ok(Self {
             manifest,
-            source: gh_release,
+            source,
             artifacts,
         })
     }
