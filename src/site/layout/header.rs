@@ -10,12 +10,13 @@ use axohtml::elements::{div, header, img, li, nav};
 use axohtml::{html, text};
 
 fn get_logo(logo: String, config: &Config) -> Result<Box<img<String>>> {
-    let fetched_logo = fetch_logo(&config.dist_dir, logo, &config.name);
+    let fetched_logo = fetch_logo(&config.path_prefix, &config.dist_dir, logo, &config.name);
 
     tokio::runtime::Handle::current().block_on(fetched_logo)
 }
 
 async fn fetch_logo(
+    path_prefix: &Option<String>,
     dist_dir: &str,
     origin_path: String,
     name: &String,
@@ -23,8 +24,9 @@ async fn fetch_logo(
     let copy_result = Asset::copy(&origin_path, dist_dir).await?;
 
     let path_as_string = copy_result.strip_prefix(dist_dir)?.to_string_lossy();
+    let src = link::generate(path_prefix, &path_as_string);
 
-    Ok(html!(<img src=path_as_string alt=name class="logo" />))
+    Ok(html!(<img src=src alt=name class="logo" />))
 }
 
 fn nav(
