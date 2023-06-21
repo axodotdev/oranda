@@ -1,5 +1,5 @@
 use assert_fs::TempDir;
-use oranda::site::layout::css::LATEST_ORANDA_CSS;
+use oranda::config::style::ORANDA_CSS_TAG;
 use oranda::site::layout::Layout;
 
 mod fixtures;
@@ -51,7 +51,7 @@ fn it_adds_oranda_css() {
     let config = oranda_config::no_artifacts(temp_dir);
     let layout = Layout::new(&config).unwrap();
     let page = page::index(&config, &layout);
-    let filename = format!("oranda-v{LATEST_ORANDA_CSS}.css");
+    let filename = format!("oranda-{ORANDA_CSS_TAG}.css");
     assert!(page.contents.contains(&filename));
 }
 
@@ -64,7 +64,7 @@ fn it_adds_oranda_css_with_pinned_version() {
     let page = page::index(&config, &layout);
     assert!(page
         .contents
-        .contains(r#"<link href="/oranda-v0.0.3.css" rel="stylesheet"/>"#));
+        .contains(r#"<link href="/oranda-css-v0.0.3.css" rel="stylesheet"/>"#));
 }
 
 #[test]
@@ -86,7 +86,7 @@ fn reads_description() {
     let layout = Layout::new(&config).unwrap();
     let page = page::index(&config, &layout);
     assert!(page.contents.contains("you axolotl questions"));
-    assert!(page.contents.contains("My Axo project"))
+    assert!(page.contents.contains("My Oranda Project"))
 }
 
 #[test]
@@ -106,6 +106,7 @@ fn creates_nav() {
     let config = oranda_config::no_artifacts(temp_dir);
     let layout = Layout::new(&config).unwrap();
     let page = page::index(&config, &layout);
+    eprintln!("{}", page.contents);
     assert!(page.contents.contains(r#"<nav class="nav"><ul><li><a href="/">Home</a></li><li><a href="/README/">Another Page</a></li></ul></nav>"#));
 }
 
@@ -128,7 +129,7 @@ fn creates_footer() {
     let page = page::index(&config, &layout);
     assert!(page
         .contents
-        .contains(r#"<footer><span>My Axo project</span></footer>"#));
+        .contains(r#"<footer><span>My Oranda Project</span></footer>"#));
 }
 
 #[test]

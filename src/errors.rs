@@ -156,7 +156,9 @@ pub enum OrandaError {
     },
 
     #[error("Couldn't find your FUNDING.yml or funding.md")]
-    #[diagnostic(help = "You can manually specify md_path or yml_path in your funding config")]
+    #[diagnostic(
+        help = "You can manually specify md_path or yml_path in your components.funding config"
+    )]
     FundingConfigInvalid,
 
     #[error("Error while parsing FUNDING.yml")]
@@ -165,6 +167,10 @@ pub enum OrandaError {
         url = "https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/displaying-a-sponsor-button-in-your-repository"
     )]
     GithubFundingParseError { details: String },
+
+    #[error("Couldn't find your book.toml")]
+    #[diagnostic(help = "You can manually specify path in your components.mdbook config")]
+    MdBookConfigInvalid,
 
     #[error("{0}")]
     Other(String),

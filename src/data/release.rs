@@ -20,7 +20,7 @@ impl Release {
         repo: &GithubRepo,
         artifacts_config: &ArtifactsConfig,
     ) -> Result<Self> {
-        let manifest = if artifacts_config.cargo_dist() {
+        let manifest = if artifacts_config.cargo_dist {
             Self::fetch_manifest(&gh_release, repo).await?
         } else {
             None

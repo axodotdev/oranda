@@ -52,7 +52,7 @@ impl Dev {
         )?;
         let mut paths_to_watch = vec![];
         // Watch for the readme file
-        paths_to_watch.push(config.readme_path);
+        paths_to_watch.push(config.project.readme_path);
         // Watch for the oranda config file
         paths_to_watch.push(
             self.config_path
@@ -62,31 +62,31 @@ impl Dev {
         );
 
         // Watch for any user-provided paths
-        if self.include_paths.is_some() {
-            let mut include_paths: Vec<String> = self
-                .include_paths
-                .unwrap()
-                .iter()
-                .map(|p| p.to_string())
-                .collect();
+        if let Some(include_paths) = &self.include_paths {
+            let mut include_paths: Vec<String> =
+                include_paths.iter().map(|p| p.to_string()).collect();
             paths_to_watch.append(&mut include_paths);
         }
 
         // Watch for the funding.md page and the funding.yml file
-        if config.funding.is_some() {
-            paths_to_watch.push("funding.md".into());
-            paths_to_watch.push(".github/FUNDING.yml".into());
+        if let Some(funding) = &config.components.funding {
+            if let Some(path) = &funding.yml_path {
+                paths_to_watch.push(path.clone());
+            }
+            if let Some(path) = &funding.md_path {
+                paths_to_watch.push(path.clone());
+            }
         }
 
         // Watch for additional pages, if we have any
-        if config.additional_pages.is_some() {
+        if !config.build.additional_pages.is_empty() {
             let mut additional_pages: Vec<String> =
-                config.additional_pages.unwrap().values().cloned().collect();
+                config.build.additional_pages.values().cloned().collect();
             paths_to_watch.append(&mut additional_pages);
         }
 
         // Watch for the mdbook directory, if we have it
-        if let Some(book_cfg) = &config.mdbook {
+        if let Some(book_cfg) = &config.components.mdbook {
             let path = mdbook_dir(book_cfg)?;
             let md = load_mdbook(&path)?;
             // watch book.toml and /src/
@@ -95,7 +95,7 @@ impl Dev {
 
             // If we're not clobbering the theme, also watch the theme dir
             // (note that this may not exist on the fs, mdbook reports the path regardless)
-            if custom_theme(book_cfg, &config.styles.theme()).is_none() {
+            if custom_theme(book_cfg, &config.styles.theme).is_none() {
                 paths_to_watch.push(md.theme_dir().display().to_string());
             }
         }

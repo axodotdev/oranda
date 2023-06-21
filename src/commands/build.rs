@@ -29,7 +29,7 @@ impl Build {
         Site::build(&config)?.write(&config)?;
         let msg = format!(
             "Successfully built your site in the `{}` directory. To view, run `oranda serve`.",
-            { config.dist_dir }
+            { config.build.dist_dir }
         );
         Message::new(MessageType::Success, &msg).print();
         Ok(())

@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use crate::config::{ArtifactsConfig, Config, FundingConfig, MdBookConfig};
 use crate::errors::*;
 use crate::message::{Message, MessageType};
@@ -8,9 +6,10 @@ use crate::site::{link, page};
 use axoasset::Asset;
 use axohtml::elements::{div, header, img, li, nav};
 use axohtml::{html, text};
+use indexmap::IndexMap;
 
 fn get_logo(logo: String, config: &Config) -> Result<Box<img<String>>> {
-    let fetched_logo = fetch_logo(&config.dist_dir, logo, &config.name);
+    let fetched_logo = fetch_logo(&config.build.dist_dir, logo, &config.project.name);
 
     tokio::runtime::Handle::current().block_on(fetched_logo)
 }
@@ -28,7 +27,7 @@ async fn fetch_logo(
 }
 
 fn nav(
-    additional_pages: &Option<HashMap<String, String>>,
+    additional_pages: &IndexMap<String, String>,
     path_prefix: &Option<String>,
     artifacts: &ArtifactsConfig,
     md_book: &Option<MdBookConfig>,
@@ -43,9 +42,9 @@ fn nav(
         vec![html!(<li><a href="/">"Home"</a></li>)]
     };
 
-    if let Some(pages) = additional_pages {
+    if !additional_pages.is_empty() {
         Message::new(MessageType::Info, "Found additional pages...").print();
-        for (page_name, page_path) in pages.iter() {
+        for (page_name, page_path) in additional_pages.iter() {
             if page::source::is_markdown(page_path) {
                 let file_path = page::source::get_filename(page_path);
 
@@ -111,24 +110,24 @@ fn nav(
 }
 
 pub fn create(config: &Config) -> Result<Box<header<String>>> {
-    let logo = if let Some(logo) = config.logo.clone() {
+    let logo = if let Some(logo) = config.styles.logo.clone() {
         Some(get_logo(logo, config)?)
     } else {
         None
     };
 
-    let nav = if config.additional_pages.is_some()
-        || config.artifacts.has_some()
-        || config.mdbook.is_some()
-        || config.changelog
+    let nav = if !config.build.additional_pages.is_empty()
+        || config.components.artifacts.has_some()
+        || config.components.mdbook.is_some()
+        || config.components.changelog
     {
         Some(nav(
-            &config.additional_pages,
-            &config.path_prefix,
-            &config.artifacts,
-            &config.mdbook,
-            &config.changelog,
-            &config.funding,
+            &config.build.additional_pages,
+            &config.build.path_prefix,
+            &config.components.artifacts,
+            &config.components.mdbook,
+            &config.components.changelog,
+            &config.components.funding,
         )?)
     } else {
         None
@@ -136,14 +135,14 @@ pub fn create(config: &Config) -> Result<Box<header<String>>> {
     Ok(html!(
         <header>
             {logo}
-            <h1 class="title">{text!(&config.name)}</h1>
+            <h1 class="title">{text!(&config.project.name)}</h1>
             {nav}
         </header>
     ))
 }
 
 pub fn repo_banner(config: &Config) -> Option<Box<div<String>>> {
-    let repository = config.repository.as_ref()?;
+    let repository = config.project.repository.as_ref()?;
     Some(html!(
     <div class="repo_banner">
         <a href=repository>

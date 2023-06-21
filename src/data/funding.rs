@@ -66,7 +66,7 @@ impl Funding {
 
         if let Some(md_path) = &funding_cfg.md_path {
             let res = LocalAsset::load_string(md_path)?;
-            let html = to_html(&res, &style_cfg.syntax_theme())?;
+            let html = to_html(&res, &style_cfg.syntax_theme)?;
             funding.docs_content = Some(html);
         }
 

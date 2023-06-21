@@ -15,7 +15,7 @@ use crate::site::{icons, link, markdown};
 type Platforms = HashMap<TargetTriple, Vec<InstallerIdx>>;
 
 pub fn build_header(release: &Release, config: &Config) -> Result<Box<div<String>>> {
-    let downloads_href = link::generate(&config.path_prefix, "artifacts/");
+    let downloads_href = link::generate(&config.build.path_prefix, "artifacts/");
     let tag = &release.source.tag_name;
     let platforms_we_want = filter_platforms(release);
     if platforms_we_want.is_empty() {
@@ -195,7 +195,7 @@ pub fn run_html(
 ) -> Box<div<String>> {
     let code = {
         let highlighted_code =
-            markdown::syntax_highlight(Some("sh"), run_hint, &config.styles.syntax_theme());
+            markdown::syntax_highlight(Some("sh"), run_hint, &config.styles.syntax_theme);
         match highlighted_code {
             Ok(code) => code,
             Err(_) => format!("<code class='inline-code'>{}</code>", run_hint),
@@ -204,7 +204,7 @@ pub fn run_html(
     let source_file = if let Some(file) = file {
         let file = release.artifacts.file(file);
         let url = if let Some(view_path) = &file.view_path {
-            link::generate(&config.path_prefix, view_path)
+            link::generate(&config.build.path_prefix, view_path)
         } else {
             file.download_url.clone()
         };

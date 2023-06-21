@@ -1,33 +1,31 @@
-use std::path::PathBuf;
-
 use axoproject::{PackageIdx, WorkspaceInfo, WorkspaceSearch};
 use camino::{Utf8Path, Utf8PathBuf};
-use serde::Deserialize;
+use std::path::PathBuf;
 
-use crate::errors::*;
-use crate::message::{Message, MessageType};
+use super::ProjectLayer;
+use crate::{
+    errors::*,
+    message::{Message, MessageType},
+};
 
-#[derive(Debug, Deserialize, Eq, PartialEq)]
-pub struct ProjectConfig {
-    pub name: String,
-    pub description: String,
-    pub homepage: Option<String>,
-    pub repository: Option<String>,
-    pub version: Option<String>,
-    pub license: Option<String>,
-    pub readme_path: Option<Utf8PathBuf>,
+/// Info gleaned from axoproject
+#[derive(Debug)]
+pub struct AxoprojectConfig {
+    /// Generic project info
+    pub project: ProjectLayer,
+    /// Did they have cargo_dist settings?
     pub cargo_dist: Option<bool>,
 }
 
-impl ProjectConfig {
-    pub fn load(project_root: Option<PathBuf>) -> Result<Option<ProjectConfig>> {
+impl AxoprojectConfig {
+    pub fn load(project_root: Option<PathBuf>) -> Result<Option<AxoprojectConfig>> {
         // Start in the project root, or failing that current dir
         let start_dir = project_root.unwrap_or_else(|| {
             std::env::current_dir().expect("couldn't get current working dir!?")
         });
         let start_dir = Utf8PathBuf::from_path_buf(start_dir).expect("project path isn't utf8!?");
 
-        if let Some((workspace, pkg)) = ProjectConfig::get_project(&start_dir) {
+        if let Some((workspace, pkg)) = AxoprojectConfig::get_project(&start_dir) {
             // Cool we found the best possible match, now extract all the values we care about from it
             let package = workspace.package(pkg);
 
@@ -37,14 +35,16 @@ impl ProjectConfig {
                 .cargo_metadata_table
                 .as_ref()
                 .map(|t| t.get("dist").is_some());
-            Ok(Some(ProjectConfig {
-                name: package.name.clone(),
-                description: package.description.clone().unwrap_or_default(),
-                homepage: package.homepage_url.clone(),
-                repository: package.repository_url.clone(),
-                version: package.version.as_ref().map(|v| v.to_string()),
-                license: package.license.clone(),
-                readme_path: package.readme_file.clone(),
+            Ok(Some(AxoprojectConfig {
+                project: ProjectLayer {
+                    name: Some(package.name.clone()),
+                    description: package.description.clone(),
+                    homepage: package.homepage_url.clone(),
+                    repository: package.repository_url.clone(),
+                    version: package.version.as_ref().map(|v| v.to_string()),
+                    license: package.license.clone(),
+                    readme_path: package.readme_file.as_ref().map(|v| v.to_string()),
+                },
                 cargo_dist,
             }))
         } else {

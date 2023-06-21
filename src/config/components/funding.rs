@@ -6,27 +6,49 @@ use crate::config::{ApplyLayer, ApplyOptExt};
 use crate::data::funding::FundingType;
 use crate::errors::*;
 
-/// Config for displaying funding information on your page
-#[derive(Debug, Default, Deserialize, JsonSchema)]
+/// Config for displaying funding information on your page (complete version)
+#[derive(Debug)]
 pub struct FundingConfig {
     pub preferred_funding: Option<FundingType>,
     pub yml_path: Option<String>,
     pub md_path: Option<String>,
 }
+/// Config for displaying funding information on your page (partial version used by oranda.json)
+#[derive(Debug, Deserialize, JsonSchema)]
+pub struct FundingLayer {
+    pub preferred_funding: Option<FundingType>,
+    pub yml_path: Option<String>,
+    pub md_path: Option<String>,
+}
 
+impl Default for FundingConfig {
+    fn default() -> Self {
+        FundingConfig {
+            preferred_funding: None,
+            yml_path: None,
+            md_path: None,
+        }
+    }
+}
 impl ApplyLayer for FundingConfig {
-    fn apply_layer(&mut self, layer: Self) {
-        self.preferred_funding.apply_opt(layer.preferred_funding);
-        self.yml_path.apply_opt(layer.yml_path);
-        self.md_path.apply_opt(layer.md_path);
+    type Layer = FundingLayer;
+    fn apply_layer(&mut self, layer: Self::Layer) {
+        // This is intentionally written slightly cumbersome to make you update this
+        let FundingLayer {
+            preferred_funding,
+            yml_path,
+            md_path,
+        } = layer;
+        self.preferred_funding.apply_opt(preferred_funding);
+        self.yml_path.apply_opt(yml_path);
+        self.md_path.apply_opt(md_path);
     }
 }
 
 impl FundingConfig {
-    // see if we can find a FUNDING.yml, if so update the config path
-
     /// If we have a FUNDING.yml file, try to find it. If we fail, we disable funding support.
     pub fn find_paths(config: &mut Option<Self>) -> Result<()> {
+        // If this is None, we were force-disabled and shouldn't auto-detect
         let Some(this) = config else {
             return Ok(())
         };
@@ -46,8 +68,14 @@ impl FundingConfig {
             }
         }
 
-        let cant_find_files = this.yml_path.is_none() && this.md_path.is_none();
-        let has_user_config = this.preferred_funding.is_some();
+        // This is intentionally written slightly cumbersome to make you update this
+        let FundingConfig {
+            preferred_funding,
+            yml_path,
+            md_path,
+        } = this;
+        let cant_find_files = yml_path.is_none() && md_path.is_none();
+        let has_user_config = preferred_funding.is_some();
         if cant_find_files {
             // The config is unusable.
             //

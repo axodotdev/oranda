@@ -98,7 +98,7 @@ impl Context {
 
             // Special handling of dist-manifest.json
             if release.manifest.is_some() {
-                if artifacts_config.cargo_dist() {
+                if artifacts_config.cargo_dist {
                     // cargo-dist is enabled, so we want to find the latest stable release
                     // or, failing that, the latest prerelease.
                     if is_prerelease {

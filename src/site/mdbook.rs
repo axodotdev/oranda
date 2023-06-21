@@ -168,7 +168,7 @@ pub fn mdbook_dir(book_cfg: &MdBookConfig) -> Result<Utf8PathBuf> {
 
 /// Gets the custom theme to set in an mdbook
 pub fn custom_theme(book_cfg: &MdBookConfig, oranda_theme: &OrandaTheme) -> Option<AxomdbookTheme> {
-    if book_cfg.theme.unwrap_or(true) {
+    if book_cfg.theme {
         AxomdbookTheme::from_oranda_theme(oranda_theme)
     } else {
         None
