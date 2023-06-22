@@ -10,7 +10,7 @@ jobs:
   web:
     strategy:
       matrix:
-        example-name: ["cargo-new"]
+        example-name: ["cargo-new", "oclif-generate"]
     name: project-gallery
     runs-on: ubuntu-latest
     steps:

@@ -1,0 +1,15 @@
+{
+    "components": {
+    "artifacts": {
+        "package_managers": {
+            "preferred": {
+                "npx": "npx oclif-generate",
+                "npm": "npm install oclif"
+            }
+        }
+    }
+    },
+    "styles": {
+        "theme": "cupcake"
+    }
+}
