@@ -22,10 +22,18 @@ pub struct Dev {
     /// The port for the file server to be launched on
     #[arg(long)]
     port: Option<u16>,
-    /// The project root we want to build from
+    /// DO NOT USE: Path to the root dir of the project
+    ///
+    /// This flag exists for internal testing. It is incorrectly implemented for actual
+    /// end-users and will make you very confused and sad.
+    #[clap(hide = true)]
     #[arg(long)]
     project_root: Option<Utf8PathBuf>,
-    /// Custom path to an oranda configuration file
+    /// DO NOT USE: Path to the oranda.json
+    ///
+    /// This flag exists for internal testing. It is incorrectly implemented for actual
+    /// end-users and will make you very confused and sad.
+    #[clap(hide = true)]
     #[arg(long)]
     config_path: Option<Utf8PathBuf>,
     /// Skip the first build before starting to watch for changes
