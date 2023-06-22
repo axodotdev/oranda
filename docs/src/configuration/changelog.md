@@ -4,7 +4,9 @@ oranda supports reading your project's changelogs from GitHub releases. You can 
 
 ```json
 {
-  "changelog": true
+  "components": {
+    "changelog": true
+  }
 }
 ```
 

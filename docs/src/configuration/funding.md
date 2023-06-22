@@ -11,8 +11,10 @@ if have a "main" funding option, you can set the following configuration setting
 
 ```json
 {
-  "funding": {
-    "preferred_funding": "github"
+  "components": {
+    "funding": {
+      "preferred_funding": "github"
+    }
   }
 }
 ```
@@ -23,6 +25,19 @@ file.
 If you want to display additional information or context, oranda can also include
 the contents of a top-level `funding.md` Markdown file. Its contents will be translated
 into HTML and displayed on the Funding page as well.
+
+Both of the YAML and Markdown file paths can be customized as such:
+
+```json
+{
+  "components": {
+    "funding": {
+      "md_path": "myfunding.md",
+      "yml_path": "misc/funding.yml"
+    }
+  }
+}
+```
 
 > oranda's funding parsing and site generation are currently an experiment into how
   to better integrate common funding methods into your tools' websites. If you have

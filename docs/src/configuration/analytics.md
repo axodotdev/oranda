@@ -15,9 +15,11 @@ To add any of these, add the required configuration under the `analytics` key:
 
 ```json
 {
-  "analytics": {
-    "google_analytics": {
-      "tracking_id": "String"
+  "marketing": {
+    "analytics": {
+      "google_analytics": {
+        "tracking_id": "String"
+      }
     }
   }
 }
@@ -27,10 +29,12 @@ To add any of these, add the required configuration under the `analytics` key:
 
 ```json
 {
-  "analytics": {
-    "plausible": {
-      "domain": "String",
-      "script_url": "Optional string for self hosted"
+  "marketing": {
+    "analytics": {
+      "plausible": {
+        "domain": "String",
+        "script_url": "Optional string for self hosted"
+      }
     }
   }
 }
@@ -40,9 +44,11 @@ To add any of these, add the required configuration under the `analytics` key:
 
 ```json
 {
-  "analytics": {
-    "fathom": {
-      "site": "String"
+  "marketing": {
+    "analytics": {
+      "fathom": {
+        "site": "String"
+      }
     }
   }
 }
@@ -52,10 +58,12 @@ To add any of these, add the required configuration under the `analytics` key:
 
 ```json
 {
-  "analytics": {
-    "unami": {
-      "website": "String",
-      "script_url": "String"
+  "marketing": {
+    "analytics": {
+      "unami": {
+        "website": "String",
+        "script_url": "String"
+      }
     }
   }
 }

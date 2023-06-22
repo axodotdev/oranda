@@ -62,7 +62,9 @@ So let's tell oranda it's ok to look through our GitHub Releases by enabling the
 
 ```json
 {
-  "changelog": true
+  "components": {
+    "changelog": true
+  }
 }
 ```
 

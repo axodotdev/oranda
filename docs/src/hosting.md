@@ -10,7 +10,9 @@ Let's say your website is hosted at `https://myorg.github.io/reponame/`, to fix 
 
 ```json
 {
-  "path_prefix": "reponame"
+  "build": {
+    "path_prefix": "reponame"
+  }
 }
 ```
 

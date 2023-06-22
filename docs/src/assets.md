@@ -14,7 +14,9 @@ If you want to use a custom-named directory you can configure this in your `oran
 
 ```json
 {
-  "static_dir": "assets"
+  "build": {
+    "static_dir": "assets"
+  }
 }
 ```
 
