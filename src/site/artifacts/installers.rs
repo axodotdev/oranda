@@ -17,10 +17,8 @@ pub fn build_header(release: &Release, config: &Config) -> Result<Box<div<String
     let downloads_href = link::generate(&config.build.path_prefix, "artifacts/");
     let tag = release.source.version_tag();
     let platforms_we_want = filter_platforms(release);
-    if platforms_we_want.is_empty() {
-        return Ok(html!(<div></div>));
-    }
-    let one_platform = platforms_we_want.len() == 1;
+
+    let simple_platforms = platforms_we_want.len() <= 1;
 
     let date_html = release.source.formatted_date().map(|date| {
         html!(<div><small class="published-date">{text!("Published on {}", date)}</small></div>)
@@ -39,8 +37,8 @@ pub fn build_header(release: &Release, config: &Config) -> Result<Box<div<String
         </div>
     );
 
-    // If there's only one platform we don't need scripts
-    let noscript = if one_platform {
+    // If there aren't multiple platform we don't need scripts
+    let noscript = if simple_platforms {
         None
     } else {
         Some(
@@ -48,38 +46,50 @@ pub fn build_header(release: &Release, config: &Config) -> Result<Box<div<String
         )
     };
     // If there's only one platform we don't need dropdowns
-    let selector = if one_platform {
-        let target = platforms_we_want.keys().next().unwrap();
-        if target == "all" {
-            // If we think this is a universal setup, don't mention platforms
-            None
+    let selector = if simple_platforms {
+        let target = platforms_we_want.keys().next();
+        if let Some(target) = target {
+            if target == "all" {
+                // If we think this is a universal setup, don't mention platforms
+                None
+            } else {
+                // Otherwise mention the platform
+                let os_name = triple_to_display_name(target).unwrap();
+                let desc = format!("Platform: {os_name}");
+                Some(html!(<div class="arch-select">{text!(desc)}</div>))
+            }
         } else {
-            // Otherwise mention the platform
-            let os_name = triple_to_display_name(target).unwrap();
-            let desc = format!("Platform: {os_name}");
-            Some(html!(<div class="arch-select">{text!(desc)}</div>))
+            None
         }
     } else {
         Some(html!(<div class="arch-select hidden">
             {text!("Platform: ")} {selector}
         </div>))
     };
-    let no_autodetect = if one_platform {
+    let no_autodetect = if simple_platforms {
         None
     } else {
         Some(html!(
         <div class="no-autodetect hidden">
             <span class="no-autodetect-details">{text!("We weren't able to detect your OS. ")}</span>
-            <a href=&downloads_href class="backup-download primary">{text!("View all installation options.")}</a>
         </div>
         ))
+    };
+
+    let bottom_classes = if simple_platforms {
+        "bottom-options one"
+    } else {
+        "bottom-options"
     };
     Ok(html!(
     <div class="artifacts" data-tag=tag>
         {main_html}
         {no_autodetect}
-        {selector}
         {noscript}
+        <div class=bottom_classes>
+            <a href=&downloads_href class="backup-download primary">{text!("View all installation options")}</a>
+            {selector}
+        </div>
     </div>
     ))
 }
@@ -87,23 +97,27 @@ pub fn build_header(release: &Release, config: &Config) -> Result<Box<div<String
 /// Build the tab and content HTML for all arches.
 fn build_arches(platforms: &Platforms, release: &Release, config: &Config) -> Vec<Box<li<String>>> {
     let mut html = vec![];
-    let one_platform = platforms.len() == 1;
+    let simple_platforms = platforms.len() == 1;
 
     for (target, installers) in platforms {
         // If there's only one installer, no need for tabs
         let tabs = if installers.len() == 1 {
             None
         } else {
-            let tabs = tab_list(target, release, installers, one_platform);
+            let tabs = tab_list(target, release, installers, simple_platforms);
             Some(html!(<ul class="tabs">
                 {tabs}
             </ul>))
         };
 
-        let contents = content_list(target, installers, release, config, one_platform);
+        let contents = content_list(target, installers, release, config, simple_platforms);
 
         // If there's only one entry, make it visible by default (noscript friendly)
-        let classes = if one_platform { "arch" } else { "arch hidden" };
+        let classes = if simple_platforms {
+            "arch"
+        } else {
+            "arch hidden"
+        };
         html.push(html!(
             <li class=classes data-arch=target>
                 {tabs}
@@ -122,14 +136,14 @@ fn tab_list(
     target: &TargetTriple,
     release: &Release,
     installers: &[InstallerIdx],
-    one_platform: bool,
+    simple_platforms: bool,
 ) -> Vec<Box<li<String>>> {
     let mut list = vec![];
     let mut is_first = true;
     for i in installers.iter() {
         let installer = release.artifacts.installer(i.to_owned());
         let string_idx = i.0.to_string();
-        let classes = if one_platform && is_first {
+        let classes = if simple_platforms && is_first {
             "install-tab selected"
         } else {
             "install-tab"
@@ -148,7 +162,7 @@ fn content_list(
     installers: &Vec<InstallerIdx>,
     release: &Release,
     config: &Config,
-    one_platform: bool,
+    simple_platforms: bool,
 ) -> Vec<Box<li<String>>> {
     let mut list = vec![];
     let mut is_first = true;
@@ -164,7 +178,7 @@ fn content_list(
         };
 
         // If there's only one platform, auto-show
-        let classes = if one_platform && is_first {
+        let classes = if simple_platforms && is_first {
             "install-content"
         } else {
             "install-content hidden"

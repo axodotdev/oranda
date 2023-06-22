@@ -11,7 +11,7 @@
 }
 
 .artifacts {
-  @apply flex gap-2 items-center flex-col mb-16 p-5;
+  @apply flex items-center flex-col mb-8 p-0;
   color: var(--light-highlight-fg-color);
   background-color: var(--light-highlight-bg-color);
 }
@@ -76,6 +76,13 @@ ul.tabs li.selected {
   @apply hover:no-underline;
 }
 
+.bottom-options {
+  @apply flex flex-row w-full justify-between;
+}
+.bottom-options.one {
+  @apply justify-center;
+}
+
 .install-code-wrapper {
   @apply flex items-stretch;
 }
@@ -103,9 +110,6 @@ ul.tabs li.selected {
   @apply block mb-2;
 }
 
-.arch-select {
-  @apply self-end;
-}
 
 .arch {
   @apply p-0 m-0 pt-4;
