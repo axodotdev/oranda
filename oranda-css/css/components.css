@@ -1,7 +1,7 @@
 /* FOOTER */
 
 footer {
-  @apply flex w-full justify-between px-4 py-2 text-xs items-center;
+  @apply flex w-full justify-between px-4 py-2 text-xs items-center shrink grow-0;
   background-color: var(--dark-color);
   color: var(--light-color);
 }

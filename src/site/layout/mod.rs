@@ -72,11 +72,13 @@ impl Layout {
             </head>
             <body>
             <div class="container">
-                {banner}
-                <main>
-                    {header}
-                    <div>{text!(BODY_PLACEHOLDER)}</div>
-                </main>
+                <div class="page-body">
+                    {banner}
+                    <main>
+                        {header}
+                        <div>{text!(BODY_PLACEHOLDER)}</div>
+                    </main>
+                </div>
                 {footer}
             </div>
                 {analytics.snippet}
