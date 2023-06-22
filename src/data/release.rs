@@ -88,8 +88,13 @@ impl Release {
     pub async fn new(
         source: ReleaseSource,
         repo: Option<&GithubRepo>,
-        artifacts_config: &ArtifactsConfig,
+        artifacts_config: Option<&ArtifactsConfig>,
     ) -> Result<Self> {
+        // If artifacts are disabled then bail out, because all this code is just artifacts stuff
+        let Some(artifacts_config) = artifacts_config else {
+            return Ok(Self { manifest: None, source, artifacts: ReleaseArtifacts::new(None)} )
+        };
+
         let manifest = if let (ReleaseSource::Github(gh_release), Some(repo)) = (&source, repo) {
             if artifacts_config.cargo_dist {
                 Self::fetch_manifest(gh_release, repo).await?
@@ -118,7 +123,7 @@ impl Release {
         artifacts.add_inference();
 
         // Compute the final result
-        artifacts.select_installers();
+        artifacts.select_installers(artifacts_config);
 
         Ok(Self {
             manifest,

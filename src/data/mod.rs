@@ -1,4 +1,4 @@
-use crate::config::{ArtifactsConfig, Config};
+use crate::config::{ArtifactsConfig, ProjectConfig};
 use crate::data::github::{GithubRelease, GithubRepo};
 use crate::data::release::CurrentStateRelease;
 use crate::errors::*;
@@ -35,28 +35,33 @@ pub struct Context {
 
 impl Context {
     /// Make a Context with a faux-release for the current project state
-    pub fn new_current(config: &Config) -> Result<Self> {
-        let releases =
-            tokio::runtime::Handle::current().block_on(Self::make_current_release(None, config))?;
-        Ok(Self::with_releases(
+    pub fn new_current(
+        project_config: &ProjectConfig,
+        artifacts_config: Option<&ArtifactsConfig>,
+    ) -> Result<Self> {
+        let releases = tokio::runtime::Handle::current().block_on(Self::make_current_release(
             None,
-            releases,
-            &config.components.artifacts,
-        ))
+            project_config,
+            artifacts_config,
+        ))?;
+        Ok(Self::with_releases(None, releases, artifacts_config))
     }
     /// Get releases using github
-    pub fn new_github(repo_url: &str, config: &Config) -> Result<Self> {
+    pub fn new_github(
+        repo_url: &str,
+        project_config: &ProjectConfig,
+        artifacts_config: Option<&ArtifactsConfig>,
+    ) -> Result<Self> {
         let repo = GithubRepo::from_url(repo_url)?;
-        let mut releases = Self::fetch_all_releases(&repo, &config.components.artifacts)?;
+        let mut releases = Self::fetch_all_releases(&repo, artifacts_config)?;
         if releases.is_empty() {
-            releases = tokio::runtime::Handle::current()
-                .block_on(Self::make_current_release(Some(&repo), config))?;
+            releases = tokio::runtime::Handle::current().block_on(Self::make_current_release(
+                Some(&repo),
+                project_config,
+                artifacts_config,
+            ))?;
         }
-        Ok(Self::with_releases(
-            Some(repo),
-            releases,
-            &config.components.artifacts,
-        ))
+        Ok(Self::with_releases(Some(repo), releases, artifacts_config))
     }
 
     /// Get the latest release, if it exists
@@ -73,7 +78,7 @@ impl Context {
     /// Fetch and process all the Github Releases to produce a final result
     pub fn fetch_all_releases(
         repo: &GithubRepo,
-        artifacts_config: &ArtifactsConfig,
+        artifacts_config: Option<&ArtifactsConfig>,
     ) -> Result<Vec<Release>> {
         let gh_releases =
             tokio::runtime::Handle::current().block_on(GithubRelease::fetch_all(repo))?;
@@ -92,7 +97,7 @@ impl Context {
     fn with_releases(
         repo: Option<GithubRepo>,
         releases: Vec<Release>,
-        artifacts_config: &ArtifactsConfig,
+        artifacts_config: Option<&ArtifactsConfig>,
     ) -> Self {
         // Walk through all the releases (from newest to oldest) to find the latest ones
         //
@@ -131,7 +136,7 @@ impl Context {
 
             // Special handling of dist-manifest.json
             if release.manifest.is_some() {
-                if artifacts_config.cargo_dist {
+                if artifacts_config.map(|a| a.cargo_dist).unwrap_or(false) {
                     // cargo-dist is enabled, so we want to find the latest stable release
                     // or, failing that, the latest prerelease.
                     if is_prerelease {
@@ -191,16 +196,17 @@ impl Context {
 
     async fn make_current_release(
         repo: Option<&GithubRepo>,
-        config: &Config,
+        project_config: &ProjectConfig,
+        artifacts_config: Option<&ArtifactsConfig>,
     ) -> Result<Vec<Release>> {
         let release = Release::new(
             ReleaseSource::CurrentState(CurrentStateRelease {
-                version: config.project.version.to_owned(),
+                version: project_config.version.to_owned(),
                 date: None,
                 prerelease: false,
             }),
             repo,
-            &config.components.artifacts,
+            artifacts_config,
         )
         .await?;
         Ok(vec![release])

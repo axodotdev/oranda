@@ -233,7 +233,13 @@ impl ReleaseArtifacts {
     }
 
     /// Now that we've added all the data sources, select installers for each target
-    pub fn select_installers(&mut self) {
+    pub fn select_installers(&mut self, artifacts_config: &ArtifactsConfig) {
+        // Hide anything that the user has asked for
+        for installer in &mut self.installers {
+            if artifacts_config.hidden.contains(&installer.label) {
+                installer.display = DisplayPreference::Hidden;
+            }
+        }
         for target in KNOWN_TARGET_TRIPLES.iter().copied().flatten().copied() {
             // Gather up all the installers into an array
             let mut installers = vec![];
