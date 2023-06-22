@@ -8,8 +8,18 @@ use oranda::site::Site;
 
 #[derive(Debug, Parser)]
 pub struct Build {
+    /// DO NOT USE: Path to the root dir of the project
+    ///
+    /// This flag exists for internal testing. It is incorrectly implemented for actual
+    /// end-users and will make you very confused and sad.
+    #[clap(hide = true)]
     #[arg(long, default_value = "./")]
     project_root: Utf8PathBuf,
+    /// DO NOT USE: Path to the oranda.json
+    ///
+    /// This flag exists for internal testing. It is incorrectly implemented for actual
+    /// end-users and will make you very confused and sad.
+    #[clap(hide = true)]
     #[arg(long, default_value = "./oranda.json")]
     config_path: Utf8PathBuf,
 }
