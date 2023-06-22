@@ -272,7 +272,6 @@ Before version 0.1.0 (the last stable version was/is 0.0.3, the last prerelease 
 configuration format looked like this:
 
 ```json
-```json
 {
   "name": "oranda",
   "description": "generate static sites for your dev tools",
@@ -311,5 +310,4 @@ configuration format looked like this:
   },
   "changelog": true
 }
-```
 ```
