@@ -154,7 +154,6 @@ fn loads_js() {
     assert!(page.contents.contains(r#"<script src="/artifacts.js">"#));
 }
 
-#[ignore]
 #[test]
 fn creates_download_for_mac() {
     let _guard = TEST_RUNTIME.enter();
@@ -162,7 +161,9 @@ fn creates_download_for_mac() {
     let config = oranda_config::cargo_dist(temp_dir);
     let layout = Layout::new(&config).unwrap();
     let page = page::index_with_artifacts(&config, &layout);
-    assert!(page.contents.contains(r#"<span class="detect">We have detected you are on <span class="detected-os">mac</span>, are we wrong?</span>"#));
+    assert!(page
+        .contents
+        .contains(r#"<option value="x86_64-apple-darwin">x64 macOS</option>"#));
 }
 
 #[test]
@@ -214,7 +215,6 @@ fn creates_copy_to_clipboard_artifacts() {
 }
 
 #[test]
-#[ignore]
 fn adds_prefix() {
     let _guard = TEST_RUNTIME.enter();
     let (_t, temp_dir) = temp_build_dir();
@@ -224,10 +224,9 @@ fn adds_prefix() {
     assert!(page.contents.contains("<script src=\"/axo/artifacts.js\">"));
     assert!(page
         .contents
-        .contains(r#"<a href="/axo/artifacts/">View all installation options</a>"#))
+        .contains(r#"href="/axo/artifacts/">View all installation options.</a>"#))
 }
 
-#[ignore]
 #[test]
 fn adds_prefix_with_package_managers() {
     let _guard = TEST_RUNTIME.enter();
@@ -236,9 +235,6 @@ fn adds_prefix_with_package_managers() {
     let layout = Layout::new(&config).unwrap();
     let page = page::index_with_artifacts(&config, &layout);
     assert!(page.contents.contains("<script src=\"/axo/artifacts.js\">"));
-    assert!(page
-        .contents
-        .contains(r#"<a class="download-all" href="/axo/artifacts.html">View all downloads</a>"#));
 }
 
 #[test]
