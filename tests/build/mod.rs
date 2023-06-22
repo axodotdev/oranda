@@ -154,7 +154,6 @@ fn loads_js() {
     assert!(page.contents.contains(r#"<script src="/artifacts.js">"#));
 }
 
-#[ignore]
 #[test]
 fn creates_download_for_mac() {
     let _guard = TEST_RUNTIME.enter();
@@ -214,7 +213,6 @@ fn creates_copy_to_clipboard_artifacts() {
 }
 
 #[test]
-#[ignore]
 fn adds_prefix() {
     let _guard = TEST_RUNTIME.enter();
     let (_t, temp_dir) = temp_build_dir();
@@ -227,7 +225,6 @@ fn adds_prefix() {
         .contains(r#"<a href="/axo/artifacts/">View all installation options</a>"#))
 }
 
-#[ignore]
 #[test]
 fn adds_prefix_with_package_managers() {
     let _guard = TEST_RUNTIME.enter();
