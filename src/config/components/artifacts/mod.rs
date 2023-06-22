@@ -33,15 +33,18 @@ enum ArtifactSystem {
     Freebsd,
 }
 
+/// Info about downloadable artifacts / installers / package-managers (cimplete version)
 #[derive(Debug)]
 pub struct ArtifactsConfig {
     pub cargo_dist: bool,
     pub package_managers: PackageManagersConfig,
+    pub hidden: Vec<String>,
 }
 #[derive(Debug, Default, Deserialize, JsonSchema)]
 pub struct ArtifactsLayer {
     pub cargo_dist: Option<bool>,
     pub package_managers: Option<PackageManagersLayer>,
+    pub hidden: Option<Vec<String>>,
 }
 
 impl Default for ArtifactsConfig {
@@ -49,6 +52,7 @@ impl Default for ArtifactsConfig {
         ArtifactsConfig {
             cargo_dist: false,
             package_managers: PackageManagersConfig::default(),
+            hidden: vec![],
         }
     }
 }
@@ -59,10 +63,12 @@ impl ApplyLayer for ArtifactsConfig {
         let ArtifactsLayer {
             cargo_dist,
             package_managers,
+            hidden,
         } = layer;
         self.cargo_dist.apply_val(cargo_dist);
-        // FIXME: should this get merged with e.g. `extend?`
         self.package_managers.apply_val_layer(package_managers);
+        // In the future this might want to be `extend`
+        self.hidden.apply_val(hidden);
     }
 }
 

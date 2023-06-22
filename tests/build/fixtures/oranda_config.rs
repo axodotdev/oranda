@@ -34,10 +34,11 @@ pub fn no_artifacts(temp_dir: String) -> Config {
         components: ComponentConfig {
             mdbook: None,
             funding: None,
-            artifacts: ArtifactsConfig {
+            artifacts: Some(ArtifactsConfig {
                 cargo_dist: false,
                 package_managers: PackageManagersConfig::default(),
-            },
+                ..Default::default()
+            }),
             ..Default::default()
         },
         ..Default::default()
@@ -87,10 +88,10 @@ pub fn path_prefix(temp_dir: String) -> Config {
             ..Default::default()
         },
         components: ComponentConfig {
-            artifacts: ArtifactsConfig {
+            artifacts: Some(ArtifactsConfig {
                 cargo_dist: true,
                 ..Default::default()
-            },
+            }),
             ..Default::default()
         },
         styles: StyleConfig {
@@ -132,10 +133,11 @@ pub fn path_prefix_with_package_managers(temp_dir: String) -> Config {
             ..Default::default()
         },
         components: ComponentConfig {
-            artifacts: ArtifactsConfig {
+            artifacts: Some(ArtifactsConfig {
                 cargo_dist: false,
                 package_managers: build_package_managers(),
-            },
+                ..Default::default()
+            }),
             ..Default::default()
         },
         styles: StyleConfig {
@@ -160,10 +162,10 @@ pub fn cargo_dist(temp_dir: String) -> Config {
             ..Default::default()
         },
         components: ComponentConfig {
-            artifacts: ArtifactsConfig {
+            artifacts: Some(ArtifactsConfig {
                 cargo_dist: true,
                 ..Default::default()
-            },
+            }),
             ..Default::default()
         },
         ..Default::default()
@@ -181,10 +183,10 @@ pub fn package_managers(temp_dir: String) -> Config {
             ..Default::default()
         },
         components: ComponentConfig {
-            artifacts: ArtifactsConfig {
+            artifacts: Some(ArtifactsConfig {
                 package_managers: build_package_managers(),
                 ..Default::default()
-            },
+            }),
             ..Default::default()
         },
         ..Default::default()

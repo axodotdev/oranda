@@ -36,7 +36,7 @@ async fn fetch_logo(
 fn nav(
     additional_pages: &IndexMap<String, String>,
     path_prefix: &Option<String>,
-    artifacts: &ArtifactsConfig,
+    artifacts: Option<&ArtifactsConfig>,
     md_book: &Option<MdBookConfig>,
     changelog: &bool,
     funding: &Option<FundingConfig>,
@@ -71,11 +71,13 @@ fn nav(
         }
     }
 
-    if artifacts.has_some() {
-        Message::new(MessageType::Info, "Adding artifacts page...").print();
-        let href = link::generate(path_prefix, "artifacts/");
-        html.extend(html!(<li><a href=href>{text!("Install")}</a></li>));
-    };
+    if let Some(artifacts) = artifacts {
+        if artifacts.has_some() {
+            Message::new(MessageType::Info, "Adding artifacts page...").print();
+            let href = link::generate(path_prefix, "artifacts/");
+            html.extend(html!(<li><a href=href>{text!("Install")}</a></li>));
+        };
+    }
 
     if md_book.is_some() {
         Message::new(MessageType::Info, "Adding book...").print();
@@ -124,14 +126,19 @@ pub fn create(config: &Config) -> Result<Box<header<String>>> {
     };
 
     let nav = if !config.build.additional_pages.is_empty()
-        || config.components.artifacts.has_some()
+        || config
+            .components
+            .artifacts
+            .as_ref()
+            .map(|a| a.has_some())
+            .unwrap_or(false)
         || config.components.mdbook.is_some()
         || config.components.changelog
     {
         Some(nav(
             &config.build.additional_pages,
             &config.build.path_prefix,
-            &config.components.artifacts,
+            config.components.artifacts.as_ref(),
             &config.components.mdbook,
             &config.components.changelog,
             &config.components.funding,

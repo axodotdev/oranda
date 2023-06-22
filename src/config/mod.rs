@@ -95,7 +95,9 @@ impl Config {
             } = layer;
 
             self.project.apply_layer(project);
-            self.components.artifacts.cargo_dist.apply_val(cargo_dist);
+            if let Some(artifacts) = &mut self.components.artifacts {
+                artifacts.cargo_dist.apply_val(cargo_dist);
+            }
         }
     }
 

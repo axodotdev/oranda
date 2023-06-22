@@ -49,8 +49,14 @@ impl Site {
 
         if Self::needs_context(config) {
             let mut context = match &config.project.repository {
-                Some(repo_url) => Context::new_github(repo_url, config)?,
-                None => Context::new_current(config)?,
+                Some(repo_url) => Context::new_github(
+                    repo_url,
+                    &config.project,
+                    config.components.artifacts.as_ref(),
+                )?,
+                None => {
+                    Context::new_current(&config.project, config.components.artifacts.as_ref())?
+                }
             };
             // FIXME: change the config so that you can set `artifacts: false` and disable this?
             if context.latest().is_some() {
@@ -87,7 +93,12 @@ impl Site {
     }
 
     fn needs_context(config: &Config) -> bool {
-        config.components.artifacts.has_some()
+        config
+            .components
+            .artifacts
+            .as_ref()
+            .map(|a| a.has_some())
+            .unwrap_or(false)
             || config.components.changelog
             || config.components.funding.is_some()
     }

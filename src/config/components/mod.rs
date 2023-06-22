@@ -35,7 +35,7 @@ pub struct ComponentConfig {
     /// This defaults to Some(Default) and is set to None
     /// if we fail to auto-detect necessary information or if the user
     /// manually disables it.
-    pub artifacts: ArtifactsConfig,
+    pub artifacts: Option<ArtifactsConfig>,
 }
 /// Extra components (partial version used by oranda.json)
 #[derive(Debug, Deserialize, JsonSchema)]
@@ -61,7 +61,7 @@ pub struct ComponentLayer {
     /// This defaults to Some(Default) and is set to None
     /// if we fail to auto-detect necessary information or if the user
     /// manually disables it.
-    pub artifacts: Option<ArtifactsLayer>,
+    pub artifacts: Option<BoolOr<ArtifactsLayer>>,
 }
 impl Default for ComponentConfig {
     fn default() -> Self {
@@ -69,7 +69,7 @@ impl Default for ComponentConfig {
             changelog: false,
             mdbook: Some(MdBookConfig::default()),
             funding: Some(FundingConfig::default()),
-            artifacts: ArtifactsConfig::default(),
+            artifacts: Some(ArtifactsConfig::default()),
         }
     }
 }
@@ -86,6 +86,6 @@ impl ApplyLayer for ComponentConfig {
         self.changelog.apply_val(changelog);
         self.mdbook.apply_bool_layer(mdbook);
         self.funding.apply_bool_layer(funding);
-        self.artifacts.apply_val_layer(artifacts);
+        self.artifacts.apply_bool_layer(artifacts);
     }
 }
