@@ -7,8 +7,10 @@ The option's format is an object with the human-readable page name as keys, and 
 
 ```json
 {
-  "additional_pages": {
-    "Another page": "./AnotherFile.md"
+  "build": {
+    "additional_pages": {
+      "Another page": "./AnotherFile.md"
+    }
   }
 }
 ```

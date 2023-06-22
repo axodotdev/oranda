@@ -5,8 +5,10 @@ at your book directory using the `mdbook.path` option:
 
 ```json
 {
-  "mdbook": {
-    "path": "./docs"
+  "components": {
+    "mdbook": {
+      "path": "./docs"
+    }
   }
 }
 ```

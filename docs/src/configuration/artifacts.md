@@ -6,13 +6,15 @@ Artifact settings are managed in the `artifacts` key in your oranda config. This
 
 ```json
 {
-  "artifacts": {
-    "cargo_dist": true,
-    "package_managers": {
-      "npm": "npm install @axodotdev/oranda --save-dev",
-      "npx": "npx @axodotdev/oranda",
-      "crates.io": "cargo install oranda --locked --profile=dist",
-      "binstall": "cargo binstall oranda"
+  "components": {
+    "artifacts": {
+      "cargo_dist": true,
+      "package_managers": {
+        "npm": "npm install @axodotdev/oranda --save-dev",
+        "npx": "npx @axodotdev/oranda",
+        "crates.io": "cargo install oranda --locked --profile=dist",
+        "binstall": "cargo binstall oranda"
+      }
     }
   }
 }
