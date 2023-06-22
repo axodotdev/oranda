@@ -10,10 +10,16 @@ pub struct PackageManagersConfig {
     pub preferred: IndexMap<String, String>,
     pub additional: IndexMap<String, String>,
 }
-/// Package managers to display (partial version used by oranda.json)
+/// Package managers to display
 #[derive(Debug, Deserialize, JsonSchema)]
 pub struct PackageManagersLayer {
+    /// Packages to display in both the install widget and install page
+    ///
+    /// See docs for the parent "package_managers" field for details
     pub preferred: Option<IndexMap<String, String>>,
+    /// Packages to display in just the install page
+    ///
+    /// See docs for the parent "package_managers" field for details
     pub additional: Option<IndexMap<String, String>>,
 }
 

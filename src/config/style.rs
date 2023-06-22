@@ -18,14 +18,33 @@ pub struct StyleConfig {
     pub logo: Option<String>,
     pub favicon: Option<String>,
 }
-/// Config related to styling your page (partial version used by oranda.json)
+/// Settings for styling your page
 #[derive(Debug, Deserialize, JsonSchema)]
 pub struct StyleLayer {
+    /// The builtin oranda theme to use for all your pages
+    ///
+    /// If using oranda's mdbook integration this will also restyle your mdbook
+    /// (assuming we made an equivalent mdbook theme).
+    ///
+    /// Default is "dark"
     pub theme: Option<OrandaTheme>,
+    /// The builtin syntax highlighting theme to use for all your pages
+    ///
+    /// WARNING: this feature is currently non-functional, only the default works!
+    ///
+    /// Default is "MaterialTheme"
     pub syntax_theme: Option<SyntaxTheme>,
+    /// A list of relative paths to extra css files to include in all your pages
     pub additional_css: Option<Vec<String>>,
+    /// A way to force oranda to use a different archived version of its builtin css
+    ///
+    /// The value is the git-tag of the release on the oranda repo to fetch oranda.css from.
+    ///
+    /// Example: "css-v0.0.7"
     pub oranda_css_version: Option<String>,
+    /// A relative path or URL to an image to use as the logo of your project
     pub logo: Option<String>,
+    /// A relative path or URL to an image to use as the favicon of your site
     pub favicon: Option<String>,
 }
 

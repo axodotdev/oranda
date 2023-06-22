@@ -27,25 +27,62 @@ pub struct ProjectConfig {
     pub license: Option<String>,
 }
 
-/// Information about the project (partial version used by oranda.json)
+/// Info about the project/application you're making a site for
+///
+/// All of these values should automatically be sourced from your Cargo.toml or package.json
+/// whenever possible. You should only need to set these if you want to override the value.
 #[derive(Debug, Deserialize, JsonSchema)]
 pub struct ProjectLayer {
     /// Name of the project
+    ///
+    /// This is used for the top-level heading on your site, as well as the title and footer.
+    ///
+    /// This is automatically sourced from your Cargo.toml or package.json.
     pub name: Option<String>,
-    /// Current version of the project(?)
+    /// Current version of the project
+    ///
+    /// This is used as a last-resort fallback when referring to the current release
+    /// of your project. If using richer integrations like our support for GitHub Releases,
+    /// we'll prefer that source and complete ignore this field.
+    ///
+    /// This is automatically sourced from your Cargo.toml or package.json.
     pub version: Option<String>,
     /// Brief description of the project
+    ///
+    /// This is used as metadata for things like preview links to your site.
+    ///
+    /// This is automatically sourced from your Cargo.toml or package.json.
     pub description: Option<String>,
     /// URL to the homepage of the project
+    ///
+    /// This is used as metadata for things like preview links to your site.
+    ///
+    /// This is automatically sourced from your Cargo.toml or package.json.
     pub homepage: Option<String>,
     /// URL to the repository of the project
     ///
-    /// If this is of the form `https://github.com/$USER/$PROJECT/` we can
-    /// enable more advanced Github support
+    /// This is used for a lot of things and super important for enabling richer
+    /// integrations. If this is of the form `https://github.com/$USER/$PROJECT/` we can
+    /// enable more advanced GitHub support like reading your GitHub Releases to generate
+    /// pages for every release and doing platform-autodetected installation options.
+    ///
+    /// This is automatically sourced from your Cargo.toml or package.json, although
+    /// we might not handle the more complicated formats that package.json supports.
     pub repository: Option<String>,
     /// Relative path to the README of this project
+    ///
+    /// This will become the body of your site's front page.
+    ///
+    /// By default we will just check for a README.md in the current working directory.
+    ///
+    /// This is automatically sourced from your Cargo.toml. To the best of our
+    /// knowledge there is no equivalent field in package.json.
     pub readme_path: Option<String>,
-    /// License of the project (probably SPDX format)
+    /// License of the project
+    ///
+    /// This is displayed in the footer of your pages.
+    ///
+    /// This is automatically sourced from your Cargo.toml or package.json.
     pub license: Option<String>,
 }
 

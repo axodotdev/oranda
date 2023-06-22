@@ -10,22 +10,22 @@ use crate::{
 
 /// Info gleaned from axoproject
 #[derive(Debug)]
-pub struct AxoprojectConfig {
+pub struct AxoprojectLayer {
     /// Generic project info
     pub project: ProjectLayer,
     /// Did they have cargo_dist settings?
     pub cargo_dist: Option<bool>,
 }
 
-impl AxoprojectConfig {
-    pub fn load(project_root: Option<PathBuf>) -> Result<Option<AxoprojectConfig>> {
+impl AxoprojectLayer {
+    pub fn load(project_root: Option<PathBuf>) -> Result<Option<AxoprojectLayer>> {
         // Start in the project root, or failing that current dir
         let start_dir = project_root.unwrap_or_else(|| {
             std::env::current_dir().expect("couldn't get current working dir!?")
         });
         let start_dir = Utf8PathBuf::from_path_buf(start_dir).expect("project path isn't utf8!?");
 
-        if let Some((workspace, pkg)) = AxoprojectConfig::get_project(&start_dir) {
+        if let Some((workspace, pkg)) = AxoprojectLayer::get_project(&start_dir) {
             // Cool we found the best possible match, now extract all the values we care about from it
             let package = workspace.package(pkg);
 
@@ -35,7 +35,7 @@ impl AxoprojectConfig {
                 .cargo_metadata_table
                 .as_ref()
                 .map(|t| t.get("dist").is_some());
-            Ok(Some(AxoprojectConfig {
+            Ok(Some(AxoprojectLayer {
                 project: ProjectLayer {
                     name: Some(package.name.clone()),
                     description: package.description.clone(),

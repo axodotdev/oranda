@@ -16,14 +16,38 @@ pub struct MdBookConfig {
     pub theme: bool,
 }
 
-/// Config for us building and integrating your mdbook (partial version used by oranda.json)
+/// The config for building and embedding an mdbook on your site
 #[derive(Debug, Default, Deserialize, JsonSchema)]
 pub struct MdBookLayer {
-    /// Path to the mdbook
+    /// Path to the mdbook (the directory containing book.toml)
     ///
-    /// If not set we will attempt to auto-detect
+    /// If not set we will attempt to auto-detect this by trying
+    ///  "./", "./book/", and "./docs/".
     pub path: Option<String>,
-    /// Whether to enable the custom oranda/axo theme
+    /// Whether to enable oranda's customized mdbook theme that unifies
+    /// with your oranda theme.
+    ///
+    /// If enabled we will use mdbook's custom themeing system to overwrite
+    /// most of the hbs/css/js file mdbook defines to add hooks for our
+    /// custom themes to be enabled and defaulted on. The existing mdbook
+    /// themes will still be available and should work normally.
+    ///
+    /// Unfortunately this means that `mdbook build` won't produce the same
+    /// results as `oranda build`. In the future we may introduce a way
+    /// to "vendor" the changes oranda makes so that `mdbook build` behaves
+    /// the same. This should be possible because we mostly use officially
+    /// supported mdbook settings when changing the theme (the only exception
+    /// being we add an extra css file for our theme's syntax highlighter).
+    ///
+    /// Any other mdbook settings should ideally be preserved/respected.
+    ///
+    /// If the theme has a paired dark/light variant, that variant will
+    /// also be made available, although we won't respect mdbook's builtin
+    /// preferred dark-mode setting, to ensure the rest of your oranda site
+    /// always looks the same (this may be improved when the rest of oranda
+    /// gets richer support for light/dark-mode).
+    ///
+    /// defaults to true
     pub theme: Option<bool>,
 }
 
