@@ -5,6 +5,7 @@ use std::time::Duration;
 use axoproject::WorkspaceSearch;
 use camino::Utf8PathBuf;
 use clap::Parser;
+use miette::Report;
 
 use crate::{
     commands::{Build, Serve},
@@ -187,9 +188,12 @@ impl Dev {
                 )
                 .print();
 
-                Build::new(self.project_root.clone(), self.config_path.clone())
-                    .run()
-                    .unwrap();
+                if let Err(e) =
+                    Build::new(self.project_root.clone(), self.config_path.clone()).run()
+                {
+                    eprintln!("{:?}", Report::new(e));
+                    continue;
+                }
             }
         }
     }
