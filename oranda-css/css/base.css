@@ -4,8 +4,16 @@
 
 body,
 html {
-  @apply scroll-smooth;
+  @apply scroll-smooth h-full;
   font-family: var(--font-face);
+}
+
+.container {
+  @apply min-h-full flex flex-col;
+}
+
+.page-body {
+  @apply grow;
 }
 
 *:focus {
