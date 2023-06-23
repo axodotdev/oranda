@@ -16,15 +16,11 @@ pub fn page(context: &Context, config: &Config) -> Result<String> {
         return Ok(String::new());
     };
 
-    let header = installers::build_header(release, config)?;
     let installer_scripts = scripts(release, config)?;
     let artifact_table = table::build(release, config)?;
 
     Ok(html!(
     <div>
-        <div>
-            {header}
-        </div>
         <div class="package-managers-downloads">
             {installer_scripts}
         </div>
