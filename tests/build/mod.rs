@@ -224,7 +224,7 @@ fn adds_prefix() {
     assert!(page.contents.contains("<script src=\"/axo/artifacts.js\">"));
     assert!(page
         .contents
-        .contains(r#"href="/axo/artifacts/">View all installation options.</a>"#))
+        .contains(r#"href="/axo/artifacts/">View all installation options</a>"#))
 }
 
 #[test]
@@ -237,7 +237,7 @@ fn adds_prefix_with_package_managers() {
     assert!(page.contents.contains("<script src=\"/axo/artifacts.js\">"));
      assert!(page
         .contents
-        .contains(r#"href="/axo/artifacts/">View all installation options.</a>"#))
+        .contains(r#"href="/axo/artifacts/">View all installation options</a>"#))
 }
 
 #[test]
