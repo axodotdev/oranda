@@ -76,7 +76,7 @@ pub fn build_header(release: &Release, config: &Config) -> Result<Box<div<String
         ))
     };
 
-    let bottom_classes = if simple_platforms {
+    let bottom_classes = if selector.is_none() {
         "bottom-options one"
     } else {
         "bottom-options"
