@@ -59,7 +59,13 @@ impl Site {
                 }
             };
             // FIXME: change the config so that you can set `artifacts: false` and disable this?
-            if context.latest().is_some() {
+            let artifacts_enabled = config
+                .components
+                .artifacts
+                .as_ref()
+                .map(|a| a.has_some())
+                .unwrap_or(false);
+            if context.latest().is_some() && artifacts_enabled {
                 context
                     .latest_mut()
                     .unwrap()
