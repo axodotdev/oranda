@@ -29,14 +29,15 @@ off, error, warn, info, debug, trace]
 ## Basic Setup
 
 oranda is designed to be a tool you can simply drop into an existing project. For the purposes of this
-guide, we're going to use [axolotlsay], a simple CLI project, but you can use one of your own
+guide, we're going to use [minimal-axolotlsay], a simple CLI project, but you can use one of your own
 projects, or even set up a new one from scratch! The only hard requirement oranda has is for your
 project to have a readme file (`README.md`).
 
 The easiest way to get a feedback loop going with oranda is to move into the directory and run `oranda dev`:
 
 ```
-cd axolotlsay
+git clone https://github.com/axodotdev/minimal-axolotlsay
+cd minimal-axolotlsay
 oranda dev
 ```
 
@@ -48,17 +49,19 @@ if you open localhost:7979, you'll see something like this:
 
 oranda has picked up on our readme file and converted it into a static page! How nice!
 
+`minimal-axolotlsay` also has integration with [cargo-dist] already set up - a powerful way to streamling
+cross-platform releases of applications. Since oranda and cargo-dist integrate, oranda already knows
+about our cargo-dist releases, and automatically shows a widget and page to download the latest binaries.
+
+How does oranda know where our repository is? It extracts the `repository` key from our `Cargo.toml` file!
+oranda can do this for Rust and JavaScript/Node.js-based projects at the moment. This way, you don't need to
+explicitly specify a lot of info you may already be keeping elsewhere.
+
 ## Beyond the Basics
 
 If we want to work with the more advanced features that oranda offers, we'll have to create a configuration file.
 The default location of this file is `oranda.json` in the same directory where your project manifest is located.
-You can view a full reference of the configuration schema [here](./configuration.md). Let's start by making the simplest and highest impact change: telling oranda that our project has releases and changelogs that it should make pages for!
-
-`axolotlsay` uses GitHub Releases, and oranda knows how to handle those, so all it needs is the URL
-to our repository and permission to do so. As it turns out, oranda already has the URL, because it
-_also_ knows how to find and read `Cargo.toml` files, and ours specifies
-`repository = "https://github.com/axodotdev/axolotlsay"`.
-So let's tell oranda it's ok to look through our GitHub Releases by enabling the "changelog" feature:
+You can view a full reference of the configuration schema [here](./configuration.md). Let's start by making the simplest and highest impact change: telling oranda that our project has changelogs that it should make pages for!
 
 ```json
 {
@@ -68,7 +71,7 @@ So let's tell oranda it's ok to look through our GitHub Releases by enabling the
 }
 ```
 
-If you now build again, it should look like this:
+If you now build again (you may have to restart `oranda dev` since we added a new file to watch), it should look like this:
 
 ![an image of oranda with changelogs enabled](./images/quickstart-2.png)
 
@@ -79,4 +82,5 @@ than enabling the changelog setting!
 
 For more specific configuration, check out the [configuration page](./configuration.md) and its sub-pages.
 
-[axolotlsay]: https://github.com/axodotdev/axolotlsay
+[minimal-axolotlsay]: https://github.com/axodotdev/minimal-axolotlsay
+[cargo-dist]: https://opensource.axo.dev/cargo-dist
