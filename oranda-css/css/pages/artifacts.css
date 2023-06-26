@@ -11,7 +11,7 @@
 }
 
 .artifacts {
-  @apply flex items-center flex-col mb-8 p-0;
+  @apply sm:flex items-center flex-col mb-8 p-0 hidden;
   color: var(--light-highlight-fg-color);
   background-color: var(--light-highlight-bg-color);
 }
@@ -28,7 +28,6 @@ ul.tabs {
 ul.tabs li {
   @apply hover:cursor-pointer m-0 px-3 py-2 text-base;
 }
-
 
 ul.tabs li.selected {
   color: var(--light-highlight-bg-color);
@@ -110,11 +109,14 @@ ul.tabs li.selected {
   @apply block mb-2;
 }
 
-
 .arch {
   @apply p-0 m-0 pt-4;
 }
 .arch .contents {
   @apply pt-4;
   min-height: 7rem;
+}
+
+.mobile-download {
+  @apply block sm:hidden mx-auto mb-12;
 }

@@ -82,14 +82,17 @@ pub fn build_header(release: &Release, config: &Config) -> Result<Box<div<String
         "bottom-options"
     };
     Ok(html!(
-    <div class="artifacts" data-tag=tag>
-        {main_html}
-        {no_autodetect}
-        {noscript}
-        <div class=bottom_classes>
-            <a href=&downloads_href class="backup-download primary">{text!("View all installation options")}</a>
-            {selector}
+    <div>
+        <div class="artifacts" data-tag=tag>
+            {main_html}
+            {no_autodetect}
+            {noscript}
+            <div class=bottom_classes>
+                <a href=&downloads_href class="backup-download primary">{text!("View all installation options")}</a>
+                {selector}
+            </div>
         </div>
+        <a href=&downloads_href class="button mobile-download primary">{text!("View all installation options")}</a>
     </div>
     ))
 }
