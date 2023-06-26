@@ -33,7 +33,7 @@ pub struct StyleLayer {
     /// WARNING: this feature is currently non-functional, only the default works!
     ///
     /// Default is "MaterialTheme"
-    pub syntax_theme: Option<SyntaxTheme>,
+    syntax_theme: Option<SyntaxTheme>,
     /// A list of relative paths to extra css files to include in all your pages
     pub additional_css: Option<Vec<String>>,
     /// A way to force oranda to use a different archived version of its builtin css

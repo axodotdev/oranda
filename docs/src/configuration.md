@@ -7,7 +7,7 @@
     - [`version`](#version) 📦 - current version of your project
     - [`description`](#description) 📦 - brief description of your project
     - [`homepage`](#homepage) 📦 - url to the homepage of your project
-    - [`repository`](#repository) 📦 - url to the repository of your project 
+    - [`repository`](#repository) 📦 - url to the repository of your project
     - [`readme_path`](#readmepath) - relative custom path to your project's readme file
     - [`license`](#license) 📦 - license of your project (in SPDX format)
   - [Build Configuration](#build-configuration)
@@ -20,7 +20,6 @@
     - [`social`](#social) - additional configuration for SEO-related inserts
   - [Theme/Style Configuration](#style-configuration)
     - [`theme`](#theme) - change oranda's CSS theme
-    - [`syntax_theme`](#syntaxtheme) - change the syntax theme used by oranda
     - [`additional_css`](#additionalcss) - additional CSS to insert into your pages
     - [`oranda_css_version`](#orandacssversion) - custom version of oranda's built-in CSS to use
     - [`logo`](#logo) - custom site logo
@@ -88,8 +87,8 @@ For example:
 ```
 
 > **NOTE:** All paths in `oranda.json` are relative to the `oranda.json` file. We
-  recommend placing this file in the same directory as your project manifest, such as a `package.json`
-  or `Cargo.toml`.
+> recommend placing this file in the same directory as your project manifest, such as a `package.json`
+> or `Cargo.toml`.
 
 ## Project Configuration
 
@@ -204,14 +203,6 @@ An object of additional Markdown pages that you'd like to be included. All of th
 - Default value: `dark`
 
 Choose which theme to use. Read more about [themes](./configuration/theme.md).
-
-### syntax_theme
-
-> Added in version 0.1.0.
-
-- Default value: `materialtheme`.
-
-Choose which syntax theme to use for code blocks.
 
 ### additional_css
 
