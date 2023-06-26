@@ -263,17 +263,17 @@ fn filter_platforms(release: &Release) -> Platforms {
         let has_valid_installer = installer.iter().any(|i| {
             let installer = release.artifacts.installer(i.to_owned());
             matches!(installer.method, InstallMethod::Download { file: _ })
+                || is_core_target(target)
         });
         if has_valid_installer {
             platforms.insert(target.clone(), installer.to_vec());
         }
     }
 
-    // If that produce non-empty results, great!
+    // If that produces non-empty results, great!
     if !platforms.is_empty() {
         return platforms;
     }
-    eprintln!("taking universal path");
 
     // Otherwise, only show things that are on every platform
     let mut universal_installers = vec![];
@@ -297,4 +297,16 @@ fn filter_platforms(release: &Release) -> Platforms {
 
     // Otherwise it's empty, oh well
     Platforms::default()
+}
+
+/// Check if a target belongs to the "big four" sets of targets:
+/// - Linux x64
+/// - macOS ARM
+/// - macOS x64
+/// - Windows x64
+fn is_core_target(target: &TargetTriple) -> bool {
+    target == "x86_64-pc-windows-msvc"
+        || target == "aarch64-apple-darwin"
+        || target == "x86_64-apple-darwin"
+        || target == "x86_64-unknown-linux-gnu"
 }
