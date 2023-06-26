@@ -20,3 +20,4 @@
     - [Theming](./configuration/theme.md)
       - [Theme Previews](./configuration/theme/previews.md)
     - [Funding](./configuration/funding.md)
+- [Contributing](./contributing.md)
