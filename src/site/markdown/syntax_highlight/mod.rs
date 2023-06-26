@@ -1,13 +1,14 @@
 pub mod syntax_themes;
 
 use std::collections::BTreeMap;
+use std::time::Instant;
 
 use crate::errors::*;
 use crate::message::{Message, MessageType};
 use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxTheme;
 use syntect::highlighting::{Theme, ThemeSet};
 use syntect::html::highlighted_html_for_string;
-use syntect::parsing::{SyntaxReference, SyntaxSet};
+use syntect::parsing::{SyntaxDefinition, SyntaxReference, SyntaxSet};
 
 // The reason for this function is that find_syntax_by_extension will work when your
 // snippet uses rs but not when it uses rust as the language.
@@ -47,12 +48,39 @@ fn find_syntax<'a>(ps: &'a SyntaxSet, language: &'a str) -> Result<&'a SyntaxRef
 
 const THEMES: &[(&str, &str)] = &[("MaterialTheme", include_str!("MaterialTheme.tmTheme"))];
 
+/// Builds a syntax theme set and dumps all themes to a binary so that it can be loaded
+/// by normal program executions.
+///
+/// We do not currently call this method from anywhere, so you'll have to pop it somewhere in the
+/// code if you want to manually update syntax themes (for example if we add a new language).
+#[allow(dead_code)]
+pub fn dump_syntax_themes() -> Result<()> {
+    println!("DUMPING ORANDA SYNTAX THEMES...");
+    let toml_syntax_file =
+        std::fs::read_to_string("./src/site/markdown/syntax_highlight/TOML.sublime-syntax")?;
+    let timer = Instant::now();
+    let toml_syntax =
+        SyntaxDefinition::load_from_str(&toml_syntax_file, true, Some("toml")).unwrap();
+    let mut ps_builder = SyntaxSet::load_defaults_newlines().into_builder();
+    ps_builder.add(toml_syntax);
+    let ps = ps_builder.build();
+    syntect::dumps::dump_to_uncompressed_file(
+        &ps,
+        "./src/site/markdown/syntax_highlight/syntax_themes.themedump",
+    )
+    .unwrap();
+    println!("DUMPED SYNTAX THEMES IN {}MS", timer.elapsed().as_millis());
+    println!("PLEASE DELETE THIS CODE PATH");
+    Ok(())
+}
+
 pub fn syntax_highlight(
     lang: Option<&str>,
     code: &str,
     syntax_theme: &SyntaxTheme,
 ) -> Result<String> {
-    let ps = SyntaxSet::load_defaults_newlines();
+    let ps = syntect::dumps::from_uncompressed_data(include_bytes!("./syntax_themes.themedump"))
+        .unwrap();
     let themes = THEMES
         .iter()
         .map(|(name, body)| {

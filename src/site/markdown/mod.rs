@@ -1,8 +1,8 @@
 use std::collections::HashMap;
 
 mod syntax_highlight;
-pub use syntax_highlight::syntax_highlight;
 pub use syntax_highlight::syntax_themes::SyntaxTheme;
+pub use syntax_highlight::{dump_syntax_themes, syntax_highlight};
 
 use crate::errors::*;
 
