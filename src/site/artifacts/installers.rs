@@ -17,6 +17,7 @@ pub fn build_header(release: &Release, config: &Config) -> Result<Box<div<String
     let downloads_href = link::generate(&config.build.path_prefix, "artifacts/");
     let tag = release.source.version_tag();
     let platforms_we_want = filter_platforms(release);
+    let view_all_text = "View all installation options";
 
     let simple_platforms = platforms_we_want.len() <= 1;
 
@@ -42,7 +43,7 @@ pub fn build_header(release: &Release, config: &Config) -> Result<Box<div<String
         None
     } else {
         Some(
-            html!(<noscript><a href=&downloads_href class="backup-download primary">{text!("View all installation options")}</a></noscript>),
+            html!(<noscript><a href=&downloads_href class="backup-download primary">{text!(view_all_text)}</a></noscript>),
         )
     };
     // If there's only one platform we don't need dropdowns
@@ -82,14 +83,17 @@ pub fn build_header(release: &Release, config: &Config) -> Result<Box<div<String
         "bottom-options"
     };
     Ok(html!(
-    <div class="artifacts" data-tag=tag>
-        {main_html}
-        {no_autodetect}
-        {noscript}
-        <div class=bottom_classes>
-            <a href=&downloads_href class="backup-download primary">{text!("View all installation options")}</a>
-            {selector}
+    <div>
+        <div class="artifacts" data-tag=tag>
+            {main_html}
+            {no_autodetect}
+            {noscript}
+            <div class=bottom_classes>
+                <a href=&downloads_href class="backup-download primary">{text!(view_all_text)}</a>
+                {selector}
+            </div>
         </div>
+        <a href=&downloads_href class="button mobile-download primary">{text!(view_all_text)}</a>
     </div>
     ))
 }
