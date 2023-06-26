@@ -235,7 +235,7 @@ fn adds_prefix_with_package_managers() {
     let layout = Layout::new(&config).unwrap();
     let page = page::index_with_artifacts(&config, &layout);
     assert!(page.contents.contains("<script src=\"/axo/artifacts.js\">"));
-     assert!(page
+    assert!(page
         .contents
         .contains(r#"href="/axo/artifacts/">View all installation options</a>"#))
 }
