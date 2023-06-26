@@ -13,11 +13,21 @@ pub struct FundingConfig {
     pub yml_path: Option<String>,
     pub md_path: Option<String>,
 }
-/// Config for displaying funding information on your page (partial version used by oranda.json)
+/// Settings for displaying funding information on your page
 #[derive(Debug, Deserialize, JsonSchema)]
 pub struct FundingLayer {
+    /// A funding method to make larger/focused to encourage over all others
     pub preferred_funding: Option<FundingType>,
+    /// A path to a github-format FUNDING.yml file
+    ///
+    /// We parse this out to get a list of funding sources.
+    ///
+    /// By default we try to find this at "./.github/FUNDING.yml"
     pub yml_path: Option<String>,
+    /// A relative path to a freeform github-flavor markdown file
+    /// whose contents will be included on your funding page.
+    ///
+    /// By default we try to find this at "./funding.md"
     pub md_path: Option<String>,
 }
 

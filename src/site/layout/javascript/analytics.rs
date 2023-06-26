@@ -23,7 +23,7 @@ impl Analytics {
                 }
                 AnalyticsConfig::Plausible(provider) => Self::build(provider),
                 AnalyticsConfig::Fathom(provider) => Self::build(provider),
-                AnalyticsConfig::Unami(provider) => Self::build(provider),
+                AnalyticsConfig::Umami(provider) => Self::build(provider),
             }
         } else {
             Self {
@@ -58,7 +58,7 @@ pub struct Plausible {
 }
 
 #[derive(Debug, Deserialize, JsonSchema)]
-pub struct Unami {
+pub struct Umami {
     pub website: String,
     pub script_url: String,
 }
@@ -94,7 +94,7 @@ impl Snippet for Fathom {
     }
 }
 
-impl Snippet for Unami {
+impl Snippet for Umami {
     fn snippet(&self) -> Box<script<String>> {
         html!(<script async=true defer=true src=&self.script_url data-website-id=&self.website></script>)
     }

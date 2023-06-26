@@ -16,12 +16,14 @@ pub struct MarketingConfig {
     /// Social media
     pub social: SocialConfig,
 }
-/// Marketing config (partial version used by oranda.json)
+/// Settings for marketing/social/analytics
 #[derive(Debug, Deserialize, JsonSchema)]
 pub struct MarketingLayer {
-    /// Analytics
+    /// Settings for analytics
+    ///
+    /// Analytics providers are currently mututally exclusive -- you can pick at most one.
     pub analytics: Option<AnalyticsConfig>,
-    /// Social media
+    /// Settings for social media integrations
     pub social: Option<SocialLayer>,
 }
 

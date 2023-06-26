@@ -6,7 +6,7 @@ pub struct ConfigSchema {}
 
 impl ConfigSchema {
     pub fn run(&self) -> Result<()> {
-        let schema = schemars::schema_for!(oranda::config::OrandaConfig);
+        let schema = schemars::schema_for!(oranda::config::OrandaLayer);
         let json_schema = serde_json::to_string_pretty(&schema).unwrap();
         println!("{json_schema}");
         Ok(())

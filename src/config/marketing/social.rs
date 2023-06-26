@@ -10,11 +10,22 @@ pub struct SocialConfig {
     pub image_alt: Option<String>,
     pub twitter_account: Option<String>,
 }
-// Social media config (partial version used by oranda.json)
+// Settings for social media integrations
 #[derive(Debug, Deserialize, JsonSchema)]
 pub struct SocialLayer {
+    /// Image to show in link previews
+    ///
+    /// FIXME: what format?
     pub image: Option<String>,
+    /// Alt image to show in link previews
+    ///
+    /// FIXME: explain the distinction with "image"
+    ///
+    /// FIXME: what format?
     pub image_alt: Option<String>,
+    /// Twitter account to show in link previews
+    ///
+    /// Example: "@axodotdev"
     pub twitter_account: Option<String>,
 }
 

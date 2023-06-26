@@ -23,21 +23,30 @@ pub struct BuildConfig {
     pub additional_pages: IndexMap<String, String>,
 }
 #[derive(Debug, Deserialize, JsonSchema)]
-/// Information about how the pages should be built (partial version used by oranda.json)
+/// Information about how the pages of your site should be built
 pub struct BuildLayer {
     /// Relative path to the dir where build output should be placed
+    ///
+    /// This is "./public/" by default
     pub dist_dir: Option<String>,
-    /// Relative path to a dir full of extra static content
+    /// Relative path to a dir full of extra static content that should be included in your site
+    ///
+    /// (FIXME: explain what paths it ends up at)
+    ///
+    /// This is "./static/" by default
     pub static_dir: Option<String>,
     /// A path fragment to prepend before URLs
     ///
     /// This allows things like hosting a static site at `axodotdev.github.io/my_project/`
+    /// (you would set path_prefix = "my_project" for that).
     pub path_prefix: Option<String>,
     /// Additional pages that should be included in the top level nav.
     ///
-    /// This is a map from page-label to relative paths to pages.
+    /// This is a map from page-label to relative paths to (Github Flavored) Markdown files
+    /// that should be rendered into pages.
     ///
-    /// We use IndexMap to respect the order the user provided.
+    /// These pages will be listed in the given order after "home" and before
+    /// other pages that oranda automatically adds like "install" and "funding".
     pub additional_pages: Option<IndexMap<String, String>>,
 }
 

@@ -1,14 +1,20 @@
 use schemars::JsonSchema;
 use serde::Deserialize;
 
-use crate::site::layout::javascript::analytics::{Fathom, Google, Plausible, Unami};
+use crate::site::layout::javascript::analytics::{Fathom, Google, Plausible, Umami};
 
-/// Analytics config (complete version, but also partial oranda.json version)
+/// Settings for Analytics
+///
+/// Analytics providers are currently mututally exclusive -- you can pick at most one.
 #[derive(Debug, Deserialize, JsonSchema)]
 #[serde(rename_all = "lowercase")]
 pub enum AnalyticsConfig {
+    /// Use Google Analytics
     Google(Google),
+    /// Use Plausible Analytics
     Plausible(Plausible),
+    /// Use Fathom Analytics
     Fathom(Fathom),
-    Unami(Unami),
+    /// Use Umami Analytics
+    Umami(Umami),
 }
