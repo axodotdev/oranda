@@ -1,7 +1,6 @@
 name: Project Gallery
 
 on:
-  pull_request:
   push:
     branches:
       - main
