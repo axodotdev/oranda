@@ -276,12 +276,12 @@ fn infer_targets_for_script(file: &File) -> Vec<TargetTriple> {
 
 /// Infer the command to curl|sh a script
 fn infer_run_hint_for_script(file: &File) -> String {
-    if file.name.ends_with(EXT_SCRIPT_POWERSHELL) {
+    if file.name.ends_with(EXT_SCRIPT_SHELL) {
         format!(
             "curl --proto '=https' --tlsv1.2 -LsSf {} | sh",
             file.download_url
         )
-    } else if file.name.ends_with(EXT_SCRIPT_SHELL) {
+    } else if file.name.ends_with(EXT_SCRIPT_POWERSHELL) {
         format!("irm {} | iex", file.download_url)
     } else {
         unimplemented!(
