@@ -92,7 +92,7 @@ pub fn syntax_highlight(
         .collect::<Result<BTreeMap<String, Theme>>>()?;
     let theme_set = ThemeSet { themes };
     let language = match lang {
-        None | Some("") => "rs",
+        None => "",
         Some("text") => "txt",
         Some("shell") => "sh",
         Some(l) => l,
