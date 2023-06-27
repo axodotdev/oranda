@@ -76,7 +76,7 @@ ul.tabs li.selected {
 }
 
 .bottom-options {
-  @apply flex flex-row w-full justify-between;
+  @apply flex flex-row w-full justify-between items-center;
 }
 .bottom-options.one {
   @apply justify-center;

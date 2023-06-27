@@ -207,6 +207,11 @@ main {
   @apply bg-github-logo-dark;
 }
 
+.dark .artifacts,
+.light .artifacts {
+  @apply p-8;
+}
+
 .logo {
   @apply m-auto;
 }
