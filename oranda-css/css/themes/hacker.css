@@ -118,3 +118,11 @@ html.hacker .releases-nav ul li a {
 html.hacker .funding-wrapper {
   @apply items-start;
 }
+
+html.hacker .artifacts {
+  @apply p-8;
+}
+
+html.hacker .published-date {
+  @apply block w-full;
+}
