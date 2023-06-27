@@ -10,6 +10,7 @@ use super::{BuildLayer, ComponentLayer, MarketingLayer, ProjectLayer, StyleLayer
 
 /// Configuration for `oranda` (typically stored in oranda.json)
 #[derive(Debug, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
 pub struct OrandaLayer {
     /// Info about the project/application you're making a site for
     ///
