@@ -1,0 +1,33 @@
+name: Release - CSS
+
+permissions:
+  contents: write
+
+on:
+  workflow_run:
+    workflows: ["Release"]
+    types: 
+      - completed
+
+jobs:
+  build-css:
+    needs: [create-release]
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - id: build-css
+        run: |
+          cd oranda-css
+          yarn install
+          # Run tailwind build
+          yarn run build
+          ls dist
+          echo "built css!"
+          # Upload css to the Github Release™
+          gh release upload ${{ github.ref_name }} dist/oranda.css
+          echo "uploaded css!"

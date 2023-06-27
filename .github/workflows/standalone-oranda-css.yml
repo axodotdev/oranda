@@ -1,4 +1,4 @@
-name: Release - CSS
+name: Release - CSS (standalone)
 
 permissions:
   contents: write
