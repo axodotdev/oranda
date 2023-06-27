@@ -60,6 +60,22 @@ impl Page {
         })
     }
 
+    pub fn new_from_file_with_dir(source: &str, layout: &Layout, config: &Config) -> Result<Self> {
+        let body = Self::load_and_render_contents(source, &config.styles.syntax_theme)?;
+        let contents = layout.render(body, None);
+        // Try diffing with the execution directory in case the user has provided an absolute-ish
+        // path, in order to obtain the relative-to-dir path segment
+        let relpath = if let Some(path) = pathdiff::diff_paths(source, std::env::current_dir()?) {
+            path
+        } else {
+            source.into()
+        };
+        Ok(Page {
+            contents,
+            filename: relpath.display().to_string(),
+        })
+    }
+
     pub fn new_from_contents(
         body: String,
         filename: &str,

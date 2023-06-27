@@ -48,6 +48,7 @@ notify-debouncer-mini = "0.3.0"
 toml_edit = "0.19.9"
 schemars = { version = "0.8.12", features = ["indexmap1"] }
 indexmap = { version = "1.9.3", features = ["serde-1"] }
+pathdiff = { version = "0.2.1", features = ["camino"] }
 
 [dev-dependencies]
 assert_cmd="2"

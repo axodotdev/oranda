@@ -2138,6 +2138,7 @@ dependencies = [
  "minifier",
  "notify-debouncer-mini",
  "octolotl",
+ "pathdiff",
  "reqwest",
  "schemars",
  "serde",
