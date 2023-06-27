@@ -88,6 +88,12 @@ pub enum OrandaError {
         details: AxoassetError,
     },
 
+    #[error(
+        "Failed checking for Github releases for repo, {repo}. Proceeding without releases..."
+    )]
+    #[diagnostic(severity = "warn")]
+    ReleasesCheckFailed { repo: String },
+
     #[error("Skipping unparseable dist-manifest.json for {tag}")]
     #[diagnostic(help(
         "the schema was version {schema_version}, while our parser is version {parser_version}"
