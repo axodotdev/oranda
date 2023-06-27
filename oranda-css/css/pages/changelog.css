@@ -2,6 +2,10 @@
   @apply w-6 h-6;
 }
 
+.release-body {
+  word-break: break-word;
+}
+
 .release-body h1 {
   @apply heading-2 mt-12;
 }
