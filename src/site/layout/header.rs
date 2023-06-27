@@ -53,7 +53,7 @@ fn nav(
         Message::new(MessageType::Info, "Found additional pages...").print();
         for (page_name, page_path) in additional_pages.iter() {
             if page::source::is_markdown(page_path) {
-                let file_path = page::source::get_filename_with_dir(page_path);
+                let file_path = page::source::get_filename_with_dir(page_path)?;
 
                 if let Some(file_name) = file_path {
                     let href = link::generate(path_prefix, &format!("{}/", file_name));

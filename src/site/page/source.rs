@@ -1,3 +1,4 @@
+use crate::errors::{OrandaError, Result};
 use camino::Utf8PathBuf;
 use std::{ffi::OsStr, path::Path};
 
@@ -14,20 +15,16 @@ pub fn get_filename(file: &str) -> Option<&OsStr> {
     file_path.file_stem()
 }
 
-pub fn get_filename_with_dir(file: &str) -> Option<Utf8PathBuf> {
-    let cur_dir = match std::env::current_dir() {
-        Ok(dir) => dir,
-        Err(_) => return None,
-    };
+pub fn get_filename_with_dir(file: &str) -> Result<Option<Utf8PathBuf>> {
     // Try diffing with the execution directory in case the user has provided an absolute-ish
     // path, in order to obtain the relative-to-dir path segment
-    let path = if let Some(path) =
-        pathdiff::diff_utf8_paths(file, Utf8PathBuf::from_path_buf(cur_dir).unwrap())
-    {
+    let cur_dir = Utf8PathBuf::from_path_buf(std::env::current_dir()?)
+        .map_err(|_| OrandaError::Other("Unable to read your current working directory.".into()))?;
+    let path = if let Some(path) = pathdiff::diff_utf8_paths(file, cur_dir) {
         path
     } else {
         Utf8PathBuf::from(file)
     };
 
-    Some(path.with_extension(""))
+    Ok(Some(path.with_extension("")))
 }
