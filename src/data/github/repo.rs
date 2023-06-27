@@ -1,3 +1,6 @@
+use std::fmt;
+
+use crate::data::GithubRelease;
 use crate::errors::*;
 
 use miette::{miette, IntoDiagnostic};
@@ -10,6 +13,12 @@ pub struct GithubRepo {
     pub owner: String,
     /// The repository name.
     pub name: String,
+}
+
+impl fmt::Display for GithubRepo {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "({}/{})", self.owner, self.name)
+    }
 }
 
 #[derive(Debug)]
@@ -101,5 +110,23 @@ impl GithubRepo {
     /// whether the repo actually exists.
     pub fn from_url(repo_url: &str) -> Result<Self> {
         GithubRepoInput::new(repo_url.to_string()).parse()
+    }
+
+    pub fn has_releases(&self) -> Result<bool> {
+        if let Ok(releases) =
+            tokio::runtime::Handle::current().block_on(GithubRelease::fetch_all(self))
+        {
+            if releases.is_empty() {
+                Ok(false)
+            } else {
+                Ok(true)
+            }
+        } else {
+            let warning = OrandaError::ReleasesCheckFailed {
+                repo: self.to_string(),
+            };
+            eprintln!("{:?}", miette::Report::new(warning));
+            Ok(false)
+        }
     }
 }

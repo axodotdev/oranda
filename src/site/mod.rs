@@ -5,7 +5,7 @@ use camino::{Utf8Path, Utf8PathBuf};
 use indexmap::IndexMap;
 
 use crate::config::Config;
-use crate::data::{funding::Funding, Context};
+use crate::data::{funding::Funding, github::GithubRepo, Context};
 use crate::errors::*;
 use crate::message::{Message, MessageType};
 
@@ -47,7 +47,7 @@ impl Site {
 
         let mut index = None;
 
-        if Self::needs_context(config) {
+        if Self::needs_context(config)? {
             let mut context = match &config.project.repository {
                 Some(repo_url) => Context::new_github(
                     repo_url,
@@ -98,8 +98,8 @@ impl Site {
         Ok(Site { pages })
     }
 
-    fn needs_context(config: &Config) -> bool {
-        config
+    fn needs_context(config: &Config) -> Result<bool> {
+        Ok(config
             .components
             .artifacts
             .as_ref()
@@ -107,6 +107,15 @@ impl Site {
             .unwrap_or(false)
             || config.components.changelog
             || config.components.funding.is_some()
+            || Self::has_repo_and_releases(&config.project.repository)?)
+    }
+
+    fn has_repo_and_releases(repo_config: &Option<String>) -> Result<bool> {
+        if let Some(repo) = repo_config {
+            GithubRepo::from_url(repo)?.has_releases()
+        } else {
+            Ok(false)
+        }
     }
 
     fn build_additional_pages(
