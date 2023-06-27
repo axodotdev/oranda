@@ -163,7 +163,7 @@ fn creates_download_for_mac() {
     let page = page::index_with_artifacts(&config, &layout);
     assert!(page
         .contents
-        .contains(r#"<option value="x86_64-apple-darwin">x64 macOS</option>"#));
+        .contains(r#"<option value="x86_64-apple-darwin">macOS Intel</option>"#));
 }
 
 #[test]
