@@ -117,7 +117,8 @@ impl Site {
         let mut pages = vec![];
         for file_path in files.values() {
             if page::source::is_markdown(file_path) {
-                let additional_page = Page::new_from_file(file_path, layout_template, config)?;
+                let additional_page =
+                    Page::new_from_file_with_dir(file_path, layout_template, config)?;
                 pages.push(additional_page)
             } else {
                 let msg = format!(

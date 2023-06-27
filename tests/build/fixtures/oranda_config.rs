@@ -8,10 +8,8 @@ use oranda::site::javascript::analytics::Plausible;
 
 pub fn no_artifacts(temp_dir: String) -> Config {
     let mut additional_pages = IndexMap::new();
-    additional_pages.insert(
-        "Another Page".to_string(),
-        "https://raw.githubusercontent.com/axodotdev/oranda/main/README.md".to_string(),
-    );
+    additional_pages.insert("Another Page".to_string(), "docs/src/cli.md".to_string());
+    additional_pages.insert("A New Page".to_string(), "SECURITY.md".to_string());
     Config {
         project: ProjectConfig {
             description: Some(String::from("you axolotl questions")),

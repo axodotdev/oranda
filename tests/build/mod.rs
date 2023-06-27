@@ -107,7 +107,7 @@ fn creates_nav() {
     let layout = Layout::new(&config).unwrap();
     let page = page::index(&config, &layout);
     eprintln!("{}", page.contents);
-    assert!(page.contents.contains(r#"<nav class="nav"><ul><li><a href="/">Home</a></li><li><a href="/README/">Another Page</a></li></ul></nav>"#));
+    assert!(page.contents.contains(r#"<nav class="nav"><ul><li><a href="/">Home</a></li><li><a href="/docs/src/cli/">Another Page</a></li><li><a href="/SECURITY/">A New Page</a></li></ul></nav>"#));
 }
 
 #[test]
