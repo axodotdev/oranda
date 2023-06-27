@@ -181,8 +181,18 @@ function onTabClick(evt) {
     }
 }
 
-let hit = Array.from(document.querySelectorAll(`.arch[data-arch]`)).find(
-    (a) => a.attributes["data-arch"].value.includes(os)
+const allPlatforms = Array.from(document.querySelectorAll(`.arch[data-arch]`));
+let hit = allPlatforms.find(
+    (a) => {
+        // Show Intel Mac downloads if no M1 Mac downloads are available
+        if (
+            a.attributes["data-arch"].value.includes(options.mac64) &&
+            os.includes(options.macSilicon) &&
+            !allPlatforms.find(p => p.attributes["data-arch"].value.includes(options.macSilicon))) {
+            return true;
+        }
+        return a.attributes["data-arch"].value.includes(os);
+    }
 );
 
 if (hit) {
