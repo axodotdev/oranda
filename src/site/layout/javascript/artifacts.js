@@ -157,6 +157,8 @@ function onArchChange(evt) {
     // Hide "no OS detected" message
     const noDetectEl = document.querySelector(".no-autodetect");
     noDetectEl.classList.add("hidden");
+    // Hide Mac hint
+    document.querySelector(".mac-switch").classList.add("hidden");
 }
 
 function onTabClick(evt) {
@@ -181,8 +183,20 @@ function onTabClick(evt) {
     }
 }
 
-let hit = Array.from(document.querySelectorAll(`.arch[data-arch]`)).find(
-    (a) => a.attributes["data-arch"].value.includes(os)
+const allPlatforms = Array.from(document.querySelectorAll(`.arch[data-arch]`));
+let hit = allPlatforms.find(
+    (a) => {
+        // Show Intel Mac downloads if no M1 Mac downloads are available
+        if (
+            a.attributes["data-arch"].value.includes(options.mac64) &&
+            os.includes(options.macSilicon) &&
+            !allPlatforms.find(p => p.attributes["data-arch"].value.includes(options.macSilicon))) {
+            // Unhide hint
+            document.querySelector(".mac-switch").classList.remove("hidden");
+            return true;
+        }
+        return a.attributes["data-arch"].value.includes(os);
+    }
 );
 
 if (hit) {

@@ -88,6 +88,7 @@ pub fn build_header(release: &Release, config: &Config) -> Result<Box<div<String
             {main_html}
             {no_autodetect}
             {noscript}
+            <div class="mac-switch hidden">{text!("This project doesn't offer Apple Silicon downloads, but you can run Intel macOS binaries via Rosetta 2.")}</div>
             <div class=bottom_classes>
                 <a href=&downloads_href class="backup-download primary">{text!(view_all_text)}</a>
                 {selector}
