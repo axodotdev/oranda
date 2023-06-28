@@ -8,6 +8,7 @@ use crate::data::artifacts::inference::triple_to_display_name;
 use crate::data::artifacts::InstallMethod;
 use crate::data::Release;
 use crate::errors::*;
+use crate::message::{Message, MessageType};
 
 /// Build a downloads table for this release
 pub fn build(release: &Release, _config: &Config) -> Result<Box<div<String>>> {
@@ -36,7 +37,13 @@ pub fn build(release: &Release, _config: &Config) -> Result<Box<div<String>>> {
     files.sort_by_key(|(_, (f, _))| &f.name);
 
     if files.is_empty() {
-        return Ok(html!(<div><h3>{text!("No Downloads")}</h3></div>));
+        Message::new(MessageType::Warning, "You seem to have release automation set up, but we didn't detect any releases. The install page and associated widget will be empty. To disable this, set `artifacts: false`").print();
+        return Ok(html!(
+            <div>
+                <h3>{text!("No Release artifacts published yet")}</h3>
+                <p>{text!("When you publish your first release, it will show up here.")}</p>
+            </div>
+        ));
     }
 
     // If any files have checksums, add a column for that
