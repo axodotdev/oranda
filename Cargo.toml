@@ -51,7 +51,7 @@ indexmap = { version = "1.9.3", features = ["serde-1"] }
 pathdiff = { version = "0.2.1", features = ["camino"] }
 
 [dev-dependencies]
-assert_cmd="2"
+assert_cmd = "2"
 assert_fs = "1.0.7"
 
 # The profile that 'cargo dist' will build with
