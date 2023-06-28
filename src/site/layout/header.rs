@@ -41,7 +41,6 @@ fn nav(
     changelog: &bool,
     funding: &Option<FundingConfig>,
 ) -> Result<Box<nav<String>>> {
-    Message::new(MessageType::Info, "Building nav...").print();
     let mut html: Vec<Box<li<String>>> = if let Some(prefix) = &path_prefix {
         let href = format!("/{}/", prefix);
         vec![html!(<li><a href=href>"Home"</a></li>)]
@@ -72,14 +71,12 @@ fn nav(
 
     if let Some(artifacts) = artifacts {
         if artifacts.has_some() {
-            Message::new(MessageType::Info, "Adding artifacts page...").print();
             let href = link::generate(path_prefix, "artifacts/");
             html.extend(html!(<li><a href=href>{text!("Install")}</a></li>));
         };
     }
 
     if md_book.is_some() {
-        Message::new(MessageType::Info, "Adding book...").print();
         let href = if let Some(prefix) = &path_prefix {
             format!("/{}/{}/", prefix, "book")
         } else {
@@ -89,7 +86,6 @@ fn nav(
     };
 
     if funding.is_some() {
-        Message::new(MessageType::Info, "Adding funding page...").print();
         let href = if let Some(prefix) = &path_prefix {
             format!("/{}/{}/", prefix, "funding")
         } else {
@@ -99,7 +95,6 @@ fn nav(
     }
 
     if *changelog {
-        Message::new(MessageType::Info, "Adding changelog...").print();
         let href = if let Some(prefix) = &path_prefix {
             format!("/{}/{}/", prefix, "changelog")
         } else {

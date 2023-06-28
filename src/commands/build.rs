@@ -37,10 +37,9 @@ impl Build {
         tracing::info!("Running build...");
         let config = Config::build(&self.config_path)?;
         Site::build(&config)?.write(&config)?;
-        let msg = format!(
-            "Successfully built your site in the `{}` directory. To view, run `oranda serve`.",
-            { config.build.dist_dir }
-        );
+        let msg = format!("Your site build is located in `{}`.", {
+            config.build.dist_dir
+        });
         Message::new(MessageType::Success, &msg).print();
         Ok(())
     }

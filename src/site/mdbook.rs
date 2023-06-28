@@ -4,7 +4,6 @@ use mdbook::MDBook;
 
 use crate::config::MdBookConfig;
 use crate::errors::*;
-use crate::message::{Message, MessageType};
 use crate::site::{oranda_theme::OrandaTheme, Site};
 
 use super::markdown::SyntaxTheme;
@@ -188,9 +187,6 @@ pub fn build_mdbook(
     oranda_theme: &OrandaTheme,
     syntax_theme: &SyntaxTheme,
 ) -> Result<()> {
-    Message::new(MessageType::Info, "Building mdbook...").print();
-    tracing::info!("Building mdbook...");
-
     // Read mdbook's config to inherit the user's setup
     let book_dir = mdbook_dir(book_cfg)?;
     let mut md = load_mdbook(&book_dir)?;
@@ -264,9 +260,6 @@ pub fn load_mdbook(book_dir: &Utf8Path) -> Result<MDBook> {
 /// Note that these files assume you will also call [`add_custom_syntax_theme_to_output`][]
 /// to add axo-highlight.css to the build dir.
 fn init_theme_dir(theme_dir: &Utf8Path, theme: AxomdbookTheme) -> Result<()> {
-    Message::new(MessageType::Info, "Adding oranda mdbook theme...").print();
-    tracing::info!("Adding oranda mdbook theme...");
-
     // Just to be safe, clear out the theme dir in case it still exists
     delete_theme_dir(theme_dir)?;
 

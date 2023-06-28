@@ -46,13 +46,6 @@ pub struct Dev {
 
 impl Dev {
     pub fn run(self) -> Result<()> {
-        Message::new(
-            MessageType::Info,
-            "Starting dev, looking for paths to watch...",
-        )
-        .print();
-        tracing::info!("Starting dev, looking for paths to watch...");
-
         let config = Config::build(
             &self
                 .config_path
