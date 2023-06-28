@@ -139,7 +139,7 @@ impl Site {
             .iter()
             .fold(String::new(), |acc, component| {
                 if acc.is_empty() {
-                    format!("{}", component)
+                    component.to_string()
                 } else {
                     format!("{}, {}", acc, component)
                 }
