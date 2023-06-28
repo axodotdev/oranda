@@ -123,8 +123,6 @@ impl Context {
             // Make note of whether we've found prereleases or stable releases yet
             if is_prerelease {
                 if !has_prereleases {
-                    let msg = "Detected pre-releases...";
-                    Message::new(MessageType::Info, msg).print();
                     has_prereleases = true;
                 }
                 if latest_prerelease.is_none() {

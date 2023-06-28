@@ -46,8 +46,10 @@ impl Site {
         }
 
         let mut index = None;
+        let needs_context = Self::needs_context(config)?;
+        Self::print_plan(config);
 
-        if Self::needs_context(config)? {
+        if needs_context {
             let mut context = match &config.project.repository {
                 Some(repo_url) => Context::new_github(
                     repo_url,
@@ -116,6 +118,37 @@ impl Site {
         } else {
             Ok(false)
         }
+    }
+
+    fn print_plan(config: &Config) {
+        let mut planned_components = Vec::new();
+        if config.components.artifacts.is_some() {
+            planned_components.push("artifacts");
+        }
+        if config.components.changelog {
+            planned_components.push("changelog");
+        }
+        if config.components.funding.is_some() {
+            planned_components.push("funding");
+        }
+        if config.components.mdbook.is_some() {
+            planned_components.push("mdbook");
+        }
+
+        let joined = planned_components
+            .iter()
+            .fold(String::new(), |acc, component| {
+                if acc.is_empty() {
+                    format!("{}", component)
+                } else {
+                    format!("{}, {}", acc, component)
+                }
+            });
+        Message::new(
+            MessageType::Info,
+            &format!("Building components: {}", joined),
+        )
+        .print();
     }
 
     fn build_additional_pages(
