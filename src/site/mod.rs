@@ -144,11 +144,13 @@ impl Site {
                     format!("{}, {}", acc, component)
                 }
             });
-        Message::new(
-            MessageType::Info,
-            &format!("Building components: {}", joined),
-        )
-        .print();
+        if !joined.is_empty() {
+            Message::new(
+                MessageType::Info,
+                &format!("Building components: {}", joined),
+            )
+            .print();
+        }
     }
 
     fn build_additional_pages(
