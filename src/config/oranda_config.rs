@@ -29,9 +29,6 @@ pub struct OrandaLayer {
 
 impl OrandaLayer {
     pub fn load(config_path: &Utf8PathBuf) -> Result<Option<OrandaLayer>> {
-        let msg = format!("Loading config at {}", config_path);
-        Message::new(MessageType::Info, &msg).print();
-        tracing::info!("{}", &msg);
         let config_result = SourceFile::load_local(config_path.as_path());
 
         match config_result {

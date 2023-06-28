@@ -41,7 +41,6 @@ fn nav(
     changelog: &bool,
     funding: &Option<FundingConfig>,
 ) -> Result<Box<nav<String>>> {
-    Message::new(MessageType::Info, "Building nav...").print();
     let mut html: Vec<Box<li<String>>> = if let Some(prefix) = &path_prefix {
         let href = format!("/{}/", prefix);
         vec![html!(<li><a href=href>"Home"</a></li>)]

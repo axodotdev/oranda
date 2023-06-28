@@ -95,11 +95,11 @@ impl AxoprojectLayer {
             }
         }
 
-        if let Some((best_ws, _best_pkg)) = &best_workspace {
+        if let Some((_, _best_pkg)) = &best_workspace {
             // Report the winner
-            let message = format!("Detected {:?} project...", best_ws.kind);
-            Message::new(MessageType::Info, &message).print();
-            tracing::info!("{}", message);
+            // let message = format!("Detected {:?} project...", best_ws.kind);
+            // Message::new(MessageType::Info, &message).print();
+            // tracing::info!("{}", message);
 
             // Warn about the existence of perfectly good losers
             for (reject_ws, reject_pkg) in rejected_workspaces {

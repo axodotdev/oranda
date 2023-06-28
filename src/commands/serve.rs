@@ -24,12 +24,8 @@ impl Serve {
     }
 
     pub fn run(&self) -> Result<()> {
-        Message::new(MessageType::Info, "Running serve...").print();
-        tracing::info!("Running serve...");
         let config = Config::build(&Utf8PathBuf::from("./oranda.json"))?;
         if Utf8Path::new(&config.build.dist_dir).is_dir() {
-            let msg = format!("Found build in {} directory...", &config.build.dist_dir);
-            Message::new(MessageType::Info, &msg).print();
             if let Some(prefix) = config.build.path_prefix {
                 tracing::debug!("`path_prefix` configured: {}", &prefix);
                 self.serve_prefix(&config.build.dist_dir, &prefix)?;
