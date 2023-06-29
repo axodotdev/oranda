@@ -1,6 +1,6 @@
 # Analytics
 
-When it comes to analytics, oranda gives you a simple interface to add your scripts and make sure you collect analytics.
+oranda supports automatically inserting the correct analytics snippet your provider into your generated pages.
 
 Right now we support the following analytics providers:
 

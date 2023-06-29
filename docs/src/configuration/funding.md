@@ -1,13 +1,13 @@
 # Funding page
 
 Oranda has the capability of reading information from your GitHub funding file, and
-automatically writing a page based on it. Unless you disable it by passing
-`"funding": false` in the oranda config file, oranda will search your project for
+automatically writing a page based on it. Unless you disable it by setting `components.funding` to `false`
+in the oranda config file, oranda will search your project for
 a `.github/FUNDING.yml` file, and generate a page based off of it. You can read
 more about the format of this file on [GitHub's docs][funding-docs].
 
 Oranda will display your different sponsor/funding links next to each other, but
-if have a "main" funding option, you can set the following configuration setting:
+if you have a "main" funding option, you can set the following configuration setting:
 
 ```json
 {
