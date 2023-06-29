@@ -49,7 +49,7 @@ if you open localhost:7979, you'll see something like this:
 
 oranda has picked up on our readme file and converted it into a static page! How nice!
 
-`minimal-axolotlsay` also has integration with [cargo-dist] already set up - a powerful way to streamling
+`minimal-axolotlsay` also has integration with [cargo-dist] already set up - a powerful way to streamline
 cross-platform releases of applications. Since oranda and cargo-dist integrate, oranda already knows
 about our cargo-dist releases, and automatically shows a widget and page to download the latest binaries.
 

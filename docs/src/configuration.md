@@ -32,9 +32,10 @@
 
 > 📦 = automatically collected from your package metadata!
 
-`oranda` is designed to work with no configuration- for projects with a
+**`oranda` is designed to work with no configuration**- for projects with a
 `package.json` or `Cargo.toml`, `oranda` will grab the project metadata it needs
-from your project manifest file.
+from your project manifest file. It can also infer a lot of the things it wants to
+render from your already existing environment.
 
 If you project has both a `Cargo.toml` and a `package.json` we recommend defining
 project metadata fields like `name` in your `oranda.json`.
@@ -88,7 +89,7 @@ For example:
 
 > **NOTE:** All paths in `oranda.json` are relative to the `oranda.json` file. We
 > recommend placing this file in the same directory as your project manifest, such as a `package.json`
-> or `Cargo.toml`.
+> or `Cargo.toml`. oranda does not currently support detecting Cargo workspaces.
 
 ## Project Configuration
 
@@ -130,7 +131,7 @@ Your project's homepage.
 
 - Default value: Project manifest `repository` field
 
-Your project's Git repository. Right now, only the HTTPS URL works.
+Your project's Git repository.
 
 ### readme_path
 
@@ -178,6 +179,7 @@ If you're hosting oranda on a nested path (e.g. `mysite.cool/myproject`), you sh
 > Added in version 0.1.0.
 
 An object of additional Markdown pages that you'd like to be included. All of these will appear in the site header.
+
 [More information](./configuration/additional-pages.md)
 
 ## Marketing Configuration
@@ -186,13 +188,17 @@ An object of additional Markdown pages that you'd like to be included. All of th
 
 > Added in version 0.1.0.
 
-[Configuration for page analytics.](./configuration/analytics.md)
+Configuration for page analytics.
+
+[More information](./configuration/analytics.md)
 
 ### social
 
 > Added in version 0.1.0.
 
-[Options useful for SEO features.](./configuration/social.md)
+Options useful for SEO features.
+
+[More information](./configuration/social.md)
 
 ## Style Configuration
 
@@ -202,20 +208,25 @@ An object of additional Markdown pages that you'd like to be included. All of th
 
 - Default value: `dark`
 
-Choose which theme to use. Read more about [themes](./configuration/theme.md).
+Choose which built-in theme to use. 
+
+[More information](./configuration/theme.md)
 
 ### additional_css
 
 > Added in version 0.1.0.
 
-Add extra CSS to your pages' header. Read more in the [theme documentation](./configuration/theme.md).
+Add extra CSS to your pages' header.
+
+[More information](./configuration/theme.md)
 
 ### oranda_css_version
 
 > Added in version 0.1.0.
 
 Specify a version of the embedded oranda CSS. This can be used to opt into newer CSS releases that don't have
-an oranda release associated with them yet.
+an oranda release associated with them yet. (Internally, this looks for a `oranda.css` release artifact on the given
+tag in the `axodotdev/oranda` GitHub repository)
 
 ## logo
 
@@ -235,27 +246,33 @@ Path to a custom favicon.
 
 > Added in version 0.1.0.
 
-Configuration for enabling downloadable artifacts, as well as the `cargo-dist`integration.
+Configuration for enabling downloadable artifacts, as well as the `cargo-dist` integration.
+
 [More information](./configuration/artifacts.md)
 
 ### mdbook or md_book
 
 > Added in version 0.1.0.
 
-[Configuration for mdbook.](./configuration/mdbook.md)
+Configuration for mdbook.
+
+[More information](./configuration/mdbook.md)
 
 ### changelog
 
 > Added in version 0.1.0.
 
-Enable changelog generation. [More information](./configuration/changelog.md)
+Enable changelog generation.
+
+[More information](./configuration/changelog.md)
 
 ### funding
 
 > Added in version 0.1.0.
 
 Allows you to tweak or disable oranda's funding page.
-[Read more here.](./configuration/funding.md)
+
+[More information](./configuration/funding.md)
 
 ## Configuration before 0.1.0
 

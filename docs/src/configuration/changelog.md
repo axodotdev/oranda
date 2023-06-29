@@ -1,6 +1,6 @@
 # Changelogs
 
-oranda supports reading your project's changelogs from GitHub releases. You can enable this by setting `changelog` to `true`:
+oranda supports reading your project's changelogs from GitHub releases. You can enable this by setting `components.changelog` to `true`:
 
 ```json
 {

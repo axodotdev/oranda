@@ -14,6 +14,7 @@ such, we have to take care to only run the build process when _relevant_ files c
 - Your oranda configuration file
 - Any mdbook source files you may have
 - Your readme, and additional files specified in the configuration
+- Files immediately relevant to certain components oranda renders (funding, for example)
 - Any other paths you give it using `--include-paths`
 
 This command also support several options:

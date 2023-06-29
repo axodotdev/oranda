@@ -2,7 +2,7 @@
 
 ## Predefined themes
 
-Oranda comes with four default themes:
+Oranda comes with six default themes:
 
 - Light
 - Dark

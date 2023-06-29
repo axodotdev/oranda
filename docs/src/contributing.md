@@ -39,3 +39,5 @@ that's not included in syntect's default set of languages or the ones oranda pro
 `oranda::site::markdown::syntax_highlight::dump_syntax_themes` function to load your new `.sublime-syntax` file from disk
 and to include it in our syntax set dump. This function, once adjusted, only needs to be ran once manually, by including
 it anywhere in the call path of the application (I recommend somewhere close to the top of the build CLI function).
+
+[syntect]: https://crates.io/crates/syntect
