@@ -11,6 +11,7 @@
 [![release](https://github.com/axodotdev/oranda/actions/workflows/release.yml/badge.svg)](https://github.com/axodotdev/oranda/actions/workflows/release.yml)
 [![web](https://github.com/axodotdev/oranda/actions/workflows/web.yml/badge.svg?branch=main)](https://github.com/axodotdev/oranda/actions/workflows/web.yml)
 
+
 `oranda` is an opinionated static-site generator that is designed for developers
 who are publishing projects and would like a website but don't want to build
 one from scratch.
@@ -41,6 +42,10 @@ To install `oranda`, please visit the [`oranda` website][website]- which is gene
 > oranda dev
 ```
 
+Here's an animated demo:
+
+![oranda demo gif](https://github.com/axodotdev/oranda/assets/6445316/439082a6-2caa-477e-93cc-1ff985d9bb21)
+
 ## Configuration
 
 If you'd like to configure `oranda`, place an `oranda.json` file in the root of
@@ -57,6 +62,7 @@ using `cargo-dist` you can add this to your `oranda.json`:
 
 ```json
 "artifacts": {
+
     "cargo_dist": true
 }
 ```
