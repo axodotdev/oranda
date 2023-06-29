@@ -1,97 +1,12 @@
 # Changelog
 
-## 0.1.0
+## Unreleased
 
-## What is oranda?
+FIXME: write a proper changelog for the next release
 
-oranda is a hands-off static site generator for people who want a website for their tool but don't want to learn a static site generator. As long as you have a `README.md` in your directory, you can benefit from oranda. oranda will also try to automatically work with:
-
-- Release artifacts (currently only for GitHub releases)
-    - `cargo-dist`-generated ones, and
-    - arbitrary release artifacts
-- `mdbook`docs
-- GitHub-supported project/maintainer funding sources
-
-oranda is designed to _just work_ in a lot of cases, and in cases where it doesn't, to provide fine-grained configuration so you can make it work for you.
-
-## Features
-
-### Components
-
-#### Github release artifacts inference
-
-We can now not only figure out whether you're using `cargo-dist` _automatically_, but we also try and support arbitrary tarballs, as long as they're attached to a release and they're following the target-triple format. Oranda will now, for example, pick up a release artifacts called `myapp-aarch64-apple-darwin.tar.xz`, even if the project isn't using `cargo-dist`.
-
-#### Smarter install widget
-
-The installer widget on our main page has been upgraded! It now not only shows a select box where you can switch between different architectures (though we still attempt to figure out what platform you're running on), but it now additionally displays your package managers:
-
-![](https://hackmd.io/_uploads/B1iKMxju3.png)
-
-You can customize which package managers you want to be displayed on in this widget vs. which ones should only be displayed on the separate install page, as well.
-
-#### Funding page
-
-oranda now has the ability to autodetect whether you're using GitHub's funding embed functionality (meaning you have a `.github/FUNDING.yml`), in which case it'll automatically generate a page showing your available funding options.
-
-Additionally, you can enhance this page by selecting a particular funding channel to be showcased as well as providing custom content from a `funding.md` Markdown file. You can, of course, fully disable this feature, or adjust the paths if you want.
-
-This is less of a defined feature and more of an experiment on how we can better integrate maintainers' funding sources onto their websites. Please let us know what you think, or if you have any other feedback or input!
-
-#### `mdbook` autodetect and styling
-
-oranda themes now get applied to your mdbook output, too, meaning there's less of a discrepancy between your flashy oranda page and your default-mdbook-styled docs. We've also been hard at work being able to detect when you use `mdbook` without you having to set it, which should now work in the majority of cases.
-
-### Configuration
-
-#### New configuration structure
-
-We've completely revamped our configuration structure to be more future-proof and to require less refactoring in the fullness of time. For the new configuration layout, please [consult the docs](https://opensource.axo.dev/oranda/book/configuration.html).
-
-One other major change is that we now **reject unknown config keys**. This means that if you've had a oranda 0.0.3 site, it will now force you to migrate your config to the new format. We've decided on this because we believe that doing anything but hard erroring in this situation would lead to unwanted behavior (old keys getting interpreted in new, weird ways, and so on).
-
-#### Config schema
-
-oranda's configuration schema is now available in a JSON schema for each release starting with this one. This means that in editors like VSCode, you can attach the schema to your `oranda.json` file and get autofill and documentation, like this:
-
-```json
-{
-  "$schema": "https://github.com/axodotdev/oranda/releases/download/v0.1.0/oranda-config-schema.json"
-}
-```
-
-### CLI
-
-#### `dev` command
-
-This release introduces `oranda dev`, which bundles both building your site and serving it from a file server, as well as sprinkling in auto-recompilation when files change. It's intended to be the prime command for local development of a oranda site.
-
-## Bug fixes
-
-(this is a selection, there's been way too many to fully list, at least until we're able to automatically generate a list)
-
-- Various style fixes, lists now display correct, colors should be less offensive to the eye, that sort of stuff
-- We're much better now at handling complex release histories!
-- We've completely removed the `version` key from the configuration. It wasn't used, and we probably won't use it in the future, either
-
-## Docs
-
-Documentation has had a major rewrite! We now provide a full configuration overview, as well as more detailed writeups for major parts of functionality.
-
-## Thank you to our contributors!
-
-Despite being formally unannounced, several intrepid folks discovered oranda, and have been using it for personal projects and contributing issues and PRs. Their feedback has been invaluable in getting oranda to 0.1.0 today and we'd like to thank them:
-
-- [2mill]: https://github.com/2mill
-- [andrewmd5]: https://github.com/andrewmd5
-- [jamesmunns]: https://github.com/jamesmunns
-- [MarcoIeni]: https://github.com/MarcoIeni 
-- [msjarvis]: https://github.com/msfjarvis
-- [pomdtr]: https://github.com/pomdtr
-- [proofconstruction]: https://github.com/proofconstruction
-- [tshepang]: https://github.com/tshepang
-- [untitaker]: https://github.com/untitaker
-- [zkat]: https://github.com/zkat
+* various fixes
+* much faster
+* mdbook integration change
 
 ## 0.0.3 - 2023-05-08
 
