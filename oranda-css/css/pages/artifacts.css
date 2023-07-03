@@ -16,6 +16,10 @@
   background-color: var(--light-highlight-bg-color);
 }
 
+.artifacts-table {
+  @apply block max-w-full overflow-auto;
+}
+
 .dark .artifacts {
   color: var(--dark-highlight-fg-color);
   background-color: var(--dark-highlight-bg-color);

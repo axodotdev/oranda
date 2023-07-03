@@ -107,7 +107,7 @@ fn html(table: Vec<Box<tr<String>>>) -> Box<div<String>> {
     html!(
     <div>
         <h3>{text!("Downloads")}</h3>
-        <table>
+        <table class="artifacts-table">
             {table}
         </table>
     </div>
