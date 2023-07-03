@@ -39,7 +39,12 @@ fn reset(dist_dir: &str) {
 
 pub fn index(config: &Config, layout: &Layout) -> Page {
     reset(&config.build.dist_dir);
-    let body = markdown::to_html(readme(), &config.styles.syntax_theme).unwrap();
+    let body = markdown::to_html(
+        readme(),
+        &config.styles.syntax_theme,
+        &config.build.path_prefix,
+    )
+    .unwrap();
     Page::new_from_contents(body, "index.html", layout, config)
 }
 
@@ -60,7 +65,12 @@ pub fn index_with_artifacts(config: &Config, layout: &Layout) -> Page {
 
 pub fn index_with_warning(config: &Config, layout: &Layout) -> Page {
     reset(&config.build.dist_dir);
-    let body = markdown::to_html(readme_invalid_annotation(), &config.styles.syntax_theme).unwrap();
+    let body = markdown::to_html(
+        readme_invalid_annotation(),
+        &config.styles.syntax_theme,
+        &config.build.path_prefix,
+    )
+    .unwrap();
     Page::new_from_contents(body, "index.html", layout, config)
 }
 

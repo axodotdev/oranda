@@ -29,6 +29,7 @@ impl Page {
         let readme = Self::load_and_render_contents(
             &config.project.readme_path,
             &config.styles.syntax_theme,
+            &config.build.path_prefix,
         )?;
         body.push_str(&readme);
         let os_script = javascript::build_os_script(&config.build.path_prefix);
@@ -43,6 +44,7 @@ impl Page {
         let body = Self::load_and_render_contents(
             &config.project.readme_path,
             &config.styles.syntax_theme,
+            &config.build.path_prefix,
         )?;
         let contents = layout.render(body, None);
         Ok(Page {
@@ -52,7 +54,11 @@ impl Page {
     }
 
     pub fn new_from_file(source: &str, layout: &Layout, config: &Config) -> Result<Self> {
-        let body = Self::load_and_render_contents(source, &config.styles.syntax_theme)?;
+        let body = Self::load_and_render_contents(
+            source,
+            &config.styles.syntax_theme,
+            &config.build.path_prefix,
+        )?;
         let contents = layout.render(body, None);
         Ok(Page {
             contents,
@@ -61,7 +67,11 @@ impl Page {
     }
 
     pub fn new_from_file_with_dir(source: &str, layout: &Layout, config: &Config) -> Result<Self> {
-        let body = Self::load_and_render_contents(source, &config.styles.syntax_theme)?;
+        let body = Self::load_and_render_contents(
+            source,
+            &config.styles.syntax_theme,
+            &config.build.path_prefix,
+        )?;
         let contents = layout.render(body, None);
         // Try diffing with the execution directory in case the user has provided an absolute-ish
         // path, in order to obtain the relative-to-dir path segment
@@ -90,10 +100,14 @@ impl Page {
         }
     }
 
-    fn load_and_render_contents(source: &str, syntax_theme: &SyntaxTheme) -> Result<String> {
+    fn load_and_render_contents(
+        source: &str,
+        syntax_theme: &SyntaxTheme,
+        path_prefix: &Option<String>,
+    ) -> Result<String> {
         let source = SourceFile::load_local(source)?;
         let contents = source.contents();
-        markdown::to_html(contents, syntax_theme).map(|html| {
+        markdown::to_html(contents, syntax_theme, path_prefix).map(|html| {
             let html: Box<div<String>> = html!(
                 <div class="rendered-markdown">
                     {unsafe_text!(html)}

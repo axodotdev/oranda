@@ -89,7 +89,7 @@ impl Site {
                 pages.append(&mut changelog_pages);
             }
             if let Some(funding_cfg) = &config.components.funding {
-                let funding = Funding::new(funding_cfg, &config.styles)?;
+                let funding = Funding::new(&config.build.path_prefix, funding_cfg, &config.styles)?;
                 let body = funding::page(config, &funding)?;
                 let page = Page::new_from_contents(body, "funding.html", &layout_template, config);
                 pages.push(page);

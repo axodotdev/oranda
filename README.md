@@ -11,6 +11,7 @@
 [![release](https://github.com/axodotdev/oranda/actions/workflows/release.yml/badge.svg)](https://github.com/axodotdev/oranda/actions/workflows/release.yml)
 [![web](https://github.com/axodotdev/oranda/actions/workflows/web.yml/badge.svg?branch=main)](https://github.com/axodotdev/oranda/actions/workflows/web.yml)
 
+See [security](./SECURITY.md)
 
 `oranda` is an opinionated static-site generator that is designed for developers
 who are publishing projects and would like a website but don't want to build
