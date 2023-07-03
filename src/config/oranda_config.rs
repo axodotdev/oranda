@@ -25,6 +25,11 @@ pub struct OrandaLayer {
     pub styles: Option<StyleLayer>,
     /// Additional optional components
     pub components: Option<ComponentLayer>,
+    /// Field that text-editors can use to fetch the schema for this struct
+    ///
+    /// We never use this, but we don't want to error out if its set.
+    #[serde(rename = "$schema")]
+    pub _schema: Option<String>,
 }
 
 impl OrandaLayer {

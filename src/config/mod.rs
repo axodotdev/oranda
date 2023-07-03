@@ -161,6 +161,7 @@ impl Config {
                 marketing,
                 styles,
                 components,
+                _schema,
             } = layer;
             self.project.apply_val_layer(project);
             self.build.apply_val_layer(build);
