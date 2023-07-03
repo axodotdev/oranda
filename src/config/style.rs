@@ -6,7 +6,7 @@ use crate::site::{markdown::SyntaxTheme, oranda_theme::OrandaTheme};
 
 use super::ApplyValExt;
 
-pub const ORANDA_CSS_TAG: &str = "v0.1.0-prerelease.9";
+pub const ORANDA_CSS_TAG: &str = "v0.1.0";
 
 /// Config related to styling your page (complete version)
 #[derive(Debug)]
