@@ -25,7 +25,7 @@ jobs:
 
       - name: Install oranda
         run: |
-          curl --proto '=https' --tlsv1.2 -LsSf https://github.com/axodotdev/oranda/releases/download/v0.1.0-prerelease.7/oranda-installer.sh | sh
+          curl --proto '=https' --tlsv1.2 -LsSf https://github.com/axodotdev/oranda/releases/download/v0.1.0/oranda-installer.sh | sh
 
       - name: Build and deploy example
         env:
