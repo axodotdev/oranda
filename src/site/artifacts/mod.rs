@@ -66,11 +66,16 @@ pub fn scripts(release: &Release, config: &Config) -> Result<Vec<Box<div<String>
     Ok(output)
 }
 
-pub fn header(context: &Context, config: &Config) -> Result<String> {
+/// Build the install-widget for the latest release
+pub fn header(context: &Context, config: &Config) -> Result<Box<div<String>>> {
     let Some(release) = context.latest() else {
-        return Ok(String::new());
+        return Ok(html!(<div></div>));
     };
 
-    let header = installers::build_header(release, config)?;
-    Ok(header.to_string())
+    header_for_release(release, config)
+}
+
+/// Build the install-widget for a given release
+pub fn header_for_release(release: &Release, config: &Config) -> Result<Box<div<String>>> {
+    installers::build_header(release, config)
 }

@@ -66,9 +66,22 @@ pub fn build_single_release(config: &Config, release: &Release) -> Result<String
         .name()
         .unwrap_or(release.source.version_tag());
 
+    let artifacts_enabled = config
+        .components
+        .artifacts
+        .as_ref()
+        .map(|a| a.has_some())
+        .unwrap_or(false);
+    let widget = if artifacts_enabled {
+        Some(crate::site::artifacts::header_for_release(release, config)?)
+    } else {
+        None
+    };
+
     Ok(html!(
          <div>
             <h1>{text!("{}", title)}</h1>
+            {widget}
             <div class="releases-body">
                 {preview}
             </div>

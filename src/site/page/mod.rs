@@ -25,7 +25,7 @@ impl Page {
         layout: &Layout,
         config: &Config,
     ) -> Result<Self> {
-        let mut body = artifacts::header(context, config)?;
+        let mut body = artifacts::header(context, config)?.to_string();
         let readme = Self::load_and_render_contents(
             &config.project.readme_path,
             &config.styles.syntax_theme,
