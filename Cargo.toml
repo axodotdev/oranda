@@ -13,10 +13,10 @@ name = "oranda"
 
 [dependencies]
 ammonia = "3"
-axoasset = { version = "0.3.0", features = ["json-serde", "toml-edit"] }
+axoasset = { version = "0.4.0", features = ["json-serde", "toml-edit"] }
 axocli = "0.1.0"
 axohtml = "0.5.0"
-axoproject = { version = "0.4.1", default-features = false, features = ["cargo-projects", "npm-projects"] }
+axoproject = { version = "0.4.2", default-features = false, features = ["cargo-projects", "npm-projects"] }
 axum = "0.6.18"
 cargo-dist-schema = "=0.1.0-prerelease.4"
 chrono = "0.4.26"
@@ -27,7 +27,7 @@ fs_extra = "1.3.0"
 lazy_static = "1.4.0"
 minifier = "0.2.2"
 octolotl = "0.1.0"
-reqwest = { version = "0.11.13", features = ["blocking", "json"] }
+reqwest = { version = "0.11.13", default-features = false, features = ["blocking", "json", "rustls-tls"] }
 serde = { version = "1.0.144", features = ["derive"] }
 serde_json = { version = "1.0.85" }
 serde_yaml = "0.9.21"
