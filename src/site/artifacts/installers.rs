@@ -273,6 +273,21 @@ fn filter_platforms(release: &Release) -> Platforms {
 
     // If that produces non-empty results, great!
     if !platforms.is_empty() {
+        // Quick-and-dirty hack: if there's x64 macos stuff but no arm64 macos stuff,
+        // pretend that x64 stuff is arm64, and hope the user has rosetta2 setup.
+        //
+        // This won't work if the user has never setup rosetta2 and the app is a CLI,
+        // because apple's auto-installer for that stuff only works for "real" apps
+        // (.app?).
+        //
+        // Eventually this should be replaced with a more robust notion of "nearby platforms"
+        // as described in https://github.com/axodotdev/cargo-dist/issues/202
+        if let Some(entries) = platforms.get("x86_64-apple-darwin") {
+            if !platforms.contains_key("aarch64-apple-darwin") {
+                let entries = entries.clone();
+                platforms.insert("aarch64-apple-darwin".to_owned(), entries);
+            }
+        }
         return platforms;
     }
 

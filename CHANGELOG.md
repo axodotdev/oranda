@@ -1,5 +1,48 @@
 # Changelog
 
+## 0.1.1 - 2023-07-04
+
+### Fixes
+
+- **Remove OpenSSL dependency - [ashleygwilliams]/[pr515], [geelen]/[i514]**
+
+    If a release happens without an OpenSSL issue, does it really happen? In trying
+    to run `oranda build` on a beta image for Cloudflare Pages, an end user discovered
+    that we hadn't fully vanquished our dependency on OpenSSL. With this PR, we've
+    made 100% sure we have.
+
+- **Allow schema key in `oranda.json` - [Gankra], [pr506]**
+
+    To improve the user experience of configuring oranda, we error on unexpected
+    keys in the `oranda.json` file- which will help people see typos and other
+    mistakes. However, this checking was over-eagerly erroring when folks added
+    a schema key so they could use VS Code's schema support. This PR makes an
+    exception for users including the "non-functional" (in oranda) schema key.
+
+- **Add fallback to macOS Intel artifacts if Apple Silicon detected, but no artifacts found - [Gankra], [pr511]**
+
+    Platform support and detection is slightly more complicated on Apple/macOS
+    machines because Apple offers Rosetta2 which allows you to run binaries built
+    for older Intel-based systems on the new Apple Silicon ones (but not vice versa).
+    This PR updates the install widget's behavior to show artifacts built for
+    Apple Intel-based systems if it detects an Apple Silicon system but cannot find
+    any binaries built for Apple Silicon.
+
+- **Artifact table width on mobile - [SaraVieira], [pr505]**
+
+    On mobile, the artifact table's width was forcing a scroll. We've updated the
+    CSS to fix this!
+
+[pr505]: https://github.com/axodotdev/oranda/pull/505
+[pr506]: https://github.com/axodotdev/oranda/pull/506
+[pr511]: https://github.com/axodotdev/oranda/pull/511
+[i514]: https://github.com/axodotdev/oranda/issues/514
+[pr515]: https://github.com/axodotdev/oranda/pull/515
+[ashleygwilliams]: https://github.com/ashleygwilliams
+[Gankra]: https://github.com/Gankra
+[geelen]: https://github.com/geelen
+[SaraVieira]: https://github.com/SaraVieira
+
 ## 0.1.0 - 2023-07-03
 
 ### What is oranda?
