@@ -3,6 +3,7 @@
     "path_prefix": "oranda"
   },
   "styles": {
+    "logo": "https://doc.rust-lang.org/cargo/images/Cargo-Logo-Small.png",
     "theme": "axodark",
     "favicon": "https://www.axo.dev/favicon.ico"
   },
