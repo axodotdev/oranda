@@ -33,6 +33,7 @@ html.hacker h6 {
 html.hacker .repo_banner > a,
 html.hacker footer {
   color: var(--light-color);
+  @apply py-2;
 }
 
 html.hacker p,
@@ -125,4 +126,8 @@ html.hacker .artifacts {
 
 html.hacker .published-date {
   @apply block w-full;
+}
+
+html.hacker .logo {
+  @apply block m-0;
 }
