@@ -3,19 +3,17 @@
 html.hacker {
   --light-highlight-bg-color: var(--dark-highlight-bg-color);
   --light-highlight-fg-color: var(--dark-highlight-fg-color);
+  --hacker-green: #20c20e;
 }
 
 html.hacker ::selection {
   @apply text-axo-black;
-  background-color: var(--hacker-green);
-
-  -webkit-text-fill-color: var(--color-axo-black);
+  background-color: #20c20e;
 }
 
 html.hacker body {
   @apply bg-axo-black text-slate-300;
   font-family: "IBM Plex Mono", monospace;
-  --hacker-green: #20c20e;
 }
 
 html.hacker .button.secondary {
