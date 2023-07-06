@@ -213,7 +213,7 @@ main {
 }
 
 .logo {
-  @apply m-auto;
+  @apply m-auto block max-w-xs;
 }
 
 .inline-code {
