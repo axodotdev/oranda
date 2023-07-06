@@ -13,7 +13,7 @@ Artifact settings are managed in the `artifacts` key in your oranda config. This
           "npm": "npm install @axodotdev/oranda --save-dev",
           "crates.io": "cargo install oranda --locked --profile=dist",
         },
-        "hidden": {
+        "additional": {
           "npx": "npx @axodotdev/oranda",
           "binstall": "cargo binstall oranda"
         }
@@ -48,7 +48,7 @@ You can add custom installation instructions for package managers or package man
 
 - `components.artifacts.package_managers.preferred` - methods that you want to be recommended on the front page install
   widget
-- `components.artifacts.package_managers.hidden` - methods that should only show up on the dedicated "install" page
+- `components.artifacts.package_managers.additional` - methods that should only show up on the dedicated "install" page
 
 All package manager entries are currently treated as "cross-platform", meaning they'll show up in the install widget for
 any platform you support. We're aware of this limitation, and will likely expand support for this in the future.
