@@ -58,11 +58,16 @@ pub fn dump_syntax_themes() -> Result<()> {
     println!("DUMPING ORANDA SYNTAX THEMES...");
     let toml_syntax_file =
         std::fs::read_to_string("./src/site/markdown/syntax_highlight/TOML.sublime-syntax")?;
+    let ts_syntax_file =
+        std::fs::read_to_string("./src/site/markdown/syntax_highlight/TypeScript.sublime-syntax")?;
     let timer = Instant::now();
     let toml_syntax =
         SyntaxDefinition::load_from_str(&toml_syntax_file, true, Some("toml")).unwrap();
+    let ts_syntax =
+        SyntaxDefinition::load_from_str(&ts_syntax_file, true, Some("typescript")).unwrap();
     let mut ps_builder = SyntaxSet::load_defaults_newlines().into_builder();
     ps_builder.add(toml_syntax);
+    ps_builder.add(ts_syntax);
     let ps = ps_builder.build();
     syntect::dumps::dump_to_uncompressed_file(
         &ps,
