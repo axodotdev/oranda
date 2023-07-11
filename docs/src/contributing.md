@@ -40,4 +40,16 @@ that's not included in syntect's default set of languages or the ones oranda pro
 and to include it in our syntax set dump. This function, once adjusted, only needs to be ran once manually, by including
 it anywhere in the call path of the application (I recommend somewhere close to the top of the build CLI function).
 
+### Converting from .tmLanguage
+
+`syntect` accepts `.sublime-syntax` files, but Sublime Text can also accept `.tmLanguage` (TextMate syntax bundles) files,
+so sometimes we need to convert from one to the other. Thankfully, the Sublime Text editor has a built-in feature for this.
+Here's what you need to do:
+
+1. Download and install Sublime Text
+2. In Sublime Text, from the menu, select Tools -> Developer -> New Syntax...
+3. This puts you in your Packages/User folder. Paste your tmLanguage file contents and save as `<yourlang>.tmLanguage`.
+4. Next, you should be able to run Tools -> Developer -> New Syntax from <yourlang>.tmLanguage...
+5. This opens a new tab with the converted output. Save and copy it or paste it into a new file in oranda. Profit!
+
 [syntect]: https://crates.io/crates/syntect
