@@ -1,155 +1,142 @@
-mod icons;
-
 use crate::config::Config;
 use crate::data::funding::{Funding, FundingContent, FundingType};
 use crate::errors::Result;
-use axohtml::dom::UnsafeTextNode;
-use axohtml::elements::{div, li};
-use axohtml::types::SpacedList;
-use axohtml::{html, text, unsafe_text};
-use std::collections::HashMap;
+use serde::Serialize;
 
-/// Generate the standalone funding page.
-pub fn page(config: &Config, funding: &Funding) -> Result<String> {
-    let mut funding_items = funding.content.clone();
-    // We've already made sure that we can unwrap on all of these `Option`s
+#[derive(Serialize, Debug)]
+pub struct FundingContext {
+    preferred_funding: Option<Vec<FundingMethod>>,
+    funding: Vec<FundingMethod>,
+    docs_content: Option<String>,
+}
+
+#[derive(Serialize, Debug)]
+pub struct FundingMethod {
+    title: String,
+    link: String,
+    icon: Option<String>,
+}
+
+pub fn context(config: &Config, funding: &Funding) -> Result<FundingContext> {
+    let mut funding_base = funding.content.clone();
     let unwrapped_config = config.components.funding.as_ref().unwrap();
-    let preferred_html = if unwrapped_config.preferred_funding.is_some() {
+    let preferred_funding = if unwrapped_config.preferred_funding.is_some() {
         let preferred = unwrapped_config.preferred_funding.as_ref().unwrap();
-        // Remove the preferred item from the rest of the list
-        funding_items.remove(preferred);
-        preferred_funding_section(preferred.clone(), funding.content.clone())
+        let content = funding_base.get(preferred).cloned().unwrap();
+        funding_base.remove(preferred);
+        Some(to_funding_methods(preferred, &content))
     } else {
         None
     };
-    let regular_html = create_funding_list(funding_items);
-    Ok(html!(
-        <div class="funding-wrapper">
-            <h1>{text!("Help fund this project!")}</h1>
-            {preferred_html}
-            {unsafe_text!(funding.docs_content.clone().unwrap_or("".into()))}
-            <ul class="funding-list">
-                {regular_html}
-            </ul>
-        </div>
-    )
-    .to_string())
+
+    Ok(FundingContext {
+        preferred_funding,
+        funding: funding_base
+            .iter()
+            .flat_map(|(k, v)| to_funding_methods(k, v))
+            .collect(),
+        docs_content: funding.docs_content.clone(),
+    })
 }
 
-fn preferred_funding_section(
-    preferred: FundingType,
-    funding: HashMap<FundingType, FundingContent>,
-) -> Option<Box<div<String>>> {
-    if let Some(element) = funding.get(&preferred).cloned() {
-        let mut hashmap = HashMap::new();
-        hashmap.insert(preferred, element);
-        Some(html!(
-        <div>
-            <ul class="funding-list preferred-funding-list">
-                {create_funding_list(hashmap)}
-            </ul>
-        </div>))
-    } else {
-        None
-    }
-}
-
-#[allow(clippy::vec_box)]
-fn create_funding_list(funding: HashMap<FundingType, FundingContent>) -> Vec<Box<li<String>>> {
-    let mut list_html = vec![];
-    if let Some(github) = one_or_multiple(&funding.get(&FundingType::Github)) {
-        for link in github {
-            let gh_link = format!("https://github.com/sponsors/{}", link);
-            list_html
-                .extend(html!(<li>{create_link(&gh_link, icons::get_github_icon(), "GitHub")}</li>))
+fn to_funding_methods(ftype: &FundingType, content: &FundingContent) -> Vec<FundingMethod> {
+    let mut return_vec = Vec::new();
+    match ftype {
+        FundingType::Github => {
+            let items = one_or_multiple(content);
+            for item in items {
+                return_vec.push(FundingMethod {
+                    title: "GitHub".to_string(),
+                    link: format!("https://github.com/sponsors/{item}"),
+                    icon: Some("github".to_string()),
+                })
+            }
+        }
+        FundingType::Patreon => {
+            if let FundingContent::One(item) = content {
+                return_vec.push(FundingMethod {
+                    title: "Patreon".to_string(),
+                    link: format!("https://patreon.com/{item}"),
+                    icon: Some("patreon".to_string()),
+                })
+            }
+        }
+        FundingType::OpenCollective => {
+            if let FundingContent::One(item) = content {
+                return_vec.push(FundingMethod {
+                    title: "OpenCollective".to_string(),
+                    link: format!("https://opencollective.com/{item}"),
+                    icon: Some("opencollective".to_string()),
+                })
+            }
+        }
+        FundingType::KoFi => {
+            if let FundingContent::One(item) = content {
+                return_vec.push(FundingMethod {
+                    title: "Ko-fi".to_string(),
+                    link: format!("https://ko-fi.com/{item}"),
+                    icon: Some("kofi".to_string()),
+                })
+            }
+        }
+        FundingType::Tidelift => {
+            if let FundingContent::One(item) = content {
+                return_vec.push(FundingMethod {
+                    title: "Tidelift".to_string(),
+                    link: format!("https://tidelift.com/subscription/pkg/{item}"),
+                    icon: Some("patreon".to_string()),
+                })
+            }
+        }
+        FundingType::CommunityBridge => {
+            if let FundingContent::One(item) = content {
+                return_vec.push(FundingMethod {
+                    title: "CommunityBridge".to_string(),
+                    link: format!("https://crowdfunding.lfx.linuxfoundation.org/projects/{item}"),
+                    icon: None,
+                })
+            }
+        }
+        FundingType::Issuehunt => {
+            if let FundingContent::One(item) = content {
+                return_vec.push(FundingMethod {
+                    title: "IssueHunt".to_string(),
+                    link: format!("https://issuehunt.com/r/{item}"),
+                    icon: None,
+                })
+            }
+        }
+        FundingType::Liberapay => {
+            if let FundingContent::One(item) = content {
+                return_vec.push(FundingMethod {
+                    title: "Liberapay".to_string(),
+                    link: format!("https://liberapay.com/{item}"),
+                    icon: Some("liberapay".to_string()),
+                })
+            }
+        }
+        FundingType::Custom => {
+            let items = one_or_multiple(content);
+            for item in items {
+                return_vec.push(FundingMethod {
+                    title: item.clone(),
+                    link: item,
+                    icon: None,
+                })
+            }
         }
     }
 
-    if let Some(FundingContent::One(patreon)) = &funding.get(&FundingType::Patreon) {
-        let patreon_link = format!("https://patreon.com/{}", patreon);
-        list_html.extend(
-            html!(<li>{create_link(&patreon_link, icons::get_patreon_icon(), "Patreon")}</li>),
-        )
-    }
-
-    if let Some(FundingContent::One(open_collective)) = &funding.get(&FundingType::OpenCollective) {
-        let oc_link = format!("https://opencollective.com/{}", open_collective);
-        list_html.extend(html!(<li>{create_link(&oc_link, icons::get_open_collective_icon(), "Open Collective")}</li>))
-    }
-
-    if let Some(FundingContent::One(kofi)) = &funding.get(&FundingType::KoFi) {
-        let kofi_link = format!("https://ko-fi.com/{}", kofi);
-        list_html.extend(html!(<li>{create_link(&kofi_link, icons::get_kofi_icon(), "Ko-fi")}</li>))
-    }
-
-    if let Some(FundingContent::One(tidelift)) = &funding.get(&FundingType::Tidelift) {
-        let tidelift_link = format!("https://tidelift.com/subscription/pkg/{}", tidelift);
-        list_html.extend(
-            html!(<li>{create_link(&tidelift_link, icons::get_tidelift_icon(), "Tidelift")}</li>),
-        )
-    }
-
-    if let Some(FundingContent::One(community_bridge)) = &funding.get(&FundingType::CommunityBridge)
-    {
-        let cb_link = format!(
-            "https://crowdfunding.lfx.linuxfoundation.org/projects/{}",
-            community_bridge
-        );
-        list_html.extend(
-            html!(<li>{create_link(&cb_link, icons::get_linux_icon(), "LFX Mentorship")}</li>),
-        )
-    }
-
-    if let Some(FundingContent::One(liberapay)) = &funding.get(&FundingType::Liberapay) {
-        let liberapay_link = format!("https://liberapay.com/{}", liberapay);
-        list_html.extend(html!(<li>{create_link(&liberapay_link, icons::get_liberapay_icon(), "Liberapay")}</li>))
-    }
-
-    if let Some(FundingContent::One(issuehunt)) = &funding.get(&FundingType::Issuehunt) {
-        let issuehunt_link = format!("https://issuehunt.com/r/{}", issuehunt);
-        // FIXME: Get an issuehunt icon from somewhere
-        list_html.extend(
-            html!(<li>{create_link(&issuehunt_link, icons::get_web_icon(), "IssueHunt")}</li>),
-        )
-    }
-
-    if let Some(custom) = one_or_multiple(&funding.get(&FundingType::Custom)) {
-        for link in custom {
-            list_html.extend(html!(<li>{create_link(&link, icons::get_web_icon(), &link)}</li>))
-        }
-    }
-
-    list_html
+    return_vec
 }
 
 /// Handles either one or multiple funding items, and puts them into a Vec.
-fn one_or_multiple(funding: &Option<&FundingContent>) -> Option<Vec<String>> {
-    if funding.is_none() {
-        return None;
-    }
+fn one_or_multiple(funding: &FundingContent) -> Vec<String> {
     let mut vec = vec![];
-    match funding.unwrap() {
+    match funding {
         FundingContent::One(item) => vec.push(item.to_owned()),
         FundingContent::Multiple(items) => vec.extend(items.to_vec()),
     }
 
-    Some(vec)
-}
-
-/// Creates a link element to be used in the funding page.
-fn create_link(
-    link: &str,
-    icon: Box<UnsafeTextNode<String>>,
-    site_name: &str,
-) -> Box<axohtml::elements::a<String>> {
-    let mut rels = SpacedList::new();
-    rels.add("noopener");
-    rels.add("noreferrer");
-    let title = &format!("Support us on {}", site_name);
-    html!(<a href=link target="_blank" title=title rel=rels>
-            <button class="button secondary">
-                {icon}
-            </button>
-            {unsafe_text!(title)}
-        </a>)
+    vec
 }

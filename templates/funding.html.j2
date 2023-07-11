@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="funding-wrapper">
+    <h1>Help fund this project!</h1>
+    <div>
+        <ul class="funding-list preferred-funding-list">
+            {% for funding in page.preferred_funding %}
+                <li>
+                    <a href="{{ funding.link }}" target="_blank" title="{{ funding.title }}" rel="noopener noreferrer">
+                        <button class="secondary button">
+                            {% if funding.icon %}
+                                {% include "icons/" ~ funding.icon ~ ".html" %}
+                            {% else %}
+                                {% include "icons/web.html" %}
+                            {% endif %}
+                        </button>
+                        {{ funding.title }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% if page.docs_content %}
+        {{ page.docs_content }}
+    {% endif %}
+    <ul class="funding-list">
+        {% for funding in page.funding %}
+            <li>
+                <a href="{{ funding.link }}" target="_blank" title="{{ funding.title }}" rel="noopener noreferrer">
+                    <button class="secondary button">
+                        {% if funding.icon %}
+                            {% include "icons/" ~ funding.icon ~ ".html" %}
+                        {% else %}
+                            {% include "icons/web.html" %}
+                        {% endif %}
+                    </button>
+                    {{ funding.title }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

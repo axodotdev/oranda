@@ -1,28 +1,30 @@
 use std::path::Path;
 
-use axoasset::LocalAsset;
+use axoasset::{Asset, LocalAsset};
 use camino::{Utf8Path, Utf8PathBuf};
 use indexmap::IndexMap;
+use minijinja::context;
 
 use crate::config::Config;
 use crate::data::{funding::Funding, github::GithubRepo, Context};
 use crate::errors::*;
 use crate::message::{Message, MessageType};
 
+use crate::site::templates::Templates;
+use layout::css;
 pub use layout::javascript;
-use layout::{css, Layout};
 use page::Page;
 
 pub mod artifacts;
 pub mod changelog;
 pub mod funding;
-pub mod icons;
 pub mod layout;
 pub mod link;
 pub mod markdown;
 pub mod mdbook;
 pub mod oranda_theme;
 pub mod page;
+pub mod templates;
 
 #[derive(Debug)]
 pub struct Site {
@@ -32,16 +34,13 @@ pub struct Site {
 impl Site {
     pub fn build(config: &Config) -> Result<Site> {
         Self::clean_dist_dir(&config.build.dist_dir)?;
+        let templates = Templates::new(config)?;
 
         let mut pages = vec![];
-        let layout_template = Layout::new(config)?;
 
         if !config.build.additional_pages.is_empty() {
-            let mut additional_pages = Self::build_additional_pages(
-                &config.build.additional_pages,
-                &layout_template,
-                config,
-            )?;
+            let mut additional_pages =
+                Self::build_additional_pages(&config.build.additional_pages, &templates, config)?;
             pages.append(&mut additional_pages);
         }
 
@@ -73,30 +72,45 @@ impl Site {
                     .unwrap()
                     .artifacts
                     .make_scripts_viewable(config)?;
-                index = Some(Page::index_with_artifacts(
-                    &context,
-                    &layout_template,
+                let template_context = artifacts::template_context(&context, config)?;
+                index = Some(Page::new_from_both(
+                    &config.project.readme_path,
+                    "index.html",
+                    &templates,
+                    "index.html",
+                    context!(artifacts => template_context),
                     config,
                 )?);
-                let body = artifacts::page(&context, config)?;
-                let artifacts_page =
-                    Page::new_from_contents(body, "artifacts.html", &layout_template, config);
+                let artifacts_page = Page::new_from_template(
+                    "artifacts.html",
+                    &templates,
+                    "artifacts.html",
+                    &template_context,
+                )?;
                 pages.push(artifacts_page);
             }
             if config.components.changelog {
                 let mut changelog_pages =
-                    Self::build_changelog_pages(&context, &layout_template, config)?;
+                    Self::build_changelog_pages(&context, &templates, config)?;
                 pages.append(&mut changelog_pages);
             }
             if let Some(funding_cfg) = &config.components.funding {
                 let funding = Funding::new(funding_cfg, &config.styles)?;
-                let body = funding::page(config, &funding)?;
-                let page = Page::new_from_contents(body, "funding.html", &layout_template, config);
+                let context = funding::context(config, &funding)?;
+                let page =
+                    Page::new_from_template("funding.html", &templates, "funding.html", context)?;
                 pages.push(page);
             }
         }
 
-        pages.push(index.unwrap_or(Page::index(&layout_template, config)?));
+        pages.push(index.unwrap_or(Page::new_from_both(
+            &config.project.readme_path,
+            "index.html",
+            &templates,
+            "index.html",
+            context!(),
+            config,
+        )?));
         Ok(Site { pages })
     }
 
@@ -155,14 +169,13 @@ impl Site {
 
     fn build_additional_pages(
         files: &IndexMap<String, String>,
-        layout_template: &Layout,
+        templates: &Templates,
         config: &Config,
     ) -> Result<Vec<Page>> {
         let mut pages = vec![];
         for file_path in files.values() {
             if page::source::is_markdown(file_path) {
-                let additional_page =
-                    Page::new_from_file_with_dir(file_path, layout_template, config)?;
+                let additional_page = Page::new_from_markdown(file_path, templates, config)?;
                 pages.push(additional_page)
             } else {
                 let msg = format!(
@@ -177,22 +190,26 @@ impl Site {
 
     fn build_changelog_pages(
         context: &Context,
-        layout_template: &Layout,
+        templates: &Templates,
         config: &Config,
     ) -> Result<Vec<Page>> {
         let mut pages = vec![];
-        let changelog_html = changelog::build(context, config)?;
-        let changelog_page =
-            Page::new_from_contents(changelog_html, "changelog.html", layout_template, config);
-        let changelog_releases = changelog::build_all(context, config)?;
+        let index_context = changelog::index_context(context, config)?;
+        let changelog_page = Page::new_from_template(
+            "changelog.html",
+            templates,
+            "changelog_index.html",
+            index_context,
+        )?;
         pages.push(changelog_page);
-        for (name, content) in changelog_releases {
-            let page = Page::new_from_contents(
-                content,
-                &format!("changelog/{}.html", name),
-                layout_template,
-                config,
-            );
+        for release in context.releases.iter() {
+            let single_context = changelog::single_context(release, config);
+            let page = Page::new_from_template(
+                &format!("changelog/{}.html", single_context.version_tag),
+                templates,
+                "changelog_single.html",
+                context!(release => single_context),
+            )?;
             pages.push(page);
         }
         Ok(pages)
@@ -232,6 +249,13 @@ impl Site {
                 &config.styles.syntax_theme,
             )?;
         }
+        if config.styles.favicon.is_some() {
+            let copy_result_future = Asset::copy(
+                config.styles.favicon.as_ref().unwrap(),
+                &config.build.dist_dir[..],
+            );
+            tokio::runtime::Handle::current().block_on(copy_result_future)?;
+        }
         if Path::new(&config.build.static_dir).exists() {
             Self::copy_static(&dist, &config.build.static_dir)?;
         }
@@ -239,7 +263,7 @@ impl Site {
 
         let additional_css = &config.styles.additional_css;
         if !additional_css.is_empty() {
-            css::write_additional(additional_css, &dist)?;
+            css::write_additional_css(additional_css, &dist)?;
         }
 
         Ok(())

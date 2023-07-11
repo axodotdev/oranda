@@ -33,6 +33,9 @@ pub enum OrandaError {
     #[error(transparent)]
     Reqwest(#[from] reqwest::Error),
 
+    #[error(transparent)]
+    Minijinja(#[from] minijinja::Error),
+
     #[error("Failed to create a directory, `{dist_path}` to build your project in.")]
     DistDirCreationError {
         dist_path: String,

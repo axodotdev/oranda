@@ -1,96 +1,137 @@
-use axohtml::{html, text};
-
-use crate::config::Config;
+use crate::config::{Config, SocialConfig};
 use crate::errors::*;
 use crate::site::oranda_theme::OrandaTheme;
+use serde::Serialize;
 
 pub mod css;
-mod footer;
-mod head;
 mod header;
 pub mod javascript;
+use crate::site::layout::header::get_logo;
+use crate::site::{link, page};
 use javascript::analytics::Analytics;
 
-#[derive(Debug)]
-pub struct Layout {
-    template: String,
+#[derive(Serialize, Debug)]
+pub struct LayoutContext {
+    theme: OrandaTheme,
+    project_name: String,
+    homepage: Option<String>,
+    repository: Option<String>,
+    favicon_url: Option<String>,
+    description: Option<String>,
+    oranda_css_path: String,
+    has_additional_css: bool,
+    logo: Option<String>,
+    license: Option<String>,
+    additional_pages: Option<Vec<AdditionalPageContext>>,
+    artifacts_link: Option<String>,
+    mdbook_link: Option<String>,
+    funding_link: Option<String>,
+    changelog_link: Option<String>,
+    has_nav: bool,
+    home_link: String,
+    path_prefix: Option<String>,
+    analytics: Analytics,
+    social: SocialConfig,
 }
 
-const DOCTYPE: &str = r#"<!doctype html>"#;
-const BODY_PLACEHOLDER: &str = "{{{BODY}}}";
-const OS_SCRIPT_PLACEHOLDER: &str = "{{{OS_SCRIPT}}}";
+#[derive(Serialize, Debug)]
+pub struct AdditionalPageContext {
+    path: String,
+    name: String,
+}
 
-impl Layout {
-    pub fn render(&self, body: String, os_script: Option<String>) -> String {
-        self.template
-            .replace(BODY_PLACEHOLDER, &body)
-            .replace(OS_SCRIPT_PLACEHOLDER, &os_script.unwrap_or(String::new()))
-    }
-
+impl LayoutContext {
     pub fn new(config: &Config) -> Result<Self> {
-        let theme = OrandaTheme::css_class(&config.styles.theme);
-        let name = &config.project.name;
-        let header = header::create(config)?;
-        let homepage = config.project.homepage.as_ref().map(|homepage| {
-            html!(
-              <meta property="og:url" content=homepage/>
-            )
-        });
-        let banner = header::repo_banner(config);
-        let meta_tags = head::create_meta_tags(config);
-        let favicon = if let Some(favicon) = config.styles.favicon.clone() {
-            Some(head::get_favicon(
-                favicon,
-                config.build.dist_dir.clone(),
-                &config.build.path_prefix,
-            )?)
-        } else {
-            None
-        };
-        let footer = footer::create_footer(config);
-
-        let additional_css = if !config.styles.additional_css.is_empty() {
-            Some(css::build_additional(&config.build.path_prefix))
-        } else {
-            None
-        };
-        let oranda_css = css::build_oranda(
+        let css_path = css::get_css_link(
             &config.build.dist_dir,
             &config.build.path_prefix,
             &config.styles.oranda_css_version,
         )?;
+        let additional_pages = if config.build.additional_pages.is_empty() {
+            None
+        } else {
+            let mut ret = Vec::new();
+            for (name, path) in config.build.additional_pages.iter() {
+                if page::source::is_markdown(path) {
+                    let file_path = page::source::get_filename_with_dir(path)?;
+                    if let Some(path) = file_path {
+                        let href = link::generate(&config.build.path_prefix, &format!("{}/", path));
+                        ret.push(AdditionalPageContext {
+                            name: name.clone(),
+                            path: href,
+                        });
+                    }
+                }
+            }
+            Some(ret)
+        };
+
+        let favicon_url = config
+            .styles
+            .favicon
+            .clone()
+            .map(|_| link::generate(&config.build.path_prefix, "favicon.ico"));
+        let logo = if config.styles.logo.is_some() {
+            let path = get_logo(config.styles.logo.clone().unwrap(), config)?;
+            Some(path)
+        } else {
+            None
+        };
+        let artifacts_link = if config.components.artifacts.is_some()
+            && config.components.artifacts.as_ref().unwrap().has_some()
+        {
+            let link = link::generate(&config.build.path_prefix, "artifacts/");
+            Some(link)
+        } else {
+            None
+        };
+        let mdbook_link = &config
+            .components
+            .mdbook
+            .as_ref()
+            .map(|_| link::generate(&config.build.path_prefix, "book/"));
+        let funding_link = &config
+            .components
+            .funding
+            .as_ref()
+            .map(|_| link::generate(&config.build.path_prefix, "funding/"));
+        let changelog_link = &config
+            .components
+            .changelog
+            .then(|| link::generate(&config.build.path_prefix, "changelog/"));
+        let has_nav = additional_pages.is_some()
+            || artifacts_link.is_some()
+            || mdbook_link.is_some()
+            || funding_link.is_some()
+            || changelog_link.is_some();
+        let home_link = if config.build.path_prefix.is_some() {
+            format!("/{}/", &config.build.path_prefix.as_ref().unwrap())
+        } else {
+            "/".to_string()
+        };
         let analytics = Analytics::new(&config.marketing.analytics);
-        let template_html: String = html!(
-        <html lang="en" id="oranda" class=theme>
-            <head>
-                <title>{ text!(name) }</title>
-                {homepage}
-                {favicon}
-                {meta_tags}
-                {oranda_css}
-                {additional_css}
-            </head>
-            <body>
-            <div class="container">
-                <div class="page-body">
-                    {banner}
-                    <main>
-                        {header}
-                        <div>{text!(BODY_PLACEHOLDER)}</div>
-                    </main>
-                </div>
-                {footer}
-            </div>
-                {analytics.snippet}
-                {analytics.google_script}
-                <div>{text!(OS_SCRIPT_PLACEHOLDER)}</div>
-            </body>
-        </html>
-        )
-        .to_string();
 
-        let template = format!("{DOCTYPE}{template_html}");
-
-        Ok(Layout { template })
+        Ok(Self {
+            theme: config.styles.theme,
+            project_name: config.project.name.clone(),
+            homepage: config.project.homepage.clone(),
+            repository: config.project.repository.clone(),
+            favicon_url,
+            description: config.project.description.clone(),
+            logo,
+            license: config.project.license.clone(),
+            oranda_css_path: css_path,
+            has_additional_css: !config.styles.additional_css.is_empty(),
+            additional_pages,
+            artifacts_link,
+            mdbook_link: mdbook_link.clone(),
+            funding_link: funding_link.clone(),
+            changelog_link: changelog_link.clone(),
+            has_nav,
+            home_link,
+            path_prefix: config.build.path_prefix.clone(),
+            analytics,
+            social: config.marketing.social.clone(),
+        })
     }
 }

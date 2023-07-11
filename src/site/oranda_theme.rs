@@ -1,28 +1,17 @@
 use schemars::JsonSchema;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Deserialize, JsonSchema)]
+#[derive(
+    Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize, JsonSchema,
+)]
 #[serde(rename_all = "lowercase")]
 pub enum OrandaTheme {
     Light,
     Dark,
-    #[serde(alias = "axo_light")]
+    #[serde(alias = "axo_light", rename(serialize = "axo"))]
     AxoLight,
-    #[serde(alias = "axo_dark")]
+    #[serde(alias = "axo_dark", rename(serialize = "dark axo"))]
     AxoDark,
     Hacker,
     Cupcake,
-}
-
-impl OrandaTheme {
-    pub fn css_class(theme: &OrandaTheme) -> &'static str {
-        match theme {
-            OrandaTheme::Dark => "dark",
-            OrandaTheme::AxoLight => "axo",
-            OrandaTheme::AxoDark => "dark axo",
-            OrandaTheme::Hacker => "hacker",
-            OrandaTheme::Cupcake => "cupcake",
-            _ => "light",
-        }
-    }
 }

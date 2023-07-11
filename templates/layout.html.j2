@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" id="oranda" class="{{ layout.theme }}">
+    <head>
+        <title>{% block title %}{{ layout.project_name }}{% endblock %}</title>
+        {% if layout.homepage %}
+            <meta property="og:url" content="{{ layout.homepage }}" />
+        {% endif %}
+        {% if layout.favicon_url %}
+            <link rel="icon" href="{{ layout.favicon_url }}" />
+        {% endif %}
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        {% if layout.description %}
+            <meta name="description" content="{{ layout.description }}" />
+            <meta property="og:description" content="{{ layout.description }}" />
+        {% endif %}
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="{{ layout.project_name }}" />
+        {% if layout.social.image %}
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta property="og:image" content="{{ layout.social.image }}" />
+        {% endif %}
+        {% if layout.social.image_alt %}
+            <meta property="og:image:alt" content="{{ layout.social.image_alt }}" />
+        {% endif %}
+        {% if layout.social.twitter_account %}
+            <meta name="twitter:creator" content="{{ layout.social.twitter_account }}" />
+            <meta name="twitter:site" content="{{ layout.social.twitter_account }}" />
+        {% endif %}
+        <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
+        <link rel="stylesheet" href="{{ layout.oranda_css_path }}" />
+        {% if layout.has_additional_css %}
+            <link rel="stylesheet" href="{{ "custom.css" | generate_link(layout.path_prefix) }}" />
+        {% endif %}
+        {% block head %}{% endblock %}
+    </head>
+    <body>
+        <div class="container">
+            <div class="page-body">
+                {% if layout.repository %}
+                    <div class="repo_banner">
+                        <a href="{{ layout.repository }}">
+                            <div class="github-icon" aria-hidden="true"></div>
+                            Check out our GitHub!
+                        </a>
+                    </div>
+                {% endif %}
+
+                <main>
+                    <header>
+                        {% if layout.logo %}
+                            <img src="{{ layout.logo }}" alt="{{ layout.project_name }}" />
+                        {% endif %}
+                        <h1 class="title">{{ layout.project_name }}</h1>
+                        {% include "includes/nav.html" %}
+                    </header>
+
+                    {% block content %}{% endblock %}
+                </main>
+            </div>
+
+            <footer>
+                {% if layout.repository %}
+                    <a href="{{ layout.repository }}"><div class="github-icon" aria-hidden="true"></div></a>
+                {% endif %}
+                <span>
+                    {{ layout.project_name }}{% if layout.license %}, {{ layout.license }}{% endif %}
+                </span>
+            </footer>
+        </div>
+
+        {% if layout.analytics.snippet %}
+            {{ layout.analytics.snippet }}
+        {% endif %}
+        {% if layout.analytics.google_script %}
+            {{ layout.analytics.google_script }}
+        {% endif %}
+
+        {% block os_script %}{% endblock %}
+    </body>
+</html>

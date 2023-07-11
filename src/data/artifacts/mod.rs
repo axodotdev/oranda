@@ -125,6 +125,7 @@ pub enum DisplayPreference {
 
 /// Different methods of installation recommendation
 #[derive(Debug, Clone, Serialize)]
+#[serde(tag = "type")]
 pub enum InstallMethod {
     /// Download this file
     Download {
