@@ -71,15 +71,13 @@ impl LayoutContext {
             .favicon
             .clone()
             .map(|_| link::generate(&config.build.path_prefix, "favicon.ico"));
-        let logo = if config.styles.logo.is_some() {
-            let path = get_logo(config.styles.logo.clone().unwrap(), config)?;
+        let logo = if let Some(logo) = config.styles.logo.as_deref() {
+            let path = get_logo(logo, config)?;
             Some(path)
         } else {
             None
         };
-        let artifacts_link = if config.components.artifacts.is_some()
-            && config.components.artifacts.as_ref().unwrap().has_some()
-        {
+        let artifacts_link = if config.components.artifacts_enabled() {
             let link = link::generate(&config.build.path_prefix, "artifacts/");
             Some(link)
         } else {
@@ -104,8 +102,8 @@ impl LayoutContext {
             || mdbook_link.is_some()
             || funding_link.is_some()
             || changelog_link.is_some();
-        let home_link = if config.build.path_prefix.is_some() {
-            format!("/{}/", &config.build.path_prefix.as_ref().unwrap())
+        let home_link = if let Some(path_prefix) = config.build.path_prefix.as_ref() {
+            format!("/{}/", path_prefix)
         } else {
             "/".to_string()
         };

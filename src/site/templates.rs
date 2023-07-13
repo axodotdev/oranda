@@ -30,9 +30,15 @@ impl<'a> Templates<'a> {
     pub fn new(config: &Config) -> Result<Self> {
         let mut env = Environment::new();
         let mut files = HashMap::new();
-        Self::load_files(&TEMPLATE_DIR, &mut files).unwrap();
+        // These two `expects` should never happen in production, because all of these things are
+        // are baked into the binary. If this fails at all it should presumably *always* fail, and
+        // so these unwraps will only show up when someone's messing with the templates locally
+        // during development and presumably wrote some malformed jinja2 markup.
+        Self::load_files(&TEMPLATE_DIR, &mut files)
+            .expect("failed to load jinja2 templates from binary");
         for (path, contents) in files {
-            env.add_template_owned(path, contents).unwrap();
+            env.add_template_owned(path, contents)
+                .expect("failed to add jinja2 template");
         }
         env.add_filter("generate_link", Self::generate_link);
         env.add_filter("syntax_highlight", Self::syntax_highlight);
@@ -61,11 +67,13 @@ impl<'a> Templates<'a> {
                 let file_name = file_path.with_extension("");
                 files.insert(
                     file_name.display().to_string(),
-                    file.contents_utf8().unwrap().to_string(),
+                    file.contents_utf8()
+                        .expect("non-utf8 jinja2 template")
+                        .to_string(),
                 );
             }
             if let Some(dir) = entry.as_dir() {
-                Self::load_files(dir, files).unwrap();
+                Self::load_files(dir, files).expect("failed to load jinja2 templates from binary");
             }
         }
 
@@ -92,6 +100,7 @@ impl<'a> Templates<'a> {
     }
 
     fn triple_to_display_name(target: String) -> String {
+        // TODO: should this be `unwrap_or(target)` to produce some useful output?
         triple_to_display_name(&target).unwrap_or("").to_string()
     }
 }

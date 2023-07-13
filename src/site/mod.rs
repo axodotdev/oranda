@@ -59,35 +59,29 @@ impl Site {
                     Context::new_current(&config.project, config.components.artifacts.as_ref())?
                 }
             };
-            // FIXME: change the config so that you can set `artifacts: false` and disable this?
-            let artifacts_enabled = config
-                .components
-                .artifacts
-                .as_ref()
-                .map(|a| a.has_some())
-                .unwrap_or(false);
-            if context.latest().is_some() && artifacts_enabled {
-                context
-                    .latest_mut()
-                    .unwrap()
-                    .artifacts
-                    .make_scripts_viewable(config)?;
-                let template_context = artifacts::template_context(&context, config)?;
-                index = Some(Page::new_from_both(
-                    &config.project.readme_path,
-                    "index.html",
-                    &templates,
-                    "index.html",
-                    context!(artifacts => template_context),
-                    config,
-                )?);
-                let artifacts_page = Page::new_from_template(
-                    "artifacts.html",
-                    &templates,
-                    "artifacts.html",
-                    &template_context,
-                )?;
-                pages.push(artifacts_page);
+            if config.components.artifacts_enabled() {
+                if let Some(latest) = context.latest_mut() {
+                    // Give especially nice treatment to the latest release and make
+                    // its scripts easy to view (others get hotlinked and will just download)
+                    latest.artifacts.make_scripts_viewable(config)?;
+
+                    let template_context = artifacts::template_context(&context, config)?;
+                    index = Some(Page::new_from_both(
+                        &config.project.readme_path,
+                        "index.html",
+                        &templates,
+                        "index.html",
+                        context!(artifacts => template_context),
+                        config,
+                    )?);
+                    let artifacts_page = Page::new_from_template(
+                        "artifacts.html",
+                        &templates,
+                        "artifacts.html",
+                        &template_context,
+                    )?;
+                    pages.push(artifacts_page);
+                }
             }
             if config.components.changelog {
                 let mut changelog_pages =
@@ -96,7 +90,7 @@ impl Site {
             }
             if let Some(funding_cfg) = &config.components.funding {
                 let funding = Funding::new(funding_cfg, &config.styles)?;
-                let context = funding::context(config, &funding)?;
+                let context = funding::context(funding_cfg, &funding)?;
                 let page =
                     Page::new_from_template("funding.html", &templates, "funding.html", context)?;
                 pages.push(page);
@@ -115,12 +109,7 @@ impl Site {
     }
 
     fn needs_context(config: &Config) -> Result<bool> {
-        Ok(config
-            .components
-            .artifacts
-            .as_ref()
-            .map(|a| a.has_some())
-            .unwrap_or(false)
+        Ok(config.components.artifacts_enabled()
             || config.components.changelog
             || config.components.funding.is_some()
             || Self::has_repo_and_releases(&config.project.repository)?)
@@ -229,11 +218,12 @@ impl Site {
         let dist = Utf8PathBuf::from(&config.build.dist_dir);
         for page in self.pages {
             let filename_path = Utf8PathBuf::from(&page.filename);
-            // Prepare to write a "pretty link" for pages that aren't index.html already. This essentially means that we rewrite
-            // the page from "page.html" to "page/index.html", so that it can be loaded as "mysite.com/page" in the browser.
+            // Prepare to write a "pretty link" for pages that aren't index.html already.
+            // This essentially means that we rewrite the page from "page.html" to
+            // "page/index.html", so that it can be loaded as "mysite.com/page" in the browser.
             let full_path: Utf8PathBuf = if !filename_path.ends_with("index.html") {
-                // FIXME: Can we do anything BUT unwrap here? What's the smart way to deal with a missing filename path portion?
-                let file_stem = filename_path.file_stem().unwrap();
+                // Surely we can't we do anything BUT unwrap here? A file without a name is a mess.
+                let file_stem = filename_path.file_stem().expect("missing file_stem???");
                 let parent = filename_path.parent().unwrap_or("".into());
                 dist.join(parent).join(file_stem).join("index.html")
             } else {
@@ -249,11 +239,8 @@ impl Site {
                 &config.styles.syntax_theme,
             )?;
         }
-        if config.styles.favicon.is_some() {
-            let copy_result_future = Asset::copy(
-                config.styles.favicon.as_ref().unwrap(),
-                &config.build.dist_dir[..],
-            );
+        if let Some(origin_path) = config.styles.favicon.as_ref() {
+            let copy_result_future = Asset::copy(origin_path, &config.build.dist_dir[..]);
             tokio::runtime::Handle::current().block_on(copy_result_future)?;
         }
         if Path::new(&config.build.static_dir).exists() {

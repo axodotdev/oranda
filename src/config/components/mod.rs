@@ -195,3 +195,13 @@ impl ApplyLayer for ComponentConfig {
         self.artifacts.apply_bool_layer(artifacts);
     }
 }
+impl ComponentConfig {
+    /// Convenience for checking if the artifacts component is actually enabled
+    /// because a ton of code was repeating this due to the extra Option.
+    pub fn artifacts_enabled(&self) -> bool {
+        self.artifacts
+            .as_ref()
+            .map(|a| a.has_some())
+            .unwrap_or(false)
+    }
+}

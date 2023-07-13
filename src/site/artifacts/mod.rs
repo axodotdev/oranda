@@ -10,7 +10,16 @@ use crate::message::{Message, MessageType};
 use crate::site::javascript;
 use serde::Serialize;
 
+/// A list of downloadable files.
+///
+/// The inner Vec is a list of supported platforms (display name). If the Option is None then
+/// we don't have a pretty name for the platform and will omit it. (This seems suboptimal,
+/// shouldn't we show the ugly TargetTriple name as fallback?)
 type DownloadableFiles = Vec<(FileIdx, (File, Vec<Option<String>>))>;
+/// A map from TargetTriples to Installers that support that platform
+///
+/// In theory this should be BTreeMap or IndexMap but something in the pipeline from here to
+/// jinja seems to be forcing a sorting so it's deterministic..? Can't find docs for this.
 type Platforms = HashMap<TargetTriple, Vec<InstallerIdx>>;
 
 #[derive(Serialize, Debug)]
@@ -36,8 +45,8 @@ pub fn template_context(context: &Context, config: &Config) -> Result<Option<Art
         .installers()
         .filter_map(|(_, installer)| {
             let InstallMethod::Download { file } = installer.method else {
-            return None;
-        };
+                return None;
+            };
             Some((
                 file,
                 (

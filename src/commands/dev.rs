@@ -157,7 +157,7 @@ impl Dev {
         let _ = std::thread::spawn(move || Serve::new(self.port).run());
         loop {
             // Wait for all debounced events to arrive
-            let first_event = rx.recv().unwrap();
+            let first_event = rx.recv().expect("channel shut down incorrectly");
             sleep(Duration::from_millis(50));
             let other_events = rx.try_iter();
 

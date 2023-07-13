@@ -1,4 +1,4 @@
-use crate::config::Config;
+use crate::config::FundingConfig;
 use crate::data::funding::{Funding, FundingContent, FundingType};
 use crate::errors::Result;
 use serde::Serialize;
@@ -17,14 +17,18 @@ pub struct FundingMethod {
     icon: Option<String>,
 }
 
-pub fn context(config: &Config, funding: &Funding) -> Result<FundingContext> {
+pub fn context(config: &FundingConfig, funding: &Funding) -> Result<FundingContext> {
     let mut funding_base = funding.content.clone();
-    let unwrapped_config = config.components.funding.as_ref().unwrap();
-    let preferred_funding = if unwrapped_config.preferred_funding.is_some() {
-        let preferred = unwrapped_config.preferred_funding.as_ref().unwrap();
-        let content = funding_base.get(preferred).cloned().unwrap();
-        funding_base.remove(preferred);
-        Some(to_funding_methods(preferred, &content))
+    // allowed temporarily to preserve the TODO
+    #[allow(clippy::manual_map)]
+    let preferred_funding = if let Some(preferred) = config.preferred_funding.as_ref() {
+        if let Some(content) = funding_base.remove(preferred) {
+            Some(to_funding_methods(preferred, &content))
+        } else {
+            // TODO: check if we warn about this anywhere earlier, the user clearly messed up here
+            // and specified a preferred funding that doesn't exist, and should be told about it
+            None
+        }
     } else {
         None
     };

@@ -173,11 +173,17 @@ impl ReleaseArtifacts {
 
     /// Get a file
     pub fn file(&self, idx: FileIdx) -> &File {
-        self.files.get_index(idx.0).unwrap().1
+        self.files
+            .get_index(idx.0)
+            .expect("invalid FileIdx (did you remove an entry?)")
+            .1
     }
     /// Get a mutable file
     pub fn file_mut(&mut self, idx: FileIdx) -> &mut File {
-        self.files.get_index_mut(idx.0).unwrap().1
+        self.files
+            .get_index_mut(idx.0)
+            .expect("invalid FileIdx (did you remove an entry?)")
+            .1
     }
     /// Get the handle to a file, given the name
     pub fn file_idx(&self, name: &FileName) -> Option<FileIdx> {
