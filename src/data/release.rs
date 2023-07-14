@@ -1,6 +1,7 @@
 use axoasset::SourceFile;
 use cargo_dist_schema::DistManifest;
 use chrono::DateTime;
+use serde::Serialize;
 
 use crate::config::ArtifactsConfig;
 use crate::data::{cargo_dist, github::GithubRelease, GithubRepo};
@@ -9,13 +10,13 @@ use crate::errors::*;
 use super::artifacts::ReleaseArtifacts;
 
 #[allow(clippy::large_enum_variant)]
-#[derive(Debug, Clone)]
+#[derive(Serialize, Debug, Clone)]
 pub enum ReleaseSource {
     Github(GithubRelease),
     CurrentState(CurrentStateRelease),
 }
 
-#[derive(Debug, Clone)]
+#[derive(Serialize, Debug, Clone)]
 pub struct CurrentStateRelease {
     pub version: Option<String>,
     pub date: Option<String>,
@@ -77,7 +78,7 @@ impl ReleaseSource {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Serialize, Clone, Debug)]
 pub struct Release {
     pub manifest: Option<DistManifest>,
     pub source: ReleaseSource,

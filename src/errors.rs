@@ -33,6 +33,9 @@ pub enum OrandaError {
     #[error(transparent)]
     Reqwest(#[from] reqwest::Error),
 
+    #[error(transparent)]
+    Minijinja(#[from] minijinja::Error),
+
     #[error("Failed to create a directory, `{dist_path}` to build your project in.")]
     DistDirCreationError {
         dist_path: String,
@@ -173,6 +176,10 @@ pub enum OrandaError {
         url = "https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/displaying-a-sponsor-button-in-your-repository"
     )]
     GithubFundingParseError { details: String },
+
+    #[error("Your preferred_funding '{preferred}' didn't match any of the sources we found")]
+    #[diagnostic(help = "{help}")]
+    PreferredFundingNotFound { preferred: String, help: String },
 
     #[error("Couldn't find your book.toml")]
     #[diagnostic(help = "You can manually specify path in your components.mdbook config")]

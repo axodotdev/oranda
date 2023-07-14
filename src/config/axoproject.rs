@@ -129,7 +129,10 @@ impl AxoprojectLayer {
                 // something in guppy/cargo is desugarring symlinks in their output, so
                 // we need to too.
                 let package = workspace.packages().find_map(|(idx, p)| {
-                    let package_dir = p.manifest_path.parent().unwrap();
+                    let package_dir = p
+                        .manifest_path
+                        .parent()
+                        .expect("project manifest file wasn't in a dir!?");
                     if is_same_path(package_dir, start_dir) {
                         Some(idx)
                     } else {

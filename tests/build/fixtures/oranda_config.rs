@@ -5,6 +5,7 @@ use oranda::config::{
     PackageManagersConfig, ProjectConfig, StyleConfig,
 };
 use oranda::site::javascript::analytics::Plausible;
+use oranda::site::oranda_theme::OrandaTheme;
 
 pub fn no_artifacts(temp_dir: String) -> Config {
     let mut additional_pages = IndexMap::new();
@@ -13,9 +14,7 @@ pub fn no_artifacts(temp_dir: String) -> Config {
     Config {
         project: ProjectConfig {
             description: Some(String::from("you axolotl questions")),
-            readme_path: String::from(
-                "https://raw.githubusercontent.com/axodotdev/oranda/main/README.md",
-            ),
+            readme_path: String::from("README.md"),
             ..Default::default()
         },
         build: BuildConfig {
@@ -43,6 +42,18 @@ pub fn no_artifacts(temp_dir: String) -> Config {
     }
 }
 
+pub fn with_warning(temp_dir: String) -> Config {
+    let mut config = no_artifacts(temp_dir);
+    config.project.readme_path = "tests/build/fixtures/readme_with_warning.md".to_string();
+    config
+}
+
+pub fn with_theme(temp_dir: String) -> Config {
+    let mut config = no_artifacts(temp_dir);
+    config.styles.theme = OrandaTheme::Cupcake;
+    config
+}
+
 pub fn pinned_css(temp_dir: String) -> Config {
     let mut additional_pages = IndexMap::new();
     additional_pages.insert(
@@ -52,9 +63,7 @@ pub fn pinned_css(temp_dir: String) -> Config {
     Config {
         project: ProjectConfig {
             description: Some(String::from("you axolotl questions")),
-            readme_path: String::from(
-                "https://raw.githubusercontent.com/axodotdev/oranda/main/README.md",
-            ),
+            readme_path: String::from("README.md"),
             ..Default::default()
         },
         build: BuildConfig {

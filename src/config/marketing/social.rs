@@ -1,10 +1,10 @@
 use schemars::JsonSchema;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 use crate::config::{ApplyLayer, ApplyOptExt};
 
 // Social media config (complete version)
-#[derive(Debug)]
+#[derive(Debug, Serialize, Clone)]
 pub struct SocialConfig {
     pub image: Option<String>,
     pub image_alt: Option<String>,

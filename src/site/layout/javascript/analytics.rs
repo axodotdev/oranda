@@ -1,13 +1,12 @@
-use axohtml::elements::script;
-use axohtml::{html, unsafe_text};
 use schemars::JsonSchema;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 use crate::config::AnalyticsConfig;
 
+#[derive(Serialize, Debug)]
 pub struct Analytics {
-    pub snippet: Option<Box<script<String>>>,
-    pub google_script: Option<Box<script<String>>>,
+    pub snippet: Option<String>,
+    pub google_script: Option<String>,
 }
 
 impl Analytics {
@@ -68,44 +67,47 @@ const PLAUSIBLE_SCRIPT_URL: &str = "https://plausible.io/js/script.js";
 const FATHOM_SCRIPT_URL: &str = "https://cdn.usefathom.com/script.js";
 
 impl Google {
-    pub fn get_script(&self) -> Box<script<String>> {
-        let code = format!("window.dataLayer = window.dataLayer || []; function gtag(){{dataLayer.push(arguments);}} gtag('js', new Date());gtag('config', '{}');", self.tracking_id);
-
-        html!(<script>{unsafe_text!(code)}</script>)
+    pub fn get_script(&self) -> String {
+        format!("window.dataLayer = window.dataLayer || []; function gtag(){{dataLayer.push(arguments);}} gtag('js', new Date());gtag('config', '{}');", self.tracking_id)
     }
 }
 
 trait Snippet {
-    fn snippet(&self) -> Box<script<String>>;
+    fn snippet(&self) -> String;
 }
 
 impl Snippet for Google {
-    fn snippet(&self) -> Box<script<String>> {
+    fn snippet(&self) -> String {
         let script_url = format!("{}?id={}", GOOGLE_SCRIPT_URL, self.tracking_id);
-        html!(
-            <script async=true src=&script_url></script>
-        )
+        format!(r#"<script async="true" src="{script_url}"></script>"#)
     }
 }
 
 impl Snippet for Fathom {
-    fn snippet(&self) -> Box<script<String>> {
-        html!(<script defer=true src=FATHOM_SCRIPT_URL data-site=&self.site ></script>)
+    fn snippet(&self) -> String {
+        format!(
+            r#"<script defer="true" src="{FATHOM_SCRIPT_URL}" data-site="{}"></script>"#,
+            self.site
+        )
     }
 }
 
 impl Snippet for Umami {
-    fn snippet(&self) -> Box<script<String>> {
-        html!(<script async=true defer=true src=&self.script_url data-website-id=&self.website></script>)
+    fn snippet(&self) -> String {
+        format!(
+            r#"<script async="true" defer="true" src="{}" data-website-id="{}"></script>"#,
+            self.script_url, self.website
+        )
     }
 }
 
 impl Snippet for Plausible {
-    fn snippet(&self) -> Box<script<String>> {
+    fn snippet(&self) -> String {
         let url = PLAUSIBLE_SCRIPT_URL.to_string();
         let script_url = self.script_url.as_ref().unwrap_or(&url);
-        html!(
-            <script defer=true data-domain=&self.domain src=script_url></script>
+        format!(
+            r#"<script defer="true" data-domain="{}" src="{script_url}"></script>"#,
+            self.domain
         )
     }
 }

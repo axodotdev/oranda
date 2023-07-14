@@ -1,15 +1,14 @@
 use std::path::Path;
 
 use crate::config::Config;
-use crate::data::Context;
 use crate::errors::*;
-use crate::site::artifacts;
-use crate::site::layout::{javascript, Layout};
 use crate::site::markdown::{self, SyntaxTheme};
 
+use crate::site::templates::Templates;
 use axoasset::SourceFile;
-use axohtml::elements::div;
-use axohtml::{html, unsafe_text};
+use minijinja::context;
+use minijinja::value::Value;
+use serde::Serialize;
 
 pub mod source;
 
@@ -20,87 +19,66 @@ pub struct Page {
 }
 
 impl Page {
-    pub fn index_with_artifacts(
-        context: &Context,
-        layout: &Layout,
-        config: &Config,
+    /// Creates a new page by rendering a template, using the provided template name and template context,
+    /// and using the filename parameter as the output file name.
+    pub fn new_from_template<T: Serialize>(
+        filename: &str,
+        templates: &Templates,
+        template_name: &str,
+        context: T,
     ) -> Result<Self> {
-        let mut body = artifacts::header(context, config)?;
-        let readme = Self::load_and_render_contents(
-            &config.project.readme_path,
-            &config.styles.syntax_theme,
-        )?;
-        body.push_str(&readme);
-        let os_script = javascript::build_os_script(&config.build.path_prefix);
-        let contents = layout.render(body, Some(os_script));
-        Ok(Page {
+        let contents =
+            templates.render_to_string(template_name, Value::from_serializable(&context))?;
+        Ok(Self {
             contents,
-            filename: "index.html".to_string(),
+            filename: filename.to_string(),
         })
     }
 
-    pub fn index(layout: &Layout, config: &Config) -> Result<Self> {
-        let body = Self::load_and_render_contents(
-            &config.project.readme_path,
-            &config.styles.syntax_theme,
-        )?;
-        let contents = layout.render(body, None);
-        Ok(Page {
-            contents,
-            filename: "index.html".to_string(),
-        })
-    }
-
-    pub fn new_from_file(source: &str, layout: &Layout, config: &Config) -> Result<Self> {
-        let body = Self::load_and_render_contents(source, &config.styles.syntax_theme)?;
-        let contents = layout.render(body, None);
-        Ok(Page {
-            contents,
-            filename: Self::filename(source),
-        })
-    }
-
-    pub fn new_from_file_with_dir(source: &str, layout: &Layout, config: &Config) -> Result<Self> {
-        let body = Self::load_and_render_contents(source, &config.styles.syntax_theme)?;
-        let contents = layout.render(body, None);
+    /// Creates a new page by rendering a Markdown file into the "markdown page" template. Automatically
+    /// determines the output path based on the path to the input Markdown file, diffing it with the
+    /// basepath of the project.
+    pub fn new_from_markdown(path: &str, templates: &Templates, config: &Config) -> Result<Self> {
+        let body = Self::load_and_render_contents(path, &config.styles.syntax_theme)?;
+        let contents = templates.render_to_string("markdown_page.html", context!(body))?;
         // Try diffing with the execution directory in case the user has provided an absolute-ish
         // path, in order to obtain the relative-to-dir path segment
-        let relpath = if let Some(path) = pathdiff::diff_paths(source, std::env::current_dir()?) {
+        let relpath = if let Some(path) = pathdiff::diff_paths(path, std::env::current_dir()?) {
             path
         } else {
-            source.into()
+            path.into()
         };
-        Ok(Page {
+        Ok(Self {
             contents,
             filename: relpath.display().to_string(),
         })
     }
 
-    pub fn new_from_contents(
-        body: String,
+    /// Combines both above functions by rendering a Markdown file into an arbitrary template. The markdown
+    /// content itself will be available under the "markdown_content" key in the template itself.
+    pub fn new_from_both<T: Serialize>(
+        path: &str,
         filename: &str,
-        layout: &Layout,
+        templates: &Templates,
+        template_name: &str,
+        context: T,
         config: &Config,
-    ) -> Self {
-        let os_script = javascript::build_os_script(&config.build.path_prefix);
-        let contents = layout.render(body, Some(os_script));
-        Page {
+    ) -> Result<Self> {
+        let body = Self::load_and_render_contents(path, &config.styles.syntax_theme)?;
+        let template = templates.get(template_name)?;
+        let context =
+            context!(layout => templates.layout, page => context, markdown_content => body);
+        let contents = template.render(context)?;
+        Ok(Self {
             contents,
             filename: filename.to_string(),
-        }
+        })
     }
 
     fn load_and_render_contents(source: &str, syntax_theme: &SyntaxTheme) -> Result<String> {
         let source = SourceFile::load_local(source)?;
         let contents = source.contents();
-        markdown::to_html(contents, syntax_theme).map(|html| {
-            let html: Box<div<String>> = html!(
-                <div class="rendered-markdown">
-                    {unsafe_text!(html)}
-                </div>
-            );
-            html.to_string()
-        })
+        markdown::to_html(contents, syntax_theme)
     }
 
     pub fn filename(source: &str) -> String {

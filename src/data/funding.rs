@@ -31,6 +31,24 @@ pub enum FundingType {
     Custom,
 }
 
+impl std::fmt::Display for FundingType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let string = match self {
+            FundingType::Github => "github",
+            FundingType::Patreon => "patreon",
+            FundingType::OpenCollective => "open_collective",
+            FundingType::KoFi => "ko_fi",
+            FundingType::Tidelift => "tide_lift",
+            FundingType::CommunityBridge => "community_bridge",
+            FundingType::Issuehunt => "issue_hunt",
+            FundingType::Liberapay => "liberapay",
+            FundingType::Custom => "custom",
+        };
+
+        string.fmt(f)
+    }
+}
+
 /// An enum expressing the different types of values that an entry in FUNDING.yml can have.
 #[derive(Serialize, Deserialize, Clone, Debug)]
 #[serde(untagged)]
@@ -68,6 +86,31 @@ impl Funding {
             let res = LocalAsset::load_string(md_path)?;
             let html = to_html(&res, &style_cfg.syntax_theme)?;
             funding.docs_content = Some(html);
+        }
+
+        // Check that the user's preferred funding resolves properly
+        if let Some(preferred) = funding_cfg.preferred_funding.as_ref() {
+            if !funding.content.contains_key(preferred) {
+                // It did not, print out a diagnostic
+                let mut found = String::new();
+                let mut first = false;
+                for key in funding.content.keys() {
+                    if !first {
+                        found.push_str(", ");
+                    }
+                    found.push_str(&key.to_string());
+                    first = false;
+                }
+                let help = if found.is_empty() {
+                    "We didn't find any funding sources, maybe remove preferred_funding from your config?".to_owned()
+                } else {
+                    format!("We found the following funding sources: {found}")
+                };
+                return Err(OrandaError::PreferredFundingNotFound {
+                    preferred: preferred.to_string(),
+                    help,
+                });
+            }
         }
 
         Ok(funding)

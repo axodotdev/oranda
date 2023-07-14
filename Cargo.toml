@@ -15,7 +15,6 @@ name = "oranda"
 ammonia = "3"
 axoasset = { version = "0.4.0", features = ["json-serde", "toml-edit"] }
 axocli = "0.1.0"
-axohtml = "0.5.0"
 axoproject = { version = "0.4.2", default-features = false, features = ["cargo-projects", "npm-projects"] }
 axum = "0.6.18"
 cargo-dist-schema = "=0.1.0-prerelease.4"
@@ -49,6 +48,8 @@ toml_edit = "0.19.9"
 schemars = { version = "0.8.12", features = ["indexmap1"] }
 indexmap = { version = "1.9.3", features = ["serde-1"] }
 pathdiff = { version = "0.2.1", features = ["camino"] }
+minijinja = { version = "1.0.3", features = ["loader"] }
+include_dir = "0.7.3"
 
 [dev-dependencies]
 assert_cmd = "2"

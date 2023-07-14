@@ -1,0 +1,16 @@
+<div class="install-code-wrapper">
+    {{ installer.method.run_hint | syntax_highlight("sh", "") }}
+    <button class="button copy-clipboard-button primary" data-copy="{{ installer.method.run_hint }}">
+        {% include "icons/copy.html" %}
+    </button>
+    {# Grab the installer source link, if we can find it #}
+    {% if installer.method.file %}
+        {% set file = release.artifacts.files[installer.method.file] %}
+        {% if file.view_path %}
+            {% set url = file.view_path | generate_link(layout.path_prefix) %}
+        {% else %}
+            {% set url = file.download_url %}
+        {% endif %}
+        <a class="button primary" href="{{ url }}">Source</a>
+    {% endif %}
+</div>

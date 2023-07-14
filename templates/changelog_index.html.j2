@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% block content %}
+<div>
+    <h1>Releases</h1>
+    <div class="releases-wrapper">
+        <nav class="releases-nav">
+            {% if page.has_prereleases %}
+                <div class="prereleases-toggle">
+                    <div class="flex h-6 items-center">
+                        <input type="checkbox" id="show-prereleases" />
+                    </div>
+                    <div class="ml-3">
+                        <label for="show-prereleases">Show prereleases</label>
+                    </div>
+                </div>
+            {% endif %}
+
+            <ul>
+                {% for release in page.releases %}
+                     <li class="{% if release.is_prerelease %}pre-release hidden{% endif %}">
+                         <a href="{{ release.version_tag }}/">{{ release.version_tag }}</a>
+                     </li>
+                {% endfor %}
+            </ul>
+        </nav>
+
+        <div class="releases-list">
+            {% for release in page.releases %}
+                {% set is_page = false %}
+                {% include "includes/changelog_release.html" %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block os_script %}
+<script src="{{ page.os_script }}"></script>
+{% endblock %}

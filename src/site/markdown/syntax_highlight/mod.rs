@@ -40,7 +40,7 @@ fn find_syntax<'a>(ps: &'a SyntaxSet, language: &'a str) -> Result<&'a SyntaxRef
             .syntaxes()
             .iter()
             .find(|syntax| syntax.name == "Plain Text")
-            .unwrap();
+            .expect("syntax was missing the Plain Text builtin???");
 
         Ok(plain_text)
     }
@@ -85,13 +85,14 @@ pub fn syntax_highlight(
     syntax_theme: &SyntaxTheme,
 ) -> Result<String> {
     let ps = syntect::dumps::from_uncompressed_data(include_bytes!("./syntax_themes.themedump"))
-        .unwrap();
+        .expect("failed to load syntax_themes.themedump from the binary");
     let themes = THEMES
         .iter()
         .map(|(name, body)| {
             use std::io::Cursor;
             let mut buff = Cursor::new(body);
-            let theme = ThemeSet::load_from_reader(&mut buff).unwrap();
+            let theme = ThemeSet::load_from_reader(&mut buff)
+                .expect("failed to parse syntax theme from the binary");
             Ok((name.to_string(), theme))
         })
         .collect::<Result<BTreeMap<String, Theme>>>()?;
