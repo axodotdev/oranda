@@ -41,7 +41,11 @@ pub enum FundingContent {
 
 impl Funding {
     /// Creates a new Funding struct by attempting to read from the FUNDING.yml, and the docs file.
-    pub fn new(funding_cfg: &FundingConfig, style_cfg: &StyleConfig) -> Result<Self> {
+    pub fn new(
+        path_prefix: &Option<String>,
+        funding_cfg: &FundingConfig,
+        style_cfg: &StyleConfig,
+    ) -> Result<Self> {
         let mut funding = if let Some(yml_path) = &funding_cfg.yml_path {
             match LocalAsset::load_string(yml_path) {
                 Ok(res) => {
@@ -66,7 +70,7 @@ impl Funding {
 
         if let Some(md_path) = &funding_cfg.md_path {
             let res = LocalAsset::load_string(md_path)?;
-            let html = to_html(&res, &style_cfg.syntax_theme)?;
+            let html = to_html(&res, &style_cfg.syntax_theme, path_prefix)?;
             funding.docs_content = Some(html);
         }
 
