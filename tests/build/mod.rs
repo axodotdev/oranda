@@ -5,7 +5,7 @@ mod fixtures;
 use super::utils::tokio_utils::TEST_RUNTIME;
 use fixtures::{oranda_config, page};
 
-// TODO:
+// FIXME(#528):
 // Fix these tests by using a library that's actually HTML-aware so that we don't have to mess around
 // with trying to detect variable levels of whitespace.
 
