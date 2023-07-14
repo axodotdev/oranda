@@ -12,10 +12,8 @@ use serde::Serialize;
 
 /// A list of downloadable files.
 ///
-/// The inner Vec is a list of supported platforms (display name). If the Option is None then
-/// we don't have a pretty name for the platform and will omit it. (This seems suboptimal,
-/// shouldn't we show the ugly TargetTriple name as fallback?)
-type DownloadableFiles = Vec<(FileIdx, (File, Vec<Option<String>>))>;
+/// The inner Vec is a list of supported platforms (display name).
+type DownloadableFiles = Vec<(FileIdx, File, Vec<String>)>;
 /// A map from TargetTriples to Installers that support that platform
 ///
 /// In theory this should be BTreeMap or IndexMap but something in the pipeline from here to
@@ -49,25 +47,27 @@ pub fn template_context(context: &Context, config: &Config) -> Result<Option<Art
             };
             Some((
                 file,
-                (
-                    release.artifacts.file(file).clone(),
-                    installer
-                        .targets
-                        .keys()
-                        .map(|s| triple_to_display_name(s).map(|s| s.to_string()))
-                        .collect::<Vec<_>>(),
-                ),
+                release.artifacts.file(file).clone(),
+                installer
+                    .targets
+                    .keys()
+                    .map(|s| {
+                        triple_to_display_name(s)
+                            .map(|s| s.to_string())
+                            .unwrap_or_else(|| s.clone())
+                    })
+                    .collect::<Vec<_>>(),
             ))
         })
         .collect();
-    downloadable_files.sort_by_key(|(_, (f, _))| f.clone().name);
+    downloadable_files.sort_by_key(|(_, f, _)| f.name.clone());
 
     if downloadable_files.is_empty() {
         Message::new(MessageType::Warning, "You seem to have release automation set up, but we didn't detect any releases. The install page and associated widget will be empty. To disable this, set `artifacts: false`").print();
     }
     let has_checksum_files = downloadable_files
         .iter()
-        .any(|(_, (f, _))| f.checksum_file.is_some());
+        .any(|(_, f, _)| f.checksum_file.is_some());
 
     Ok(Some(ArtifactsContext {
         tag: release.source.version_tag().to_string(),

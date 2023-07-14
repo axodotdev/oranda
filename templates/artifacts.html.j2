@@ -24,8 +24,8 @@
                     {% endif %}
                 </tr>
                 {% for f in page.downloadable_files %}
-                    {% set file = f[1][0] %}
-                    {% set platforms = f[1][1] %}
+                    {% set file = f[1] %}
+                    {% set platforms = f[2] %}
                     <tr>
                         <td><a href="{{ file.download_url }}">{{ file.name }}</a></td>
                         <td>

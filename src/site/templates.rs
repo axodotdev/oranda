@@ -99,8 +99,10 @@ impl<'a> Templates<'a> {
         }
     }
 
+    // Turn a triple into a pretty display name, or return the original triple
     fn triple_to_display_name(target: String) -> String {
-        // TODO: should this be `unwrap_or(target)` to produce some useful output?
-        triple_to_display_name(&target).unwrap_or("").to_string()
+        triple_to_display_name(&target)
+            .map(|t| t.to_string())
+            .unwrap_or(target)
     }
 }
