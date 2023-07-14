@@ -1,5 +1,4 @@
 use axoasset::LocalAsset;
-use axohtml::{elements::script, html};
 use camino::Utf8Path;
 
 use crate::errors::*;
@@ -9,10 +8,8 @@ pub mod analytics;
 
 const ARTIFACTS_SCRIPT_SOURCE: &str = include_str!("./artifacts.js");
 
-pub fn build_os_script(path_prefix: &Option<String>) -> String {
-    let script_url = link::generate(path_prefix, "artifacts.js");
-    let script: Box<script<String>> = html!(<script src=script_url />);
-    script.to_string()
+pub fn build_os_script_path(path_prefix: &Option<String>) -> String {
+    link::generate(path_prefix, "artifacts.js")
 }
 
 pub fn write_os_script(dist_dir: &Utf8Path) -> Result<()> {

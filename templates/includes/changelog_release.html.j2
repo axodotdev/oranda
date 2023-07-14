@@ -1,0 +1,26 @@
+<section class="release {% if release.is_prerelease %}pre-release hidden{% endif %}">
+    <h2 class="{% if is_page %}hidden{% endif %}" id="tag-{{ release.version_tag }}">
+        <a href="{{ release.version_tag }}/">
+            {% if release.name %}
+                {{ release.name }}
+            {% else %}
+                {{ release.version_tag }}
+            {% endif %}
+        </a>
+    </h2>
+    <div class="release-info">
+        <span class="flex items-center gap-2">
+            {% include "icons/tag.html" %}
+            {{ release.version_tag }}
+        </span>
+        <span class="flex items-center gap-2">
+            {% if release.formatted_date %}
+                {% include "icons/date.html" %}
+                {{ release.formatted_date }}
+            {% endif %}
+        </span>
+    </div>
+    <div class="release-body">
+        {{ release.body }}
+    </div>
+</section>

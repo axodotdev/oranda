@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% block content %}
+{% if page.artifacts %}
+    {% include "includes/artifacts_header.html" %}
+{% endif %}
+{{ markdown_content }}
+{% endblock %}
+
+{% block os_script %}
+{% if page.artifacts %}
+    <script src="{{ page.artifacts.os_script }}"></script>
+{% endif %}
+{% endblock %}

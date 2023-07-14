@@ -207,13 +207,15 @@ pub fn build_mdbook(
         let dark_theme = theme;
         md.config
             .set("output.html.default-theme", theme.class())
-            .unwrap();
+            .expect("failed to convert theme name to a TOML String");
         md.config
             .set("output.html.preferred-dark-theme", dark_theme.class())
-            .unwrap();
+            .expect("failed to convert dark theme name to a TOML String");
 
         // Tell mdbook where to find our custom theme
-        md.config.set("output.html.theme", &theme_dir).unwrap();
+        md.config
+            .set("output.html.theme", &theme_dir)
+            .expect("failed to convert theme_dir to a TOML String");
     }
 
     // Build the mdbook

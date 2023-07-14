@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+{% block content %}
+<div>
+    <div class="package-managers-downloads">
+        {% for installer in page.release.artifacts.installers | sort(attribute="label") %}
+            {% if installer.display != "Hidden" and installer.method.type == "Run" %}
+                {% set release = page.release %}
+                <div>
+                    <h3>{{ installer.label }}</h3>
+                    {% include "includes/installer_run.html" %}
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+    <div>
+        <h3>Downloads</h3>
+        <table class="artifacts-table">
+            <tbody>
+                <tr>
+                    <th>File</th>
+                    <th>Platform</th>
+                    {% if page.has_checksum_files %}
+                        <th>Checksum</th>
+                    {% endif %}
+                </tr>
+                {% for f in page.downloadable_files %}
+                    {% set file = f[1] %}
+                    {% set platforms = f[2] %}
+                    <tr>
+                        <td><a href="{{ file.download_url }}">{{ file.name }}</a></td>
+                        <td>
+                            {% for platform in platforms %}
+                                {% if platform %}
+                                    {{ platform }}{% if not loop.first %}, {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                        {% if page.has_checksum_files %}
+                            {% if file.checksum_file %}
+                                {% set checksum = page.release.artifacts.files[file.checksum_file] %}
+                                <td><a href="{{ checksum.download_url }}">checksum</a></td>
+                            {% endif %}
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block os_script %}
+<script src="{{ page.os_script }}"></script>
+{% endblock %}

@@ -1,6 +1,6 @@
 use crate::errors::{OrandaError, Result};
 use camino::Utf8PathBuf;
-use std::{ffi::OsStr, path::Path};
+use std::path::Path;
 
 pub fn is_markdown(file: &str) -> bool {
     let file_path = Path::new(&file);
@@ -8,11 +8,6 @@ pub fn is_markdown(file: &str) -> bool {
         None => false,
         Some(ext) => ext.to_string_lossy().to_lowercase() == "md",
     }
-}
-
-pub fn get_filename(file: &str) -> Option<&OsStr> {
-    let file_path = Path::new(file);
-    file_path.file_stem()
 }
 
 pub fn get_filename_with_dir(file: &str) -> Result<Option<Utf8PathBuf>> {

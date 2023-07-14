@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block content %}
+<div>
+    <h1>{% if page.release.name %}{{ page.release.name }}{% else %}{{ page.release.version_tag }}{% endif %}</h1>
+    <div class="releases-body">
+        {% set is_page = true %}
+        {% set release = page.release %}
+        {% include "includes/changelog_release.html" %}
+    </div>
+</div>
+{% endblock %}

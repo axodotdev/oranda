@@ -295,7 +295,7 @@ fn infer_label_for_bundle(file: &File) -> String {
     // For now just use the extension
     Utf8PathBuf::from(&file.name)
         .extension()
-        .unwrap()
+        .expect("we determined a file was a bundle based on its extension, but it had none?")
         .to_owned()
 }
 
@@ -322,7 +322,7 @@ fn infer_label_for_script(file: &File) -> String {
     } else {
         Utf8PathBuf::from(&file.name)
             .extension()
-            .unwrap()
+            .expect("we determined a file was a script based on its extension, but it had none?")
             .to_owned()
     }
 }

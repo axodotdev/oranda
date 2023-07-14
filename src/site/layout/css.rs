@@ -4,8 +4,6 @@ use crate::errors::*;
 use crate::message::{Message, MessageType};
 
 use axoasset::{Asset, LocalAsset};
-use axohtml::elements::link;
-use axohtml::html;
 use camino::Utf8Path;
 use minifier::css;
 
@@ -24,15 +22,13 @@ fn concat_minify(css_files: &[String]) -> Result<String> {
     Ok(css)
 }
 
-pub fn build_oranda(
+pub fn get_css_link(
     dist_dir: &str,
     path_prefix: &Option<String>,
     release_tag: &str,
-) -> Result<Box<link<String>>> {
-    let dist_dir = dist_dir;
+) -> Result<String> {
     let filename = fetch_css(dist_dir, release_tag)?;
-    let abs_path = crate::site::link::generate(path_prefix, &filename);
-    Ok(html!(<link rel="stylesheet" href=abs_path></link>))
+    Ok(crate::site::link::generate(path_prefix, &filename))
 }
 
 fn fetch_css(dist_dir: &str, release_tag: &str) -> Result<String> {
@@ -64,12 +60,7 @@ async fn fetch_oranda(release_tag: &str) -> Result<String> {
         .await?)
 }
 
-pub fn build_additional(path_prefix: &Option<String>) -> Box<link<String>> {
-    let abs_path = crate::site::link::generate(path_prefix, "custom.css");
-    html!(<link rel="stylesheet" href=abs_path></link>)
-}
-
-pub fn write_additional(additional_css: &[String], dist_dir: &Utf8Path) -> Result<()> {
+pub fn write_additional_css(additional_css: &[String], dist_dir: &Utf8Path) -> Result<()> {
     let minified_css = concat_minify(additional_css)?;
 
     LocalAsset::write_new(&minified_css, dist_dir.join("custom.css"))?;
