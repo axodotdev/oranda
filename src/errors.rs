@@ -177,6 +177,10 @@ pub enum OrandaError {
     )]
     GithubFundingParseError { details: String },
 
+    #[error("Your preferred_funding '{preferred}' didn't match any of the sources we found")]
+    #[diagnostic(help = "{help}")]
+    PreferredFundingNotFound { preferred: String, help: String },
+
     #[error("Couldn't find your book.toml")]
     #[diagnostic(help = "You can manually specify path in your components.mdbook config")]
     MdBookConfigInvalid,

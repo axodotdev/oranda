@@ -19,19 +19,16 @@ pub struct FundingMethod {
 
 pub fn context(config: &FundingConfig, funding: &Funding) -> Result<FundingContext> {
     let mut funding_base = funding.content.clone();
-    // allowed temporarily to preserve the TODO
-    #[allow(clippy::manual_map)]
-    let preferred_funding = if let Some(preferred) = config.preferred_funding.as_ref() {
-        if let Some(content) = funding_base.remove(preferred) {
-            Some(to_funding_methods(preferred, &content))
-        } else {
-            // TODO: check if we warn about this anywhere earlier, the user clearly messed up here
-            // and specified a preferred funding that doesn't exist, and should be told about it
-            None
-        }
-    } else {
-        None
-    };
+    // Remove the preferred funding method from the generic content so that it's only
+    // showed in its more prominent position.
+    //
+    // This silently ignores preferred_funding not resolving because earlier steps should
+    // have produced an error to help the user catch that.
+    let preferred_funding = config
+        .preferred_funding
+        .as_ref()
+        .and_then(|preferred| Some((preferred, funding_base.remove(preferred)?)))
+        .map(|(preferred, content)| to_funding_methods(preferred, &content));
 
     Ok(FundingContext {
         preferred_funding,
