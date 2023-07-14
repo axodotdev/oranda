@@ -245,19 +245,16 @@ where
                 if let Some(this) = self {
                     this.apply_layer(val);
                 } else {
-                    // If self is None, then
+                    // If self is None, then a previous layer completely disabled this.
+                    // For now we respect that and drop this request completely.
                 }
             }
             Some(BoolOr::Bool(false)) => {
                 // Disable this setting
                 *self = None;
             }
-            None | Some(BoolOr::Bool(true)) => {
-                // Do nothing, use the previous value
-                //
-                // (Arguably "true" should mean something like Some(default)
-                // but that's already the default and we don't want to clobber
-                // other layers if they have an opinion.)
+            Some(BoolOr::Bool(true)) | None => {
+                // Do nothing, no opinion
             }
         }
     }
