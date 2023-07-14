@@ -1,5 +1,44 @@
 # Changelog
 
+## Unreleased
+
+### BREAKING
+
+- **make artifact autodetect configurable - [Gankra]/[pr527]**
+
+### Features
+
+- **Typescript syntax highlighting support - [shadows-withal]/[pr525], [geelen]/[i513]**
+
+- **Better logo positioning - [SaraVieira]/[pr524], [tertsdiepraam]/[i519]**
+
+### Fixes
+
+- **Hacker theme highlight color - [SaraVieira], [pr523]/[i522]** 
+
+- **Package managers documentation - [shadows-withal]/[pr521], [tertsdiepraam]/[i520]**
+
+### Maintenance
+
+- **Refactor into using minijinja templates instead of axohtml - [shadows-withal]/[pr526]**
+
+[i513]: https://github.com/axodotdev/oranda/issues/513
+[i519]: https://github.com/axodotdev/oranda/issues/519
+[i520]: https://github.com/axodotdev/oranda/issues/520
+[i522]: https://github.com/axodotdev/oranda/issues/522
+[pr521]: https://github.com/axodotdev/oranda/pull/521
+[pr523]: https://github.com/axodotdev/oranda/pull/523
+[pr524]: https://github.com/axodotdev/oranda/pull/524
+[pr525]: https://github.com/axodotdev/oranda/pull/525
+[pr526]: https://github.com/axodotdev/oranda/pull/526
+[pr527]: https://github.com/axodotdev/oranda/pull/527
+[shadows-withal]: https://github.com/shadows-withal
+[geelen]: https://github.com/geelen
+[SaraVieira]: https://github.com/SaraVieira
+[tertsdiepraam]: https://github.com/tertsdiepraam
+[Gankra]: https://github.com/Gankra
+
+
 ## 0.1.1 - 2023-07-04
 
 ### Fixes
