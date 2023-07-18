@@ -9,6 +9,7 @@ pub mod cargo_dist;
 pub mod funding;
 pub mod github;
 mod release;
+pub mod workspaces;
 
 pub use release::Release;
 

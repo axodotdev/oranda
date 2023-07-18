@@ -4,7 +4,7 @@ use serde::Deserialize;
 
 use super::{ApplyLayer, ApplyOptExt, ApplyValExt};
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 /// Information about how the pages should be built (complete version)
 pub struct BuildConfig {
     /// Relative path to the dir where build output should be placed

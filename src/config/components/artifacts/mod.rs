@@ -34,7 +34,7 @@ enum ArtifactSystem {
 }
 
 /// Info about downloadable artifacts / installers / package-managers (complete version)
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ArtifactsConfig {
     pub auto: bool,
     pub cargo_dist: bool,

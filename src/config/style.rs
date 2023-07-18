@@ -9,7 +9,7 @@ use super::ApplyValExt;
 pub const ORANDA_CSS_TAG: &str = "v0.2.0-prerelease.1";
 
 /// Config related to styling your page (complete version)
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct StyleConfig {
     pub theme: OrandaTheme,
     pub syntax_theme: SyntaxTheme,

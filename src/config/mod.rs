@@ -90,6 +90,7 @@ mod marketing;
 pub mod oranda_config;
 pub mod project;
 pub mod style;
+mod workspace;
 
 pub use self::axoproject::AxoprojectLayer;
 pub use self::oranda_config::OrandaLayer;
@@ -99,12 +100,13 @@ pub use components::{
     MdBookConfig, MdBookLayer, PackageManagersConfig, PackageManagersLayer,
 };
 pub use marketing::{AnalyticsConfig, MarketingConfig, MarketingLayer, SocialConfig, SocialLayer};
+pub use workspace::{WorkspaceConfig, WorkspaceLayer};
 
 pub use project::{ProjectConfig, ProjectLayer};
 pub use style::{StyleConfig, StyleLayer};
 
 /// Top-level mega-config
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Config {
     /// Info about the project/application
     pub project: ProjectConfig,
@@ -116,6 +118,8 @@ pub struct Config {
     pub styles: StyleConfig,
     /// Additional optional components
     pub components: ComponentConfig,
+    /// Workspace configuration
+    pub workspace: WorkspaceConfig,
 }
 
 impl Config {
@@ -131,6 +135,37 @@ impl Config {
         // oranda.json layer
         cfg.apply_custom_layer(custom);
         // auto-detect layer
+        cfg.apply_autodetect_layer()?;
+        Ok(cfg)
+    }
+
+    /// Build out a config for the workspace root, which is only interested in what's in the
+    /// oranda.json.
+    pub fn build_workspace_root(config_path: &Utf8PathBuf) -> Result<Config> {
+        let conf = OrandaLayer::load(config_path)?;
+        let mut cfg = Config::default();
+        cfg.apply_custom_layer(conf);
+        Ok(cfg)
+    }
+
+    /// Build out a config for a workspace member, which is interested in the following things,
+    /// in ascending priority:
+    /// - "root" config keys that are inherited
+    /// - axoproject stuff
+    /// - its own oranda.json
+    /// - autodetect
+    pub fn build_workspace_member(
+        config_path: &Utf8PathBuf,
+        root_config_path: &Utf8PathBuf,
+        project_root: &Utf8PathBuf,
+    ) -> Result<Config> {
+        let member_conf = OrandaLayer::load(config_path)?;
+        let root_conf = OrandaLayer::load(root_config_path)?;
+        let project = AxoprojectLayer::load(Some(project_root.into()))?;
+        let mut cfg = Config::default();
+        cfg.apply_custom_layer(root_conf);
+        cfg.apply_project_layer(project);
+        cfg.apply_custom_layer(member_conf);
         cfg.apply_autodetect_layer()?;
         Ok(cfg)
     }
@@ -161,6 +196,7 @@ impl Config {
                 marketing,
                 styles,
                 components,
+                workspace,
                 _schema,
             } = layer;
             self.project.apply_val_layer(project);
@@ -168,6 +204,7 @@ impl Config {
             self.marketing.apply_val_layer(marketing);
             self.styles.apply_val_layer(styles);
             self.components.apply_val_layer(components);
+            self.workspace.apply_val_layer(workspace);
         }
     }
 
@@ -188,6 +225,7 @@ impl Default for Config {
             marketing: MarketingConfig::default(),
             styles: StyleConfig::default(),
             components: ComponentConfig::default(),
+            workspace: WorkspaceConfig::default(),
         }
     }
 }

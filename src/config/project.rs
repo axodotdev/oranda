@@ -4,7 +4,7 @@ use serde::Deserialize;
 use super::{ApplyLayer, ApplyOptExt, ApplyValExt};
 
 /// Information about the project (complete version)
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ProjectConfig {
     /// Name of the project
     pub name: String,

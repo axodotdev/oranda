@@ -35,12 +35,24 @@ impl Build {
     pub fn run(&self) -> Result<()> {
         Message::new(MessageType::Info, "Running build...").print();
         tracing::info!("Running build...");
-        let config = Config::build(&self.config_path)?;
-        Site::build(&config)?.write(&config)?;
-        let msg = format!("Your site build is located in `{}`.", {
-            config.build.dist_dir
-        });
-        Message::new(MessageType::Success, &msg).print();
+        if let Ok(Some(config)) = Site::get_workspace_config() {
+            let sites = Site::build_multi(&config)?;
+            for site in sites {
+                site.write(None)?;
+            }
+            let msg = format!(
+                "Your site builds are located in `{}`.",
+                config.build.dist_dir
+            );
+            Message::new(MessageType::Success, &msg).print();
+        } else {
+            let config = Config::build(&self.config_path)?;
+            Site::build_single(&config)?.write(Some(&config))?;
+            let msg = format!("Your site build is located in `{}`.", {
+                config.build.dist_dir
+            });
+            Message::new(MessageType::Success, &msg).print();
+        }
         Ok(())
     }
 }
