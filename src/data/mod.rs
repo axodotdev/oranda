@@ -2,7 +2,6 @@ use crate::config::{ArtifactsConfig, ProjectConfig};
 use crate::data::github::{GithubRelease, GithubRepo};
 use crate::data::release::CurrentStateRelease;
 use crate::errors::*;
-use crate::message::{Message, MessageType};
 
 pub mod artifacts;
 pub mod cargo_dist;
@@ -148,7 +147,7 @@ impl Context {
                 } else if !warned {
                     // We found a dist-manifest but they didn't enable cargo-dist support, encourage them to do so
                     let msg = "You have not configured cargo-dist yet we detected dist-manifests in your releases. Is this intended?";
-                    Message::new(MessageType::Warning, msg).print();
+                    tracing::warn!("{}", msg);
                     warned = true;
                 }
             }
@@ -164,7 +163,7 @@ impl Context {
                 let dist_rel = &releases[dist_latest].source.version_tag();
                 let stable_rel = &releases[latest].source.version_tag();
                 let msg = format!("You have newer stable Github Releases ({}) than your latest cargo-dist Release ({}). Is this intended? (We're going to prefer the cargo-dist one.)", stable_rel, dist_rel);
-                Message::new(MessageType::Warning, &msg).print();
+                tracing::warn!("{}", msg);
             }
         }
 

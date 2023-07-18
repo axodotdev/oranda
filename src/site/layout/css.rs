@@ -1,7 +1,6 @@
 use std::env;
 
 use crate::errors::*;
-use crate::message::{Message, MessageType};
 
 use axoasset::{Asset, LocalAsset};
 use camino::Utf8Path;
@@ -36,7 +35,7 @@ fn fetch_css(dist_dir: &str, release_tag: &str) -> Result<String> {
         Ok(path) => {
             let filename = "oranda.css".to_string();
             let msg = format!("Overriding oranda_css path with {}", &path);
-            Message::new(MessageType::Warning, &msg).print();
+            tracing::warn!("{}", &msg);
             LocalAsset::copy(&path, dist_dir)?;
             Ok(filename)
         }

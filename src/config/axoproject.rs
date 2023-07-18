@@ -3,10 +3,7 @@ use camino::{Utf8Path, Utf8PathBuf};
 use std::path::PathBuf;
 
 use super::ProjectLayer;
-use crate::{
-    errors::*,
-    message::{Message, MessageType},
-};
+use crate::errors::*;
 
 /// Info gleaned from axoproject
 #[derive(Debug)]
@@ -108,7 +105,7 @@ impl AxoprojectLayer {
                     "Also found a {:?} project at {}, but we're ignoring it",
                     reject_ws.kind, reject_pkg.manifest_path
                 );
-                Message::new(MessageType::Warning, &message).print();
+                tracing::warn!("{}", &message);
             }
         }
 
@@ -146,11 +143,7 @@ impl AxoprojectLayer {
                 } else {
                     // Found a workspace but none of the packages specifically control this dir.
                     // This can happen if you run oranda in a dir with a virtual Cargo.toml.
-                    Message::new(
-                        MessageType::Warning,
-                        &format!("Ignoring {:?} project, oranda is currently per-package and this looks like a whole workspace", workspace.kind),
-                    )
-                    .print();
+                    tracing::warn!("Ignoring {:?} project, oranda is currently per-package and this looks like a whole workspace", workspace.kind);
                     None
                 }
             }
@@ -166,14 +159,7 @@ impl AxoprojectLayer {
                 eprintln!("{:?}", miette::Report::new(warning));
                 None
             }
-            axoproject::WorkspaceSearch::Missing(cause) => {
-                // Just quietly log this in case useful
-                tracing::info!(
-                    "Couldn't find a {name} project {:?}",
-                    &miette::Report::new(cause)
-                );
-                None
-            }
+            axoproject::WorkspaceSearch::Missing(_) => None,
         }
     }
 }

@@ -7,10 +7,7 @@ use camino::Utf8PathBuf;
 use clap::Parser;
 use miette::Report;
 
-use crate::{
-    commands::{Build, Serve},
-    message::{Message, MessageType},
-};
+use crate::commands::{Build, Serve};
 use oranda::{
     config::Config,
     errors::*,
@@ -131,23 +128,11 @@ impl Dev {
             }
         }
 
-        Message::new(
-            MessageType::Info,
-            &format!(
-                "Found {} paths to watch, starting watch...",
-                existing_paths.len()
-            ),
-        )
-        .print();
         tracing::info!(
             "Found {} paths to watch, starting watch...",
             existing_paths.len()
         );
-        Message::new(
-            MessageType::Debug,
-            &format!("Files watched: {:?}", existing_paths),
-        )
-        .print();
+        tracing::debug!("Files watched: {:?}", existing_paths);
 
         if !self.no_first_build {
             Build::new(self.project_root.clone(), self.config_path.clone()).run()?;
@@ -168,11 +153,6 @@ impl Dev {
                     Ok(events) => Some(events),
                     Err(errors) => {
                         for error in errors {
-                            Message::new(
-                                MessageType::Warning,
-                                &format!("Error while watching for changes: {error}",),
-                            )
-                            .print();
                             tracing::warn!("Error while watching for changes: {error}",);
                         }
                         None
@@ -183,11 +163,7 @@ impl Dev {
                 .collect();
 
             if !paths.is_empty() {
-                Message::new(
-                    MessageType::Info,
-                    &format!("Path(s) {:?} changed, rebuilding...", paths),
-                )
-                .print();
+                tracing::info!("Path(s) {:?} changed, rebuilding...", paths);
 
                 if let Err(e) =
                     Build::new(self.project_root.clone(), self.config_path.clone()).run()

@@ -4,7 +4,6 @@ use std::collections::BTreeMap;
 use std::time::Instant;
 
 use crate::errors::*;
-use crate::message::{Message, MessageType};
 use crate::site::markdown::syntax_highlight::syntax_themes::SyntaxTheme;
 use syntect::highlighting::{Theme, ThemeSet};
 use syntect::html::highlighted_html_for_string;
@@ -30,7 +29,6 @@ fn find_syntax<'a>(ps: &'a SyntaxSet, language: &'a str) -> Result<&'a SyntaxRef
         // unsupported and being overridden as plain text.
         if !language.is_empty() {
             let msg = format!("Found syntax highlight language annotation `{language}` which is not currently supported. The annotated block will be shown as plaintext. Please file an issue https://github.com/axodotdev/oranda/issues/new to let us know you'd like to see it supported.");
-            Message::new(MessageType::Warning, &msg).print();
             tracing::warn!("{}", &msg);
         }
 

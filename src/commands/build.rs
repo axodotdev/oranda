@@ -1,7 +1,6 @@
 use camino::Utf8PathBuf;
 use clap::Parser;
 
-use crate::message::{Message, MessageType};
 use oranda::config::Config;
 use oranda::errors::*;
 use oranda::site::Site;
@@ -33,7 +32,6 @@ impl Build {
     }
 
     pub fn run(&self) -> Result<()> {
-        Message::new(MessageType::Info, "Running build...").print();
         tracing::info!("Running build...");
         if let Ok(Some(config)) = Site::get_workspace_config() {
             let sites = Site::build_multi(&config)?;
@@ -44,14 +42,14 @@ impl Build {
                 "Your site builds are located in `{}`.",
                 config.build.dist_dir
             );
-            Message::new(MessageType::Success, &msg).print();
+            tracing::info!(success = true, "{}", &msg);
         } else {
             let config = Config::build(&self.config_path)?;
             Site::build_single(&config)?.write(Some(&config))?;
             let msg = format!("Your site build is located in `{}`.", {
                 config.build.dist_dir
             });
-            Message::new(MessageType::Success, &msg).print();
+            tracing::info!(success = true, "{}", &msg);
         }
         Ok(())
     }

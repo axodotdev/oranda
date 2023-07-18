@@ -8,7 +8,6 @@ use minijinja::context;
 use crate::config::Config;
 use crate::data::{funding::Funding, github::GithubRepo, workspaces, Context};
 use crate::errors::*;
-use crate::message::{Message, MessageType};
 
 use crate::data::workspaces::WorkspaceData;
 use crate::site::templates::Templates;
@@ -35,7 +34,7 @@ pub struct Site {
 
 impl Site {
     pub fn build_multi(workspace_config: &Config) -> Result<Vec<Site>> {
-        Message::new(MessageType::Info, "Workspace detected, gathering info...").print();
+        tracing::info!("Workspace detected, gathering info...");
         // We assume the root path is wherever oranda-workspace.json is located (current dir)
         let root_path = Utf8PathBuf::from_path_buf(std::env::current_dir()?.canonicalize()?)
             .unwrap_or(Utf8PathBuf::new());
@@ -49,11 +48,7 @@ impl Site {
             &workspace_config_path,
             &workspace_config,
         )?;
-        Message::new(
-            MessageType::Info,
-            &format!("Building {} workspace member(s)...", members.len()),
-        )
-        .print();
+        tracing::info!("Building {} workspace member(s)...", members.len());
         for member in members {
             std::env::set_current_dir(&member.path)?;
             let mut site = Self::build_single(&member.config)?;
@@ -194,11 +189,7 @@ impl Site {
                 }
             });
         if !joined.is_empty() {
-            Message::new(
-                MessageType::Info,
-                &format!("Building components: {}", joined),
-            )
-            .print();
+            tracing::info!("Building components: {}", joined);
         }
     }
 
@@ -217,7 +208,7 @@ impl Site {
                     "File {} in additional pages is not markdown and will be skipped",
                     file_path
                 );
-                Message::new(MessageType::Warning, &msg).print();
+                tracing::warn!("{}", &msg);
             }
         }
         Ok(pages)

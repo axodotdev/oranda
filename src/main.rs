@@ -4,12 +4,13 @@ use clap::builder::{PossibleValuesParser, TypedValueParser};
 use clap::{Parser, Subcommand};
 use miette::Report;
 use tracing::level_filters::LevelFilter;
+use tracing::subscriber::{set_default, set_global_default};
 
 mod commands;
 use commands::{Build, ConfigSchema, Dev, Serve};
 
-pub mod message;
-use message::OutputFormat;
+pub mod formatter;
+use formatter::OutputFormat;
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
@@ -57,6 +58,10 @@ fn run(cli: &axocli::CliApp<Cli>) -> Result<(), Report> {
         .build()
         .expect("Initializing tokio runtime failed");
     let _guard = runtime.enter();
+    let sub = tracing_subscriber::fmt()
+        .event_format(formatter::OrandaFormatter)
+        .finish();
+    let _sub_guard = set_default(sub);
 
     match &cli.config.command {
         Command::Build(cmd) => cmd.run()?,

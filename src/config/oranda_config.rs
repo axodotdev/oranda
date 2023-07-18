@@ -4,7 +4,6 @@ use schemars::JsonSchema;
 use serde::Deserialize;
 
 use crate::errors::*;
-use crate::message::{Message, MessageType};
 
 use super::{BuildLayer, ComponentLayer, MarketingLayer, ProjectLayer, StyleLayer, WorkspaceLayer};
 
@@ -45,7 +44,7 @@ impl OrandaLayer {
                 Ok(Some(data))
             }
             Err(_) => {
-                Message::new(MessageType::Info, "No config found, using default values").print();
+                tracing::info!("No config found, using default values");
                 Ok(None)
             }
         }
