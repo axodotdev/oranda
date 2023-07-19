@@ -4,7 +4,9 @@ use clap::builder::{PossibleValuesParser, TypedValueParser};
 use clap::{Parser, Subcommand};
 use miette::Report;
 use tracing::level_filters::LevelFilter;
-use tracing::subscriber::{set_default, set_global_default};
+use tracing::subscriber::set_default;
+use tracing::Level;
+use tracing_subscriber::layer::SubscriberExt;
 
 mod commands;
 use commands::{Build, ConfigSchema, Dev, Serve};
@@ -58,9 +60,10 @@ fn run(cli: &axocli::CliApp<Cli>) -> Result<(), Report> {
         .build()
         .expect("Initializing tokio runtime failed");
     let _guard = runtime.enter();
-    let sub = tracing_subscriber::fmt()
-        .event_format(formatter::OrandaFormatter)
-        .finish();
+    let sub_filter = tracing_subscriber::filter::Targets::new().with_target("oranda", Level::DEBUG);
+    let sub = tracing_subscriber::registry()
+        .with(tracing_subscriber::fmt::layer().event_format(formatter::OrandaFormatter))
+        .with(sub_filter);
     let _sub_guard = set_default(sub);
 
     match &cli.config.command {
