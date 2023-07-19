@@ -42,12 +42,8 @@ impl Site {
         let mut workspace_config_path = root_path.clone();
         workspace_config_path.push("oranda-workspace.json");
         let mut results = Vec::new();
-        let members = workspaces::from_config(
-            &workspace_config,
-            &root_path,
-            &workspace_config_path,
-            &workspace_config,
-        )?;
+        let members =
+            workspaces::from_config(&workspace_config, &root_path, &workspace_config_path)?;
         tracing::info!("Building {} workspace member(s)...", members.len());
         for member in members {
             std::env::set_current_dir(&member.path)?;

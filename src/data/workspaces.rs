@@ -11,13 +11,12 @@ pub struct WorkspaceData {
 }
 
 pub fn from_config(
-    config: &Config,
+    workspace_config: &Config,
     root_path: &Utf8PathBuf,
     workspace_config_path: &Utf8PathBuf,
-    workspace_config: &Config,
 ) -> Result<Vec<WorkspaceData>> {
     let mut vec = Vec::new();
-    for member in config.workspace.members.clone() {
+    for member in workspace_config.workspace.members.clone() {
         if !member.path.exists() {
             return Err(OrandaError::FileNotFound {
                 filedesc: "workspace member".to_string(),

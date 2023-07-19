@@ -110,6 +110,12 @@ pub enum OrandaError {
         details: AxoassetError,
     },
 
+    #[error("Unable to create the correct paths we need to process your site.")]
+    #[diagnostic(help(
+        "It can help to have your workspace members in a subdirectory under your workspace root."
+    ))]
+    PathdiffError { root_path: String, path: String },
+
     #[error("Couldn't load your mdbook at {path}")]
     MdBookLoad {
         path: String,

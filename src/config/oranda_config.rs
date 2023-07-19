@@ -40,7 +40,6 @@ impl OrandaLayer {
         match config_result {
             Ok(config) => {
                 let data: OrandaLayer = config.deserialize_json()?;
-                tracing::debug!("{:?}", data);
                 Ok(Some(data))
             }
             Err(_) => {
