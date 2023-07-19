@@ -1,26 +1,62 @@
 # Changelog
 
-## Unreleased
+## 0.2.0 - 2023-07-19
 
 ### BREAKING
 
 - **make artifact autodetect configurable - [Gankra]/[pr527]**
 
+  We now provide a new boolean key, `components.artifacts.auto`, that lets you explicitly
+  enable autodetection of artifacts. Previously, we would only enable this if you either
+  turned on `components.artifacts.cargo_dist`, or if you provided some package manager entries.
+  Since oranda _does_ also support gleaning artifacts even without `cargo-dist` support enabled,
+  we added this extra switch to let you toggle it without having to mess around with package managers.
+
+  This is a **breaking change**, as enabling `cargo-dist` support or specifying package managers does
+  not turn on auto-detection of artifacts anymore. If you were previously relying on auto-detection, your
+  artifacts will no longer be displayed. To re-enable auto-detection, create a `oranda.json` file if you don't
+  already have one, and set the following configuration:
+
+  ```json
+  {
+    "components": {
+      "artifacts": {
+        "auto": true
+      }
+    }
+  }
+  ```
+
 ### Features
 
 - **Typescript syntax highlighting support - [shadows-withal]/[pr525], [geelen]/[i513]**
 
+  You can now use the `ts`/`typescript` languages in code blocks! Hooray for types!
+
 - **Better logo positioning - [SaraVieira]/[pr524], [tertsdiepraam]/[i519]**
+
+  Logos set via the `styles.logo` option will now be properly centered/aligned in all themes,
+  and set to a maximum width so that a 1920x1080 logo won't be displayed in its full width and height, thus
+  pushing all content down below the fold.
 
 ### Fixes
 
 - **Hacker theme highlight color - [SaraVieira], [pr523]/[i522]** 
 
+  Selecting text in the Hacker theme now applies a nice, green, high contrast highlight background
+  color, instead of being the same color as the text, therefore hiding the content.
+
 - **Package managers documentation - [shadows-withal]/[pr521], [tertsdiepraam]/[i520]**
+
+  Some minor fixes to bring the package manager docs up to speed with how oranda actually processes options.
 
 ### Maintenance
 
 - **Refactor into using minijinja templates instead of axohtml - [shadows-withal]/[pr526]**
+
+  A biiig internal refactor moving us away from our previous typed-HTML-in-Rust approach of generating
+  HTML, towards using a proper template language (Jinja2) instead. This allows for a lot more flexibility
+  and separation of concerns going forward!
 
 [i513]: https://github.com/axodotdev/oranda/issues/513
 [i519]: https://github.com/axodotdev/oranda/issues/519
