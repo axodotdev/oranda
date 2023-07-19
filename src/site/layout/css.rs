@@ -25,17 +25,18 @@ pub fn get_css_link(
     dist_dir: &str,
     path_prefix: &Option<String>,
     release_tag: &str,
+    prefix: &Option<String>,
 ) -> Result<String> {
-    let filename = fetch_css(dist_dir, release_tag)?;
+    let filename = fetch_css(dist_dir, release_tag, prefix)?;
     Ok(crate::site::link::generate(path_prefix, &filename))
 }
 
-fn fetch_css(dist_dir: &str, release_tag: &str) -> Result<String> {
+fn fetch_css(dist_dir: &str, release_tag: &str, prefix: &Option<String>) -> Result<String> {
     match env::var("ORANDA_CSS") {
         Ok(path) => {
             let filename = "oranda.css".to_string();
             let msg = format!("Overriding oranda_css path with {}", &path);
-            tracing::warn!("{}", &msg);
+            tracing::warn!(prefix, "{}", &msg);
             LocalAsset::copy(&path, dist_dir)?;
             Ok(filename)
         }

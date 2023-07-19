@@ -30,7 +30,11 @@ pub struct ArtifactsContext {
     has_checksum_files: bool,
 }
 
-pub fn template_context(context: &Context, config: &Config) -> Result<Option<ArtifactsContext>> {
+pub fn template_context(
+    context: &Context,
+    config: &Config,
+    prefix: &Option<String>,
+) -> Result<Option<ArtifactsContext>> {
     let Some(release) = context.latest() else {
         return Ok(None);
     };
@@ -62,7 +66,7 @@ pub fn template_context(context: &Context, config: &Config) -> Result<Option<Art
     downloadable_files.sort_by_key(|(_, f, _)| f.name.clone());
 
     if downloadable_files.is_empty() {
-        tracing::warn!("You seem to have release automation set up, but we didn't detect any releases. The install page and associated widget will be empty. To disable this, set `artifacts: false`");
+        tracing::warn!(prefix, "You seem to have release automation set up, but we didn't detect any releases. The install page and associated widget will be empty. To disable this, set `artifacts: false`");
     }
     let has_checksum_files = downloadable_files
         .iter()

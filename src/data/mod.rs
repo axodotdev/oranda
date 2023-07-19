@@ -38,19 +38,26 @@ impl Context {
     pub fn new_current(
         project_config: &ProjectConfig,
         artifacts_config: Option<&ArtifactsConfig>,
+        prefix: &Option<String>,
     ) -> Result<Self> {
         let releases = tokio::runtime::Handle::current().block_on(Self::make_current_release(
             None,
             project_config,
             artifacts_config,
         ))?;
-        Ok(Self::with_releases(None, releases, artifacts_config))
+        Ok(Self::with_releases(
+            None,
+            releases,
+            artifacts_config,
+            prefix,
+        ))
     }
     /// Get releases using github
     pub fn new_github(
         repo_url: &str,
         project_config: &ProjectConfig,
         artifacts_config: Option<&ArtifactsConfig>,
+        prefix: &Option<String>,
     ) -> Result<Self> {
         let repo = GithubRepo::from_url(repo_url)?;
         let mut releases = Self::fetch_all_releases(&repo, artifacts_config)?;
@@ -61,7 +68,12 @@ impl Context {
                 artifacts_config,
             ))?;
         }
-        Ok(Self::with_releases(Some(repo), releases, artifacts_config))
+        Ok(Self::with_releases(
+            Some(repo),
+            releases,
+            artifacts_config,
+            prefix,
+        ))
     }
 
     /// Get the latest release, if it exists
@@ -98,6 +110,7 @@ impl Context {
         repo: Option<GithubRepo>,
         releases: Vec<Release>,
         artifacts_config: Option<&ArtifactsConfig>,
+        prefix: &Option<String>,
     ) -> Self {
         // Walk through all the releases (from newest to oldest) to find the latest ones
         //
@@ -147,7 +160,7 @@ impl Context {
                 } else if !warned {
                     // We found a dist-manifest but they didn't enable cargo-dist support, encourage them to do so
                     let msg = "You have not configured cargo-dist yet we detected dist-manifests in your releases. Is this intended?";
-                    tracing::warn!("{}", msg);
+                    tracing::warn!(prefix, "{}", msg);
                     warned = true;
                 }
             }
@@ -163,7 +176,7 @@ impl Context {
                 let dist_rel = &releases[dist_latest].source.version_tag();
                 let stable_rel = &releases[latest].source.version_tag();
                 let msg = format!("You have newer stable Github Releases ({}) than your latest cargo-dist Release ({}). Is this intended? (We're going to prefer the cargo-dist one.)", stable_rel, dist_rel);
-                tracing::warn!("{}", msg);
+                tracing::warn!(prefix, "{}", msg);
             }
         }
 
