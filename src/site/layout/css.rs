@@ -45,7 +45,7 @@ fn fetch_css(dist_dir: &str, release_tag: &str, prefix: &Option<String>) -> Resu
             let dest_path = Utf8Path::new(dist_dir).join(&filename);
             let oranda_css_response =
                 tokio::runtime::Handle::current().block_on(fetch_oranda(release_tag))?;
-            axoasset::LocalAsset::write_new(&oranda_css_response, dest_path)?;
+            axoasset::LocalAsset::write_new_all(&oranda_css_response, dest_path)?;
             Ok(filename)
         }
     }
