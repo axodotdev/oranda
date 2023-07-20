@@ -49,7 +49,7 @@ impl Dev {
     pub fn run(self) -> Result<()> {
         let root_path = Utf8PathBuf::from_path_buf(std::env::current_dir()?.canonicalize()?)
             .unwrap_or(Utf8PathBuf::new());
-        let mut paths_to_watch = if let Ok(Some(config)) = Site::get_workspace_config() {
+        let (config, mut paths_to_watch) = if let Ok(Some(config)) = Site::get_workspace_config() {
             let mut workspace_config_path = root_path.clone();
             workspace_config_path.push("oranda-workspace.json");
             let members = workspaces::from_config(&config, &root_path, &workspace_config_path)?;
@@ -61,7 +61,7 @@ impl Dev {
             }
             // Also watch oranda-workspace.json
             ret.push(Utf8PathBuf::from("oranda-workspace.json"));
-            ret
+            (config, ret)
         } else {
             let config = Config::build(
                 &self
@@ -69,7 +69,8 @@ impl Dev {
                     .clone()
                     .unwrap_or(Utf8PathBuf::from("./oranda.json")),
             )?;
-            self.collect_paths_for_site(&config, &root_path, None)?
+            let ret = self.collect_paths_for_site(&config, &root_path, None)?;
+            (config, ret)
         };
 
         // Watch for any user-provided paths
@@ -111,7 +112,15 @@ impl Dev {
         // Spawn the serve process out into a separate thread so that we can loop through received events on this thread
         let _ = std::thread::spawn(move || Serve::new(self.port).run());
         let addr = SocketAddr::from(([127, 0, 0, 1], self.port.unwrap_or(7979)));
-        let msg = format!("Your project is available at: http://{}", addr);
+        let msg = if config.build.path_prefix.is_some() {
+            format!(
+                "Your project is available at: http://{}/{}",
+                addr,
+                config.build.path_prefix.unwrap()
+            )
+        } else {
+            format!("Your project is available at: http://{}", addr)
+        };
         tracing::info!(success = true, "{}", &msg);
         loop {
             // Wait for all debounced events to arrive

@@ -23,7 +23,12 @@ impl Serve {
     }
 
     pub fn run(&self) -> Result<()> {
-        let config = Config::build(&Utf8PathBuf::from("./oranda.json"))?;
+        let workspace_config_path = &Utf8PathBuf::from("./oranda-workspace.json");
+        let config = if workspace_config_path.exists() {
+            Config::build(workspace_config_path)?
+        } else {
+            Config::build(&Utf8PathBuf::from("./oranda.json"))?
+        };
         if Utf8Path::new(&config.build.dist_dir).is_dir() {
             if let Some(prefix) = config.build.path_prefix {
                 tracing::debug!("`path_prefix` configured: {}", &prefix);
