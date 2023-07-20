@@ -2,6 +2,7 @@ use camino::Utf8PathBuf;
 use clap::Parser;
 
 use oranda::config::Config;
+use oranda::data::workspaces::WorkspaceData;
 use oranda::errors::*;
 use oranda::site::Site;
 
@@ -34,6 +35,16 @@ impl Build {
     pub fn run(&self) -> Result<()> {
         if let Ok(Some(config)) = Site::get_workspace_config() {
             let sites = Site::build_multi(&config)?;
+            // FIXME: Let the user turn this off
+            if true {
+                tracing::info!("Building workspace index page...");
+                let mut member_data = Vec::new();
+                for site in &sites {
+                    member_data.push(site.workspace_data.clone().unwrap());
+                }
+                Site::build_and_write_workspace_index(&config, &member_data)?;
+            }
+
             for site in sites {
                 site.write(None)?;
             }

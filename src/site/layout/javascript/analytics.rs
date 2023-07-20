@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::config::AnalyticsConfig;
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, Default)]
 pub struct Analytics {
     pub snippet: Option<String>,
     pub google_script: Option<String>,

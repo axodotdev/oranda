@@ -49,6 +49,22 @@ impl<'a> Templates<'a> {
         Ok(Self { env, layout })
     }
 
+    pub fn new_for_index(workspace_config: &Config) -> Result<Self> {
+        let mut env = Environment::new();
+        let mut files = HashMap::new();
+        let dir = &TEMPLATE_DIR
+            .get_dir("workspace_index")
+            .expect("workspace_index directory not found");
+        Self::load_files(dir, &mut files).expect("failed to load jinja2 templates from binary");
+        for (path, contents) in files {
+            env.add_template_owned(path, contents)
+                .expect("failed to add jinja2 template");
+        }
+        env.add_filter("generate_link", Self::generate_link);
+        let layout = LayoutContext::new_for_index(workspace_config)?;
+        Ok(Self { env, layout })
+    }
+
     pub fn get(&self, name: &str) -> Result<Template> {
         Ok(self.env.get_template(name)?)
     }

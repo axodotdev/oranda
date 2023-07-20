@@ -1,0 +1,22 @@
+ul.index-grid {
+    @apply grid lg:grid-cols-2 md:grid-cols-2 gap-8 mt-16 items-stretch;
+}
+
+.index-grid li {
+    @apply flex flex-col p-2 h-full mb-0 rounded shadow relative items-center ml-0;
+}
+
+.index-grid span {
+    @apply text-xl;
+}
+
+.index-grid span,
+.index-grid h4,
+.index-grid h3 {
+    @apply text-center;
+}
+
+.index-grid h4,
+.index-grid h3 {
+    @apply m-3;
+}

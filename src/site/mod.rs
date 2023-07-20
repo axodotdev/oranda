@@ -11,6 +11,7 @@ use crate::errors::*;
 
 use crate::data::workspaces::WorkspaceData;
 use crate::site::templates::Templates;
+use crate::site::workspace_index::WorkspaceIndexContext;
 use layout::css;
 pub use layout::javascript;
 use page::Page;
@@ -25,6 +26,7 @@ pub mod mdbook;
 pub mod oranda_theme;
 pub mod page;
 pub mod templates;
+mod workspace_index;
 
 #[derive(Debug)]
 pub struct Site {
@@ -45,7 +47,7 @@ impl Site {
         let members =
             workspaces::from_config(&workspace_config, &root_path, &workspace_config_path)?;
         tracing::info!("Building {} workspace member(s)...", members.len());
-        for member in members {
+        for member in &members {
             std::env::set_current_dir(&member.path)?;
             let mut site = Self::build_single(&member.config, Some(member.clone()))?;
             site.workspace_data = Some(member.clone());
@@ -54,6 +56,24 @@ impl Site {
         }
 
         Ok(results)
+    }
+
+    pub fn build_and_write_workspace_index(
+        workspace_config: &Config,
+        member_data: &Vec<WorkspaceData>,
+    ) -> Result<()> {
+        let templates = Templates::new_for_index(workspace_config)?;
+        let context = WorkspaceIndexContext::new(&member_data);
+        let page = Page::new_from_template(
+            "index.html",
+            &templates,
+            "workspace_index/index.html",
+            context,
+        )?;
+        let mut dist = Utf8PathBuf::from(&workspace_config.build.dist_dir);
+        dist.push("index.html");
+        LocalAsset::write_new_all(&page.contents, dist)?;
+        Ok(())
     }
 
     pub fn build_single(config: &Config, workspace: Option<WorkspaceData>) -> Result<Site> {

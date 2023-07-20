@@ -1,3 +1,4 @@
+use std::net::SocketAddr;
 use std::path::PathBuf;
 use std::thread::sleep;
 use std::time::Duration;
@@ -109,6 +110,9 @@ impl Dev {
 
         // Spawn the serve process out into a separate thread so that we can loop through received events on this thread
         let _ = std::thread::spawn(move || Serve::new(self.port).run());
+        let addr = SocketAddr::from(([127, 0, 0, 1], self.port.unwrap_or(7979)));
+        let msg = format!("Your project is available at: http://{}", addr);
+        tracing::info!(success = true, "{}", &msg);
         loop {
             // Wait for all debounced events to arrive
             let first_event = rx.recv().expect("channel shut down incorrectly");
@@ -167,7 +171,6 @@ impl Dev {
             .clone()
             .unwrap_or(Utf8PathBuf::from("./oranda.json"));
         paths_to_watch.push(pathdiff(root_path, &member_path, cfg_file)?);
-        dbg!(&paths_to_watch);
 
         // Watch for the funding.md page and the funding.yml file
         if let Some(funding) = &config.components.funding {
