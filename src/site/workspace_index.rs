@@ -54,9 +54,16 @@ impl WorkspaceIndexContext {
                 .to_string()
                 .replace('/', "_");
             filename.remove(0);
-            let mut dp = Utf8PathBuf::from(&member.slug);
-            dp.push(filename);
-            Ok(dp)
+            let mut path = Utf8PathBuf::from(
+                workspace_config
+                    .build
+                    .path_prefix
+                    .clone()
+                    .unwrap_or("".to_string()),
+            );
+            path.push(&member.slug);
+            path.push(filename);
+            Ok(path)
         } else {
             determine_path(root_path, &Some(&member.slug), logo_url)
         }
