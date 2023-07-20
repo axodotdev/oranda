@@ -4,13 +4,23 @@
 <ul class="index-grid">
     {% for slug, member in page.members | items %}
         <li>
-            <a href="{{ member.slug | generate_link(layout.path_prefix) }}">
-                <h3>⭐</h3>
-                <span>{{ member.name }}</span>
-            </a>
-            {% if member.description %}
-                <p>{{ member.description }}</p>
-            {% endif %}
+            <div class="content">
+                <div class="index-about">
+                    <h4>{{ member.name }}</h4>
+                    {% if member.description %}
+                        <div class="index-description">{{ member.description }}</div>
+                    {% endif %}
+                </div>
+                {% if member.logo %}
+                    <div class="index-logo"><img src="{{ member.logo }}" alt="{{ member.name }}'s logo" /></div>
+                {% endif %}
+            </div>
+            <div class="links">
+                <a href="{{ member.slug | generate_link(layout.path_prefix) }}">Website</a>
+                {% if member.repository %}
+                    <a href="{{ member.repository }}">Repository</a>
+                {% endif %}
+            </div>
         </li>
     {% endfor %}
 </ul>

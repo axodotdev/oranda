@@ -3,20 +3,23 @@ ul.index-grid {
 }
 
 .index-grid li {
-    @apply flex flex-col p-2 h-full mb-0 rounded shadow relative items-center ml-0;
+    @apply ml-0 border rounded flex flex-col justify-between;
+    border-color: var(--light-color);
+    box-shadow: 0px 0px 0px 8px rgba(0, 0, 0, 0.3);
 }
 
-.index-grid span {
-    @apply text-xl;
+.index-grid .content {
+    @apply flex justify-between p-4;
 }
 
-.index-grid span,
-.index-grid h4,
-.index-grid h3 {
-    @apply text-center;
+.index-grid .links {
+    @apply flex w-full border-t divide-x;
 }
 
-.index-grid h4,
-.index-grid h3 {
-    @apply m-3;
+.index-grid .links a {
+    @apply inline-flex items-center space-x-2 w-1/2 px-6 py-4;
+}
+
+.index-grid .content .index-logo {
+    @apply relative flex-shrink-0 w-20 h-20;
 }
