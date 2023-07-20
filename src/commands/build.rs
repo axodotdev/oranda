@@ -2,7 +2,7 @@ use camino::Utf8PathBuf;
 use clap::Parser;
 
 use oranda::config::Config;
-use oranda::data::workspaces::WorkspaceData;
+
 use oranda::errors::*;
 use oranda::site::Site;
 

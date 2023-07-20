@@ -93,7 +93,7 @@ pub fn determine_path(
         }
         Err(_) => {
             // The path probably doesn't exist, return an empty path
-            return Ok(Utf8PathBuf::new());
+            Ok(Utf8PathBuf::new())
         }
     }
 }

@@ -45,7 +45,7 @@ impl Site {
         workspace_config_path.push("oranda-workspace.json");
         let mut results = Vec::new();
         let members =
-            workspaces::from_config(&workspace_config, &root_path, &workspace_config_path)?;
+            workspaces::from_config(workspace_config, &root_path, &workspace_config_path)?;
         tracing::info!("Building {} workspace member(s)...", members.len());
         for member in &members {
             std::env::set_current_dir(&member.path)?;
@@ -63,7 +63,7 @@ impl Site {
         member_data: &Vec<WorkspaceData>,
     ) -> Result<()> {
         let templates = Templates::new_for_index(workspace_config)?;
-        let context = WorkspaceIndexContext::new(&member_data, workspace_config)?;
+        let context = WorkspaceIndexContext::new(member_data, workspace_config)?;
         let page = Page::new_from_template(
             "index.html",
             &templates,

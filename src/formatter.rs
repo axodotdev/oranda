@@ -35,7 +35,7 @@ where
         let mut message = LogMessage::default();
         let metadata = event.metadata();
         event.record(&mut message);
-        if let Some(_) = metadata.fields().field("message") {
+        if metadata.fields().field("message").is_some() {
             // Handle the special success case first
             let output_str = if message.success {
                 let style = Style::new().bold().fg(Green);

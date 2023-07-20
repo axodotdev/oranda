@@ -131,7 +131,6 @@ impl LayoutContext {
             path_prefix: config.build.path_prefix.clone(),
             analytics,
             social: config.marketing.social.clone(),
-            ..Default::default()
         })
     }
 

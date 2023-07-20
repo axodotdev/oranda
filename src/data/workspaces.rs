@@ -1,6 +1,6 @@
 use crate::config::Config;
 use crate::errors::{OrandaError, Result};
-use camino::{Utf8Path, Utf8PathBuf};
+use camino::Utf8PathBuf;
 
 #[derive(Debug, Clone)]
 pub struct WorkspaceData {
@@ -43,7 +43,7 @@ pub fn from_config(
                 &member.slug
             ))
         } else {
-            Some(format!("{}", &member.slug))
+            Some(member.slug.to_string())
         };
 
         // Set the correct dist_dir. This should be `cwd_from_root/workspace_dist_dir/slug`
