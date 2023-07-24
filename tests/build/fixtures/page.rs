@@ -10,7 +10,7 @@ fn reset(dist_dir: &str) {
 
 pub fn index(config: &Config) -> Page {
     reset(&config.build.dist_dir);
-    let templates = Templates::new(config, &None).unwrap();
+    let templates = Templates::new(config).unwrap();
     Page::new_from_both(
         &config.project.readme_path,
         "index.html",
@@ -24,19 +24,18 @@ pub fn index(config: &Config) -> Page {
 
 pub fn index_with_artifacts(config: &Config) -> Page {
     reset(&config.build.dist_dir);
-    let templates = Templates::new(config, &None).unwrap();
+    let templates = Templates::new(config).unwrap();
     let repo_url = config.project.repository.as_ref().unwrap();
     let mut context = Context::new_github(
         repo_url,
         &config.project,
         config.components.artifacts.as_ref(),
-        &None,
     )
     .unwrap();
     if let Some(latest) = context.latest_mut() {
         latest.artifacts.make_scripts_viewable(config).unwrap();
     }
-    let template_context = artifacts::template_context(&context, config, &None).unwrap();
+    let template_context = artifacts::template_context(&context, config).unwrap();
     Page::new_from_both(
         &config.project.readme_path,
         "index.html",
@@ -50,16 +49,15 @@ pub fn index_with_artifacts(config: &Config) -> Page {
 
 pub fn artifacts(config: &Config) -> Page {
     reset(&config.build.dist_dir);
-    let templates = Templates::new(config, &None).unwrap();
+    let templates = Templates::new(config).unwrap();
     let repo_url = config.project.repository.as_ref().unwrap();
     let context = Context::new_github(
         repo_url,
         &config.project,
         config.components.artifacts.as_ref(),
-        &None,
     )
     .unwrap();
-    let template_context = artifacts::template_context(&context, config, &None).unwrap();
+    let template_context = artifacts::template_context(&context, config).unwrap();
     Page::new_from_template(
         "artifacts.html",
         &templates,
@@ -71,13 +69,12 @@ pub fn artifacts(config: &Config) -> Page {
 
 pub fn changelog(config: &Config) -> Page {
     reset(&config.build.dist_dir);
-    let templates = Templates::new(config, &None).unwrap();
+    let templates = Templates::new(config).unwrap();
     let repo_url = config.project.repository.as_ref().unwrap();
     let context = Context::new_github(
         repo_url,
         &config.project,
         config.components.artifacts.as_ref(),
-        &None,
     )
     .unwrap();
     let index_context = changelog::index_context(&context, config).unwrap();

@@ -136,6 +136,7 @@ impl Config {
         cfg.apply_custom_layer(custom);
         // auto-detect layer
         cfg.apply_autodetect_layer()?;
+
         Ok(cfg)
     }
 
@@ -150,8 +151,8 @@ impl Config {
 
     /// Build out a config for a workspace member, which is interested in the following things,
     /// in ascending priority:
-    /// - "root" config keys that are inherited
     /// - axoproject stuff
+    /// - "root" config keys that are inherited
     /// - its own oranda.json
     /// - autodetect
     pub fn build_workspace_member(
@@ -162,11 +163,21 @@ impl Config {
         let member_conf = OrandaLayer::load(config_path)?;
         let root_conf = OrandaLayer::load(root_config_path)?;
         let project = AxoprojectLayer::load(Some(project_root.into()))?;
+
+        // Complain if the member config contains workspace keys, because those keys should be set
+        // in the top-level workspace config file.
+        if let Some(member_conf) = &member_conf {
+            if member_conf.workspace.is_some() {
+                tracing::warn!("A workspace member oranda.json contains workspace configuration! You likely want to set this in the root oranda-workspace.json.");
+            }
+        }
+
         let mut cfg = Config::default();
-        cfg.apply_custom_layer(root_conf);
         cfg.apply_project_layer(project);
+        cfg.apply_custom_layer(root_conf);
         cfg.apply_custom_layer(member_conf);
         cfg.apply_autodetect_layer()?;
+
         Ok(cfg)
     }
 

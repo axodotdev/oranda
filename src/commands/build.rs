@@ -40,6 +40,9 @@ impl Build {
                 tracing::info!("Building workspace index page...");
                 let mut member_data = Vec::new();
                 for site in &sites {
+                    // Unwrap here because `Site::build_multi` always sets `workspace_data = Some(_)`.
+                    // It's only set to `None` on a _single_ page build, which can't happen in this
+                    // code path.
                     member_data.push(site.workspace_data.clone().unwrap());
                 }
                 Site::build_and_write_workspace_index(&config, &member_data)?;
@@ -55,7 +58,7 @@ impl Build {
             tracing::info!(success = true, "{}", &msg);
         } else {
             let config = Config::build(&self.config_path)?;
-            Site::build_single(&config)?.write(Some(&config))?;
+            Site::build_single(&config, None)?.write(Some(&config))?;
             let msg = format!("Your site build is located in `{}`.", {
                 config.build.dist_dir
             });

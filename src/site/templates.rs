@@ -49,7 +49,7 @@ impl<'a> Templates<'a> {
         Ok(Self { env, layout })
     }
 
-    pub fn new_for_index(workspace_config: &Config) -> Result<Self> {
+    pub fn new_for_workspace_index(workspace_config: &Config) -> Result<Self> {
         let mut env = Environment::new();
         let mut files = HashMap::new();
         let dir = &TEMPLATE_DIR
@@ -61,7 +61,7 @@ impl<'a> Templates<'a> {
                 .expect("failed to add jinja2 template");
         }
         env.add_filter("generate_link", Self::generate_link);
-        let layout = LayoutContext::new_for_index(workspace_config)?;
+        let layout = LayoutContext::new_for_workspace_index(workspace_config)?;
         Ok(Self { env, layout })
     }
 

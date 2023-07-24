@@ -31,7 +31,7 @@ struct EventVisitor {
     pub success: bool,
 }
 
-/// String-string hashmap to store span attributes in, by shoving it into the span `extensions` field.
+/// Storage struct for our spans, accomplished by shoving it into the span `extensions` field.
 struct SpanFieldStorage(SpanVisitor);
 
 impl<S> Layer<S> for CaptureFieldsLayer
@@ -119,7 +119,7 @@ where
             };
 
             if let Some(fields) = fields {
-                if let Some(prefix) = fields.prefix.clone() {
+                if let Some(prefix) = fields.prefix {
                     write!(&mut writer, "[{}] {}", prefix, output_str)?;
                 } else {
                     write!(&mut writer, "{}", output_str)?;

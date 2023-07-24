@@ -29,7 +29,7 @@ pub struct WorkspaceConfig {
 impl Default for WorkspaceConfig {
     fn default() -> Self {
         Self {
-            name: None,
+            name: Some("My Oranda Config".to_string()),
             members: Vec::new(),
         }
     }

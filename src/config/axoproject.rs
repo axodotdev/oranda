@@ -159,7 +159,14 @@ impl AxoprojectLayer {
                 eprintln!("{:?}", miette::Report::new(warning));
                 None
             }
-            axoproject::WorkspaceSearch::Missing(_) => None,
+            axoproject::WorkspaceSearch::Missing(cause) => {
+                // Just quietly log this in case it's useful
+                tracing::debug!(
+                    "Couldn't find a {name} project: {:?}",
+                    &miette::Report::new(cause)
+                );
+                None
+            }
         }
     }
 }

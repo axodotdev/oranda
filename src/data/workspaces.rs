@@ -35,16 +35,13 @@ pub fn from_config(
         // Set the correct path prefix. This should be:
         // - If no root path prefix: `slug`
         // - If root path prefix: `path_prefix/slug`
-        config.build.path_prefix = if workspace_config.build.path_prefix.is_some() {
-            // FIXME: Doesn't account for trailing slashes right now
-            Some(format!(
-                "{}/{}",
-                workspace_config.build.path_prefix.as_ref().unwrap(),
-                &member.slug
-            ))
-        } else {
-            Some(member.slug.to_string())
-        };
+        config.build.path_prefix =
+            if let Some(path_prefix) = workspace_config.build.path_prefix.as_ref() {
+                // FIXME: Doesn't account for trailing slashes right now
+                Some(format!("{}/{}", path_prefix, &member.slug))
+            } else {
+                Some(member.slug.to_string())
+            };
 
         // Set the correct dist_dir. This should be `cwd_from_root/workspace_dist_dir/slug`
         config.build.dist_dir = format!(

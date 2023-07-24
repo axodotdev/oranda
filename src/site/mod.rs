@@ -4,7 +4,7 @@ use axoasset::{Asset, LocalAsset};
 use camino::{Utf8Path, Utf8PathBuf};
 use indexmap::IndexMap;
 use minijinja::context;
-use tracing::info_span;
+use tracing::instrument;
 
 use crate::config::Config;
 use crate::data::{funding::Funding, github::GithubRepo, workspaces, Context};
@@ -40,7 +40,7 @@ impl Site {
         tracing::info!("Workspace detected, gathering info...");
         // We assume the root path is wherever oranda-workspace.json is located (current dir)
         let root_path = Utf8PathBuf::from_path_buf(std::env::current_dir()?.canonicalize()?)
-            .unwrap_or(Utf8PathBuf::new());
+            .unwrap_or_default();
 
         let mut workspace_config_path = root_path.clone();
         workspace_config_path.push("oranda-workspace.json");
@@ -49,9 +49,8 @@ impl Site {
             workspaces::from_config(workspace_config, &root_path, &workspace_config_path)?;
         tracing::info!("Building {} workspace member(s)...", members.len());
         for member in &members {
-            let _span_handle = info_span!("workspace_page", prefix = member.slug).entered();
             std::env::set_current_dir(&member.path)?;
-            let mut site = Self::build_single(&member.config)?;
+            let mut site = Self::build_single(&member.config, Some(member.slug.to_string()))?;
             site.workspace_data = Some(member.clone());
             results.push(site);
             std::env::set_current_dir(&root_path)?;
@@ -64,7 +63,7 @@ impl Site {
         workspace_config: &Config,
         member_data: &Vec<WorkspaceData>,
     ) -> Result<()> {
-        let templates = Templates::new_for_index(workspace_config)?;
+        let templates = Templates::new_for_workspace_index(workspace_config)?;
         let context = WorkspaceIndexContext::new(member_data, workspace_config)?;
         let page = Page::new_from_template(
             "index.html",
@@ -78,7 +77,8 @@ impl Site {
         Ok(())
     }
 
-    pub fn build_single(config: &Config) -> Result<Site> {
+    #[instrument("workspace_page", fields(prefix = prefix))]
+    pub fn build_single(config: &Config, prefix: Option<String>) -> Result<Site> {
         Self::clean_dist_dir(&config.build.dist_dir)?;
         let templates = Templates::new(config)?;
 
@@ -269,11 +269,19 @@ impl Site {
         Ok(())
     }
 
+    /// Properly writes page data to disk.
+    /// This takes an optional config argument, the presence of which indicates that we're building
+    /// a single site. If the config isn't given, it indicates that we're building a workspace member
+    /// page instead (its config is stored in the `Site` struct itself). If none of these apply,
+    /// that's a bug (for now).
     pub fn write(self, config: Option<&Config>) -> Result<()> {
-        let config = if self.workspace_data.is_some() {
-            &self.workspace_data.as_ref().unwrap().config
+        // Differentiate between workspace page write or single page write by checking if there's a
+        // workspace config set in the struct, or if the (single) page config is manually passed to
+        // the function.
+        let config = if let Some(config) = config {
+            config
         } else {
-            config.unwrap()
+            &self.workspace_data.as_ref().expect("Attempted to build workspace page without workspace config. This is an oranda bug!").config
         };
         let dist = Utf8PathBuf::from(&config.build.dist_dir);
         for page in self.pages {

@@ -24,8 +24,8 @@ impl WorkspaceIndexContext {
     pub fn new(members: &Vec<WorkspaceData>, workspace_config: &Config) -> Result<Self> {
         let mut map = IndexMap::new();
         for member in members {
-            let logo = if member.config.styles.logo.is_some() {
-                Some(Self::find_logo_path(member, workspace_config)?)
+            let logo = if let Some(logo) = &member.config.styles.logo {
+                Some(Self::find_logo_path(logo, member, workspace_config)?)
             } else {
                 None
             };
@@ -42,14 +42,16 @@ impl WorkspaceIndexContext {
         Ok(Self { members: map })
     }
 
-    fn find_logo_path(member: &WorkspaceData, workspace_config: &Config) -> Result<Utf8PathBuf> {
-        let logo_url = member.config.styles.logo.clone().unwrap();
+    fn find_logo_path(
+        logo_url: &String,
+        member: &WorkspaceData,
+        workspace_config: &Config,
+    ) -> Result<Utf8PathBuf> {
         let root_path = Utf8PathBuf::from_path_buf(std::env::current_dir()?.canonicalize()?)
-            .unwrap_or(Utf8PathBuf::new());
+            .unwrap_or_default();
         if logo_url.starts_with("http") {
             // Lifted from axoasset. Expose it there?
-            let mut filename = url::Url::parse(&logo_url)
-                .unwrap()
+            let mut filename = url::Url::parse(logo_url)?
                 .path()
                 .to_string()
                 .replace('/', "_");
@@ -59,7 +61,7 @@ impl WorkspaceIndexContext {
                     .build
                     .path_prefix
                     .clone()
-                    .unwrap_or("".to_string()),
+                    .unwrap_or_default(),
             );
             path.push(&member.slug);
             path.push(filename);

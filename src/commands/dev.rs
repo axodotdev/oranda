@@ -49,7 +49,7 @@ pub struct Dev {
 impl Dev {
     pub fn run(self) -> Result<()> {
         let root_path = Utf8PathBuf::from_path_buf(std::env::current_dir()?.canonicalize()?)
-            .unwrap_or(Utf8PathBuf::new());
+            .unwrap_or_default();
         let (config, mut paths_to_watch) = if let Ok(Some(config)) = Site::get_workspace_config() {
             let mut workspace_config_path = root_path.clone();
             workspace_config_path.push("oranda-workspace.json");
@@ -179,7 +179,7 @@ impl Dev {
         let cfg_file = self
             .config_path
             .clone()
-            .unwrap_or(Utf8PathBuf::from("./oranda.json"));
+            .unwrap_or_else(|| Utf8PathBuf::from("./oranda.json"));
         paths_to_watch.push(determine_path(root_path, &member_path, cfg_file)?);
 
         // Watch for the funding.md page and the funding.yml file
@@ -199,8 +199,8 @@ impl Dev {
                 .additional_pages
                 .values()
                 .cloned()
-                .map(|p| determine_path(root_path, &member_path, p).unwrap())
-                .collect();
+                .map(|p| determine_path(root_path, &member_path, p))
+                .collect::<Result<Vec<Utf8PathBuf>>>()?;
             paths_to_watch.append(&mut additional_pages);
         }
 

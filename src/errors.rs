@@ -36,6 +36,9 @@ pub enum OrandaError {
     #[error(transparent)]
     Minijinja(#[from] minijinja::Error),
 
+    #[error(transparent)]
+    UrlParse(#[from] url::ParseError),
+
     #[error("Failed to create a directory, `{dist_path}` to build your project in.")]
     DistDirCreationError {
         dist_path: String,
@@ -110,7 +113,7 @@ pub enum OrandaError {
         details: AxoassetError,
     },
 
-    #[error("Unable to create the correct paths we need to process your site.")]
+    #[error("Unable to create a path to {path} from root path {root_path}.")]
     #[diagnostic(help(
         "It can help to have your workspace members in a subdirectory under your workspace root."
     ))]

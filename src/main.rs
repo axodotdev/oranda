@@ -60,7 +60,7 @@ fn run(cli: &axocli::CliApp<Cli>) -> Result<(), Report> {
         .build()
         .expect("Initializing tokio runtime failed");
     let _guard = runtime.enter();
-    let sub_filter = tracing_subscriber::filter::Targets::new().with_target("oranda", Level::DEBUG);
+    let sub_filter = tracing_subscriber::filter::Targets::new().with_target("oranda", Level::INFO);
     let sub = tracing_subscriber::registry()
         .with(formatter::CaptureFieldsLayer)
         .with(tracing_subscriber::fmt::layer().event_format(formatter::OrandaFormatter))
