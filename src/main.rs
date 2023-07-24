@@ -62,6 +62,7 @@ fn run(cli: &axocli::CliApp<Cli>) -> Result<(), Report> {
     let _guard = runtime.enter();
     let sub_filter = tracing_subscriber::filter::Targets::new().with_target("oranda", Level::DEBUG);
     let sub = tracing_subscriber::registry()
+        .with(formatter::CaptureFieldsLayer)
         .with(tracing_subscriber::fmt::layer().event_format(formatter::OrandaFormatter))
         .with(sub_filter);
     let _sub_guard = set_default(sub);

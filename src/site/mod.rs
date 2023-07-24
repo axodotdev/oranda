@@ -4,6 +4,7 @@ use axoasset::{Asset, LocalAsset};
 use camino::{Utf8Path, Utf8PathBuf};
 use indexmap::IndexMap;
 use minijinja::context;
+use tracing::info_span;
 
 use crate::config::Config;
 use crate::data::{funding::Funding, github::GithubRepo, workspaces, Context};
@@ -48,8 +49,9 @@ impl Site {
             workspaces::from_config(workspace_config, &root_path, &workspace_config_path)?;
         tracing::info!("Building {} workspace member(s)...", members.len());
         for member in &members {
+            let _span_handle = info_span!("workspace_page", prefix = member.slug).entered();
             std::env::set_current_dir(&member.path)?;
-            let mut site = Self::build_single(&member.config, Some(member.clone()))?;
+            let mut site = Self::build_single(&member.config)?;
             site.workspace_data = Some(member.clone());
             results.push(site);
             std::env::set_current_dir(&root_path)?;
@@ -76,26 +78,21 @@ impl Site {
         Ok(())
     }
 
-    pub fn build_single(config: &Config, workspace: Option<WorkspaceData>) -> Result<Site> {
-        let prefix = workspace.map(|w| w.slug);
+    pub fn build_single(config: &Config) -> Result<Site> {
         Self::clean_dist_dir(&config.build.dist_dir)?;
-        let templates = Templates::new(config, &prefix)?;
+        let templates = Templates::new(config)?;
 
         let mut pages = vec![];
 
         if !config.build.additional_pages.is_empty() {
-            let mut additional_pages = Self::build_additional_pages(
-                &config.build.additional_pages,
-                &templates,
-                config,
-                &prefix,
-            )?;
+            let mut additional_pages =
+                Self::build_additional_pages(&config.build.additional_pages, &templates, config)?;
             pages.append(&mut additional_pages);
         }
 
         let mut index = None;
         let needs_context = Self::needs_context(config)?;
-        Self::print_plan(config, &prefix);
+        Self::print_plan(config);
 
         if needs_context {
             let mut context = match &config.project.repository {
@@ -103,13 +100,10 @@ impl Site {
                     repo_url,
                     &config.project,
                     config.components.artifacts.as_ref(),
-                    &prefix,
                 )?,
-                None => Context::new_current(
-                    &config.project,
-                    config.components.artifacts.as_ref(),
-                    &prefix,
-                )?,
+                None => {
+                    Context::new_current(&config.project, config.components.artifacts.as_ref())?
+                }
             };
             if config.components.artifacts_enabled() {
                 if let Some(latest) = context.latest_mut() {
@@ -117,7 +111,7 @@ impl Site {
                     // its scripts easy to view (others get hotlinked and will just download)
                     latest.artifacts.make_scripts_viewable(config)?;
 
-                    let template_context = artifacts::template_context(&context, config, &prefix)?;
+                    let template_context = artifacts::template_context(&context, config)?;
                     index = Some(Page::new_from_both(
                         &config.project.readme_path,
                         "index.html",
@@ -188,7 +182,7 @@ impl Site {
         }
     }
 
-    fn print_plan(config: &Config, prefix: &Option<String>) {
+    fn print_plan(config: &Config) {
         let mut planned_components = Vec::new();
         if config.components.artifacts_enabled() {
             planned_components.push("artifacts");
@@ -213,7 +207,7 @@ impl Site {
                 }
             });
         if !joined.is_empty() {
-            tracing::info!(prefix, "Building components: {}", joined);
+            tracing::info!("Building components: {}", joined);
         }
     }
 
@@ -221,7 +215,6 @@ impl Site {
         files: &IndexMap<String, String>,
         templates: &Templates,
         config: &Config,
-        prefix: &Option<String>,
     ) -> Result<Vec<Page>> {
         let mut pages = vec![];
         for file_path in files.values() {
@@ -233,7 +226,7 @@ impl Site {
                     "File {} in additional pages is not markdown and will be skipped",
                     file_path
                 );
-                tracing::warn!(prefix, "{}", &msg);
+                tracing::warn!("{}", &msg);
             }
         }
         Ok(pages)

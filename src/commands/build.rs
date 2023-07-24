@@ -55,7 +55,7 @@ impl Build {
             tracing::info!(success = true, "{}", &msg);
         } else {
             let config = Config::build(&self.config_path)?;
-            Site::build_single(&config, None)?.write(Some(&config))?;
+            Site::build_single(&config)?.write(Some(&config))?;
             let msg = format!("Your site build is located in `{}`.", {
                 config.build.dist_dir
             });

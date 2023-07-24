@@ -27,7 +27,7 @@ pub struct Templates<'a> {
 }
 
 impl<'a> Templates<'a> {
-    pub fn new(config: &Config, prefix: &Option<String>) -> Result<Self> {
+    pub fn new(config: &Config) -> Result<Self> {
         let mut env = Environment::new();
         let mut files = HashMap::new();
         // These two `expects` should never happen in production, because all of these things are
@@ -45,7 +45,7 @@ impl<'a> Templates<'a> {
         env.add_filter("triple_to_display_name", Self::triple_to_display_name);
         // Use opt-in autoescape
         env.set_auto_escape_callback(|_| AutoEscape::None);
-        let layout = LayoutContext::new(config, prefix)?;
+        let layout = LayoutContext::new(config)?;
         Ok(Self { env, layout })
     }
 
