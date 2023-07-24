@@ -1,3 +1,4 @@
+use std::net::SocketAddr;
 use std::path::PathBuf;
 use std::thread::sleep;
 use std::time::Duration;
@@ -7,10 +8,11 @@ use camino::Utf8PathBuf;
 use clap::Parser;
 use miette::Report;
 
-use crate::{
-    commands::{Build, Serve},
-    message::{Message, MessageType},
-};
+use crate::commands::{Build, Serve};
+use oranda::data::workspaces;
+use oranda::data::workspaces::WorkspaceData;
+use oranda::site::link::determine_path;
+use oranda::site::Site;
 use oranda::{
     config::Config,
     errors::*,
@@ -46,69 +48,36 @@ pub struct Dev {
 
 impl Dev {
     pub fn run(self) -> Result<()> {
-        let config = Config::build(
-            &self
-                .config_path
-                .clone()
-                .unwrap_or(Utf8PathBuf::from("./oranda.json")),
-        )?;
-        let mut paths_to_watch = vec![];
-        // Watch for the readme file
-        paths_to_watch.push(config.project.readme_path);
-        // Watch for the oranda config file
-        paths_to_watch.push(
-            self.config_path
-                .clone()
-                .unwrap_or(Utf8PathBuf::from("./oranda.json"))
-                .into(),
-        );
+        let root_path = Utf8PathBuf::from_path_buf(std::env::current_dir()?.canonicalize()?)
+            .unwrap_or_default();
+        let (config, mut paths_to_watch) = if let Ok(Some(config)) = Site::get_workspace_config() {
+            let mut workspace_config_path = root_path.clone();
+            workspace_config_path.push("oranda-workspace.json");
+            let members = workspaces::from_config(&config, &root_path, &workspace_config_path)?;
+            let mut ret = Vec::new();
+            for member in members {
+                let mut paths =
+                    self.collect_paths_for_site(&member.config, &root_path, Some(member.clone()))?;
+                ret.append(&mut paths);
+            }
+            // Also watch oranda-workspace.json
+            ret.push(Utf8PathBuf::from("oranda-workspace.json"));
+            (config, ret)
+        } else {
+            let config = Config::build(
+                &self
+                    .config_path
+                    .clone()
+                    .unwrap_or(Utf8PathBuf::from("./oranda.json")),
+            )?;
+            let ret = self.collect_paths_for_site(&config, &root_path, None)?;
+            (config, ret)
+        };
 
         // Watch for any user-provided paths
         if let Some(include_paths) = &self.include_paths {
-            let mut include_paths: Vec<String> =
-                include_paths.iter().map(|p| p.to_string()).collect();
+            let mut include_paths = include_paths.clone();
             paths_to_watch.append(&mut include_paths);
-        }
-
-        // Watch for the funding.md page and the funding.yml file
-        if let Some(funding) = &config.components.funding {
-            if let Some(path) = &funding.yml_path {
-                paths_to_watch.push(path.clone());
-            }
-            if let Some(path) = &funding.md_path {
-                paths_to_watch.push(path.clone());
-            }
-        }
-
-        // Watch for additional pages, if we have any
-        if !config.build.additional_pages.is_empty() {
-            let mut additional_pages: Vec<String> =
-                config.build.additional_pages.values().cloned().collect();
-            paths_to_watch.append(&mut additional_pages);
-        }
-
-        // Watch for the mdbook directory, if we have it
-        if let Some(book_cfg) = &config.components.mdbook {
-            let path = mdbook_dir(book_cfg)?;
-            let md = load_mdbook(&path)?;
-            // watch book.toml and /src/
-            paths_to_watch.push(md.root.join("book.toml").display().to_string());
-            paths_to_watch.push(md.source_dir().display().to_string());
-
-            // If we're not clobbering the theme, also watch the theme dir
-            // (note that this may not exist on the fs, mdbook reports the path regardless)
-            if custom_theme(book_cfg, &config.styles.theme).is_none() {
-                paths_to_watch.push(md.theme_dir().display().to_string());
-            }
-        }
-
-        // Watch for any project manifest files
-        let project = axoproject::get_workspaces("./".into(), None);
-        if let WorkspaceSearch::Found(workspace) = project.rust {
-            paths_to_watch.push(workspace.manifest_path.into());
-        }
-        if let WorkspaceSearch::Found(workspace) = project.javascript {
-            paths_to_watch.push(workspace.manifest_path.into());
         }
 
         let (tx, rx) = std::sync::mpsc::channel();
@@ -131,23 +100,11 @@ impl Dev {
             }
         }
 
-        Message::new(
-            MessageType::Info,
-            &format!(
-                "Found {} paths to watch, starting watch...",
-                existing_paths.len()
-            ),
-        )
-        .print();
         tracing::info!(
             "Found {} paths to watch, starting watch...",
             existing_paths.len()
         );
-        Message::new(
-            MessageType::Debug,
-            &format!("Files watched: {:?}", existing_paths),
-        )
-        .print();
+        tracing::debug!("Files watched: {:?}", existing_paths);
 
         if !self.no_first_build {
             Build::new(self.project_root.clone(), self.config_path.clone()).run()?;
@@ -155,6 +112,17 @@ impl Dev {
 
         // Spawn the serve process out into a separate thread so that we can loop through received events on this thread
         let _ = std::thread::spawn(move || Serve::new(self.port).run());
+        let addr = SocketAddr::from(([127, 0, 0, 1], self.port.unwrap_or(7979)));
+        let msg = if config.build.path_prefix.is_some() {
+            format!(
+                "Your project is available at: http://{}/{}",
+                addr,
+                config.build.path_prefix.unwrap()
+            )
+        } else {
+            format!("Your project is available at: http://{}", addr)
+        };
+        tracing::info!(success = true, "{}", &msg);
         loop {
             // Wait for all debounced events to arrive
             let first_event = rx.recv().expect("channel shut down incorrectly");
@@ -168,11 +136,6 @@ impl Dev {
                     Ok(events) => Some(events),
                     Err(errors) => {
                         for error in errors {
-                            Message::new(
-                                MessageType::Warning,
-                                &format!("Error while watching for changes: {error}",),
-                            )
-                            .print();
                             tracing::warn!("Error while watching for changes: {error}",);
                         }
                         None
@@ -183,11 +146,7 @@ impl Dev {
                 .collect();
 
             if !paths.is_empty() {
-                Message::new(
-                    MessageType::Info,
-                    &format!("Path(s) {:?} changed, rebuilding...", paths),
-                )
-                .print();
+                tracing::info!("Path(s) {:?} changed, rebuilding...", paths);
 
                 if let Err(e) =
                     Build::new(self.project_root.clone(), self.config_path.clone()).run()
@@ -197,5 +156,100 @@ impl Dev {
                 }
             }
         }
+    }
+
+    fn collect_paths_for_site(
+        &self,
+        config: &Config,
+        root_path: &Utf8PathBuf,
+        workspace: Option<WorkspaceData>,
+    ) -> Result<Vec<Utf8PathBuf>> {
+        let config = config.clone();
+        let member_path = workspace.map(|w| w.path);
+        let mut paths_to_watch = vec![];
+
+        // Watch for the readme file
+        paths_to_watch.push(determine_path(
+            root_path,
+            &member_path,
+            config.project.readme_path,
+        )?);
+
+        // Watch for the oranda config file
+        let cfg_file = self
+            .config_path
+            .clone()
+            .unwrap_or_else(|| Utf8PathBuf::from("./oranda.json"));
+        paths_to_watch.push(determine_path(root_path, &member_path, cfg_file)?);
+
+        // Watch for the funding.md page and the funding.yml file
+        if let Some(funding) = &config.components.funding {
+            if let Some(path) = &funding.yml_path {
+                paths_to_watch.push(determine_path(root_path, &member_path, path)?);
+            }
+            if let Some(path) = &funding.md_path {
+                paths_to_watch.push(determine_path(root_path, &member_path, path)?);
+            }
+        }
+
+        // Watch for additional pages, if we have any
+        if !config.build.additional_pages.is_empty() {
+            let mut additional_pages = config
+                .build
+                .additional_pages
+                .values()
+                .cloned()
+                .map(|p| determine_path(root_path, &member_path, p))
+                .collect::<Result<Vec<Utf8PathBuf>>>()?;
+            paths_to_watch.append(&mut additional_pages);
+        }
+
+        // Watch for the mdbook directory, if we have it
+        if let Some(book_cfg) = &config.components.mdbook {
+            let path = mdbook_dir(book_cfg)?;
+            let md = load_mdbook(&path)?;
+            // watch book.toml and /src/
+            let book_path = determine_path(
+                root_path,
+                &member_path,
+                md.root.join("book.toml").display().to_string(),
+            )?;
+            let source_path = determine_path(
+                root_path,
+                &member_path,
+                md.source_dir().display().to_string(),
+            )?;
+            paths_to_watch.push(book_path);
+            paths_to_watch.push(source_path);
+
+            // If we're not clobbering the theme, also watch the theme dir
+            // (note that this may not exist on the fs, mdbook reports the path regardless)
+            if custom_theme(book_cfg, &config.styles.theme).is_none() {
+                let theme_path = determine_path(
+                    root_path,
+                    &member_path,
+                    md.theme_dir().display().to_string(),
+                )?;
+                paths_to_watch.push(theme_path);
+            }
+        }
+
+        // Watch for any project manifest files
+        let project = axoproject::get_workspaces("./".into(), None);
+        if let WorkspaceSearch::Found(workspace) = project.rust {
+            paths_to_watch.push(determine_path(
+                root_path,
+                &member_path,
+                workspace.manifest_path,
+            )?);
+        }
+        if let WorkspaceSearch::Found(workspace) = project.javascript {
+            paths_to_watch.push(determine_path(
+                root_path,
+                &member_path,
+                workspace.manifest_path,
+            )?);
+        }
+        Ok(paths_to_watch)
     }
 }

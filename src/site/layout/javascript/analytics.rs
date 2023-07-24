@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::config::AnalyticsConfig;
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, Default)]
 pub struct Analytics {
     pub snippet: Option<String>,
     pub google_script: Option<String>,
@@ -40,23 +40,23 @@ impl Analytics {
     }
 }
 
-#[derive(Debug, Deserialize, JsonSchema)]
+#[derive(Debug, Deserialize, JsonSchema, Clone)]
 pub struct Google {
     pub tracking_id: String,
 }
 
-#[derive(Debug, Deserialize, JsonSchema)]
+#[derive(Debug, Deserialize, JsonSchema, Clone)]
 pub struct Fathom {
     pub site: String,
 }
 
-#[derive(Debug, Deserialize, JsonSchema)]
+#[derive(Debug, Deserialize, JsonSchema, Clone)]
 pub struct Plausible {
     pub domain: String,
     pub script_url: Option<String>,
 }
 
-#[derive(Debug, Deserialize, JsonSchema)]
+#[derive(Debug, Deserialize, JsonSchema, Clone)]
 pub struct Umami {
     pub website: String,
     pub script_url: String,

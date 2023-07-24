@@ -2,26 +2,27 @@
 
 - [Configuration](#configuration)
   - [Manifest file: `oranda.json`](#manifest-file-orandajson)
+  - [Workspace manifest file: `oranda-workspace.json`](#workspace-manifest-file-oranda-workspacejson)
   - [Project Configuration](#project-configuration)
     - [`name`](#name) 📦 - the name of your application
     - [`version`](#version) 📦 - current version of your project
     - [`description`](#description) 📦 - brief description of your project
     - [`homepage`](#homepage) 📦 - url to the homepage of your project
     - [`repository`](#repository) 📦 - url to the repository of your project
-    - [`readme_path`](#readmepath) - relative custom path to your project's readme file
+    - [`readme_path`](#readme_path) - relative custom path to your project's readme file
     - [`license`](#license) 📦 - license of your project (in SPDX format)
   - [Build Configuration](#build-configuration)
-    - [`dist_dir`](#distdir) - path to where built output should be placed
-    - [`static_dir`](#staticdir) - path to a directory containing static assets
-    - [`path_prefix`](#pathprefix) - a URL fragment to prepend to URLs, useful if hosting from a subfolder
-    - [`additional_pages`](#additionalpages) - additional pages to be rendered and linked to
+    - [`dist_dir`](#dist_dir) - path to where built output should be placed
+    - [`static_dir`](#static_dir) - path to a directory containing static assets
+    - [`path_prefix`](#path_prefix) - a URL fragment to prepend to URLs, useful if hosting from a subfolder
+    - [`additional_pages`](#additional_pages) - additional pages to be rendered and linked to
   - [Marketing Configuration](#marketing-configuration)
     - [`analytics`](#analytics) - automatically insert analytics snippets for several providers
     - [`social`](#social) - additional configuration for SEO-related inserts
   - [Theme/Style Configuration](#style-configuration)
     - [`theme`](#theme) - change oranda's CSS theme
-    - [`additional_css`](#additionalcss) - additional CSS to insert into your pages
-    - [`oranda_css_version`](#orandacssversion) - custom version of oranda's built-in CSS to use
+    - [`additional_css`](#additional_css) - additional CSS to insert into your pages
+    - [`oranda_css_version`](#oranda_css_version) - custom version of oranda's built-in CSS to use
     - [`logo`](#logo) - custom site logo
     - [`favicon`](#favicon) - custom site favicon
   - [Components Configuration](#components-configuration)
@@ -87,9 +88,19 @@ For example:
 }
 ```
 
-> **NOTE:** All paths in `oranda.json` are relative to the `oranda.json` file. We
-> recommend placing this file in the same directory as your project manifest, such as a `package.json`
-> or `Cargo.toml`. oranda does not currently support detecting Cargo workspaces.
+> **NOTE:** All paths in `oranda.json` are relative to the `oranda.json` file.
+
+## Workspace manifest file: `oranda-workspace.json`
+
+> Added in version 0.3.0.
+
+oranda supports building multiple sites at once (referred to as building in a "workspace"). To control this behavior,
+you can create a `oranda-workspace.json` file inside your workspace root. Running an oranda command will pick up this
+file, and build the workspace members accordingly.
+
+The workspace file supports all other oranda config keys, which will be passed down to each workspace members.
+
+[Read more about workspaces](configuration/workspaces.md)
 
 ## Project Configuration
 

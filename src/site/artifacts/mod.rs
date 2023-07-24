@@ -6,7 +6,6 @@ use crate::data::{Context, Release};
 use crate::errors::*;
 
 use crate::data::artifacts::inference::triple_to_display_name;
-use crate::message::{Message, MessageType};
 use crate::site::javascript;
 use serde::Serialize;
 
@@ -63,7 +62,7 @@ pub fn template_context(context: &Context, config: &Config) -> Result<Option<Art
     downloadable_files.sort_by_key(|(_, f, _)| f.name.clone());
 
     if downloadable_files.is_empty() {
-        Message::new(MessageType::Warning, "You seem to have release automation set up, but we didn't detect any releases. The install page and associated widget will be empty. To disable this, set `artifacts: false`").print();
+        tracing::warn!("You seem to have release automation set up, but we didn't detect any releases. The install page and associated widget will be empty. To disable this, set `artifacts: false`");
     }
     let has_checksum_files = downloadable_files
         .iter()

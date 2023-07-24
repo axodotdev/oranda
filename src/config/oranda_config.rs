@@ -4,9 +4,8 @@ use schemars::JsonSchema;
 use serde::Deserialize;
 
 use crate::errors::*;
-use crate::message::{Message, MessageType};
 
-use super::{BuildLayer, ComponentLayer, MarketingLayer, ProjectLayer, StyleLayer};
+use super::{BuildLayer, ComponentLayer, MarketingLayer, ProjectLayer, StyleLayer, WorkspaceLayer};
 
 /// Configuration for `oranda` (typically stored in oranda.json)
 #[derive(Debug, Deserialize, JsonSchema)]
@@ -25,6 +24,8 @@ pub struct OrandaLayer {
     pub styles: Option<StyleLayer>,
     /// Additional optional components
     pub components: Option<ComponentLayer>,
+    /// Workspace configuration
+    pub workspace: Option<WorkspaceLayer>,
     /// Field that text-editors can use to fetch the schema for this struct
     ///
     /// We never use this, but we don't want to error out if its set.
@@ -39,11 +40,10 @@ impl OrandaLayer {
         match config_result {
             Ok(config) => {
                 let data: OrandaLayer = config.deserialize_json()?;
-                tracing::debug!("{:?}", data);
                 Ok(Some(data))
             }
             Err(_) => {
-                Message::new(MessageType::Info, "No config found, using default values").print();
+                tracing::info!("No config found, using default values");
                 Ok(None)
             }
         }

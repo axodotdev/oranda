@@ -6,7 +6,7 @@ use crate::config::{ApplyLayer, ApplyOptExt, ApplyValExt};
 use crate::errors::*;
 
 /// Config for us building and integrating your mdbook (complete version)
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MdBookConfig {
     /// Path to the mdbook
     ///

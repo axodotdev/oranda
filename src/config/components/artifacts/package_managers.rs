@@ -5,7 +5,7 @@ use serde::Deserialize;
 use crate::config::{ApplyLayer, ApplyValExt};
 
 /// Package managers to display (complete version)
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PackageManagersConfig {
     pub preferred: IndexMap<String, String>,
     pub additional: IndexMap<String, String>,

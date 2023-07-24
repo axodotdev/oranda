@@ -10,7 +10,7 @@ use crate::site::layout::header::get_logo;
 use crate::site::{link, page};
 use javascript::analytics::Analytics;
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, Default)]
 pub struct LayoutContext {
     theme: OrandaTheme,
     project_name: String,
@@ -34,7 +34,7 @@ pub struct LayoutContext {
     social: SocialConfig,
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, Default)]
 pub struct AdditionalPageContext {
     path: String,
     name: String,
@@ -130,6 +130,22 @@ impl LayoutContext {
             path_prefix: config.build.path_prefix.clone(),
             analytics,
             social: config.marketing.social.clone(),
+        })
+    }
+
+    /// Generates a new layout context to use for the workspace index page.
+    pub fn new_for_workspace_index(workspace_config: &Config) -> Result<Self> {
+        let css_path = css::get_css_link(
+            &workspace_config.build.dist_dir,
+            &workspace_config.build.path_prefix,
+            &workspace_config.styles.oranda_css_version,
+        )?;
+        Ok(Self {
+            project_name: workspace_config.workspace.name.clone().unwrap_or_default(),
+            theme: workspace_config.styles.theme,
+            oranda_css_path: css_path,
+            path_prefix: workspace_config.build.path_prefix.clone(),
+            ..Default::default()
         })
     }
 }

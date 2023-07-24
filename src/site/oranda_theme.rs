@@ -25,3 +25,9 @@ pub enum OrandaTheme {
     Hacker,
     Cupcake,
 }
+
+impl Default for OrandaTheme {
+    fn default() -> Self {
+        Self::Dark
+    }
+}

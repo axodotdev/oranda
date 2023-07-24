@@ -1,7 +1,6 @@
 use camino::{Utf8Path, Utf8PathBuf};
 use std::net::SocketAddr;
 
-use crate::message::{Message, MessageType};
 use oranda::config::Config;
 use oranda::errors::*;
 
@@ -24,7 +23,12 @@ impl Serve {
     }
 
     pub fn run(&self) -> Result<()> {
-        let config = Config::build(&Utf8PathBuf::from("./oranda.json"))?;
+        let workspace_config_path = &Utf8PathBuf::from("./oranda-workspace.json");
+        let config = if workspace_config_path.exists() {
+            Config::build(workspace_config_path)?
+        } else {
+            Config::build(&Utf8PathBuf::from("./oranda.json"))?
+        };
         if Utf8Path::new(&config.build.dist_dir).is_dir() {
             if let Some(prefix) = config.build.path_prefix {
                 tracing::debug!("`path_prefix` configured: {}", &prefix);
@@ -54,7 +58,7 @@ impl Serve {
 
         let addr = SocketAddr::from(([127, 0, 0, 1], self.port));
         let msg = format!("Your project is available at: http://{}", addr);
-        Message::new(MessageType::Success, &msg).print();
+        tracing::info!(success = true, "{}", &msg);
         axum::Server::bind(&addr)
             .serve(app.into_make_service())
             .await
@@ -76,7 +80,7 @@ impl Serve {
 
         let addr = SocketAddr::from(([127, 0, 0, 1], self.port));
         let msg = format!("Your project is available at: http://{}/{}", addr, prefix);
-        Message::new(MessageType::Success, &msg).print();
+        tracing::info!(success = true, "{}", &msg);
         axum::Server::bind(&addr)
             .serve(app.into_make_service())
             .await

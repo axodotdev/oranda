@@ -12,7 +12,7 @@ pub use mdbooks::{MdBookConfig, MdBookLayer};
 use super::{ApplyBoolLayerExt, ApplyLayer, ApplyValExt, BoolOr};
 
 /// Extra components (complete version)
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ComponentConfig {
     /// Whether to enable the changelog page
     ///

@@ -6,7 +6,7 @@ use crate::site::layout::javascript::analytics::{Fathom, Google, Plausible, Umam
 /// Settings for Analytics
 ///
 /// Analytics providers are currently mututally exclusive -- you can pick at most one.
-#[derive(Debug, Deserialize, JsonSchema)]
+#[derive(Debug, Deserialize, JsonSchema, Clone)]
 #[serde(rename_all = "lowercase")]
 pub enum AnalyticsConfig {
     /// Use Google Analytics

@@ -9,7 +9,7 @@ mod analytics;
 mod social;
 
 /// Marketing config (complete version)
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MarketingConfig {
     /// Analytics
     pub analytics: Option<AnalyticsConfig>,

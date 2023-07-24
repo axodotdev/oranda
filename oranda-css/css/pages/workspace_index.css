@@ -1,0 +1,25 @@
+ul.index-grid {
+    @apply grid lg:grid-cols-2 md:grid-cols-2 gap-8 mt-16 items-stretch;
+}
+
+.index-grid li {
+    @apply ml-0 border rounded flex flex-col justify-between;
+    border-color: var(--light-color);
+    box-shadow: 0px 0px 0px 8px rgba(0, 0, 0, 0.3);
+}
+
+.index-grid .content {
+    @apply flex justify-between p-4;
+}
+
+.index-grid .links {
+    @apply flex w-full border-t divide-x;
+}
+
+.index-grid .links a {
+    @apply inline-flex items-center space-x-2 w-1/2 px-6 py-4;
+}
+
+.index-grid .content .index-logo {
+    @apply relative flex-shrink-0 w-20 h-20;
+}

@@ -7,7 +7,7 @@ use crate::data::funding::FundingType;
 use crate::errors::*;
 
 /// Config for displaying funding information on your page (complete version)
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FundingConfig {
     pub preferred_funding: Option<FundingType>,
     pub yml_path: Option<String>,

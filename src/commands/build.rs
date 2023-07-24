@@ -1,8 +1,8 @@
 use camino::Utf8PathBuf;
 use clap::Parser;
 
-use crate::message::{Message, MessageType};
 use oranda::config::Config;
+
 use oranda::errors::*;
 use oranda::site::Site;
 
@@ -33,14 +33,37 @@ impl Build {
     }
 
     pub fn run(&self) -> Result<()> {
-        Message::new(MessageType::Info, "Running build...").print();
-        tracing::info!("Running build...");
-        let config = Config::build(&self.config_path)?;
-        Site::build(&config)?.write(&config)?;
-        let msg = format!("Your site build is located in `{}`.", {
-            config.build.dist_dir
-        });
-        Message::new(MessageType::Success, &msg).print();
+        if let Ok(Some(config)) = Site::get_workspace_config() {
+            let sites = Site::build_multi(&config)?;
+            // FIXME: Let the user turn this off
+            if true {
+                tracing::info!("Building workspace index page...");
+                let mut member_data = Vec::new();
+                for site in &sites {
+                    // Unwrap here because `Site::build_multi` always sets `workspace_data = Some(_)`.
+                    // It's only set to `None` on a _single_ page build, which can't happen in this
+                    // code path.
+                    member_data.push(site.workspace_data.clone().unwrap());
+                }
+                Site::build_and_write_workspace_index(&config, &member_data)?;
+            }
+
+            for site in sites {
+                site.write(None)?;
+            }
+            let msg = format!(
+                "Your site builds are located in `{}`.",
+                config.build.dist_dir
+            );
+            tracing::info!(success = true, "{}", &msg);
+        } else {
+            let config = Config::build(&self.config_path)?;
+            Site::build_single(&config, None)?.write(Some(&config))?;
+            let msg = format!("Your site build is located in `{}`.", {
+                config.build.dist_dir
+            });
+            tracing::info!(success = true, "{}", &msg);
+        }
         Ok(())
     }
 }
