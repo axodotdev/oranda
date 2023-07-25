@@ -1,5 +1,21 @@
 # Changelog
 
+## Unreleased
+
+### Features
+
+- **Workspace Support - [shadows-withal]/[pr532], [jamesmunns]/[i493]**
+  
+  You can now tell oranda to build multiple sites at once! By default, this will also generate a separate "root"
+  page, providing an index into all projects defined within your workspace.
+
+  Details TBD
+
+[i493]: https://github.com/axodotdev/oranda/issues/493
+[pr532]: https://github.com/axodotdev/oranda/pull/532
+[shadows-withal]: https://github.com/shadows-withal
+[jamesmunns]: https://github.com/jamesmunns
+
 ## 0.2.0 - 2023-07-19
 
 ### BREAKING
