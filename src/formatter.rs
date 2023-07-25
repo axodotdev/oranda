@@ -120,7 +120,12 @@ where
 
             if let Some(fields) = fields {
                 if let Some(prefix) = fields.prefix {
-                    write!(&mut writer, "[{}] {}", prefix, output_str)?;
+                    write!(
+                        &mut writer,
+                        "{:>15} {}",
+                        console::style(prefix).magenta(),
+                        output_str
+                    )?;
                 } else {
                     write!(&mut writer, "{}", output_str)?;
                 }
