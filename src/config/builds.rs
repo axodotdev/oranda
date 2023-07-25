@@ -23,6 +23,7 @@ pub struct BuildConfig {
     pub additional_pages: IndexMap<String, String>,
 }
 #[derive(Debug, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
 /// Information about how the pages of your site should be built
 pub struct BuildLayer {
     /// Relative path to the dir where build output should be placed

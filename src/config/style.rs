@@ -20,6 +20,7 @@ pub struct StyleConfig {
 }
 /// Settings for styling your page
 #[derive(Debug, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
 pub struct StyleLayer {
     /// The builtin oranda theme to use for all your pages
     ///

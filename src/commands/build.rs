@@ -33,7 +33,7 @@ impl Build {
     }
 
     pub fn run(&self) -> Result<()> {
-        if let Ok(Some(config)) = Site::get_workspace_config() {
+        if let Some(config) = Site::get_workspace_config()? {
             let sites = Site::build_multi(&config)?;
             // FIXME: Let the user turn this off
             if true {

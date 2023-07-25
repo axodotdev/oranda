@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 
 #[derive(Debug, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
 /// Configuration regarding multi-project "workspaces".
 pub struct WorkspaceLayer {
     /// The top-level name to be used in the index page
@@ -13,6 +14,7 @@ pub struct WorkspaceLayer {
 }
 
 #[derive(Debug, Serialize, Deserialize, JsonSchema, Clone)]
+#[serde(deny_unknown_fields)]
 pub struct WorkspaceMember {
     /// Slug for the generated URLs and directories
     pub slug: String,
