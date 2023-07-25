@@ -15,6 +15,7 @@ pub struct FundingConfig {
 }
 /// Settings for displaying funding information on your page
 #[derive(Debug, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
 pub struct FundingLayer {
     /// A funding method to make larger/focused to encourage over all others
     pub preferred_funding: Option<FundingType>,

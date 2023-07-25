@@ -12,6 +12,7 @@ pub struct SocialConfig {
 }
 // Settings for social media integrations
 #[derive(Debug, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
 pub struct SocialLayer {
     /// Image to show in link previews
     ///

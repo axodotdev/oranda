@@ -12,6 +12,7 @@ pub struct PackageManagersConfig {
 }
 /// Package managers to display
 #[derive(Debug, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
 pub struct PackageManagersLayer {
     /// Packages to display in both the install widget and install page
     ///

@@ -44,6 +44,7 @@ pub struct ArtifactsConfig {
 
 /// Setting for downloadable artifacts, installers, and package-managers
 #[derive(Debug, Default, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
 pub struct ArtifactsLayer {
     /// Whether to enable auto-detection of artifacts/installers in your Github Releases
     ///

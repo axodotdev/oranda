@@ -32,6 +32,7 @@ pub struct ProjectConfig {
 /// All of these values should automatically be sourced from your Cargo.toml or package.json
 /// whenever possible. You should only need to set these if you want to override the value.
 #[derive(Debug, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
 pub struct ProjectLayer {
     /// Name of the project
     ///

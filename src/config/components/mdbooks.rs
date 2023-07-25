@@ -18,6 +18,7 @@ pub struct MdBookConfig {
 
 /// The config for building and embedding an mdbook on your site
 #[derive(Debug, Default, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
 pub struct MdBookLayer {
     /// Path to the mdbook (the directory containing book.toml)
     ///

@@ -39,6 +39,7 @@ pub struct ComponentConfig {
 }
 /// Extra components
 #[derive(Debug, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
 pub struct ComponentLayer {
     /// Whether to enable the changelog page
     ///

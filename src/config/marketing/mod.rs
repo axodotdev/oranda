@@ -18,6 +18,7 @@ pub struct MarketingConfig {
 }
 /// Settings for marketing/social/analytics
 #[derive(Debug, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
 pub struct MarketingLayer {
     /// Settings for analytics
     ///
