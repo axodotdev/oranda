@@ -1,6 +1,7 @@
 use camino::Utf8PathBuf;
 use schemars::JsonSchema;
 use serde::Deserialize;
+use std::path::PathBuf;
 
 use crate::config::{ApplyLayer, ApplyOptExt, ApplyValExt};
 use crate::errors::*;
@@ -74,7 +75,7 @@ impl MdBookConfig {
     /// If mdbook is enabled but the path isn't set, we try to find it
     ///
     /// If we fail, we set mdbook to None to disable it.
-    pub fn find_paths(config: &mut Option<MdBookConfig>) -> Result<()> {
+    pub fn find_paths(config: &mut Option<MdBookConfig>, start_dir: &PathBuf) -> Result<()> {
         // If this is None, we were force-disabled and shouldn't auto-detect
         let Some(this) = config else {
             return Ok(());
@@ -82,9 +83,16 @@ impl MdBookConfig {
 
         if this.path.is_none() {
             // Ok time to auto-detect, try these dirs for a book.toml
-            let possible_paths = vec!["./", "./book/", "./docs/"];
+            let possible_paths: Vec<String> = vec!["/", "book/", "docs/"]
+                .iter()
+                .map(|p| {
+                    let mut path = start_dir.clone();
+                    path.push(p);
+                    path.display().to_string()
+                })
+                .collect();
             for book_dir in possible_paths {
-                let book_path = Utf8PathBuf::from(book_dir).join("book.toml");
+                let book_path = Utf8PathBuf::from(&book_dir).join("book.toml");
                 if book_path.exists() {
                     // nice, use it
                     this.path = Some(book_dir.to_owned());

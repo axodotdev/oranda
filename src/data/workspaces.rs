@@ -29,8 +29,13 @@ pub fn from_config(
         let path = Utf8PathBuf::from(member.path.display().to_string()).canonicalize_utf8()?;
         let mut config_path = path.clone();
         config_path.push("oranda.json");
-        let mut config =
-            Config::build_workspace_member(&config_path, workspace_config_path, &path)?;
+        let mut config = Config::build_workspace_member(
+            &config_path,
+            workspace_config_path,
+            &path,
+            &member,
+            Some(member.slug.clone()),
+        )?;
 
         // Set the correct path prefix. This should be:
         // - If no root path prefix: `slug`
