@@ -1,9 +1,7 @@
 #![allow(clippy::uninlined_format_args)]
 
-use clap::builder::{PossibleValuesParser, TypedValueParser};
 use clap::{Parser, Subcommand};
 use miette::Report;
-use tracing::level_filters::LevelFilter;
 use tracing::subscriber::set_default;
 use tracing::Level;
 use tracing_subscriber::layer::SubscriberExt;

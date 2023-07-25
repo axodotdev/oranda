@@ -1,7 +1,7 @@
 use camino::Utf8PathBuf;
 use schemars::JsonSchema;
 use serde::Deserialize;
-use std::path::PathBuf;
+use std::path::Path;
 
 use crate::config::{ApplyLayer, ApplyOptExt};
 use crate::data::funding::FundingType;
@@ -59,7 +59,7 @@ impl ApplyLayer for FundingConfig {
 
 impl FundingConfig {
     /// If we have a FUNDING.yml file, try to find it. If we fail, we disable funding support.
-    pub fn find_paths(config: &mut Option<Self>, start_dir: &PathBuf) -> Result<()> {
+    pub fn find_paths(config: &mut Option<Self>, start_dir: &Path) -> Result<()> {
         // If this is None, we were force-disabled and shouldn't auto-detect
         let Some(this) = config else {
             return Ok(())
