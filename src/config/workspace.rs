@@ -11,9 +11,11 @@ pub struct WorkspaceLayer {
     pub name: Option<String>,
     /// A list of workspace members
     pub members: Option<Vec<WorkspaceMember>>,
+    /// Whether to enable workspace autodetection
+    pub auto: Option<bool>,
 }
 
-#[derive(Debug, Serialize, Deserialize, JsonSchema, Clone)]
+#[derive(Debug, Serialize, Deserialize, JsonSchema, Clone, Hash, PartialEq, Eq)]
 #[serde(deny_unknown_fields)]
 pub struct WorkspaceMember {
     /// Slug for the generated URLs and directories
@@ -26,6 +28,7 @@ pub struct WorkspaceMember {
 pub struct WorkspaceConfig {
     pub name: Option<String>,
     pub members: Vec<WorkspaceMember>,
+    pub auto: bool,
 }
 
 impl Default for WorkspaceConfig {
@@ -33,6 +36,7 @@ impl Default for WorkspaceConfig {
         Self {
             name: Some("My Oranda Config".to_string()),
             members: Vec::new(),
+            auto: false,
         }
     }
 }
@@ -40,8 +44,13 @@ impl Default for WorkspaceConfig {
 impl ApplyLayer for WorkspaceConfig {
     type Layer = WorkspaceLayer;
     fn apply_layer(&mut self, layer: Self::Layer) {
-        let WorkspaceLayer { name, members } = layer;
+        let WorkspaceLayer {
+            name,
+            members,
+            auto,
+        } = layer;
         self.name.apply_opt(name);
         self.members.apply_val(members);
+        self.auto.apply_val(auto);
     }
 }
