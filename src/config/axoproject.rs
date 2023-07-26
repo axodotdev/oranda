@@ -20,7 +20,8 @@ pub struct AxoprojectLayer {
 impl AxoprojectLayer {
     /// Load package information about a single-package workspace, where the package is equal to the
     /// current working dir. This is in opposition to our workspace support, which needs to be
-    /// explicitly enabled. Used like this, we don't use axoproject's workspace-y features at all.
+    /// explicitly enabled. axoproject is workspace-aware, but we don't use the multi-package
+    /// workspace functionality it gives us when ran like this.
     pub fn load(project_root: Option<PathBuf>) -> Result<Option<AxoprojectLayer>> {
         // Start in the project root, or failing that current dir
         let start_dir = project_root.unwrap_or_else(|| {
