@@ -1985,6 +1985,7 @@ dependencies = [
  "serde",
  "serde_json",
  "serde_yaml",
+ "slug",
  "syntect",
  "thiserror",
  "tokio",

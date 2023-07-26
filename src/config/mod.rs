@@ -80,6 +80,7 @@
 use camino::Utf8PathBuf;
 use schemars::JsonSchema;
 use serde::Deserialize;
+use std::collections::HashSet;
 use tracing::instrument;
 
 use crate::errors::*;
@@ -146,8 +147,12 @@ impl Config {
     /// oranda.json.
     pub fn build_workspace_root(config_path: &Utf8PathBuf) -> Result<Config> {
         let conf = OrandaLayer::load(config_path)?;
+        // This will never be `None`, since we already appended a path to it before.
+        let root_path = config_path.parent().unwrap();
+        let workspace = AxoprojectLayer::load_workspace(root_path)?;
         let mut cfg = Config::default();
         cfg.apply_custom_layer(conf);
+        cfg.apply_project_workspace_layer(workspace);
         Ok(cfg)
     }
 
@@ -193,13 +198,40 @@ impl Config {
             let AxoprojectLayer {
                 project,
                 cargo_dist,
+                members: _,
             } = layer;
 
-            self.project.apply_layer(project);
+            self.project.apply_val_layer(project);
             if let Some(artifacts) = &mut self.components.artifacts {
                 artifacts.cargo_dist.apply_val(cargo_dist);
             }
         }
+    }
+
+    /// Apply the layer of config we computed from the workspace
+    fn apply_project_workspace_layer(&mut self, layer: Option<AxoprojectLayer>) {
+        // Don't do anything if we have no layer or no members in the layer.
+        if layer.is_none() {
+            return;
+        }
+        let layer = layer.unwrap();
+        if layer.members.is_none() {
+            return;
+        }
+
+        // We need to make sure that explicit workspace members override axoproject-derived ones,
+        // so we set up a set and insert the explicit members first.
+        let mut set = HashSet::new();
+        for member in &self.workspace.members {
+            set.insert(member.clone());
+        }
+        // We can then try and insert any "extra" workspace members that we found through axoproject.
+        let members = layer.members.unwrap();
+        for member in &members {
+            set.insert(member.clone());
+        }
+        // Convert the set into a Vec and override the existing members in our config with it.
+        self.workspace.members = set.into_iter().collect();
     }
 
     /// Apply the layer of config we computed from oranda.json

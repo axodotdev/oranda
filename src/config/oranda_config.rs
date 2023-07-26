@@ -43,7 +43,7 @@ impl OrandaLayer {
                 Ok(Some(data))
             }
             Err(_) => {
-                tracing::info!("No config found, using default values");
+                tracing::debug!("No config found, using default values");
                 Ok(None)
             }
         }
