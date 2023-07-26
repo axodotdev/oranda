@@ -17,7 +17,7 @@
                             {% for i in platform.installers %}
                                 {% set installer = artifacts.release.artifacts.installers[i] %}
                                 {# Select the first tab #}
-                                <li class="install-tab{% if simple_platforms and loop.first %} selected{% endif %}" data-id="{{ i }}" data-triple="{{ target }}">
+                                <li class="install-tab{% if simple_platforms and loop.first %} selected{% endif %}" data-id="{{ i }}" data-triple="{{ platform.target }}">
                                     {{ installer.label }}
                                 </li>
                             {% endfor %}
@@ -62,7 +62,7 @@
     {% endif %}
     <div class="mac-switch hidden">This project doesn't offer Apple Silicon downloads, but you can run Intel macOS binaries via Rosetta 2.</div>
 
-    {# Get the first target from the first platform (convert the map into a list of KV lists, and then get the list head twice) #}
+    {# Get the target from the first platform #}
     {% set first_target = artifacts.platforms_with_downloads | first | attr("target") %}
     <div class="bottom-options {% if simple_platforms and first_target != "all" %}one{% endif %}">
         <a href="{{ "artifacts/" | generate_link(layout.path_prefix) }}" class="backup-download primary">View all installation options</a>
