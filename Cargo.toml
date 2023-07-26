@@ -62,7 +62,7 @@ lto = "thin"
 # Config for 'cargo dist'
 [workspace.metadata.dist]
 # The preferred cargo-dist version to use in CI (Cargo.toml SemVer syntax)
-cargo-dist-version = "0.1.0-prerelease.3"
+cargo-dist-version = "0.1.0-prerelease.6"
 # The preferred Rust toolchain to use in CI (rustup toolchain syntax)
 rust-toolchain-version = "stable"
 # CI backends to support (see 'cargo dist generate-ci')
