@@ -36,7 +36,7 @@ impl Build {
         if let Some(config) = Site::get_workspace_config()? {
             let sites = Site::build_multi(&config)?;
             // FIXME: Let the user turn this off
-            if true {
+            if config.workspace.generate_index {
                 tracing::info!("Building workspace index page...");
                 let mut member_data = Vec::new();
                 for site in &sites {

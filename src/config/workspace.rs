@@ -9,6 +9,8 @@ use std::path::PathBuf;
 pub struct WorkspaceLayer {
     /// The top-level name to be used in the index page
     pub name: Option<String>,
+    /// Whether to generate an index page linking workspace members together
+    pub generate_index: Option<bool>,
     /// A list of workspace members
     pub members: Option<Vec<WorkspaceMember>>,
     /// Whether to enable workspace autodetection
@@ -27,6 +29,7 @@ pub struct WorkspaceMember {
 #[derive(Debug, Serialize, Clone)]
 pub struct WorkspaceConfig {
     pub name: Option<String>,
+    pub generate_index: bool,
     pub members: Vec<WorkspaceMember>,
     pub auto: bool,
 }
@@ -35,6 +38,7 @@ impl Default for WorkspaceConfig {
     fn default() -> Self {
         Self {
             name: Some("My Oranda Config".to_string()),
+            generate_index: true,
             members: Vec::new(),
             auto: false,
         }
@@ -47,9 +51,11 @@ impl ApplyLayer for WorkspaceConfig {
         let WorkspaceLayer {
             name,
             members,
+            generate_index,
             auto,
         } = layer;
         self.name.apply_opt(name);
+        self.generate_index.apply_val(generate_index);
         self.members.apply_val(members);
         self.auto.apply_val(auto);
     }
