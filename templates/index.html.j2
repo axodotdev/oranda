@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
-{% if page.artifacts %}
+{% if page.artifacts and page.artifacts.downloadable_files | length != 0 %}
     {% include "includes/artifacts_header.html" %}
 {% endif %}
 {{ markdown_content }}
