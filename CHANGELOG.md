@@ -11,9 +11,19 @@
 
   Details TBD
 
+### Fixes
+
+- **Display platforms alphabetically in install widget - [Plecra]/[pr544], [shadows-withal]/[i480]**
+
+  Platforms are now sorted alphabetically in the install widget dropdown. This is an improvement over the
+  previous unsorted state.
+
+[i480]: https://github.com/axodotdev/oranda/issues/480
 [i493]: https://github.com/axodotdev/oranda/issues/493
 [pr532]: https://github.com/axodotdev/oranda/pull/532
+[pr544]: https://github.com/axodotdev/oranda/pull/544
 [shadows-withal]: https://github.com/shadows-withal
+[Plecra]: https://github.com/Plecra
 [jamesmunns]: https://github.com/jamesmunns
 
 ## 0.2.0 - 2023-07-19
