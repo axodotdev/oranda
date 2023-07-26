@@ -3,12 +3,11 @@ use crate::data::workspaces::WorkspaceData;
 use crate::errors::Result;
 use crate::site::link::determine_path;
 use camino::Utf8PathBuf;
-use indexmap::IndexMap;
 use serde::Serialize;
 
 #[derive(Serialize, Debug)]
 pub struct WorkspaceIndexContext {
-    pub members: IndexMap<String, WorkspaceIndexMember>,
+    pub members: Vec<WorkspaceIndexMember>,
 }
 
 #[derive(Serialize, Debug)]
@@ -22,7 +21,7 @@ pub struct WorkspaceIndexMember {
 
 impl WorkspaceIndexContext {
     pub fn new(members: &Vec<WorkspaceData>, workspace_config: &Config) -> Result<Self> {
-        let mut map = IndexMap::new();
+        let mut ret = Vec::new();
         for member in members {
             let logo = if let Some(logo) = &member.config.styles.logo {
                 Some(Self::find_logo_path(logo, member, workspace_config)?)
@@ -36,10 +35,10 @@ impl WorkspaceIndexContext {
                 repository: member.config.project.repository.clone(),
                 logo,
             };
-            map.insert(member.slug.clone(), context);
+            ret.push(context);
         }
 
-        Ok(Self { members: map })
+        Ok(Self { members: ret })
     }
 
     fn find_logo_path(

@@ -78,9 +78,9 @@
 #![allow(clippy::derivable_impls)]
 
 use camino::Utf8PathBuf;
+use indexmap::IndexSet;
 use schemars::JsonSchema;
 use serde::Deserialize;
-use std::collections::HashSet;
 use tracing::instrument;
 
 use crate::errors::*;
@@ -221,7 +221,7 @@ impl Config {
 
         // We need to make sure that explicit workspace members override axoproject-derived ones,
         // so we set up a set and insert the explicit members first.
-        let mut set = HashSet::new();
+        let mut set = IndexSet::new();
         for member in &self.workspace.members {
             set.insert(member.clone());
         }
