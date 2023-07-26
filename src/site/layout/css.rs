@@ -1,10 +1,17 @@
-use std::env;
+use std::{env, sync::RwLock};
 
 use crate::errors::*;
 
 use axoasset::{Asset, LocalAsset};
 use camino::Utf8Path;
 use minifier::css;
+
+static CSS_CACHE: RwLock<Vec<CssItem>> = RwLock::new(Vec::new());
+
+struct CssItem {
+    release_tag: String,
+    contents: String,
+}
 
 fn concat_minify(css_files: &[String]) -> Result<String> {
     let mut css = String::new();
@@ -42,8 +49,32 @@ fn fetch_css(dist_dir: &str, release_tag: &str) -> Result<String> {
         Err(_) => {
             let filename = format!("oranda-{release_tag}.css");
             let dest_path = Utf8Path::new(dist_dir).join(&filename);
-            let oranda_css_response =
-                tokio::runtime::Handle::current().block_on(fetch_oranda(release_tag))?;
+
+            // Do we already have this value cached?
+            let cache_val = {
+                let cache = CSS_CACHE.read().expect("CSS Cache should not be poisoned");
+                cache
+                    .iter()
+                    .find(|elem| elem.release_tag.as_str() == release_tag)
+                    .map(|elem| elem.contents.clone())
+            };
+
+            let oranda_css_response = if let Some(c) = cache_val {
+                // Yes, we do!
+                c
+            } else {
+                // Nope, sure don't. Get it, and if we are successful, store it for next time.
+                let fresh =
+                    tokio::runtime::Handle::current().block_on(fetch_oranda(release_tag))?;
+
+                let mut cache = CSS_CACHE.write().expect("CSS Cache should not be poisoned");
+                cache.push(CssItem {
+                    release_tag: release_tag.to_string(),
+                    contents: fresh.clone(),
+                });
+                fresh
+            };
+
             axoasset::LocalAsset::write_new_all(&oranda_css_response, dest_path)?;
             Ok(filename)
         }
