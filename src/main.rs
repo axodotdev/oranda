@@ -1,9 +1,7 @@
 #![allow(clippy::uninlined_format_args)]
 
-use clap::builder::{PossibleValuesParser, TypedValueParser};
 use clap::{Parser, Subcommand};
 use miette::Report;
-use tracing::level_filters::LevelFilter;
 use tracing::subscriber::set_default;
 use tracing::Level;
 use tracing_subscriber::layer::SubscriberExt;
@@ -20,12 +18,10 @@ struct Cli {
     #[clap(subcommand)]
     command: Command,
 
-    /// How verbose logging should be (log level)
-    #[clap(long)]
-    #[clap(default_value_t = LevelFilter::WARN)]
-    #[clap(value_parser = PossibleValuesParser::new(["off", "error", "warn", "info", "debug", "trace"]).map(|s| s.parse::<LevelFilter>().expect("possible values are valid")))]
+    /// Whether to output more detailed debug information
+    #[clap(short, long)]
     #[clap(help_heading = "GLOBAL OPTIONS", global = true)]
-    pub verbose: LevelFilter,
+    pub verbose: bool,
 
     /// The format of the output
     #[clap(long, value_enum)]
@@ -47,7 +43,6 @@ fn main() {
     let cli = Cli::parse();
 
     axocli::CliAppBuilder::new("oranda")
-        .verbose(cli.verbose)
         .json_errors(cli.output_format == OutputFormat::Json)
         .start(cli, run);
 }
@@ -60,7 +55,12 @@ fn run(cli: &axocli::CliApp<Cli>) -> Result<(), Report> {
         .build()
         .expect("Initializing tokio runtime failed");
     let _guard = runtime.enter();
-    let sub_filter = tracing_subscriber::filter::Targets::new().with_target("oranda", Level::INFO);
+    let log_level = if cli.config.verbose {
+        Level::DEBUG
+    } else {
+        Level::INFO
+    };
+    let sub_filter = tracing_subscriber::filter::Targets::new().with_target("oranda", log_level);
     let sub = tracing_subscriber::registry()
         .with(formatter::CaptureFieldsLayer)
         .with(tracing_subscriber::fmt::layer().event_format(formatter::OrandaFormatter))

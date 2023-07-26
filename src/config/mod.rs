@@ -80,6 +80,7 @@
 use camino::Utf8PathBuf;
 use schemars::JsonSchema;
 use serde::Deserialize;
+use tracing::instrument;
 
 use crate::errors::*;
 
@@ -102,6 +103,7 @@ pub use components::{
 pub use marketing::{AnalyticsConfig, MarketingConfig, MarketingLayer, SocialConfig, SocialLayer};
 pub use workspace::{WorkspaceConfig, WorkspaceLayer};
 
+use crate::config::workspace::WorkspaceMember;
 pub use project::{ProjectConfig, ProjectLayer};
 pub use style::{StyleConfig, StyleLayer};
 
@@ -135,7 +137,7 @@ impl Config {
         // oranda.json layer
         cfg.apply_custom_layer(custom);
         // auto-detect layer
-        cfg.apply_autodetect_layer()?;
+        cfg.apply_autodetect_layer(None)?;
 
         Ok(cfg)
     }
@@ -155,10 +157,13 @@ impl Config {
     /// - "root" config keys that are inherited
     /// - its own oranda.json
     /// - autodetect
+    #[instrument("workspace_page", fields(prefix = prefix))]
     pub fn build_workspace_member(
         config_path: &Utf8PathBuf,
         root_config_path: &Utf8PathBuf,
         project_root: &Utf8PathBuf,
+        workspace_member: &WorkspaceMember,
+        prefix: Option<String>,
     ) -> Result<Config> {
         let member_conf = OrandaLayer::load(config_path)?;
         let root_conf = OrandaLayer::load(root_config_path)?;
@@ -168,7 +173,7 @@ impl Config {
         // in the top-level workspace config file.
         if let Some(member_conf) = &member_conf {
             if member_conf.workspace.is_some() {
-                tracing::warn!("A workspace member oranda.json contains workspace configuration! You likely want to set this in the root oranda-workspace.json.");
+                tracing::warn!("oranda.json contains workspace configuration! You likely want to set this in the root oranda-workspace.json.");
             }
         }
 
@@ -176,7 +181,7 @@ impl Config {
         cfg.apply_project_layer(project);
         cfg.apply_custom_layer(root_conf);
         cfg.apply_custom_layer(member_conf);
-        cfg.apply_autodetect_layer()?;
+        cfg.apply_autodetect_layer(Some(workspace_member))?;
 
         Ok(cfg)
     }
@@ -220,9 +225,14 @@ impl Config {
     }
 
     /// Apply the layer of config that does auto-detection of missing values
-    fn apply_autodetect_layer(&mut self) -> Result<()> {
-        MdBookConfig::find_paths(&mut self.components.mdbook)?;
-        FundingConfig::find_paths(&mut self.components.funding)?;
+    fn apply_autodetect_layer(&mut self, workspace_member: Option<&WorkspaceMember>) -> Result<()> {
+        // Find out if we need to start in another directory, in case we're working under a
+        // workspace. If not, we start in the current directory.
+        let start_dir = workspace_member
+            .map(|m| m.path.clone())
+            .unwrap_or(".".into());
+        MdBookConfig::find_paths(&mut self.components.mdbook, &start_dir)?;
+        FundingConfig::find_paths(&mut self.components.funding, &start_dir)?;
 
         Ok(())
     }

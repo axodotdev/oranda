@@ -1,6 +1,7 @@
 use camino::Utf8PathBuf;
 use schemars::JsonSchema;
 use serde::Deserialize;
+use std::path::Path;
 
 use crate::config::{ApplyLayer, ApplyOptExt};
 use crate::data::funding::FundingType;
@@ -58,7 +59,7 @@ impl ApplyLayer for FundingConfig {
 
 impl FundingConfig {
     /// If we have a FUNDING.yml file, try to find it. If we fail, we disable funding support.
-    pub fn find_paths(config: &mut Option<Self>) -> Result<()> {
+    pub fn find_paths(config: &mut Option<Self>, start_dir: &Path) -> Result<()> {
         // If this is None, we were force-disabled and shouldn't auto-detect
         let Some(this) = config else {
             return Ok(())
@@ -66,14 +67,15 @@ impl FundingConfig {
 
         // Try to auto-detect the FUNDING.yml if not specified
         if this.yml_path.is_none() {
-            let default_yml_path = Utf8PathBuf::from("./.github/FUNDING.yml");
+            let default_yml_path =
+                Utf8PathBuf::from(format!("{}/.github/FUNDING.yml", start_dir.display()));
             if default_yml_path.exists() {
                 this.yml_path = Some(default_yml_path.to_string());
             }
         }
         // Try to auto-detect funding.md if not specified
         if this.md_path.is_none() {
-            let default_md_path = Utf8PathBuf::from("./funding.md");
+            let default_md_path = Utf8PathBuf::from(format!("{}/funding.md", start_dir.display()));
             if default_md_path.exists() {
                 this.md_path = Some(default_md_path.to_string());
             }
