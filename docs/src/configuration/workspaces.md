@@ -56,6 +56,8 @@ workspace's members, as well as some quick info and metadata.
 ## List of workspace configuration keys
 
 - [name](#name) - set the overarching workspace name
+- [auto](#auto) - enable workspace autodetection
+- [generate_index](#generate_index) - disable generating a workspace index page
 - [members](#members) - list the workspace members
   - [members.slug](#membersslug) - the URL-safe slug to be used for this member
   - [members.path](#memberspath) - the path to this member's page source
@@ -66,6 +68,21 @@ workspace's members, as well as some quick info and metadata.
 
 Set the overarching workspace name. This is optional, and will fall back to "My Oranda Workspace" if not set (not very
 intuitive, I know).
+
+### auto
+
+> Added in version 0.3.0.
+
+Enables workspace autodetection if set to `true`. This will cause oranda to attempt to find any Cargo or NPM workspaces
+under the current directory, and to attempt to build all of its members (all members must therefore have at least a
+readme file). Members manually listed under the `members` key override these automatically detected workspace members.
+
+### generate_index
+
+> Added in version 0.3.0.
+
+If set to `false`, does not generate a workspace index page that links between all workspace members. Use this if you
+just want to use oranda's workspace functionality to build multiple unrelated sites in one go.
 
 ### members
 
