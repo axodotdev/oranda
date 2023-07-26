@@ -47,7 +47,7 @@ toml_edit = "0.19.9"
 schemars = { version = "0.8.12", features = ["indexmap1"] }
 indexmap = { version = "1.9.3", features = ["serde-1"] }
 pathdiff = { version = "0.2.1", features = ["camino"] }
-minijinja = { version = "1.0.3", features = ["loader"] }
+minijinja = { version = "1.0.3", features = ["loader", "preserve_order"] }
 include_dir = "0.7.3"
 
 [dev-dependencies]
