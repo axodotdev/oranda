@@ -18,12 +18,18 @@ type DownloadableFiles = Vec<(FileIdx, File, Vec<String>)>;
 /// In theory this should be BTreeMap or IndexMap but something in the pipeline from here to
 /// jinja seems to be forcing a sorting so it's deterministic..? Can't find docs for this.
 type Platforms = HashMap<TargetTriple, Vec<InstallerIdx>>;
+#[derive(Serialize, Debug)]
+pub struct Platform {
+    target: TargetTriple,
+    display_name: String,
+    installers: Vec<InstallerIdx>,
+}
 
 #[derive(Serialize, Debug)]
 pub struct ArtifactsContext {
     tag: String,
     formatted_date: Option<String>,
-    platforms_with_downloads: Platforms,
+    platforms_with_downloads: Vec<Platform>,
     downloadable_files: DownloadableFiles,
     release: Release,
     os_script: String,
@@ -35,7 +41,16 @@ pub fn template_context(context: &Context, config: &Config) -> Result<Option<Art
         return Ok(None);
     };
     let os_script = javascript::build_os_script_path(&config.build.path_prefix);
-    let platforms_with_downloads = filter_platforms(release);
+    let platforms_with_downloads = filter_platforms(release)
+        .into_iter()
+        .map(|(target, installers)| Platform {
+            display_name: triple_to_display_name(&target)
+                .map(|s| s.to_string())
+                .unwrap_or_else(|| target.clone()),
+            target,
+            installers,
+        })
+        .collect::<Vec<_>>();
 
     let mut downloadable_files: Vec<_> = release
         .artifacts
