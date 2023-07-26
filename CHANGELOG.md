@@ -18,6 +18,11 @@
   Platforms are now sorted alphabetically in the install widget dropdown. This is an improvement over the
   previous unsorted state.
 
+- **Show prerelease contents on changelog pages - [shadows-withal]/[pr549]**
+
+  This is a simple bug fix. Previously, we accidentally hid the body of a prerelease on its own separate changelog page
+  (but mysteriously, it showed up on the main changelog page when prereleases were toggled!)
+
 [i480]: https://github.com/axodotdev/oranda/issues/480
 [i493]: https://github.com/axodotdev/oranda/issues/493
 [pr532]: https://github.com/axodotdev/oranda/pull/532

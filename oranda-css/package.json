@@ -1,6 +1,6 @@
 {
   "name": "oranda-css",
-  "version": "0.3.0-prerelease.2",
+  "version": "0.3.0-prerelease.3",
   "description": "",
   "main": "tailwind.config.js",
   "scripts": {
