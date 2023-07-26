@@ -1,4 +1,4 @@
-<section class="release {% if release.is_prerelease %}pre-release hidden{% endif %}">
+<section class="release {% if release.is_prerelease %}pre-release {% if not is_page %}hidden{% endif %}{% endif %}">
     <h2 class="{% if is_page %}hidden{% endif %}" id="tag-{{ release.version_tag }}">
         <a href="{{ release.version_tag }}/">
             {% if release.name %}
