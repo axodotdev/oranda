@@ -52,6 +52,12 @@ impl GithubRepoInput {
                 details: e,
             }
         })?;
+        if parsed.domain() != Some("github.com") {
+            return Err(OrandaError::RepoParseError {
+                repo: repo_string,
+                details: miette!("For now, we can only detect releases (artifacts.auto: true) for github repository urls.")
+            });
+        }
         let segment_list = parsed.path_segments().map(|c| c.collect::<Vec<_>>());
         if let Some(segments) = segment_list {
             if segments.len() >= 2 {
@@ -70,7 +76,7 @@ impl GithubRepoInput {
     }
 
     fn parse_ssh(repo_string: String) -> Result<GithubRepo> {
-        let core = Self::remove_git_suffix(Self::remove_git_prefix(repo_string.clone()));
+        let core = Self::remove_git_suffix(Self::remove_git_prefix(repo_string.clone())?);
         let segments: Vec<&str> = core.split('/').collect();
         if !segments.is_empty() && segments.len() >= 2 {
             let owner = segments[0].to_string();
@@ -86,12 +92,15 @@ impl GithubRepoInput {
                 })
     }
 
-    fn remove_git_prefix(s: String) -> String {
+    fn remove_git_prefix(s: String) -> Result<String> {
         let prefix = "git@github.com:";
         if s.starts_with(prefix) {
-            s.replace(prefix, "")
+            Ok(s.replace(prefix, ""))
         } else {
-            s
+            Err(OrandaError::RepoParseError {
+                repo: s,
+                details: miette!("For now, we can only detect releases (artifacts.auto: true) for github repository urls.")
+            })
         }
     }
 
