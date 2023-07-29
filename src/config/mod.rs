@@ -78,7 +78,6 @@
 #![allow(clippy::derivable_impls)]
 
 use camino::Utf8PathBuf;
-use indexmap::IndexSet;
 use schemars::JsonSchema;
 use serde::Deserialize;
 use tracing::instrument;
@@ -144,15 +143,31 @@ impl Config {
     }
 
     /// Build out a config for the workspace root, which is only interested in what's in the
-    /// oranda.json.
+    /// oranda_workspace.json.
     pub fn build_workspace_root(config_path: &Utf8PathBuf) -> Result<Config> {
+        // This loads the `oranda_workspace.json`
         let conf = OrandaLayer::load(config_path)?;
-        // This will never be `None`, since we already appended a path to it before.
-        let root_path = config_path.parent().unwrap();
-        let workspace = AxoprojectLayer::load_workspace(root_path)?;
+
+        // Does the loaded value exist and have a defined workspace member list?
+        let set_members = conf
+            .as_ref()
+            .is_some_and(|c| c.workspace.as_ref().is_some_and(|w| w.members.is_some()));
+
         let mut cfg = Config::default();
         cfg.apply_custom_layer(conf);
-        cfg.apply_project_workspace_layer(workspace);
+
+        // If no members were set, attempt to set the member list from the
+        // detected list
+        if !set_members {
+            // This will never be `None`, since we already appended a path to it before.
+            let root_path = config_path.parent().unwrap();
+            let workspace = AxoprojectLayer::load_workspace(root_path)?;
+
+            if let Some(detected_members) = workspace.and_then(|w| w.members) {
+                cfg.workspace.members = detected_members;
+            }
+        }
+
         Ok(cfg)
     }
 
@@ -206,32 +221,6 @@ impl Config {
                 artifacts.cargo_dist.apply_val(cargo_dist);
             }
         }
-    }
-
-    /// Apply the layer of config we computed from the workspace
-    fn apply_project_workspace_layer(&mut self, layer: Option<AxoprojectLayer>) {
-        // Don't do anything if we have no layer or no members in the layer.
-        if layer.is_none() {
-            return;
-        }
-        let layer = layer.unwrap();
-        if layer.members.is_none() {
-            return;
-        }
-
-        // We need to make sure that explicit workspace members override axoproject-derived ones,
-        // so we set up a set and insert the explicit members first.
-        let mut set = IndexSet::new();
-        for member in &self.workspace.members {
-            set.insert(member.clone());
-        }
-        // We can then try and insert any "extra" workspace members that we found through axoproject.
-        let members = layer.members.unwrap();
-        for member in &members {
-            set.insert(member.clone());
-        }
-        // Convert the set into a Vec and override the existing members in our config with it.
-        self.workspace.members = set.into_iter().collect();
     }
 
     /// Apply the layer of config we computed from oranda.json
