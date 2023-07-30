@@ -77,6 +77,8 @@
 // to keep things very explicit and clear
 #![allow(clippy::derivable_impls)]
 
+use std::convert::identity;
+
 use camino::Utf8PathBuf;
 use schemars::JsonSchema;
 use serde::Deserialize;
@@ -149,16 +151,27 @@ impl Config {
         let conf = OrandaLayer::load(config_path)?;
 
         // Does the loaded value exist and have a defined workspace member list?
-        let set_members = conf
+        let (set_members, set_auto) = conf
             .as_ref()
-            .is_some_and(|c| c.workspace.as_ref().is_some_and(|w| w.members.is_some()));
+            // Is there a conf?
+            .and_then(|c| {
+                // Is there a workspace?
+                c.workspace.as_ref().and_then(|w| {
+                    // Is there a members field?
+                    let set_members = w.members.is_some();
+                    // Is there an auto field, and is it set true?
+                    let set_auto = w.auto.is_some_and(identity);
+                    Some((set_members, set_auto))
+                })
+            })
+            .unwrap_or((false, false));
 
         let mut cfg = Config::default();
         cfg.apply_custom_layer(conf);
 
         // If no members were set, attempt to set the member list from the
         // detected list
-        if !set_members {
+        if !set_members && set_auto {
             // This will never be `None`, since we already appended a path to it before.
             let root_path = config_path.parent().unwrap();
             let workspace = AxoprojectLayer::load_workspace(root_path)?;
