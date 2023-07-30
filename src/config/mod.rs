@@ -156,12 +156,12 @@ impl Config {
             // Is there a conf?
             .and_then(|c| {
                 // Is there a workspace?
-                c.workspace.as_ref().and_then(|w| {
+                c.workspace.as_ref().map(|w| {
                     // Is there a members field?
                     let set_members = w.members.is_some();
                     // Is there an auto field, and is it set true?
                     let set_auto = w.auto.is_some_and(identity);
-                    Some((set_members, set_auto))
+                    (set_members, set_auto)
                 })
             })
             .unwrap_or((false, false));
