@@ -11,6 +11,11 @@
 
   Details TBD
 
+- **Basic CSS caching - [jamesmunns]/[pr551]**
+
+  In line with workspace support, oranda will now attempt to keep already downloaded versions of its CSS in-memory, which
+  helps tremendously when you have a lot of workspace members all using the latest CSS version.
+
 ### Fixes
 
 - **Display platforms alphabetically in install widget - [Plecra]/[pr544], [shadows-withal]/[i480]**
@@ -23,10 +28,18 @@
   This is a simple bug fix. Previously, we accidentally hid the body of a prerelease on its own separate changelog page
   (but mysteriously, it showed up on the main changelog page when prereleases were toggled!)
 
+- **Restrict parsed repo URLs to GitHub only - [Plecra]/[pr553]**
+
+  Right now, we only support GitHub repository URLs to get context from. This fixed an issue where technically, oranda
+  would attempt to do this with GitLab URLs as well, which would cause unintended behavior.
+
 [i480]: https://github.com/axodotdev/oranda/issues/480
 [i493]: https://github.com/axodotdev/oranda/issues/493
 [pr532]: https://github.com/axodotdev/oranda/pull/532
 [pr544]: https://github.com/axodotdev/oranda/pull/544
+[pr549]: https://github.com/axodotdev/oranda/pull/549
+[pr551]: https://github.com/axodotdev/oranda/pull/551
+[pr553]: https://github.com/axodotdev/oranda/pull/553
 [shadows-withal]: https://github.com/shadows-withal
 [Plecra]: https://github.com/Plecra
 [jamesmunns]: https://github.com/jamesmunns
