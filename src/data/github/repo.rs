@@ -28,13 +28,15 @@ enum GithubRepoInput {
 }
 
 impl GithubRepoInput {
-    fn new(repo_string: String) -> Self {
-        if repo_string.starts_with("https") {
-            Self::Url(repo_string)
+    fn new(repo_string: String) -> Result<Self> {
+        // Handle git+https just the same as https
+        if repo_string.starts_with("https") || repo_string.starts_with("git+https") {
+            Ok(Self::Url(repo_string))
         } else if repo_string.starts_with("git@") {
-            Self::Ssh(repo_string)
+            Ok(Self::Ssh(repo_string))
         } else {
-            todo!()
+            let err = OrandaError::UnknownRepoStyle { url: repo_string };
+            Err(err)
         }
     }
 
@@ -87,9 +89,9 @@ impl GithubRepoInput {
             }
         }
         Err(OrandaError::RepoParseError {
-                    repo: repo_string,
-                    details: miette!("We found a repo url but we had trouble parsing it. Please make sure it's entered correctly. This may be an error, and if so you should file an issue."),
-                })
+            repo: repo_string,
+            details: miette!("We found a repo url but we had trouble parsing it. Please make sure it's entered correctly. This may be an error, and if so you should file an issue."),
+        })
     }
 
     fn remove_git_prefix(s: String) -> Result<String> {
@@ -118,7 +120,7 @@ impl GithubRepo {
     /// Constructs a new Github repository from a "owner/name" string. Notably, this does not check
     /// whether the repo actually exists.
     pub fn from_url(repo_url: &str) -> Result<Self> {
-        GithubRepoInput::new(repo_url.to_string()).parse()
+        GithubRepoInput::new(repo_url.to_string())?.parse()
     }
 
     pub fn has_releases(&self) -> Result<bool> {

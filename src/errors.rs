@@ -62,6 +62,10 @@ pub enum OrandaError {
         details: axoasset::AxoassetError,
     },
 
+    #[error("Your repository URL {url} couldn't be parsed.")]
+    #[diagnostic(help("oranda only supports URLs you can also use with Git."))]
+    UnknownRepoStyle { url: String },
+
     #[error("Could not find any releases from {repo_owner}/{repo_name} with a cargo-dist compatible `dist-manifest.json`.")]
     NoCargoDistReleasesFound {
         repo_owner: String,
