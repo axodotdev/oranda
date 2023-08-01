@@ -1,5 +1,5 @@
 <section class="release {% if release.is_prerelease %}pre-release {% if not is_page %}hidden{% endif %}{% endif %}">
-    <h2 class="{% if is_page %}hidden{% endif %}" id="tag-{{ release.version_tag }}">
+    {% if not is_page %}<h2 id="tag-{{ release.version_tag }}">
         <a href="{{ release.version_tag }}/">
             {% if release.name %}
                 {{ release.name }}
@@ -7,7 +7,7 @@
                 {{ release.version_tag }}
             {% endif %}
         </a>
-    </h2>
+    </h2>{% endif %}
     <div class="release-info">
         <span class="flex items-center gap-2">
             {% include "icons/tag.html" %}
