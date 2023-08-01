@@ -95,16 +95,18 @@ impl Site {
         Self::print_plan(config);
 
         if needs_context {
-            let mut context = match &config.project.repository {
-                Some(repo_url) => Context::new_github(
+            let mut context = config.project.repository.as_ref().and_then(|repo_url| {
+                Context::new_github(
                     repo_url,
                     &config.project,
                     config.components.artifacts.as_ref(),
-                )?,
-                None => {
-                    Context::new_current(&config.project, config.components.artifacts.as_ref())?
-                }
-            };
+                ).ok().or_else(|| {
+                    tracing::warn!("Could not identify releases available from {}. note: only GitHub is currently supported", repo_url);
+                    None
+                })
+            }).map(Ok).unwrap_or_else(|| {
+                Context::new_current(&config.project, config.components.artifacts.as_ref())
+            })?;
             if config.components.artifacts_enabled() {
                 if let Some(latest) = context.latest_mut() {
                     // Give especially nice treatment to the latest release and make

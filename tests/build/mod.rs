@@ -25,6 +25,15 @@ fn it_adds_additional_css() {
         .contents
         .contains(r#"<link rel="stylesheet" href="/custom.css" />"#));
 }
+#[test]
+fn it_can_point_to_custom_repository() {
+    let _guard = TEST_RUNTIME.enter();
+    let (_t, temp_dir) = temp_build_dir();
+    let mut config = oranda_config::cargo_dist(temp_dir);
+    config.project.repository = Some("https://github.com/axodotdev/privaterepo".into());
+    config.components.artifacts.as_mut().unwrap().auto = true;
+    oranda::site::Site::build_single(&config, None).unwrap();
+}
 
 #[test]
 fn it_renders_changelog_with_no_cargo_dist() {
