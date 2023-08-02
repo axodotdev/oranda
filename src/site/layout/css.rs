@@ -92,10 +92,11 @@ pub fn build_css(dist_dir: &str) -> Result<()> {
         )?;
 
         // On non-Windows platforms, we need to mark the file as executable
-        if !double.starts_with("windows") {
-            Command::new("chmod")
-                .args(["+x", binary_path.as_str()])
-                .output()?;
+        #[cfg(target_family = "unix")]
+        {
+            use std::os::unix::prelude::PermissionsExt;
+            let user_execute = std::fs::Permissions::from_mode(0o755);
+            std::fs::set_permissions(&binary_path, user_execute)?;
         }
     }
 
@@ -113,6 +114,11 @@ pub fn build_css(dist_dir: &str) -> Result<()> {
         ])
         .output()?;
     std::io::stderr().write_all(&output.stderr)?;
+    output
+        .status
+        .success()
+        .then_some(true)
+        .expect("Tailwind failed to compile CSS!");
 
     Ok(())
 }
