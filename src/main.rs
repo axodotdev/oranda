@@ -7,7 +7,7 @@ use tracing::Level;
 use tracing_subscriber::layer::SubscriberExt;
 
 mod commands;
-use commands::{Build, ConfigSchema, Dev, Serve};
+use commands::{Build, ConfigSchema, Dev, GenerateCss, Serve};
 
 pub mod formatter;
 use formatter::OutputFormat;
@@ -37,6 +37,8 @@ enum Command {
     Serve(Serve),
     #[clap(hide = true)]
     ConfigSchema(ConfigSchema),
+    #[clap(hide = true)]
+    GenerateCss(GenerateCss),
 }
 
 fn main() {
@@ -72,6 +74,7 @@ fn run(cli: &axocli::CliApp<Cli>) -> Result<(), Report> {
         Command::Dev(cmd) => cmd.clone().run()?,
         Command::Serve(cmd) => cmd.run()?,
         Command::ConfigSchema(cmd) => cmd.run()?,
+        Command::GenerateCss(cmd) => cmd.run()?,
     };
     Ok(())
 }

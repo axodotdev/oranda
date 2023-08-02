@@ -59,7 +59,7 @@ fn it_adds_oranda_css() {
     let (_t, temp_dir) = temp_build_dir();
     let config = oranda_config::no_artifacts(temp_dir);
     let page = page::index(&config);
-    let filename = format!("oranda-{ORANDA_CSS_TAG}.css");
+    let filename = format!("oranda.css");
     assert!(page.contents.contains(&filename));
 }
 
@@ -69,9 +69,10 @@ fn it_adds_oranda_css_with_pinned_version() {
     let (_t, temp_dir) = temp_build_dir();
     let config = oranda_config::pinned_css(temp_dir);
     let page = page::index(&config);
+    dbg!(&page.contents);
     assert!(page
         .contents
-        .contains(r#"<link rel="stylesheet" href="/oranda-css-v0.0.3.css" />"#));
+        .contains(r#"<link rel="stylesheet" href="/oranda-v0.1.0.css" />"#));
 }
 
 #[test]

@@ -48,15 +48,11 @@ jobs:
         with:
           ref: ${{ github.event.workflow_run.head_branch }}
           fetch-depth: 0
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - id: build-css
+      - name: Install oranda and build CSS
         run: |
-          cd oranda-css
-          yarn install
-          # Run tailwind build
-          yarn run build
+          echo "uploading CSS to ${{ github.event.workflow_run.head_branch }}"
+          curl --proto '=https' --tlsv1.2 -LsSf https://github.com/axodotdev/oranda/releases/download/${{ github.event.workflow_run.head_branch }}/oranda-installer.sh | sh
+          oranda generate-css
           ls dist
           echo "built css!"
           # Upload css to the Github Release™
