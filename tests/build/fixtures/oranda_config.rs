@@ -75,7 +75,7 @@ pub fn pinned_css(temp_dir: String) -> Config {
             additional_css: vec![String::from(
                 "https://raw.githubusercontent.com/axodotdev/axii/main/css/main.css",
             )],
-            oranda_css_version: "css-v0.0.3".to_string(),
+            oranda_css_version: "v0.1.0".to_string(),
             ..Default::default()
         },
         ..Default::default()

@@ -42,11 +42,8 @@ pub struct AdditionalPageContext {
 
 impl LayoutContext {
     pub fn new(config: &Config) -> Result<Self> {
-        let css_path = css::get_css_link(
-            &config.build.dist_dir,
-            &config.build.path_prefix,
-            &config.styles.oranda_css_version,
-        )?;
+        let css_path =
+            css::get_css_link(&config.build.path_prefix, &config.styles.oranda_css_version)?;
         let additional_pages = if config.build.additional_pages.is_empty() {
             None
         } else {
@@ -136,7 +133,6 @@ impl LayoutContext {
     /// Generates a new layout context to use for the workspace index page.
     pub fn new_for_workspace_index(workspace_config: &Config) -> Result<Self> {
         let css_path = css::get_css_link(
-            &workspace_config.build.dist_dir,
             &workspace_config.build.path_prefix,
             &workspace_config.styles.oranda_css_version,
         )?;

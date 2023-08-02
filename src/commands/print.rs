@@ -13,3 +13,14 @@ impl ConfigSchema {
         Ok(())
     }
 }
+
+#[derive(Debug, Parser)]
+pub struct GenerateCss {}
+
+impl GenerateCss {
+    pub fn run(&self) -> Result<()> {
+        oranda::site::layout::css::build_css("dist")?;
+        tracing::info!("CSS placed in dist/oranda.css");
+        Ok(())
+    }
+}

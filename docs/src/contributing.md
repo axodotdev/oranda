@@ -19,17 +19,15 @@ cargo watch -x "run dev" --ignore "*.png"  --ignore "*.jpg"
 
 ## ...plus working on the CSS
 
-To recompile the CSS on changes, in another Terminal, run:
+As long as you're working with a development build of oranda (by running `cargo run` without the `--release` flag),
+oranda will automatically download a version of the Tailwind compiler and compile the CSS from your
+local checkout for you.
+
+`oranda dev` doesn't automatically reload on CSS changes (because it's meant to be used by users),
+but you can include the CSS directory manually like such:
 
 ```shell
-yarn install
-yarn dev
-```
-
-You can then include your locally built CSS in your `cargo-watch` command:
-
-```shell
-ORANDA_CSS=oranda-css/dist/oranda.css cargo watch -x "run dev -i oranda-css/dist/oranda.css"
+cargo run dev -i oranda-css/css/
 ```
 
 ## Updating syntax highlighting languages

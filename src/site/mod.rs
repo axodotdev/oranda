@@ -80,6 +80,7 @@ impl Site {
     #[instrument("workspace_page", fields(prefix = prefix))]
     pub fn build_single(config: &Config, prefix: Option<String>) -> Result<Site> {
         Self::clean_dist_dir(&config.build.dist_dir)?;
+        css::place_css(&config.build.dist_dir, &config.styles.oranda_css_version)?;
         let templates = Templates::new(config)?;
 
         let mut pages = vec![];
