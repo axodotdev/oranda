@@ -1,6 +1,12 @@
 [package]
 name = "oranda-generate-css"
-version = "0.1.0"
+version = "0.3.0-prerelease.4"
+description = "the part of oranda that generates CSS"
+repository = "https://github.com/axodotdev/oranda"
+homepage = "https://opensource.axo.dev/oranda"
+edition = "2021"
+authors = ["Axo Developer Co. <hello@axo.dev>"]
+license = "MIT OR Apache-2.0"
 
 [dependencies]
 directories = "5.0.1"

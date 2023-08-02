@@ -1998,7 +1998,7 @@ dependencies = [
 
 [[package]]
 name = "oranda-generate-css"
-version = "0.1.0"
+version = "0.3.0-prerelease.4"
 dependencies = [
  "axoasset",
  "camino",
