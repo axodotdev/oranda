@@ -1,5 +1,4 @@
 use assert_fs::TempDir;
-use oranda::config::style::ORANDA_CSS_TAG;
 
 mod fixtures;
 use super::utils::tokio_utils::TEST_RUNTIME;
@@ -59,7 +58,7 @@ fn it_adds_oranda_css() {
     let (_t, temp_dir) = temp_build_dir();
     let config = oranda_config::no_artifacts(temp_dir);
     let page = page::index(&config);
-    let filename = format!("oranda.css");
+    let filename = "oranda.css".to_string();
     assert!(page.contents.contains(&filename));
 }
 
