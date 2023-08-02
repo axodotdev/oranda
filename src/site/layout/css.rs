@@ -92,9 +92,11 @@ pub fn build_css(dist_dir: &str) -> Result<()> {
         )?;
 
         // On non-Windows platforms, we need to mark the file as executable
-        Command::new("chmod")
-            .args(["+x", binary_path.as_str()])
-            .output()?;
+        if !double.starts_with("windows") {
+            Command::new("chmod")
+                .args(["+x", binary_path.as_str()])
+                .output()?;
+        }
     }
 
     tracing::info!("Building oranda CSS using Tailwind...");
