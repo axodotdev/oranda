@@ -19,8 +19,8 @@ pub struct GenerateCss {}
 
 impl GenerateCss {
     pub fn run(&self) -> Result<()> {
-        oranda_generate_css::build_css("dist")?;
-        tracing::info!("CSS placed in dist/oranda.css");
+        oranda_generate_css::build_css("oranda-css/dist")?;
+        tracing::info!("CSS placed in oranda-css/dist/oranda.css");
         Ok(())
     }
 }
