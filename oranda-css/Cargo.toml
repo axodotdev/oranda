@@ -1,0 +1,13 @@
+[package]
+name = "oranda-generate-css"
+version = "0.1.0"
+
+[dependencies]
+directories = "5.0.1"
+camino = "1.1.4"
+axoasset = "0.4.0"
+tracing = "0.1"
+tokio = { version = "1.20.1", features = ["full"] }
+reqwest = { version = "0.11.13", default-features = false, features = ["json", "rustls-tls"] }
+miette = "5.7.0"
+thiserror = "1.0.37"
