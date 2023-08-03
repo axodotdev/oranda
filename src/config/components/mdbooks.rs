@@ -1,4 +1,3 @@
-use camino::Utf8PathBuf;
 use schemars::JsonSchema;
 use serde::Deserialize;
 use std::path::Path;
@@ -83,19 +82,12 @@ impl MdBookConfig {
 
         if this.path.is_none() {
             // Ok time to auto-detect, try these dirs for a book.toml
-            let possible_paths: Vec<String> = vec!["/", "book/", "docs/"]
-                .iter()
-                .map(|p| {
-                    let mut path = start_dir.to_path_buf();
-                    path.push(p);
-                    path.display().to_string()
-                })
-                .collect();
+            let possible_paths = vec!["./", "./book/", "./docs/"];
             for book_dir in possible_paths {
-                let book_path = Utf8PathBuf::from(&book_dir).join("book.toml");
+                let book_path = start_dir.join(book_dir).join("book.toml");
                 if book_path.exists() {
                     // nice, use it
-                    this.path = Some(book_dir);
+                    this.path = Some(book_dir.to_owned());
                     return Ok(());
                 }
             }
