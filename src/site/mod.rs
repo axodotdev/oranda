@@ -39,8 +39,7 @@ impl Site {
     pub fn build_multi(workspace_config: &Config) -> Result<Vec<Site>> {
         tracing::info!("Workspace detected, gathering info...");
         // We assume the root path is wherever oranda-workspace.json is located (current dir)
-        let root_path = Utf8PathBuf::from_path_buf(std::env::current_dir()?.canonicalize()?)
-            .unwrap_or_default();
+        let root_path = Utf8PathBuf::from_path_buf(std::env::current_dir()?).unwrap_or_default();
 
         let mut workspace_config_path = root_path.clone();
         workspace_config_path.push("oranda-workspace.json");
