@@ -40,7 +40,7 @@ pub fn get_css_link(path_prefix: &Option<String>, release_tag: &str) -> Result<S
 pub fn place_css(dist_dir: &str, release_tag: &str) -> Result<()> {
     // Even if you're running a development build, we still respect the custom CSS version preference
     // by falling back to fetching said version from GitHub.
-    if cfg!(debug_assertions) && release_tag == ORANDA_CSS_TAG {
+    if release_tag == ORANDA_CSS_TAG {
         // If we're running a development build, we fetch a Tailwind binary and compile the CSS
         // on the spot. This is useful if we're working on oranda-css locally.
         #[cfg(debug_assertions)]

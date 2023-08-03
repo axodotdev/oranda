@@ -53,14 +53,14 @@ pathdiff = { version = "0.2.1", features = ["camino"] }
 minijinja = { version = "1.0.3", features = ["loader", "preserve_order"] }
 include_dir = "0.7.3"
 slug = "0.1.4"
-oranda-generate-css = "0.3.0-prerelease.4"
+oranda-generate-css = { version = "0.3.0-prerelease.4", path = "generate-css" }
 
 [dev-dependencies]
 assert_cmd = "2"
 assert_fs = "1.0.7"
 
 [build-dependencies]
-oranda-generate-css = "0.3.0-prerelease.4"
+oranda-generate-css = { version = "0.3.0-prerelease.4", path = "generate-css" }
 
 # The profile that 'cargo dist' will build with
 [profile.dist]

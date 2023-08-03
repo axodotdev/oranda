@@ -15,6 +15,7 @@ use std::io::Write;
 use std::process::Command;
 
 const CSS_SRC_PATH: &str = "oranda-css/css/main.css";
+pub const DEFAULT_CSS_OUTPUT_DIR: &str = "oranda-css/dist";
 
 pub fn build_css(dist_dir: &str) -> Result<()> {
     // Fetch our cache dir
@@ -61,7 +62,10 @@ pub fn build_css(dist_dir: &str) -> Result<()> {
     }
 
     tracing::info!("Building oranda CSS using Tailwind...");
-    let css_src_path = Utf8PathBuf::from(CSS_SRC_PATH);
+    let manifest_path =
+        std::env::var("CARGO_MANIFEST_DIR").expect("CARGO_MANIFEST_DIR is not set!");
+    let mut css_src_path = Utf8PathBuf::from(manifest_path);
+    css_src_path.push(CSS_SRC_PATH);
     let output = Command::new(binary_path)
         .args([
             "-c",

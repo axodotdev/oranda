@@ -1977,7 +1977,7 @@ dependencies = [
  "minijinja",
  "notify-debouncer-mini",
  "octolotl",
- "oranda-generate-css 0.3.0-prerelease.4 (registry+https://github.com/rust-lang/crates.io-index)",
+ "oranda-generate-css",
  "pathdiff",
  "reqwest",
  "schemars",
@@ -1999,22 +1999,6 @@ dependencies = [
 [[package]]
 name = "oranda-generate-css"
 version = "0.3.0-prerelease.4"
-dependencies = [
- "axoasset",
- "camino",
- "directories",
- "miette",
- "reqwest",
- "thiserror",
- "tokio",
- "tracing",
-]
-
-[[package]]
-name = "oranda-generate-css"
-version = "0.3.0-prerelease.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3ebe292d147da0b143b8f23af77d3c3c739bb548bdd23987fec9372c8e76c446"
 dependencies = [
  "axoasset",
  "camino",
