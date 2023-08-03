@@ -21,13 +21,8 @@ html {
 }
 
 body {
-  background-color: var(--light-color);
-  color: var(--dark-color);
-}
-
-.dark body {
-  background-color: var(--dark-color);
-  color: var(--light-color);
+  background-color: var(--bg-color);
+  color: var(--fg-color);
 }
 
 /* TEXT */
@@ -101,11 +96,7 @@ table td > code {
 
 table tbody tr {
   @apply border-t;
-  border-color: var(--dark-color);
-}
-
-.dark table tbody tr {
-  border-color: var(--light-color);
+  border-color: var(--fg-color);
 }
 
 div.table {
@@ -114,20 +105,12 @@ div.table {
 
 div.table .th {
   @apply text-left uppercase font-bold border-t text-lg p-4;
-  border-color: var(--dark-color);
-}
-
-.dark div.table .th {
-  border-color: var(--light-color);
+  border-color: var(--fg-color);
 }
 
 div.table span:not(.th) {
   @apply text-sm font-mono border-t p-4;
-  border-color: var(--dark-color);
-}
-
-.dark div.table span:not(.th) {
-  border-color: var(--light-color);
+  border-color: var(--fg-color);
 }
 
 /* LISTS */

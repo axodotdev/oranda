@@ -1,10 +1,31 @@
 :root {
-    --dark-color: #141414;
-    --light-color: #ffffff;
-    --link-color: #0284c7;
+    /* Base colors for text and background */
+    --dark-fg-color: #ffffff;
+    --light-fg-color: #141414;
+    --light-bg-color: var(--dark-fg-color);
+    --dark-bg-color: var(--light-fg-color);
+    --fg-color: var(--light-fg-color);
+    --bg-color: var(--light-bg-color);
+
+    /* Link colors */
+    --light-link-color: #0284c7;
+    --dark-link-color: #8BB9FE;
+    --link-color: var(--light-link-color);
+
+    /* Emphasis colors for text and background */
     --light-highlight-bg-color: #ededed;
     --light-highlight-fg-color: #595959;
     --dark-highlight-bg-color: #27272a;
     --dark-highlight-fg-color: #ededed;
+    --highlight-fg-color: var(--light-highlight-fg-color);
+    --highlight-bg-color: var(--light-highlight-bg-color);
     --font-face: "Fira Sans", sans-serif;
+}
+
+:root.dark {
+    --fg-color: var(--dark-fg-color);
+    --bg-color: var(--dark-bg-color);
+    --link-color: var(--dark-link-color);
+    --highlight-fg-color: var(--dark-highlight-fg-color);
+    --highlight-bg-color: var(--dark-highlight-bg-color);
 }

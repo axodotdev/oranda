@@ -5,33 +5,24 @@
 /* A mono-color button */
 .button.primary {
   @apply border-transparent;
-  color: var(--light-color);
-  background-color: var(--dark-color);
-}
-
-.dark .button.primary {
-  color: var(--dark-color);
-  background-color: var(--light-color);
+  color: var(--fg-color);
+  background-color: var(--bg-color);
 }
 
 /* A duo-color button that changes when you hover over it. */
 .button.secondary {
-  color: var(--dark-color);
-  background-color: var(--light-color);
-  border-color: var(--dark-color);
+  color: var(--fg-color);
+  background-color: var(--bg-color);
+  border-color: var(--fg-color);
 }
 
 .button.secondary:hover {
-  color: var(--light-color);
-  background-color: var(--dark-color);
-  border-color: var(--light-color);
+  color: var(--bg-color);
+  background-color: var(--fg-color);
+  border-color: var(--bg-color);
 }
 
 select {
-  color: var(--dark-color);
-  background-color: var(--light-color);
-}
-.dark select {
-  color: var(--light-color);
-  background-color: var(--dark-color);
+  color: var(--fg-color);
+  background-color: var(--bg-color);
 }

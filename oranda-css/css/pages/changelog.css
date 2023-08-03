@@ -37,11 +37,7 @@
 }
 
 .release > h2 a {
-  color: var(--dark-color);
-}
-
-.dark .release > h2 a {
-  color: var(--light-color);
+  color: var(--fg-color);
 }
 
 .releases-list {
@@ -49,17 +45,13 @@
 }
 
 .releases-wrapper {
-  @apply grid gap-12 relative items-start mt-12;
-  grid-template-columns: 160px 1fr;
+  @apply grid gap-12 relative mt-12;
+  grid-template-columns: 160px minmax(0, 1fr);
 }
 
 .releases-nav ul {
   @apply list-none m-0 flex flex-col gap-2 border-l-4 pl-4;
-  border-color: var(--dark-color);
-}
-
-.dark .releases-nav ul {
-  border-color: var(--light-color);
+  border-color: var(--fg-color);
 }
 
 .releases-nav ul li {
@@ -69,20 +61,12 @@
 .releases-nav ul li:before {
   content: "";
   @apply h-1 w-4 block absolute top-1/2 -left-5 -translate-y-1/2;
-  background-color: var(--dark-color);
-}
-
-.dark .releases-nav ul li:before {
-  background-color: var(--light-color);
+  background-color: var(--fg-color);
 }
 
 .releases-nav ul li a {
   @apply decoration-transparent underline-offset-2 hover:underline;
-  color: var(--dark-color);
-}
-
-.dark .releases-nav ul li a {
-  color: var(--light-color);
+  color: var(--fg-color);
 }
 
 .release-info {
@@ -95,7 +79,7 @@
 
 .prereleases-toggle input {
   @apply h-5 w-5 rounded;
-  color: var(--dark-color);
+  color: var(--fg-color);
 }
 
 .prereleases-toggle label {
