@@ -7,6 +7,7 @@ use axoproject::WorkspaceSearch;
 use camino::Utf8PathBuf;
 use clap::Parser;
 use miette::Report;
+use oranda::site::mdbook::mdbook_dir;
 
 use crate::commands::{Build, Serve};
 use oranda::data::workspaces;
@@ -16,7 +17,7 @@ use oranda::site::Site;
 use oranda::{
     config::Config,
     errors::*,
-    site::mdbook::{custom_theme, load_mdbook, mdbook_dir},
+    site::mdbook::{custom_theme, load_mdbook},
 };
 
 #[derive(Clone, Debug, Parser)]
@@ -165,7 +166,7 @@ impl Dev {
         workspace: Option<WorkspaceData>,
     ) -> Result<Vec<Utf8PathBuf>> {
         let config = config.clone();
-        let member_path = workspace.map(|w| w.path);
+        let member_path = workspace.as_ref().map(|w| &w.path);
         let mut paths_to_watch = vec![];
 
         // Watch for the readme file
@@ -206,7 +207,7 @@ impl Dev {
 
         // Watch for the mdbook directory, if we have it
         if let Some(book_cfg) = &config.components.mdbook {
-            let path = mdbook_dir(book_cfg)?;
+            let path = mdbook_dir(workspace.as_ref(), book_cfg)?;
             let md = load_mdbook(&path)?;
             // watch book.toml and /src/
             let book_path = determine_path(
