@@ -1,14 +1,14 @@
 use axoasset::SourceFile;
 use camino::Utf8PathBuf;
 use schemars::JsonSchema;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 use crate::errors::*;
 
 use super::{BuildLayer, ComponentLayer, MarketingLayer, ProjectLayer, StyleLayer, WorkspaceLayer};
 
 /// Configuration for `oranda` (typically stored in oranda.json)
-#[derive(Debug, Deserialize, JsonSchema)]
+#[derive(Debug, Serialize, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct OrandaLayer {
     /// Info about the project/application you're making a site for

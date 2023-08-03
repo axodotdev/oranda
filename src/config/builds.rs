@@ -1,6 +1,6 @@
 use indexmap::IndexMap;
 use schemars::JsonSchema;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 use super::{ApplyLayer, ApplyOptExt, ApplyValExt};
 
@@ -22,7 +22,7 @@ pub struct BuildConfig {
     /// We use IndexMap to respect the order the user provided.
     pub additional_pages: IndexMap<String, String>,
 }
-#[derive(Debug, Deserialize, JsonSchema)]
+#[derive(Debug, Serialize, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
 /// Information about how the pages of your site should be built
 pub struct BuildLayer {

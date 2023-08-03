@@ -1,0 +1,188 @@
+---
+source: tests/gallery/oranda_impl.rs
+expression: "&snapshots"
+---
+================ public/artifacts/index.html ================
+<!DOCTYPE html>
+<html lang="en" id="oranda" class="dark">
+    <head>
+        <title>oranda-empty-test</title>
+        
+        
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="oranda-empty-test" />
+        
+        
+        
+        <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
+        <link rel="stylesheet" href="/oranda.css" />
+        
+        
+    </head>
+    <body>
+        <div class="container">
+            <div class="page-body">
+                
+                    <div class="repo_banner">
+                        <a href="https://github.com/shadows-withal/oranda-empty-test">
+                            <div class="github-icon" aria-hidden="true"></div>
+                            Check out our GitHub!
+                        </a>
+                    </div>
+                
+
+                <main>
+                    <header>
+                        
+                        <h1 class="title">oranda-empty-test</h1>
+                        
+    <nav class="nav">
+        <ul>
+            <li><a href="/">Home</a></li>
+
+            
+
+            
+                <li><a href="/artifacts/">Install</a></li>
+            
+
+            
+
+            
+
+            
+        </ul>
+    </nav>
+
+                    </header>
+
+                    
+<div>
+    <div class="package-managers-downloads">
+        
+    </div>
+    <div>
+        <h3>Downloads</h3>
+        <table class="artifacts-table">
+            <tbody>
+                <tr>
+                    <th>File</th>
+                    <th>Platform</th>
+                    
+                </tr>
+                
+            </tbody>
+        </table>
+    </div>
+</div>
+
+                </main>
+            </div>
+
+            <footer>
+                
+                    <a href="https://github.com/shadows-withal/oranda-empty-test"><div class="github-icon" aria-hidden="true"></div></a>
+                
+                <span>
+                    oranda-empty-test
+                </span>
+            </footer>
+        </div>
+
+        
+        
+
+        
+<script src="/artifacts.js"></script>
+
+    </body>
+</html>
+================ public/index.html ================
+<!DOCTYPE html>
+<html lang="en" id="oranda" class="dark">
+    <head>
+        <title>oranda-empty-test</title>
+        
+        
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="oranda-empty-test" />
+        
+        
+        
+        <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
+        <link rel="stylesheet" href="/oranda.css" />
+        
+        
+    </head>
+    <body>
+        <div class="container">
+            <div class="page-body">
+                
+                    <div class="repo_banner">
+                        <a href="https://github.com/shadows-withal/oranda-empty-test">
+                            <div class="github-icon" aria-hidden="true"></div>
+                            Check out our GitHub!
+                        </a>
+                    </div>
+                
+
+                <main>
+                    <header>
+                        
+                        <h1 class="title">oranda-empty-test</h1>
+                        
+    <nav class="nav">
+        <ul>
+            <li><a href="/">Home</a></li>
+
+            
+
+            
+                <li><a href="/artifacts/">Install</a></li>
+            
+
+            
+
+            
+
+            
+        </ul>
+    </nav>
+
+                    </header>
+
+                    
+
+<p>hey</p>
+
+
+                </main>
+            </div>
+
+            <footer>
+                
+                    <a href="https://github.com/shadows-withal/oranda-empty-test"><div class="github-icon" aria-hidden="true"></div></a>
+                
+                <span>
+                    oranda-empty-test
+                </span>
+            </footer>
+        </div>
+
+        
+        
+
+        
+
+    <script src="/artifacts.js"></script>
+
+
+    </body>
+</html>
+

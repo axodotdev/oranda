@@ -1,6 +1,6 @@
 use indexmap::IndexMap;
 use schemars::JsonSchema;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 use crate::config::{ApplyLayer, ApplyValExt};
 
@@ -11,7 +11,7 @@ pub struct PackageManagersConfig {
     pub additional: IndexMap<String, String>,
 }
 /// Package managers to display
-#[derive(Debug, Deserialize, JsonSchema)]
+#[derive(Debug, Serialize, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct PackageManagersLayer {
     /// Packages to display in both the install widget and install page

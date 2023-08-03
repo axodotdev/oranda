@@ -81,7 +81,7 @@ use std::convert::identity;
 
 use camino::Utf8PathBuf;
 use schemars::JsonSchema;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use tracing::instrument;
 
 use crate::errors::*;
@@ -103,9 +103,8 @@ pub use components::{
     MdBookConfig, MdBookLayer, PackageManagersConfig, PackageManagersLayer,
 };
 pub use marketing::{AnalyticsConfig, MarketingConfig, MarketingLayer, SocialConfig, SocialLayer};
-pub use workspace::{WorkspaceConfig, WorkspaceLayer};
+pub use workspace::{WorkspaceConfig, WorkspaceLayer, WorkspaceMember};
 
-use crate::config::workspace::WorkspaceMember;
 pub use project::{ProjectConfig, ProjectLayer};
 pub use style::{StyleConfig, StyleLayer};
 
@@ -393,7 +392,7 @@ impl<T> ApplyOptExt for Option<T> {
 ///
 /// This allows us to have a simple yes/no version of a config while still
 /// allowing for a more advanced version to exist.
-#[derive(Deserialize, Debug, JsonSchema)]
+#[derive(Serialize, Deserialize, Debug, JsonSchema)]
 #[serde(untagged)]
 pub enum BoolOr<T> {
     /// They gave the simple bool

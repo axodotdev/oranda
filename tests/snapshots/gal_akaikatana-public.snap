@@ -1,0 +1,631 @@
+---
+source: tests/gallery/oranda_impl.rs
+expression: "&snapshots"
+---
+================ public/artifacts/index.html ================
+<!DOCTYPE html>
+<html lang="en" id="oranda" class="axo">
+    <head>
+        <title>akaikatana-repack</title>
+        
+        
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="akaikatana-repack" />
+        
+        
+        
+        <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
+        <link rel="stylesheet" href="/akaikatana-repack/oranda.css" />
+        
+        
+    </head>
+    <body>
+        <div class="container">
+            <div class="page-body">
+                
+                    <div class="repo_banner">
+                        <a href="https://github.com/mistydemeo/akaikatana-repack">
+                            <div class="github-icon" aria-hidden="true"></div>
+                            Check out our GitHub!
+                        </a>
+                    </div>
+                
+
+                <main>
+                    <header>
+                        
+                        <h1 class="title">akaikatana-repack</h1>
+                        
+    <nav class="nav">
+        <ul>
+            <li><a href="/akaikatana-repack/">Home</a></li>
+
+            
+
+            
+                <li><a href="/akaikatana-repack/artifacts/">Install</a></li>
+            
+
+            
+
+            
+
+            
+        </ul>
+    </nav>
+
+                    </header>
+
+                    
+<div>
+    <div class="package-managers-downloads">
+        
+            
+                
+                <div>
+                    <h3>powershell</h3>
+                    <div class="install-code-wrapper">
+    <pre style="background-color:#263238;">
+<span style="color:#82aaff;">irm https://github.com/mistydemeo/akaikatana-repack/releases/download/v0.2.0/akaikatana-repack-installer.ps1 </span><span style="color:#89ddff;">| </span><span style="color:#82aaff;">iex</span></pre>
+
+    <button class="button copy-clipboard-button primary" data-copy="irm https://github.com/mistydemeo/akaikatana-repack/releases/download/v0.2.0/akaikatana-repack-installer.ps1 | iex">
+        <svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 20 20' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M8 2a1 1 0 000 2h2a1 1 0 100-2H8z'></path><path d='M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z'></path></svg>
+    </button>
+    
+    
+        
+        
+            
+        
+        <a class="button primary" href="/akaikatana-repack/akaikatana-repack-installer.ps1.txt">Source</a>
+    
+</div>
+                </div>
+            
+        
+            
+                
+                <div>
+                    <h3>shell</h3>
+                    <div class="install-code-wrapper">
+    <pre style="background-color:#263238;">
+<span style="color:#82aaff;">curl</span><span style="color:#89ddff;"> --</span><span style="color:#f78c6c;">proto </span><span style="color:#89ddff;">&#39;</span><span style="color:#c3e88d;">=https</span><span style="color:#89ddff;">&#39; --</span><span style="color:#f78c6c;">tlsv1</span><span style="color:#82aaff;">.2</span><span style="color:#89ddff;"> -</span><span style="color:#f78c6c;">LsSf</span><span style="color:#82aaff;"> https://github.com/mistydemeo/akaikatana-repack/releases/download/v0.2.0/akaikatana-repack-installer.sh </span><span style="color:#89ddff;">| </span><span style="color:#82aaff;">sh</span></pre>
+
+    <button class="button copy-clipboard-button primary" data-copy="curl --proto '=https' --tlsv1.2 -LsSf https://github.com/mistydemeo/akaikatana-repack/releases/download/v0.2.0/akaikatana-repack-installer.sh | sh">
+        <svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 20 20' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M8 2a1 1 0 000 2h2a1 1 0 100-2H8z'></path><path d='M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z'></path></svg>
+    </button>
+    
+    
+        
+        
+            
+        
+        <a class="button primary" href="/akaikatana-repack/akaikatana-repack-installer.sh.txt">Source</a>
+    
+</div>
+                </div>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div>
+        <h3>Downloads</h3>
+        <table class="artifacts-table">
+            <tbody>
+                <tr>
+                    <th>File</th>
+                    <th>Platform</th>
+                    
+                </tr>
+                
+                    
+                    
+                    <tr>
+                        <td><a href="https://github.com/mistydemeo/akaikatana-repack/releases/download/v0.2.0/akaikatana-repack-aarch64-apple-darwin.tar.xz">akaikatana-repack-aarch64-apple-darwin.tar.xz</a></td>
+                        <td>
+                            
+                                
+                                    macOS Apple Silicon
+                                
+                            
+                        </td>
+                        
+                    </tr>
+                
+                    
+                    
+                    <tr>
+                        <td><a href="https://github.com/mistydemeo/akaikatana-repack/releases/download/v0.2.0/akaikatana-repack-x86_64-apple-darwin.tar.xz">akaikatana-repack-x86_64-apple-darwin.tar.xz</a></td>
+                        <td>
+                            
+                                
+                                    macOS Intel
+                                
+                            
+                        </td>
+                        
+                    </tr>
+                
+                    
+                    
+                    <tr>
+                        <td><a href="https://github.com/mistydemeo/akaikatana-repack/releases/download/v0.2.0/akaikatana-repack-x86_64-pc-windows-msvc.zip">akaikatana-repack-x86_64-pc-windows-msvc.zip</a></td>
+                        <td>
+                            
+                                
+                                    Windows x64
+                                
+                            
+                        </td>
+                        
+                    </tr>
+                
+                    
+                    
+                    <tr>
+                        <td><a href="https://github.com/mistydemeo/akaikatana-repack/releases/download/v0.2.0/akaikatana-repack-x86_64-unknown-linux-gnu.tar.xz">akaikatana-repack-x86_64-unknown-linux-gnu.tar.xz</a></td>
+                        <td>
+                            
+                                
+                                    Linux x64
+                                
+                            
+                        </td>
+                        
+                    </tr>
+                
+            </tbody>
+        </table>
+    </div>
+</div>
+
+                </main>
+            </div>
+
+            <footer>
+                
+                    <a href="https://github.com/mistydemeo/akaikatana-repack"><div class="github-icon" aria-hidden="true"></div></a>
+                
+                <span>
+                    akaikatana-repack, GPL-2.0-or-later
+                </span>
+            </footer>
+        </div>
+
+        
+        
+
+        
+<script src="/akaikatana-repack/artifacts.js"></script>
+
+    </body>
+</html>
+================ public/index.html ================
+<!DOCTYPE html>
+<html lang="en" id="oranda" class="axo">
+    <head>
+        <title>akaikatana-repack</title>
+        
+        
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="akaikatana-repack" />
+        
+        
+        
+        <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
+        <link rel="stylesheet" href="/akaikatana-repack/oranda.css" />
+        
+        
+    </head>
+    <body>
+        <div class="container">
+            <div class="page-body">
+                
+                    <div class="repo_banner">
+                        <a href="https://github.com/mistydemeo/akaikatana-repack">
+                            <div class="github-icon" aria-hidden="true"></div>
+                            Check out our GitHub!
+                        </a>
+                    </div>
+                
+
+                <main>
+                    <header>
+                        
+                        <h1 class="title">akaikatana-repack</h1>
+                        
+    <nav class="nav">
+        <ul>
+            <li><a href="/akaikatana-repack/">Home</a></li>
+
+            
+
+            
+                <li><a href="/akaikatana-repack/artifacts/">Install</a></li>
+            
+
+            
+
+            
+
+            
+        </ul>
+    </nav>
+
+                    </header>
+
+                    
+
+    
+
+
+
+<div class="artifacts" data-tag="v0.2.0">
+    <div class="artifact-header target">
+        <h4>Install v0.2.0</h4>
+        
+            <div><small class="published-date">Published on Jun 30 2023 at 03:29 UTC</small></div>
+        
+
+        <ul class="arches">
+            
+                <li class="arch hidden" data-arch="aarch64-apple-darwin">
+                    
+                        <ul class="tabs">
+                            
+                                
+                                
+                                <li class="install-tab" data-id="0" data-triple="aarch64-apple-darwin">
+                                    shell
+                                </li>
+                            
+                                
+                                
+                                <li class="install-tab" data-id="2" data-triple="aarch64-apple-darwin">
+                                    tarball
+                                </li>
+                            
+                        </ul>
+                    
+
+                    <ul class="contents">
+                        
+                            
+                            <li data-id="0" data-triple="aarch64-apple-darwin" class="install-content">
+                                
+                                    
+                                    <div class="install-code-wrapper">
+    <pre style="background-color:#263238;">
+<span style="color:#82aaff;">curl</span><span style="color:#89ddff;"> --</span><span style="color:#f78c6c;">proto </span><span style="color:#89ddff;">&#39;</span><span style="color:#c3e88d;">=https</span><span style="color:#89ddff;">&#39; --</span><span style="color:#f78c6c;">tlsv1</span><span style="color:#82aaff;">.2</span><span style="color:#89ddff;"> -</span><span style="color:#f78c6c;">LsSf</span><span style="color:#82aaff;"> https://github.com/mistydemeo/akaikatana-repack/releases/download/v0.2.0/akaikatana-repack-installer.sh </span><span style="color:#89ddff;">| </span><span style="color:#82aaff;">sh</span></pre>
+
+    <button class="button copy-clipboard-button primary" data-copy="curl --proto '=https' --tlsv1.2 -LsSf https://github.com/mistydemeo/akaikatana-repack/releases/download/v0.2.0/akaikatana-repack-installer.sh | sh">
+        <svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 20 20' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M8 2a1 1 0 000 2h2a1 1 0 100-2H8z'></path><path d='M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z'></path></svg>
+    </button>
+    
+    
+        
+        
+            
+        
+        <a class="button primary" href="/akaikatana-repack/akaikatana-repack-installer.sh.txt">Source</a>
+    
+</div>
+                                
+
+                                
+                            </li>
+                        
+                            
+                            <li data-id="2" data-triple="aarch64-apple-darwin" class="install-content hidden">
+                                
+
+                                
+                                    
+                                     <div class="download-wrapper">
+                                         <a href="https://github.com/mistydemeo/akaikatana-repack/releases/download/v0.2.0/akaikatana-repack-aarch64-apple-darwin.tar.xz">
+                                             <button class="button primary">
+                                                 <span>Download</span>
+                                                 <span class="button-subtitle">akaikatana-repack-aarch64-apple-darwin.tar.xz</span>
+                                             </button>
+                                         </a>
+                                     </div>
+                                
+                            </li>
+                        
+                    </ul>
+                </li>
+            
+                <li class="arch hidden" data-arch="x86_64-apple-darwin">
+                    
+                        <ul class="tabs">
+                            
+                                
+                                
+                                <li class="install-tab" data-id="0" data-triple="x86_64-apple-darwin">
+                                    shell
+                                </li>
+                            
+                                
+                                
+                                <li class="install-tab" data-id="3" data-triple="x86_64-apple-darwin">
+                                    tarball
+                                </li>
+                            
+                        </ul>
+                    
+
+                    <ul class="contents">
+                        
+                            
+                            <li data-id="0" data-triple="x86_64-apple-darwin" class="install-content">
+                                
+                                    
+                                    <div class="install-code-wrapper">
+    <pre style="background-color:#263238;">
+<span style="color:#82aaff;">curl</span><span style="color:#89ddff;"> --</span><span style="color:#f78c6c;">proto </span><span style="color:#89ddff;">&#39;</span><span style="color:#c3e88d;">=https</span><span style="color:#89ddff;">&#39; --</span><span style="color:#f78c6c;">tlsv1</span><span style="color:#82aaff;">.2</span><span style="color:#89ddff;"> -</span><span style="color:#f78c6c;">LsSf</span><span style="color:#82aaff;"> https://github.com/mistydemeo/akaikatana-repack/releases/download/v0.2.0/akaikatana-repack-installer.sh </span><span style="color:#89ddff;">| </span><span style="color:#82aaff;">sh</span></pre>
+
+    <button class="button copy-clipboard-button primary" data-copy="curl --proto '=https' --tlsv1.2 -LsSf https://github.com/mistydemeo/akaikatana-repack/releases/download/v0.2.0/akaikatana-repack-installer.sh | sh">
+        <svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 20 20' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M8 2a1 1 0 000 2h2a1 1 0 100-2H8z'></path><path d='M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z'></path></svg>
+    </button>
+    
+    
+        
+        
+            
+        
+        <a class="button primary" href="/akaikatana-repack/akaikatana-repack-installer.sh.txt">Source</a>
+    
+</div>
+                                
+
+                                
+                            </li>
+                        
+                            
+                            <li data-id="3" data-triple="x86_64-apple-darwin" class="install-content hidden">
+                                
+
+                                
+                                    
+                                     <div class="download-wrapper">
+                                         <a href="https://github.com/mistydemeo/akaikatana-repack/releases/download/v0.2.0/akaikatana-repack-x86_64-apple-darwin.tar.xz">
+                                             <button class="button primary">
+                                                 <span>Download</span>
+                                                 <span class="button-subtitle">akaikatana-repack-x86_64-apple-darwin.tar.xz</span>
+                                             </button>
+                                         </a>
+                                     </div>
+                                
+                            </li>
+                        
+                    </ul>
+                </li>
+            
+                <li class="arch hidden" data-arch="x86_64-pc-windows-msvc">
+                    
+                        <ul class="tabs">
+                            
+                                
+                                
+                                <li class="install-tab" data-id="1" data-triple="x86_64-pc-windows-msvc">
+                                    powershell
+                                </li>
+                            
+                                
+                                
+                                <li class="install-tab" data-id="4" data-triple="x86_64-pc-windows-msvc">
+                                    zip
+                                </li>
+                            
+                        </ul>
+                    
+
+                    <ul class="contents">
+                        
+                            
+                            <li data-id="1" data-triple="x86_64-pc-windows-msvc" class="install-content">
+                                
+                                    
+                                    <div class="install-code-wrapper">
+    <pre style="background-color:#263238;">
+<span style="color:#82aaff;">irm https://github.com/mistydemeo/akaikatana-repack/releases/download/v0.2.0/akaikatana-repack-installer.ps1 </span><span style="color:#89ddff;">| </span><span style="color:#82aaff;">iex</span></pre>
+
+    <button class="button copy-clipboard-button primary" data-copy="irm https://github.com/mistydemeo/akaikatana-repack/releases/download/v0.2.0/akaikatana-repack-installer.ps1 | iex">
+        <svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 20 20' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M8 2a1 1 0 000 2h2a1 1 0 100-2H8z'></path><path d='M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z'></path></svg>
+    </button>
+    
+    
+        
+        
+            
+        
+        <a class="button primary" href="/akaikatana-repack/akaikatana-repack-installer.ps1.txt">Source</a>
+    
+</div>
+                                
+
+                                
+                            </li>
+                        
+                            
+                            <li data-id="4" data-triple="x86_64-pc-windows-msvc" class="install-content hidden">
+                                
+
+                                
+                                    
+                                     <div class="download-wrapper">
+                                         <a href="https://github.com/mistydemeo/akaikatana-repack/releases/download/v0.2.0/akaikatana-repack-x86_64-pc-windows-msvc.zip">
+                                             <button class="button primary">
+                                                 <span>Download</span>
+                                                 <span class="button-subtitle">akaikatana-repack-x86_64-pc-windows-msvc.zip</span>
+                                             </button>
+                                         </a>
+                                     </div>
+                                
+                            </li>
+                        
+                    </ul>
+                </li>
+            
+                <li class="arch hidden" data-arch="x86_64-unknown-linux-gnu">
+                    
+                        <ul class="tabs">
+                            
+                                
+                                
+                                <li class="install-tab" data-id="0" data-triple="x86_64-unknown-linux-gnu">
+                                    shell
+                                </li>
+                            
+                                
+                                
+                                <li class="install-tab" data-id="5" data-triple="x86_64-unknown-linux-gnu">
+                                    tarball
+                                </li>
+                            
+                        </ul>
+                    
+
+                    <ul class="contents">
+                        
+                            
+                            <li data-id="0" data-triple="x86_64-unknown-linux-gnu" class="install-content">
+                                
+                                    
+                                    <div class="install-code-wrapper">
+    <pre style="background-color:#263238;">
+<span style="color:#82aaff;">curl</span><span style="color:#89ddff;"> --</span><span style="color:#f78c6c;">proto </span><span style="color:#89ddff;">&#39;</span><span style="color:#c3e88d;">=https</span><span style="color:#89ddff;">&#39; --</span><span style="color:#f78c6c;">tlsv1</span><span style="color:#82aaff;">.2</span><span style="color:#89ddff;"> -</span><span style="color:#f78c6c;">LsSf</span><span style="color:#82aaff;"> https://github.com/mistydemeo/akaikatana-repack/releases/download/v0.2.0/akaikatana-repack-installer.sh </span><span style="color:#89ddff;">| </span><span style="color:#82aaff;">sh</span></pre>
+
+    <button class="button copy-clipboard-button primary" data-copy="curl --proto '=https' --tlsv1.2 -LsSf https://github.com/mistydemeo/akaikatana-repack/releases/download/v0.2.0/akaikatana-repack-installer.sh | sh">
+        <svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 20 20' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M8 2a1 1 0 000 2h2a1 1 0 100-2H8z'></path><path d='M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z'></path></svg>
+    </button>
+    
+    
+        
+        
+            
+        
+        <a class="button primary" href="/akaikatana-repack/akaikatana-repack-installer.sh.txt">Source</a>
+    
+</div>
+                                
+
+                                
+                            </li>
+                        
+                            
+                            <li data-id="5" data-triple="x86_64-unknown-linux-gnu" class="install-content hidden">
+                                
+
+                                
+                                    
+                                     <div class="download-wrapper">
+                                         <a href="https://github.com/mistydemeo/akaikatana-repack/releases/download/v0.2.0/akaikatana-repack-x86_64-unknown-linux-gnu.tar.xz">
+                                             <button class="button primary">
+                                                 <span>Download</span>
+                                                 <span class="button-subtitle">akaikatana-repack-x86_64-unknown-linux-gnu.tar.xz</span>
+                                             </button>
+                                         </a>
+                                     </div>
+                                
+                            </li>
+                        
+                    </ul>
+                </li>
+            
+        </ul>
+    </div>
+
+    
+        <div class="no-autodetect hidden">
+            <span class="no-autodetect-details">We weren't able to detect your OS.</span>
+        </div>
+        <noscript>
+            <a href="/akaikatana-repack/artifacts/">View all installation options</a>
+        </noscript>
+    
+    <div class="mac-switch hidden">This project doesn't offer Apple Silicon downloads, but you can run Intel macOS binaries via Rosetta 2.</div>
+
+    
+    
+    <div class="bottom-options ">
+        <a href="/akaikatana-repack/artifacts/" class="backup-download primary">View all installation options</a>
+        
+            <div class="arch-select hidden">
+                <select id="install-arch-select">
+                    <option disabled="true" selected="true" value=""></option>
+                    
+                        <option value="x86_64-unknown-linux-gnu">Linux x64</option>
+                    
+                        <option value="aarch64-apple-darwin">macOS Apple Silicon</option>
+                    
+                        <option value="x86_64-apple-darwin">macOS Intel</option>
+                    
+                        <option value="x86_64-pc-windows-msvc">Windows x64</option>
+                    
+                </select>
+            </div>
+        
+    </div>
+</div>
+
+<a href="/akaikatana-repack/artifacts/" class="button mobile-download primary">View all installation options</a>
+
+<h2>Akai Katana music repacker</h2>
+<p>This set of tools allows you to extract and replace the music from the <a href="https://store.steampowered.com/app/2076220/Akai_Katana_Shin/" rel="noopener noreferrer">Steam release of Akai Katana</a>. I was inspired to make it because I love the FM arranged soundtrack from the Nin2 Jump/Akai Katana CD, but there's no way to actually use it in game. If there won't be an official one, why not make my own?</p>
+<h3>Getting the tool</h3>
+<p>Prebuilt copies of the tool can be found in the <a href="https://github.com/mistydemeo/akaikatana-repack/releases" rel="noopener noreferrer">"releases" tab</a> in GitHub. You should be able to just download and run the ZIP file or tarball.</p>
+<h3>How to use</h3>
+<p>Akai Katana's music is in a file called <code>Stream.bin</code> within the game folder. To start, copy it into the folder with these tools.</p>
+<p>The <code>akextract</code> tool is used to extract the music from <code>Stream.bin</code>. After extracting, you'll have a set of 40 <code>.wav</code> files with all the music from all three versions of the soundtrack. The <code>tracklist.txt</code> file in the documents folder explains which file is which song.</p>
+<p>To replace songs with new ones, you'll need to reencode the new file in Microsoft's ADPCM format. Doing this requires Microsoft's commandline tool <code>AdpcmEncode.exe</code>. The game won't accept normal WAV files, and it won't accept ADPCM files made with any other tool (like FFmpeg).</p>
+<p>To let the music loop properly, you can use a tool such as <a href="https://www.wavosaur.com" rel="noopener noreferrer">Wavosaur</a>; instructions for editing loop points are <a href="https://www.wavosaur.com/quick-help/loop-points-edition.php" rel="noopener noreferrer">here</a>. <code>AdpcmEncode.exe</code> will use the loop points embedded into the uncompressed WAV files. If you're using the FM arrange from the Nin2 Jump/Akai Katana CD, I've included a set of loop points in the <code>loop_points.txt</code> file in the documents folder.</p>
+<p>Once you're done preparing your music, place your new ADPCM WAV files in a folder with any of the original music you're keeping. Your new folder should still have 40 WAV files with the same numbered names as the original ones. Once you're ready, you can run the <code>akrepack</code> tool to repackage your files into a new <code>Stream.bin</code>. For example, if your new soundtrack is in a folder called <code>in</code>, you would run <code>akrepack --input in</code>. This will produce a new file called <code>Stream.bin.repacked</code>. Just replace the file in Akai Katana's game folder with this new file, and you're ready to go.</p>
+<h3>Notes</h3>
+<p>Although my generated files have loop points in place, I've had some trouble getting the game to use them. If anyone figures out what's wrong and could lend a hand, I'd appreciate it!</p>
+<p>Shin mode features one extra stage, stage 5, and the music used for that stage is missing in the arcade soundtrack. When you play Shin with the original soundtrack, stage 5 will use the song from the 360 arranged soundtrack.</p>
+<h3>Building from source</h3>
+<p>These tools are written in Rust, and can be built using standard Rust tools. As long as you have the Rust compiler installed, you just need to run <code>cargo build</code>.</p>
+<h3>Contributing</h3>
+<p>Contributions are always welcome! Please open issues if you run into any issues, and pull requests are always a big help.</p>
+<h3>License</h3>
+<p>GPL 2.0 or later.</p>
+
+
+                </main>
+            </div>
+
+            <footer>
+                
+                    <a href="https://github.com/mistydemeo/akaikatana-repack"><div class="github-icon" aria-hidden="true"></div></a>
+                
+                <span>
+                    akaikatana-repack, GPL-2.0-or-later
+                </span>
+            </footer>
+        </div>
+
+        
+        
+
+        
+
+    <script src="/akaikatana-repack/artifacts.js"></script>
+
+
+    </body>
+</html>
+

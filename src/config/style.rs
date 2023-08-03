@@ -1,5 +1,5 @@
 use schemars::JsonSchema;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 use crate::config::{ApplyLayer, ApplyOptExt};
 use crate::site::{markdown::SyntaxTheme, oranda_theme::OrandaTheme};
@@ -19,7 +19,7 @@ pub struct StyleConfig {
     pub favicon: Option<String>,
 }
 /// Settings for styling your page
-#[derive(Debug, Deserialize, JsonSchema)]
+#[derive(Debug, Serialize, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct StyleLayer {
     /// The builtin oranda theme to use for all your pages

@@ -1,0 +1,1116 @@
+---
+source: tests/gallery/oranda_impl.rs
+expression: "&snapshots"
+---
+================ public/artifacts/index.html ================
+<!DOCTYPE html>
+<html lang="en" id="oranda" class="dark axo">
+    <head>
+        <title>axolotlsay</title>
+        
+        
+            <link rel="icon" href="/axolotlsay/favicon.ico" />
+        
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        
+            <meta name="description" content="💬 a CLI for learning to distribute CLIs in rust" />
+            <meta property="og:description" content="💬 a CLI for learning to distribute CLIs in rust" />
+        
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="axolotlsay" />
+        
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta property="og:image" content="https://www.axo.dev/meta_small.jpeg" />
+        
+        
+            <meta property="og:image:alt" content="axo" />
+        
+        
+            <meta name="twitter:creator" content="@axodotdev" />
+            <meta name="twitter:site" content="@axodotdev" />
+        
+        <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
+        <link rel="stylesheet" href="/axolotlsay/oranda.css" />
+        
+        
+    </head>
+    <body>
+        <div class="container">
+            <div class="page-body">
+                
+                    <div class="repo_banner">
+                        <a href="https://github.com/axodotdev/axolotlsay">
+                            <div class="github-icon" aria-hidden="true"></div>
+                            Check out our GitHub!
+                        </a>
+                    </div>
+                
+
+                <main>
+                    <header>
+                        
+                        <h1 class="title">axolotlsay</h1>
+                        
+    <nav class="nav">
+        <ul>
+            <li><a href="/axolotlsay/">Home</a></li>
+
+            
+
+            
+                <li><a href="/axolotlsay/artifacts/">Install</a></li>
+            
+
+            
+
+            
+
+            
+                <li><a href="/axolotlsay/changelog/">Changelog</a></li>
+            
+        </ul>
+    </nav>
+
+                    </header>
+
+                    
+<div>
+    <div class="package-managers-downloads">
+        
+            
+                
+                <div>
+                    <h3>binstall</h3>
+                    <div class="install-code-wrapper">
+    <pre style="background-color:#263238;">
+<span style="color:#82aaff;">cargo binstall axolotlsay</span></pre>
+
+    <button class="button copy-clipboard-button primary" data-copy="cargo binstall axolotlsay">
+        <svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 20 20' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M8 2a1 1 0 000 2h2a1 1 0 100-2H8z'></path><path d='M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z'></path></svg>
+    </button>
+    
+    
+</div>
+                </div>
+            
+        
+            
+                
+                <div>
+                    <h3>crates.io</h3>
+                    <div class="install-code-wrapper">
+    <pre style="background-color:#263238;">
+<span style="color:#82aaff;">cargo install axolotlsay</span><span style="color:#89ddff;"> --</span><span style="color:#f78c6c;">locked</span><span style="color:#89ddff;"> --</span><span style="color:#f78c6c;">profile</span><span style="color:#89ddff;">=</span><span style="color:#82aaff;">dist</span></pre>
+
+    <button class="button copy-clipboard-button primary" data-copy="cargo install axolotlsay --locked --profile=dist">
+        <svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 20 20' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M8 2a1 1 0 000 2h2a1 1 0 100-2H8z'></path><path d='M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z'></path></svg>
+    </button>
+    
+    
+</div>
+                </div>
+            
+        
+            
+                
+                <div>
+                    <h3>npm</h3>
+                    <div class="install-code-wrapper">
+    <pre style="background-color:#263238;">
+<span style="color:#82aaff;">npm install @axodotdev/axolotlsay@0.1.0</span></pre>
+
+    <button class="button copy-clipboard-button primary" data-copy="npm install @axodotdev/axolotlsay@0.1.0">
+        <svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 20 20' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M8 2a1 1 0 000 2h2a1 1 0 100-2H8z'></path><path d='M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z'></path></svg>
+    </button>
+    
+    
+</div>
+                </div>
+            
+        
+            
+                
+                <div>
+                    <h3>npx</h3>
+                    <div class="install-code-wrapper">
+    <pre style="background-color:#263238;">
+<span style="color:#82aaff;">npx @axodotdev/axolotlsay</span></pre>
+
+    <button class="button copy-clipboard-button primary" data-copy="npx @axodotdev/axolotlsay">
+        <svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 20 20' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M8 2a1 1 0 000 2h2a1 1 0 100-2H8z'></path><path d='M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z'></path></svg>
+    </button>
+    
+    
+</div>
+                </div>
+            
+        
+            
+                
+                <div>
+                    <h3>powershell</h3>
+                    <div class="install-code-wrapper">
+    <pre style="background-color:#263238;">
+<span style="color:#82aaff;">irm https://github.com/axodotdev/axolotlsay/releases/download/v0.1.0/axolotlsay-installer.ps1 </span><span style="color:#89ddff;">| </span><span style="color:#82aaff;">iex</span></pre>
+
+    <button class="button copy-clipboard-button primary" data-copy="irm https://github.com/axodotdev/axolotlsay/releases/download/v0.1.0/axolotlsay-installer.ps1 | iex">
+        <svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 20 20' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M8 2a1 1 0 000 2h2a1 1 0 100-2H8z'></path><path d='M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z'></path></svg>
+    </button>
+    
+    
+        
+        
+            
+        
+        <a class="button primary" href="/axolotlsay/axolotlsay-installer.ps1.txt">Source</a>
+    
+</div>
+                </div>
+            
+        
+            
+                
+                <div>
+                    <h3>shell</h3>
+                    <div class="install-code-wrapper">
+    <pre style="background-color:#263238;">
+<span style="color:#82aaff;">curl</span><span style="color:#89ddff;"> --</span><span style="color:#f78c6c;">proto </span><span style="color:#89ddff;">&#39;</span><span style="color:#c3e88d;">=https</span><span style="color:#89ddff;">&#39; --</span><span style="color:#f78c6c;">tlsv1</span><span style="color:#82aaff;">.2</span><span style="color:#89ddff;"> -</span><span style="color:#f78c6c;">LsSf</span><span style="color:#82aaff;"> https://github.com/axodotdev/axolotlsay/releases/download/v0.1.0/axolotlsay-installer.sh </span><span style="color:#89ddff;">| </span><span style="color:#82aaff;">sh</span></pre>
+
+    <button class="button copy-clipboard-button primary" data-copy="curl --proto '=https' --tlsv1.2 -LsSf https://github.com/axodotdev/axolotlsay/releases/download/v0.1.0/axolotlsay-installer.sh | sh">
+        <svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 20 20' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M8 2a1 1 0 000 2h2a1 1 0 100-2H8z'></path><path d='M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z'></path></svg>
+    </button>
+    
+    
+        
+        
+            
+        
+        <a class="button primary" href="/axolotlsay/axolotlsay-installer.sh.txt">Source</a>
+    
+</div>
+                </div>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div>
+        <h3>Downloads</h3>
+        <table class="artifacts-table">
+            <tbody>
+                <tr>
+                    <th>File</th>
+                    <th>Platform</th>
+                    
+                </tr>
+                
+                    
+                    
+                    <tr>
+                        <td><a href="https://github.com/axodotdev/axolotlsay/releases/download/v0.1.0/axolotlsay-aarch64-apple-darwin.tar.gz">axolotlsay-aarch64-apple-darwin.tar.gz</a></td>
+                        <td>
+                            
+                                
+                                    macOS Apple Silicon
+                                
+                            
+                        </td>
+                        
+                    </tr>
+                
+                    
+                    
+                    <tr>
+                        <td><a href="https://github.com/axodotdev/axolotlsay/releases/download/v0.1.0/axolotlsay-x86_64-apple-darwin.tar.gz">axolotlsay-x86_64-apple-darwin.tar.gz</a></td>
+                        <td>
+                            
+                                
+                                    macOS Intel
+                                
+                            
+                        </td>
+                        
+                    </tr>
+                
+                    
+                    
+                    <tr>
+                        <td><a href="https://github.com/axodotdev/axolotlsay/releases/download/v0.1.0/axolotlsay-x86_64-pc-windows-msvc.tar.gz">axolotlsay-x86_64-pc-windows-msvc.tar.gz</a></td>
+                        <td>
+                            
+                                
+                                    Windows x64
+                                
+                            
+                        </td>
+                        
+                    </tr>
+                
+                    
+                    
+                    <tr>
+                        <td><a href="https://github.com/axodotdev/axolotlsay/releases/download/v0.1.0/axolotlsay-x86_64-unknown-linux-gnu.tar.gz">axolotlsay-x86_64-unknown-linux-gnu.tar.gz</a></td>
+                        <td>
+                            
+                                
+                                    Linux x64
+                                
+                            
+                        </td>
+                        
+                    </tr>
+                
+            </tbody>
+        </table>
+    </div>
+</div>
+
+                </main>
+            </div>
+
+            <footer>
+                
+                    <a href="https://github.com/axodotdev/axolotlsay"><div class="github-icon" aria-hidden="true"></div></a>
+                
+                <span>
+                    axolotlsay, MIT OR Apache-2.0
+                </span>
+            </footer>
+        </div>
+
+        
+            <script defer="true" data-domain="opensource.axo.dev" src="https://plausible.io/js/script.js"></script>
+        
+        
+
+        
+<script src="/axolotlsay/artifacts.js"></script>
+
+    </body>
+</html>
+================ public/changelog/index.html ================
+<!DOCTYPE html>
+<html lang="en" id="oranda" class="dark axo">
+    <head>
+        <title>axolotlsay</title>
+        
+        
+            <link rel="icon" href="/axolotlsay/favicon.ico" />
+        
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        
+            <meta name="description" content="💬 a CLI for learning to distribute CLIs in rust" />
+            <meta property="og:description" content="💬 a CLI for learning to distribute CLIs in rust" />
+        
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="axolotlsay" />
+        
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta property="og:image" content="https://www.axo.dev/meta_small.jpeg" />
+        
+        
+            <meta property="og:image:alt" content="axo" />
+        
+        
+            <meta name="twitter:creator" content="@axodotdev" />
+            <meta name="twitter:site" content="@axodotdev" />
+        
+        <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
+        <link rel="stylesheet" href="/axolotlsay/oranda.css" />
+        
+        
+    </head>
+    <body>
+        <div class="container">
+            <div class="page-body">
+                
+                    <div class="repo_banner">
+                        <a href="https://github.com/axodotdev/axolotlsay">
+                            <div class="github-icon" aria-hidden="true"></div>
+                            Check out our GitHub!
+                        </a>
+                    </div>
+                
+
+                <main>
+                    <header>
+                        
+                        <h1 class="title">axolotlsay</h1>
+                        
+    <nav class="nav">
+        <ul>
+            <li><a href="/axolotlsay/">Home</a></li>
+
+            
+
+            
+                <li><a href="/axolotlsay/artifacts/">Install</a></li>
+            
+
+            
+
+            
+
+            
+                <li><a href="/axolotlsay/changelog/">Changelog</a></li>
+            
+        </ul>
+    </nav>
+
+                    </header>
+
+                    
+<div>
+    <h1>Releases</h1>
+    <div class="releases-wrapper">
+        <nav class="releases-nav">
+            
+
+            <ul>
+                
+                     <li class="">
+                         <a href="v0.1.0/">v0.1.0</a>
+                     </li>
+                
+            </ul>
+        </nav>
+
+        <div class="releases-list">
+            
+                
+                <section class="release ">
+    <h2 id="tag-v0.1.0">
+        <a href="v0.1.0/">
+            
+                Version 0.1.0
+            
+        </a>
+    </h2>
+    <div class="release-info">
+        <span class="flex items-center gap-2">
+            <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6'>
+    <path stroke-linecap='round' stroke-linejoin='round' d='M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z' />
+    <path stroke-linecap='round' stroke-linejoin='round' d='M6 6h.008v.008H6V6z' /></svg>
+            v0.1.0
+        </span>
+        <span class="flex items-center gap-2">
+            
+                <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6'><path stroke-linecap='round' stroke-linejoin='round' d='M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5' /></svg>
+                May 24 2023 at 17:35 UTC
+            
+        </span>
+    </div>
+    <div class="release-body">
+        <pre style="background-color:#263238;"><span style="color:#eeffff;">         +------------------------+
+</span><span style="color:#eeffff;">         | the initial release!!! |
+</span><span style="color:#eeffff;">         +------------------------+
+</span><span style="color:#eeffff;">        /
+</span><span style="color:#eeffff;">≽(◕ ᴗ ◕)≼
+</span></pre>
+
+
+    </div>
+</section>
+            
+        </div>
+    </div>
+</div>
+
+                </main>
+            </div>
+
+            <footer>
+                
+                    <a href="https://github.com/axodotdev/axolotlsay"><div class="github-icon" aria-hidden="true"></div></a>
+                
+                <span>
+                    axolotlsay, MIT OR Apache-2.0
+                </span>
+            </footer>
+        </div>
+
+        
+            <script defer="true" data-domain="opensource.axo.dev" src="https://plausible.io/js/script.js"></script>
+        
+        
+
+        
+<script src="/axolotlsay/artifacts.js"></script>
+
+    </body>
+</html>
+================ public/changelog/v0.1.0/index.html ================
+<!DOCTYPE html>
+<html lang="en" id="oranda" class="dark axo">
+    <head>
+        <title>axolotlsay</title>
+        
+        
+            <link rel="icon" href="/axolotlsay/favicon.ico" />
+        
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        
+            <meta name="description" content="💬 a CLI for learning to distribute CLIs in rust" />
+            <meta property="og:description" content="💬 a CLI for learning to distribute CLIs in rust" />
+        
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="axolotlsay" />
+        
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta property="og:image" content="https://www.axo.dev/meta_small.jpeg" />
+        
+        
+            <meta property="og:image:alt" content="axo" />
+        
+        
+            <meta name="twitter:creator" content="@axodotdev" />
+            <meta name="twitter:site" content="@axodotdev" />
+        
+        <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
+        <link rel="stylesheet" href="/axolotlsay/oranda.css" />
+        
+        
+    </head>
+    <body>
+        <div class="container">
+            <div class="page-body">
+                
+                    <div class="repo_banner">
+                        <a href="https://github.com/axodotdev/axolotlsay">
+                            <div class="github-icon" aria-hidden="true"></div>
+                            Check out our GitHub!
+                        </a>
+                    </div>
+                
+
+                <main>
+                    <header>
+                        
+                        <h1 class="title">axolotlsay</h1>
+                        
+    <nav class="nav">
+        <ul>
+            <li><a href="/axolotlsay/">Home</a></li>
+
+            
+
+            
+                <li><a href="/axolotlsay/artifacts/">Install</a></li>
+            
+
+            
+
+            
+
+            
+                <li><a href="/axolotlsay/changelog/">Changelog</a></li>
+            
+        </ul>
+    </nav>
+
+                    </header>
+
+                    
+<div>
+    <h1>Version 0.1.0</h1>
+    <div class="releases-body">
+        
+        
+        <section class="release ">
+    
+    <div class="release-info">
+        <span class="flex items-center gap-2">
+            <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6'>
+    <path stroke-linecap='round' stroke-linejoin='round' d='M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z' />
+    <path stroke-linecap='round' stroke-linejoin='round' d='M6 6h.008v.008H6V6z' /></svg>
+            v0.1.0
+        </span>
+        <span class="flex items-center gap-2">
+            
+                <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6'><path stroke-linecap='round' stroke-linejoin='round' d='M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5' /></svg>
+                May 24 2023 at 17:35 UTC
+            
+        </span>
+    </div>
+    <div class="release-body">
+        <pre style="background-color:#263238;"><span style="color:#eeffff;">         +------------------------+
+</span><span style="color:#eeffff;">         | the initial release!!! |
+</span><span style="color:#eeffff;">         +------------------------+
+</span><span style="color:#eeffff;">        /
+</span><span style="color:#eeffff;">≽(◕ ᴗ ◕)≼
+</span></pre>
+
+
+    </div>
+</section>
+    </div>
+</div>
+
+                </main>
+            </div>
+
+            <footer>
+                
+                    <a href="https://github.com/axodotdev/axolotlsay"><div class="github-icon" aria-hidden="true"></div></a>
+                
+                <span>
+                    axolotlsay, MIT OR Apache-2.0
+                </span>
+            </footer>
+        </div>
+
+        
+            <script defer="true" data-domain="opensource.axo.dev" src="https://plausible.io/js/script.js"></script>
+        
+        
+
+        
+    </body>
+</html>
+================ public/index.html ================
+<!DOCTYPE html>
+<html lang="en" id="oranda" class="dark axo">
+    <head>
+        <title>axolotlsay</title>
+        
+        
+            <link rel="icon" href="/axolotlsay/favicon.ico" />
+        
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        
+            <meta name="description" content="💬 a CLI for learning to distribute CLIs in rust" />
+            <meta property="og:description" content="💬 a CLI for learning to distribute CLIs in rust" />
+        
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="axolotlsay" />
+        
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta property="og:image" content="https://www.axo.dev/meta_small.jpeg" />
+        
+        
+            <meta property="og:image:alt" content="axo" />
+        
+        
+            <meta name="twitter:creator" content="@axodotdev" />
+            <meta name="twitter:site" content="@axodotdev" />
+        
+        <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
+        <link rel="stylesheet" href="/axolotlsay/oranda.css" />
+        
+        
+    </head>
+    <body>
+        <div class="container">
+            <div class="page-body">
+                
+                    <div class="repo_banner">
+                        <a href="https://github.com/axodotdev/axolotlsay">
+                            <div class="github-icon" aria-hidden="true"></div>
+                            Check out our GitHub!
+                        </a>
+                    </div>
+                
+
+                <main>
+                    <header>
+                        
+                        <h1 class="title">axolotlsay</h1>
+                        
+    <nav class="nav">
+        <ul>
+            <li><a href="/axolotlsay/">Home</a></li>
+
+            
+
+            
+                <li><a href="/axolotlsay/artifacts/">Install</a></li>
+            
+
+            
+
+            
+
+            
+                <li><a href="/axolotlsay/changelog/">Changelog</a></li>
+            
+        </ul>
+    </nav>
+
+                    </header>
+
+                    
+
+    
+
+
+
+<div class="artifacts" data-tag="v0.1.0">
+    <div class="artifact-header target">
+        <h4>Install v0.1.0</h4>
+        
+            <div><small class="published-date">Published on May 24 2023 at 17:35 UTC</small></div>
+        
+
+        <ul class="arches">
+            
+                <li class="arch hidden" data-arch="aarch64-apple-darwin">
+                    
+                        <ul class="tabs">
+                            
+                                
+                                
+                                <li class="install-tab" data-id="0" data-triple="aarch64-apple-darwin">
+                                    shell
+                                </li>
+                            
+                                
+                                
+                                <li class="install-tab" data-id="7" data-triple="aarch64-apple-darwin">
+                                    npx
+                                </li>
+                            
+                                
+                                
+                                <li class="install-tab" data-id="3" data-triple="aarch64-apple-darwin">
+                                    tarball
+                                </li>
+                            
+                        </ul>
+                    
+
+                    <ul class="contents">
+                        
+                            
+                            <li data-id="0" data-triple="aarch64-apple-darwin" class="install-content">
+                                
+                                    
+                                    <div class="install-code-wrapper">
+    <pre style="background-color:#263238;">
+<span style="color:#82aaff;">curl</span><span style="color:#89ddff;"> --</span><span style="color:#f78c6c;">proto </span><span style="color:#89ddff;">&#39;</span><span style="color:#c3e88d;">=https</span><span style="color:#89ddff;">&#39; --</span><span style="color:#f78c6c;">tlsv1</span><span style="color:#82aaff;">.2</span><span style="color:#89ddff;"> -</span><span style="color:#f78c6c;">LsSf</span><span style="color:#82aaff;"> https://github.com/axodotdev/axolotlsay/releases/download/v0.1.0/axolotlsay-installer.sh </span><span style="color:#89ddff;">| </span><span style="color:#82aaff;">sh</span></pre>
+
+    <button class="button copy-clipboard-button primary" data-copy="curl --proto '=https' --tlsv1.2 -LsSf https://github.com/axodotdev/axolotlsay/releases/download/v0.1.0/axolotlsay-installer.sh | sh">
+        <svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 20 20' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M8 2a1 1 0 000 2h2a1 1 0 100-2H8z'></path><path d='M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z'></path></svg>
+    </button>
+    
+    
+        
+        
+            
+        
+        <a class="button primary" href="/axolotlsay/axolotlsay-installer.sh.txt">Source</a>
+    
+</div>
+                                
+
+                                
+                            </li>
+                        
+                            
+                            <li data-id="7" data-triple="aarch64-apple-darwin" class="install-content hidden">
+                                
+                                    
+                                    <div class="install-code-wrapper">
+    <pre style="background-color:#263238;">
+<span style="color:#82aaff;">npx @axodotdev/axolotlsay</span></pre>
+
+    <button class="button copy-clipboard-button primary" data-copy="npx @axodotdev/axolotlsay">
+        <svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 20 20' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M8 2a1 1 0 000 2h2a1 1 0 100-2H8z'></path><path d='M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z'></path></svg>
+    </button>
+    
+    
+</div>
+                                
+
+                                
+                            </li>
+                        
+                            
+                            <li data-id="3" data-triple="aarch64-apple-darwin" class="install-content hidden">
+                                
+
+                                
+                                    
+                                     <div class="download-wrapper">
+                                         <a href="https://github.com/axodotdev/axolotlsay/releases/download/v0.1.0/axolotlsay-aarch64-apple-darwin.tar.gz">
+                                             <button class="button primary">
+                                                 <span>Download</span>
+                                                 <span class="button-subtitle">axolotlsay-aarch64-apple-darwin.tar.gz</span>
+                                             </button>
+                                         </a>
+                                     </div>
+                                
+                            </li>
+                        
+                    </ul>
+                </li>
+            
+                <li class="arch hidden" data-arch="x86_64-apple-darwin">
+                    
+                        <ul class="tabs">
+                            
+                                
+                                
+                                <li class="install-tab" data-id="0" data-triple="x86_64-apple-darwin">
+                                    shell
+                                </li>
+                            
+                                
+                                
+                                <li class="install-tab" data-id="7" data-triple="x86_64-apple-darwin">
+                                    npx
+                                </li>
+                            
+                                
+                                
+                                <li class="install-tab" data-id="4" data-triple="x86_64-apple-darwin">
+                                    tarball
+                                </li>
+                            
+                        </ul>
+                    
+
+                    <ul class="contents">
+                        
+                            
+                            <li data-id="0" data-triple="x86_64-apple-darwin" class="install-content">
+                                
+                                    
+                                    <div class="install-code-wrapper">
+    <pre style="background-color:#263238;">
+<span style="color:#82aaff;">curl</span><span style="color:#89ddff;"> --</span><span style="color:#f78c6c;">proto </span><span style="color:#89ddff;">&#39;</span><span style="color:#c3e88d;">=https</span><span style="color:#89ddff;">&#39; --</span><span style="color:#f78c6c;">tlsv1</span><span style="color:#82aaff;">.2</span><span style="color:#89ddff;"> -</span><span style="color:#f78c6c;">LsSf</span><span style="color:#82aaff;"> https://github.com/axodotdev/axolotlsay/releases/download/v0.1.0/axolotlsay-installer.sh </span><span style="color:#89ddff;">| </span><span style="color:#82aaff;">sh</span></pre>
+
+    <button class="button copy-clipboard-button primary" data-copy="curl --proto '=https' --tlsv1.2 -LsSf https://github.com/axodotdev/axolotlsay/releases/download/v0.1.0/axolotlsay-installer.sh | sh">
+        <svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 20 20' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M8 2a1 1 0 000 2h2a1 1 0 100-2H8z'></path><path d='M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z'></path></svg>
+    </button>
+    
+    
+        
+        
+            
+        
+        <a class="button primary" href="/axolotlsay/axolotlsay-installer.sh.txt">Source</a>
+    
+</div>
+                                
+
+                                
+                            </li>
+                        
+                            
+                            <li data-id="7" data-triple="x86_64-apple-darwin" class="install-content hidden">
+                                
+                                    
+                                    <div class="install-code-wrapper">
+    <pre style="background-color:#263238;">
+<span style="color:#82aaff;">npx @axodotdev/axolotlsay</span></pre>
+
+    <button class="button copy-clipboard-button primary" data-copy="npx @axodotdev/axolotlsay">
+        <svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 20 20' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M8 2a1 1 0 000 2h2a1 1 0 100-2H8z'></path><path d='M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z'></path></svg>
+    </button>
+    
+    
+</div>
+                                
+
+                                
+                            </li>
+                        
+                            
+                            <li data-id="4" data-triple="x86_64-apple-darwin" class="install-content hidden">
+                                
+
+                                
+                                    
+                                     <div class="download-wrapper">
+                                         <a href="https://github.com/axodotdev/axolotlsay/releases/download/v0.1.0/axolotlsay-x86_64-apple-darwin.tar.gz">
+                                             <button class="button primary">
+                                                 <span>Download</span>
+                                                 <span class="button-subtitle">axolotlsay-x86_64-apple-darwin.tar.gz</span>
+                                             </button>
+                                         </a>
+                                     </div>
+                                
+                            </li>
+                        
+                    </ul>
+                </li>
+            
+                <li class="arch hidden" data-arch="x86_64-pc-windows-msvc">
+                    
+                        <ul class="tabs">
+                            
+                                
+                                
+                                <li class="install-tab" data-id="1" data-triple="x86_64-pc-windows-msvc">
+                                    powershell
+                                </li>
+                            
+                                
+                                
+                                <li class="install-tab" data-id="7" data-triple="x86_64-pc-windows-msvc">
+                                    npx
+                                </li>
+                            
+                                
+                                
+                                <li class="install-tab" data-id="5" data-triple="x86_64-pc-windows-msvc">
+                                    tarball
+                                </li>
+                            
+                        </ul>
+                    
+
+                    <ul class="contents">
+                        
+                            
+                            <li data-id="1" data-triple="x86_64-pc-windows-msvc" class="install-content">
+                                
+                                    
+                                    <div class="install-code-wrapper">
+    <pre style="background-color:#263238;">
+<span style="color:#82aaff;">irm https://github.com/axodotdev/axolotlsay/releases/download/v0.1.0/axolotlsay-installer.ps1 </span><span style="color:#89ddff;">| </span><span style="color:#82aaff;">iex</span></pre>
+
+    <button class="button copy-clipboard-button primary" data-copy="irm https://github.com/axodotdev/axolotlsay/releases/download/v0.1.0/axolotlsay-installer.ps1 | iex">
+        <svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 20 20' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M8 2a1 1 0 000 2h2a1 1 0 100-2H8z'></path><path d='M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z'></path></svg>
+    </button>
+    
+    
+        
+        
+            
+        
+        <a class="button primary" href="/axolotlsay/axolotlsay-installer.ps1.txt">Source</a>
+    
+</div>
+                                
+
+                                
+                            </li>
+                        
+                            
+                            <li data-id="7" data-triple="x86_64-pc-windows-msvc" class="install-content hidden">
+                                
+                                    
+                                    <div class="install-code-wrapper">
+    <pre style="background-color:#263238;">
+<span style="color:#82aaff;">npx @axodotdev/axolotlsay</span></pre>
+
+    <button class="button copy-clipboard-button primary" data-copy="npx @axodotdev/axolotlsay">
+        <svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 20 20' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M8 2a1 1 0 000 2h2a1 1 0 100-2H8z'></path><path d='M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z'></path></svg>
+    </button>
+    
+    
+</div>
+                                
+
+                                
+                            </li>
+                        
+                            
+                            <li data-id="5" data-triple="x86_64-pc-windows-msvc" class="install-content hidden">
+                                
+
+                                
+                                    
+                                     <div class="download-wrapper">
+                                         <a href="https://github.com/axodotdev/axolotlsay/releases/download/v0.1.0/axolotlsay-x86_64-pc-windows-msvc.tar.gz">
+                                             <button class="button primary">
+                                                 <span>Download</span>
+                                                 <span class="button-subtitle">axolotlsay-x86_64-pc-windows-msvc.tar.gz</span>
+                                             </button>
+                                         </a>
+                                     </div>
+                                
+                            </li>
+                        
+                    </ul>
+                </li>
+            
+                <li class="arch hidden" data-arch="x86_64-unknown-linux-gnu">
+                    
+                        <ul class="tabs">
+                            
+                                
+                                
+                                <li class="install-tab" data-id="0" data-triple="x86_64-unknown-linux-gnu">
+                                    shell
+                                </li>
+                            
+                                
+                                
+                                <li class="install-tab" data-id="7" data-triple="x86_64-unknown-linux-gnu">
+                                    npx
+                                </li>
+                            
+                                
+                                
+                                <li class="install-tab" data-id="6" data-triple="x86_64-unknown-linux-gnu">
+                                    tarball
+                                </li>
+                            
+                        </ul>
+                    
+
+                    <ul class="contents">
+                        
+                            
+                            <li data-id="0" data-triple="x86_64-unknown-linux-gnu" class="install-content">
+                                
+                                    
+                                    <div class="install-code-wrapper">
+    <pre style="background-color:#263238;">
+<span style="color:#82aaff;">curl</span><span style="color:#89ddff;"> --</span><span style="color:#f78c6c;">proto </span><span style="color:#89ddff;">&#39;</span><span style="color:#c3e88d;">=https</span><span style="color:#89ddff;">&#39; --</span><span style="color:#f78c6c;">tlsv1</span><span style="color:#82aaff;">.2</span><span style="color:#89ddff;"> -</span><span style="color:#f78c6c;">LsSf</span><span style="color:#82aaff;"> https://github.com/axodotdev/axolotlsay/releases/download/v0.1.0/axolotlsay-installer.sh </span><span style="color:#89ddff;">| </span><span style="color:#82aaff;">sh</span></pre>
+
+    <button class="button copy-clipboard-button primary" data-copy="curl --proto '=https' --tlsv1.2 -LsSf https://github.com/axodotdev/axolotlsay/releases/download/v0.1.0/axolotlsay-installer.sh | sh">
+        <svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 20 20' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M8 2a1 1 0 000 2h2a1 1 0 100-2H8z'></path><path d='M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z'></path></svg>
+    </button>
+    
+    
+        
+        
+            
+        
+        <a class="button primary" href="/axolotlsay/axolotlsay-installer.sh.txt">Source</a>
+    
+</div>
+                                
+
+                                
+                            </li>
+                        
+                            
+                            <li data-id="7" data-triple="x86_64-unknown-linux-gnu" class="install-content hidden">
+                                
+                                    
+                                    <div class="install-code-wrapper">
+    <pre style="background-color:#263238;">
+<span style="color:#82aaff;">npx @axodotdev/axolotlsay</span></pre>
+
+    <button class="button copy-clipboard-button primary" data-copy="npx @axodotdev/axolotlsay">
+        <svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 20 20' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M8 2a1 1 0 000 2h2a1 1 0 100-2H8z'></path><path d='M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z'></path></svg>
+    </button>
+    
+    
+</div>
+                                
+
+                                
+                            </li>
+                        
+                            
+                            <li data-id="6" data-triple="x86_64-unknown-linux-gnu" class="install-content hidden">
+                                
+
+                                
+                                    
+                                     <div class="download-wrapper">
+                                         <a href="https://github.com/axodotdev/axolotlsay/releases/download/v0.1.0/axolotlsay-x86_64-unknown-linux-gnu.tar.gz">
+                                             <button class="button primary">
+                                                 <span>Download</span>
+                                                 <span class="button-subtitle">axolotlsay-x86_64-unknown-linux-gnu.tar.gz</span>
+                                             </button>
+                                         </a>
+                                     </div>
+                                
+                            </li>
+                        
+                    </ul>
+                </li>
+            
+        </ul>
+    </div>
+
+    
+        <div class="no-autodetect hidden">
+            <span class="no-autodetect-details">We weren't able to detect your OS.</span>
+        </div>
+        <noscript>
+            <a href="/axolotlsay/artifacts/">View all installation options</a>
+        </noscript>
+    
+    <div class="mac-switch hidden">This project doesn't offer Apple Silicon downloads, but you can run Intel macOS binaries via Rosetta 2.</div>
+
+    
+    
+    <div class="bottom-options ">
+        <a href="/axolotlsay/artifacts/" class="backup-download primary">View all installation options</a>
+        
+            <div class="arch-select hidden">
+                <select id="install-arch-select">
+                    <option disabled="true" selected="true" value=""></option>
+                    
+                        <option value="x86_64-unknown-linux-gnu">Linux x64</option>
+                    
+                        <option value="aarch64-apple-darwin">macOS Apple Silicon</option>
+                    
+                        <option value="x86_64-apple-darwin">macOS Intel</option>
+                    
+                        <option value="x86_64-pc-windows-msvc">Windows x64</option>
+                    
+                </select>
+            </div>
+        
+    </div>
+</div>
+
+<a href="/axolotlsay/artifacts/" class="button mobile-download primary">View all installation options</a>
+
+<h1>axolotlsay</h1>
+<blockquote>
+<p>💬 a CLI for learning to distribute CLIs in rust</p>
+</blockquote>
+<h2>Usage</h2>
+<pre style="background-color:#263238;"><span style="color:#89ddff;">&gt;</span><span style="color:#82aaff;"> axolotlsay </span><span style="color:#89ddff;">"</span><span style="color:#c3e88d;">hello world</span><span style="color:#89ddff;">"
+</span><span style="color:#eeffff;">
+</span><span style="color:#eeffff;">         </span><span style="color:#82aaff;">+-------------+
+</span><span style="color:#eeffff;">         </span><span style="color:#89ddff;">| </span><span style="color:#82aaff;">hello world </span><span style="color:#89ddff;">|
+</span><span style="color:#eeffff;">         </span><span style="color:#82aaff;">+-------------+
+</span><span style="color:#eeffff;">        </span><span style="color:#82aaff;">/
+</span><span style="color:#82aaff;">≽(◕ ᴗ ◕</span><span style="color:#eeffff;">)</span><span style="color:#82aaff;">≼
+</span></pre>
+
+<h2>License</h2>
+<p>Licensed under either of</p>
+<ul>
+<li>Apache License, Version 2.0, (<a href="LICENSE-APACHE" rel="noopener noreferrer">LICENSE-APACHE</a> or <a href="https://www.apache.org/licenses/LICENSE-2.0" rel="noopener noreferrer">apache.org/licenses/LICENSE-2.0</a>)</li>
+<li>MIT license (<a href="LICENSE-MIT" rel="noopener noreferrer">LICENSE-MIT</a> or <a href="https://opensource.org/licenses/MIT" rel="noopener noreferrer">opensource.org/licenses/MIT</a>)</li>
+</ul>
+<p>at your option.</p>
+
+
+                </main>
+            </div>
+
+            <footer>
+                
+                    <a href="https://github.com/axodotdev/axolotlsay"><div class="github-icon" aria-hidden="true"></div></a>
+                
+                <span>
+                    axolotlsay, MIT OR Apache-2.0
+                </span>
+            </footer>
+        </div>
+
+        
+            <script defer="true" data-domain="opensource.axo.dev" src="https://plausible.io/js/script.js"></script>
+        
+        
+
+        
+
+    <script src="/axolotlsay/artifacts.js"></script>
+
+
+    </body>
+</html>
+

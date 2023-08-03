@@ -11,7 +11,7 @@ pub struct SocialConfig {
     pub twitter_account: Option<String>,
 }
 // Settings for social media integrations
-#[derive(Debug, Deserialize, JsonSchema)]
+#[derive(Debug, Serialize, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct SocialLayer {
     /// Image to show in link previews
