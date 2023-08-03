@@ -4,17 +4,23 @@
 
 ### Features
 
-- **Workspace Support - [shadows-withal]/[pr532], [jamesmunns]/[i493]**
+- **Workspace Support - [shadows-withal]/many PRs, [jamesmunns]/[i493]**
   
   You can now tell oranda to build multiple sites at once! By default, this will also generate a separate "root"
   page, providing an index into all projects defined within your workspace.
 
   Details TBD
 
+- **Inlining CSS** - [shadows-withal]/[pr565], [pr566], [i554]
+
+  oranda now uses a CSS version that's included in the binary it's shipped with! This means no more HTTP requests to GitHub
+  to fetch a CSS version over and over. As a bonus, we removed the internal dependency on a Node.js toolchain to build
+  the CSS in development, which should make hacking on oranda and its themes a lot easier!
+
 - **Basic CSS caching - [jamesmunns]/[pr551]**
 
   In line with workspace support, oranda will now attempt to keep already downloaded versions of its CSS in-memory, which
-  helps tremendously when you have a lot of workspace members all using the latest CSS version.
+  helps tremendously when you have a lot of workspace members all using a custom CSS version.
 
 ### Fixes
 
@@ -33,16 +39,27 @@
   Right now, we only support GitHub repository URLs to get context from. This fixed an issue where technically, oranda
   would attempt to do this with GitLab URLs as well, which would cause unintended behavior.
 
+- **Support `git+https` URLs** - [shadows-withal]/[pr563], [geelen]/[i531]
+
+  oranda now correctly handles `git+https://yourrepo` repository URLs, and is a lot more informative when it encounters
+  one that it _can't_ parse.
+
 [i480]: https://github.com/axodotdev/oranda/issues/480
 [i493]: https://github.com/axodotdev/oranda/issues/493
+[i531]: https://github.com/axodotdev/oranda/issues/531
+[i554]: https://github.com/axodotdev/oranda/issues/554
 [pr532]: https://github.com/axodotdev/oranda/pull/532
 [pr544]: https://github.com/axodotdev/oranda/pull/544
 [pr549]: https://github.com/axodotdev/oranda/pull/549
 [pr551]: https://github.com/axodotdev/oranda/pull/551
 [pr553]: https://github.com/axodotdev/oranda/pull/553
+[pr563]: https://github.com/axodotdev/oranda/pull/563
+[pr565]: https://github.com/axodotdev/oranda/pull/565
+[pr566]: https://github.com/axodotdev/oranda/pull/566
 [shadows-withal]: https://github.com/shadows-withal
 [Plecra]: https://github.com/Plecra
 [jamesmunns]: https://github.com/jamesmunns
+[geelen]: https://github.com/geelen
 
 ## 0.2.0 - 2023-07-19
 
