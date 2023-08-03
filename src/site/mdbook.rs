@@ -3,9 +3,11 @@ use camino::{Utf8Path, Utf8PathBuf};
 use mdbook::MDBook;
 
 use crate::config::MdBookConfig;
+use crate::data::workspaces::WorkspaceData;
 use crate::errors::*;
 use crate::site::{oranda_theme::OrandaTheme, Site};
 
+use super::link::determine_path;
 use super::markdown::SyntaxTheme;
 
 // Files we're importing
@@ -156,13 +158,18 @@ impl AxomdbookTheme {
 ///
 /// FIXME: this is broken if pwd is not the same dir as oranda.json. Our config code
 /// should do this mapping for us, when it still knows where oranda.json is!
-pub fn mdbook_dir(book_cfg: &MdBookConfig) -> Result<Utf8PathBuf> {
-    let pwd = axoasset::LocalAsset::current_dir()?;
+pub fn mdbook_dir(
+    workspace: Option<&WorkspaceData>,
+    book_cfg: &MdBookConfig,
+) -> Result<Utf8PathBuf> {
+    let root_path = Utf8PathBuf::from_path_buf(std::env::current_dir()?).unwrap_or_default();
+    let member_path = workspace.map(|w| &w.path);
     let book_path = book_cfg
         .path
         .as_ref()
         .expect("Had no mdbook.path, but config code didn't disable mdbook?");
-    Ok(pwd.join(book_path))
+    let path = determine_path(root_path, &member_path, book_path)?;
+    Ok(path)
 }
 
 /// Gets the custom theme to set in an mdbook
@@ -182,13 +189,14 @@ pub fn custom_theme_dir(_book_cfg: &MdBookConfig, dist: &Utf8Path) -> Result<Utf
 
 /// Build and write the mdbook to the dist dir
 pub fn build_mdbook(
+    workspace: Option<&WorkspaceData>,
     dist: &Utf8Path,
     book_cfg: &MdBookConfig,
     oranda_theme: &OrandaTheme,
     syntax_theme: &SyntaxTheme,
 ) -> Result<()> {
     // Read mdbook's config to inherit the user's setup
-    let book_dir = mdbook_dir(book_cfg)?;
+    let book_dir = mdbook_dir(workspace, book_cfg)?;
     let mut md = load_mdbook(&book_dir)?;
 
     // If custom theme is enabled, set that up

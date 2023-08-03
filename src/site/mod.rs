@@ -314,6 +314,7 @@ impl Site {
         }
         if let Some(book_cfg) = &config.components.mdbook {
             mdbook::build_mdbook(
+                self.workspace_data.as_ref(),
                 &dist,
                 book_cfg,
                 &config.styles.theme,
