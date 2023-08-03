@@ -1,19 +1,14 @@
 use std::env;
-use std::io::Write;
-use std::process::Command;
 use std::sync::RwLock;
 
 use crate::errors::*;
 
 use crate::config::style::ORANDA_CSS_TAG;
 use axoasset::{Asset, LocalAsset};
-use camino::{Utf8Path, Utf8PathBuf};
-use directories::ProjectDirs;
+use camino::Utf8Path;
 use minifier::css;
 
 static CSS_CACHE: RwLock<Vec<CssItem>> = RwLock::new(Vec::new());
-
-const CSS_SRC_PATH: &str = "oranda-css/css/main.css";
 
 struct CssItem {
     release_tag: String,
@@ -45,82 +40,25 @@ pub fn get_css_link(path_prefix: &Option<String>, release_tag: &str) -> Result<S
 pub fn place_css(dist_dir: &str, release_tag: &str) -> Result<()> {
     // Even if you're running a development build, we still respect the custom CSS version preference
     // by falling back to fetching said version from GitHub.
-    if cfg!(debug_assertions) && release_tag == ORANDA_CSS_TAG {
-        // If we're running in a local environment, we fetch a Tailwind binary and compile the CSS
+    if release_tag == ORANDA_CSS_TAG {
+        // If we're running a development build, we fetch a Tailwind binary and compile the CSS
         // on the spot. This is useful if we're working on oranda-css locally.
-        build_css(dist_dir)
+        #[cfg(debug_assertions)]
+        {
+            oranda_generate_css::build_css(dist_dir)?;
+        }
+        // If not, we rely on the `build.rs` file to have pre-compiled the CSS for us.
+        #[cfg(not(debug_assertions))]
+        {
+            let css = include_str!("../../../oranda-css/dist/oranda.css");
+            LocalAsset::write_new_all(css, format!("{dist_dir}/oranda-{release_tag}.css"))?;
+        }
+        Ok(())
     } else {
-        // If we're running in a released binary, we fetch the latest tag (or whichever tag is
-        // specified in the configuration).
+        // If we specified a custom oranda version, or someone compiled oranda without Cargo (how?),
+        // fall back to fetching that version off GitHub.
         fetch_css(dist_dir, release_tag)
     }
-}
-
-pub fn build_css(dist_dir: &str) -> Result<()> {
-    // Fetch our cache dir
-    let project_dir = ProjectDirs::from("dev", "axo", "oranda")
-        .expect("Unable to create cache dir for downloading Tailwind!");
-    let cache_dir = project_dir.cache_dir();
-    // Figure out our target "double" (tailwind has weird naming around this)
-    let double = match (env::consts::OS, env::consts::ARCH) {
-        ("linux", "x86_64") => "linux-x64",
-        ("linux", "aarch64") => "linux-arm64",
-        ("linux", "arm") => "linux-armv7",
-        ("macos", "x86_64") => "macos-x64",
-        ("macos", "aarch64") => "macos-arm64",
-        ("windows", "x86_64") => "windows-x64.exe",
-        ("windows", "aarch64") => "windows-arm64.exe",
-        _ => "linux-x64",
-    };
-    let mut binary_path = Utf8PathBuf::from(cache_dir.display().to_string());
-    LocalAsset::create_dir_all(&binary_path)?;
-    binary_path.push(format!("tailwindcss-{double}"));
-    if !binary_path.exists() {
-        // Fetch the binary from GitHub if it doesn't exist
-        tracing::info!("Fetching Tailwind binary from GitHub release...");
-        let url = format!(
-            "https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-{double}"
-        );
-        let handle = tokio::runtime::Handle::current();
-        let response = handle.block_on(reqwest::get(url))?;
-        let bytes = handle.block_on(response.bytes())?;
-        let file = LocalAsset::new(&binary_path, Vec::from(bytes))?;
-        file.write(
-            binary_path
-                .parent()
-                .expect("Tailwind binary path has no parent!?"),
-        )?;
-
-        // On non-Windows platforms, we need to mark the file as executable
-        #[cfg(target_family = "unix")]
-        {
-            use std::os::unix::prelude::PermissionsExt;
-            let user_execute = std::fs::Permissions::from_mode(0o755);
-            std::fs::set_permissions(&binary_path, user_execute)?;
-        }
-    }
-
-    tracing::info!("Building oranda CSS using Tailwind...");
-    let css_src_path = Utf8PathBuf::from(CSS_SRC_PATH);
-    let output = Command::new(binary_path)
-        .args([
-            "-c",
-            "oranda-css/tailwind.config.js",
-            "-i",
-            css_src_path.as_str(),
-            "-o",
-            &format!("{dist_dir}/oranda.css"),
-            "--minify",
-        ])
-        .output()?;
-    std::io::stderr().write_all(&output.stderr)?;
-    output
-        .status
-        .success()
-        .then_some(true)
-        .expect("Tailwind failed to compile CSS!");
-
-    Ok(())
 }
 
 fn fetch_css(dist_dir: &str, release_tag: &str) -> Result<()> {

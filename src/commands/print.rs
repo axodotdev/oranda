@@ -1,5 +1,6 @@
 use clap::Parser;
 use oranda::errors::*;
+use oranda_generate_css::DEFAULT_CSS_OUTPUT_DIR;
 
 #[derive(Debug, Parser)]
 pub struct ConfigSchema {}
@@ -19,8 +20,8 @@ pub struct GenerateCss {}
 
 impl GenerateCss {
     pub fn run(&self) -> Result<()> {
-        oranda::site::layout::css::build_css("dist")?;
-        tracing::info!("CSS placed in dist/oranda.css");
+        oranda_generate_css::build_css(DEFAULT_CSS_OUTPUT_DIR)?;
+        tracing::info!("CSS placed in {DEFAULT_CSS_OUTPUT_DIR}/oranda.css");
         Ok(())
     }
 }

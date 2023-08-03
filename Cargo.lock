@@ -1966,7 +1966,6 @@ dependencies = [
  "clap",
  "comrak",
  "console",
- "directories",
  "fs_extra",
  "futures-util",
  "include_dir",
@@ -1978,6 +1977,7 @@ dependencies = [
  "minijinja",
  "notify-debouncer-mini",
  "octolotl",
+ "oranda-generate-css",
  "pathdiff",
  "reqwest",
  "schemars",
@@ -1994,6 +1994,20 @@ dependencies = [
  "tracing",
  "tracing-subscriber",
  "url",
+]
+
+[[package]]
+name = "oranda-generate-css"
+version = "0.3.0-prerelease.4"
+dependencies = [
+ "axoasset",
+ "camino",
+ "directories",
+ "miette",
+ "reqwest",
+ "thiserror",
+ "tokio",
+ "tracing",
 ]
 
 [[package]]

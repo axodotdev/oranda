@@ -39,6 +39,10 @@ pub enum OrandaError {
     #[error(transparent)]
     UrlParse(#[from] url::ParseError),
 
+    #[error(transparent)]
+    #[diagnostic(transparent)]
+    GenerateCss(#[from] oranda_generate_css::errors::GenerateCssError),
+
     #[error("Failed to create a directory, `{dist_path}` to build your project in.")]
     DistDirCreationError {
         dist_path: String,
