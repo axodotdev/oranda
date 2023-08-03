@@ -12,7 +12,7 @@ license = "MIT OR Apache-2.0"
 name = "oranda"
 
 [workspace]
-members = ["oranda-css"]
+members = ["generate-css"]
 
 [dependencies]
 ammonia = "3"
