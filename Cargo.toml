@@ -61,6 +61,7 @@ assert_fs = "1.0.7"
 
 [build-dependencies]
 oranda-generate-css = { version = "0.3.0-prerelease.4", path = "generate-css" }
+tokio = { version = "1.20.1", features = ["full"] }
 
 # The profile that 'cargo dist' will build with
 [profile.dist]
