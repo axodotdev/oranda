@@ -46,8 +46,7 @@ impl WorkspaceIndexContext {
         member: &WorkspaceData,
         workspace_config: &Config,
     ) -> Result<Utf8PathBuf> {
-        let root_path = Utf8PathBuf::from_path_buf(std::env::current_dir()?.canonicalize()?)
-            .unwrap_or_default();
+        let root_path = Utf8PathBuf::from_path_buf(std::env::current_dir()?).unwrap_or_default();
         if logo_url.starts_with("http") {
             // Lifted from axoasset. Expose it there?
             let mut filename = url::Url::parse(logo_url)?

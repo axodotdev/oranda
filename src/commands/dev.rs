@@ -48,8 +48,7 @@ pub struct Dev {
 
 impl Dev {
     pub fn run(self) -> Result<()> {
-        let root_path = Utf8PathBuf::from_path_buf(std::env::current_dir()?.canonicalize()?)
-            .unwrap_or_default();
+        let root_path = Utf8PathBuf::from_path_buf(std::env::current_dir()?).unwrap_or_default();
         let (config, mut paths_to_watch) = if let Ok(Some(config)) = Site::get_workspace_config() {
             let mut workspace_config_path = root_path.clone();
             workspace_config_path.push("oranda-workspace.json");
