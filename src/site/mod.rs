@@ -63,6 +63,10 @@ impl Site {
         member_data: &Vec<WorkspaceData>,
     ) -> Result<()> {
         let templates = Templates::new_for_workspace_index(workspace_config)?;
+        css::place_css(
+            &workspace_config.build.dist_dir,
+            &workspace_config.styles.oranda_css_version,
+        )?;
         let context = WorkspaceIndexContext::new(member_data, workspace_config)?;
         let page = Page::new_from_template(
             "index.html",

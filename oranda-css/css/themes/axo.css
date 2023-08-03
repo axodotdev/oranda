@@ -7,12 +7,13 @@ html.axo {
     --axo-pink-color: #FF75C3;
 
     /* Base Oranda theme variables */
-    --dark-color: #141414;
-    --link-color: var(--axo-pink-color);
-    --light-highlight-bg-color: var(--light-color);
-    --light-highlight-fg-color: var(--dark-color);
-    --dark-highlight-bg-color: var(--dark-color);
-    --dark-highlight-fg-color: var(--light-color);
+    --light-fg-color: #141414;
+    --light-link-color: var(--axo-pink-color);
+    --dark-link-color: var(--axo-pink-color);
+    --light-highlight-bg-color: var(--light-bg-color);
+    --light-highlight-fg-color: var(--light-fg-color);
+    --dark-highlight-bg-color: var(--light-fg-color);
+    --dark-highlight-fg-color: var(--light-bg-color);
     --font-face: "Comfortaa", sans-serif;
 }
 

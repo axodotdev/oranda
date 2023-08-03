@@ -12,21 +12,17 @@
 
 .artifacts {
   @apply sm:flex items-center flex-col mb-8 p-0 hidden;
-  color: var(--light-highlight-fg-color);
-  background-color: var(--light-highlight-bg-color);
+  color: var(--highlight-fg-color);
+  background-color: var(--highlight-bg-color);
 }
 
 .artifacts-table {
   @apply block max-w-full overflow-auto;
 }
 
-.dark .artifacts {
-  color: var(--dark-highlight-fg-color);
-  background-color: var(--dark-highlight-bg-color);
-}
-
 ul.tabs {
   @apply flex border-b-2;
+  border-color: var(--highlight-fg-color);
 }
 
 ul.tabs li {
@@ -34,13 +30,8 @@ ul.tabs li {
 }
 
 ul.tabs li.selected {
-  color: var(--light-highlight-bg-color);
-  background-color: var(--light-highlight-fg-color);
-}
-
-.dark ul.tabs li.selected {
-  color: var(--dark-highlight-bg-color);
-  background-color: var(--dark-highlight-fg-color);
+  color: var(--highlight-bg-color);
+  background-color: var(--highlight-fg-color);
 }
 
 .install-content {
