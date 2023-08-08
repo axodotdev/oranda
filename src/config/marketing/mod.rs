@@ -1,6 +1,6 @@
 pub use analytics::AnalyticsConfig;
 use schemars::JsonSchema;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 pub use social::{SocialConfig, SocialLayer};
 
 use super::ApplyLayer;
@@ -17,7 +17,7 @@ pub struct MarketingConfig {
     pub social: SocialConfig,
 }
 /// Settings for marketing/social/analytics
-#[derive(Debug, Deserialize, JsonSchema)]
+#[derive(Debug, Serialize, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct MarketingLayer {
     /// Settings for analytics

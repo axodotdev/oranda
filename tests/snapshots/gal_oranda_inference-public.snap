@@ -1,0 +1,170 @@
+---
+source: tests/gallery/oranda_impl.rs
+expression: "&snapshots"
+---
+================ public/artifacts/index.html ================
+<!DOCTYPE html>
+<html lang="en" id="oranda" class="dark">
+    <head>
+        <title>My Oranda Project</title>
+        
+        
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="My Oranda Project" />
+        
+        
+        
+        <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
+        <link rel="stylesheet" href="/oranda.css" />
+        
+        
+    </head>
+    <body>
+        <div class="container">
+            <div class="page-body">
+                
+
+                <main>
+                    <header>
+                        
+                        <h1 class="title">My Oranda Project</h1>
+                        
+    <nav class="nav">
+        <ul>
+            <li><a href="/">Home</a></li>
+
+            
+
+            
+                <li><a href="/artifacts/">Install</a></li>
+            
+
+            
+
+            
+
+            
+        </ul>
+    </nav>
+
+                    </header>
+
+                    
+<div>
+    <div class="package-managers-downloads">
+        
+    </div>
+    <div>
+        <h3>Downloads</h3>
+        <table class="artifacts-table">
+            <tbody>
+                <tr>
+                    <th>File</th>
+                    <th>Platform</th>
+                    
+                </tr>
+                
+            </tbody>
+        </table>
+    </div>
+</div>
+
+                </main>
+            </div>
+
+            <footer>
+                
+                <span>
+                    My Oranda Project
+                </span>
+            </footer>
+        </div>
+
+        
+        
+
+        
+<script src="/artifacts.js"></script>
+
+    </body>
+</html>
+================ public/index.html ================
+<!DOCTYPE html>
+<html lang="en" id="oranda" class="dark">
+    <head>
+        <title>My Oranda Project</title>
+        
+        
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="My Oranda Project" />
+        
+        
+        
+        <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
+        <link rel="stylesheet" href="/oranda.css" />
+        
+        
+    </head>
+    <body>
+        <div class="container">
+            <div class="page-body">
+                
+
+                <main>
+                    <header>
+                        
+                        <h1 class="title">My Oranda Project</h1>
+                        
+    <nav class="nav">
+        <ul>
+            <li><a href="/">Home</a></li>
+
+            
+
+            
+                <li><a href="/artifacts/">Install</a></li>
+            
+
+            
+
+            
+
+            
+        </ul>
+    </nav>
+
+                    </header>
+
+                    
+
+<p>add readme</p>
+
+
+                </main>
+            </div>
+
+            <footer>
+                
+                <span>
+                    My Oranda Project
+                </span>
+            </footer>
+        </div>
+
+        
+        
+
+        
+
+    <script src="/artifacts.js"></script>
+
+
+    </body>
+</html>
+

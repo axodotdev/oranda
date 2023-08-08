@@ -1,4 +1,4 @@
-use oranda_generate_css::DEFAULT_CSS_OUTPUT_DIR;
+use oranda_generate_css::default_css_output_dir;
 
 fn main() {
     // Build the CSS on-demand if we're running a release-ish build here (as determined by Cargo)
@@ -10,6 +10,6 @@ fn main() {
             .build()
             .expect("Initializing tokio runtime failed");
         let _guard = runtime.enter();
-        oranda_generate_css::build_css(DEFAULT_CSS_OUTPUT_DIR).unwrap();
+        oranda_generate_css::build_css(&default_css_output_dir()).unwrap();
     }
 }

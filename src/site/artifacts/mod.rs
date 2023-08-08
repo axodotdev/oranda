@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 
 use crate::config::Config;
 use crate::data::artifacts::{File, FileIdx, InstallMethod, InstallerIdx, TargetTriple};
@@ -14,10 +14,7 @@ use serde::Serialize;
 /// The inner Vec is a list of supported platforms (display name).
 type DownloadableFiles = Vec<(FileIdx, File, Vec<String>)>;
 /// A map from TargetTriples to Installers that support that platform
-///
-/// In theory this should be BTreeMap or IndexMap but something in the pipeline from here to
-/// jinja seems to be forcing a sorting so it's deterministic..? Can't find docs for this.
-type Platforms = HashMap<TargetTriple, Vec<InstallerIdx>>;
+type Platforms = BTreeMap<TargetTriple, Vec<InstallerIdx>>;
 #[derive(Serialize, Debug)]
 pub struct Platform {
     target: TargetTriple,
@@ -97,7 +94,7 @@ pub fn template_context(context: &Context, config: &Config) -> Result<Option<Art
 /// Only grab platforms that we can actually provide downloadable files for.
 pub fn filter_platforms(release: &Release) -> Platforms {
     // First try to select platforms with downloadable artifacts
-    let mut platforms = HashMap::new();
+    let mut platforms = BTreeMap::new();
     for (target, installer) in release.artifacts.installers_by_target().iter() {
         let has_valid_installer = installer.iter().any(|i| {
             let installer = release.artifacts.installer(i.to_owned());

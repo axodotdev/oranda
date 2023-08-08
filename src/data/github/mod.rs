@@ -1,6 +1,7 @@
 use crate::errors::*;
 
 use axoasset::SourceFile;
+use chrono::DateTime;
 use serde::{Deserialize, Serialize};
 
 mod repo;
@@ -54,10 +55,29 @@ impl GithubRelease {
             Ok(r) => {
                 let res: serde_json::Value = serde_json::from_str(&r.text().await?)?;
                 let pretty_response = serde_json::to_string_pretty(&res)?;
-                Ok(
-                    SourceFile::new("", pretty_response)
-                        .deserialize_json::<Vec<GithubRelease>>()?,
-                )
+                let releases = SourceFile::new("", pretty_response)
+                    .deserialize_json::<Vec<GithubRelease>>()?;
+
+                // If DEBUG_DATA_CLAMP_DATE is set, discard entries that claim to be from after that date
+                let clamp = std::env::var("DEBUG_DATA_CLAMP_DATE").ok();
+                let parsed_clamp = clamp.map(|t| {
+                    DateTime::parse_from_rfc3339(&t).expect("failed to parse DEBUG_DATA_CLAMP_DATE")
+                });
+                let releases = releases
+                    .into_iter()
+                    .filter(|r| {
+                        let Some(clamp) = parsed_clamp else {
+                        return true;
+                    };
+                        let Ok(timestamp) = DateTime::parse_from_rfc3339(&r.created_at) else {
+                        return true;
+                    };
+
+                        timestamp <= clamp
+                    })
+                    .collect();
+
+                Ok(releases)
             }
             Err(e) => Err(OrandaError::GithubReleasesFetchError { details: e }),
         }

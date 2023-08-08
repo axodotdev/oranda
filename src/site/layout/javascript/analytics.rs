@@ -40,23 +40,23 @@ impl Analytics {
     }
 }
 
-#[derive(Debug, Deserialize, JsonSchema, Clone)]
+#[derive(Debug, Serialize, Deserialize, JsonSchema, Clone)]
 pub struct Google {
     pub tracking_id: String,
 }
 
-#[derive(Debug, Deserialize, JsonSchema, Clone)]
+#[derive(Debug, Serialize, Deserialize, JsonSchema, Clone)]
 pub struct Fathom {
     pub site: String,
 }
 
-#[derive(Debug, Deserialize, JsonSchema, Clone)]
+#[derive(Debug, Serialize, Deserialize, JsonSchema, Clone)]
 pub struct Plausible {
     pub domain: String,
     pub script_url: Option<String>,
 }
 
-#[derive(Debug, Deserialize, JsonSchema, Clone)]
+#[derive(Debug, Serialize, Deserialize, JsonSchema, Clone)]
 pub struct Umami {
     pub website: String,
     pub script_url: String,

@@ -68,7 +68,7 @@
         <a href="{{ "artifacts/" | generate_link(layout.path_prefix) }}" class="backup-download primary">View all installation options</a>
         {% if simple_platforms %}
             {% if first_target and first_target != "all" %}
-                <div class="arch-select">Platform: {{ platform.display_name }}</div>
+                <div class="arch-select">Platform: {{ artifacts.platforms_with_downloads | first | attr("display_name") }}</div>
             {% endif %}
         {% else %}
             <div class="arch-select hidden">

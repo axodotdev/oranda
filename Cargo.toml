@@ -58,6 +58,8 @@ oranda-generate-css = { version = "0.3.0-prerelease.4", path = "generate-css" }
 [dev-dependencies]
 assert_cmd = "2"
 assert_fs = "1.0.7"
+insta = { version = "1.31.0", features = ["filters"] }
+glob = "0.3.1"
 
 [build-dependencies]
 oranda-generate-css = { version = "0.3.0-prerelease.4", path = "generate-css" }

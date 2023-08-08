@@ -8,16 +8,26 @@ extern crate thiserror;
 
 use crate::errors::Result;
 use axoasset::LocalAsset;
-use camino::Utf8PathBuf;
+use camino::{Utf8Path, Utf8PathBuf};
 use directories::ProjectDirs;
 use std::env;
 use std::io::Write;
 use std::process::Command;
 
-const CSS_SRC_PATH: &str = "oranda-css/css/main.css";
-pub const DEFAULT_CSS_OUTPUT_DIR: &str = "oranda-css/dist";
+const MANIFEST_PATH: &str = env!("CARGO_MANIFEST_DIR");
+const CSS_SRC_PATH: &str = "../oranda-css/css/main.css";
+const TAILWIND_SRC_PATH: &str = "../oranda-css/tailwind.config.js";
+const DEFAULT_CSS_OUTPUT_DIR: &str = "../oranda-css/dist";
 
-pub fn build_css(dist_dir: &str) -> Result<()> {
+fn manifest_dir() -> &'static Utf8Path {
+    Utf8Path::new(MANIFEST_PATH)
+}
+
+pub fn default_css_output_dir() -> Utf8PathBuf {
+    manifest_dir().join(DEFAULT_CSS_OUTPUT_DIR)
+}
+
+pub fn build_css(dist_dir: &Utf8Path) -> Result<()> {
     // Fetch our cache dir
     let project_dir = ProjectDirs::from("dev", "axo", "oranda")
         .expect("Unable to create cache dir for downloading Tailwind!");
@@ -62,18 +72,17 @@ pub fn build_css(dist_dir: &str) -> Result<()> {
     }
 
     tracing::info!("Building oranda CSS using Tailwind...");
-    let manifest_path =
-        std::env::var("CARGO_MANIFEST_DIR").expect("CARGO_MANIFEST_DIR is not set!");
-    let mut css_src_path = Utf8PathBuf::from(manifest_path);
-    css_src_path.push(CSS_SRC_PATH);
+    let css_src_path = manifest_dir().join(CSS_SRC_PATH);
+    let tailwind_config_path = manifest_dir().join(TAILWIND_SRC_PATH);
+    let output_path = dist_dir.join("oranda.css");
     let output = Command::new(binary_path)
         .args([
             "-c",
-            "oranda-css/tailwind.config.js",
+            tailwind_config_path.as_str(),
             "-i",
             css_src_path.as_str(),
             "-o",
-            &format!("{dist_dir}/oranda.css"),
+            output_path.as_str(),
             "--minify",
         ])
         .output()?;

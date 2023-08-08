@@ -1,6 +1,6 @@
 use camino::Utf8PathBuf;
 use schemars::JsonSchema;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use std::path::Path;
 
 use crate::config::{ApplyLayer, ApplyOptExt};
@@ -15,7 +15,7 @@ pub struct FundingConfig {
     pub md_path: Option<String>,
 }
 /// Settings for displaying funding information on your page
-#[derive(Debug, Deserialize, JsonSchema)]
+#[derive(Debug, Serialize, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct FundingLayer {
     /// A funding method to make larger/focused to encourage over all others

@@ -12,7 +12,8 @@ use javascript::analytics::Analytics;
 
 #[derive(Serialize, Debug, Default)]
 pub struct LayoutContext {
-    theme: OrandaTheme,
+    /// Result of [`OrandaTheme::as_css_classes`][]
+    theme: &'static str,
     project_name: String,
     homepage: Option<String>,
     repository: Option<String>,
@@ -107,7 +108,7 @@ impl LayoutContext {
         let analytics = Analytics::new(&config.marketing.analytics);
 
         Ok(Self {
-            theme: config.styles.theme,
+            theme: config.styles.theme.as_css_classes(),
             project_name: config.project.name.clone(),
             homepage: config.project.homepage.clone(),
             repository: config.project.repository.clone(),
@@ -138,10 +139,24 @@ impl LayoutContext {
         )?;
         Ok(Self {
             project_name: workspace_config.workspace.name.clone().unwrap_or_default(),
-            theme: workspace_config.styles.theme,
+            theme: workspace_config.styles.theme.as_css_classes(),
             oranda_css_path: css_path,
             path_prefix: workspace_config.build.path_prefix.clone(),
             ..Default::default()
         })
+    }
+}
+
+impl OrandaTheme {
+    /// Gets the css classes this theme lowers to
+    pub fn as_css_classes(&self) -> &'static str {
+        match self {
+            OrandaTheme::Light => "light",
+            OrandaTheme::Dark => "dark",
+            OrandaTheme::AxoLight => "axo",
+            OrandaTheme::AxoDark => "dark axo",
+            OrandaTheme::Hacker => "hacker",
+            OrandaTheme::Cupcake => "cupcake",
+        }
     }
 }

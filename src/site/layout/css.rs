@@ -45,7 +45,7 @@ pub fn place_css(dist_dir: &str, release_tag: &str) -> Result<()> {
         // on the spot. This is useful if we're working on oranda-css locally.
         #[cfg(debug_assertions)]
         {
-            oranda_generate_css::build_css(dist_dir)?;
+            oranda_generate_css::build_css(Utf8Path::new(dist_dir))?;
         }
         // If not, we rely on the `build.rs` file to have pre-compiled the CSS for us.
         #[cfg(not(debug_assertions))]

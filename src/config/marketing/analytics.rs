@@ -1,12 +1,12 @@
 use schemars::JsonSchema;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 use crate::site::layout::javascript::analytics::{Fathom, Google, Plausible, Umami};
 
 /// Settings for Analytics
 ///
 /// Analytics providers are currently mututally exclusive -- you can pick at most one.
-#[derive(Debug, Deserialize, JsonSchema, Clone)]
+#[derive(Debug, Serialize, Deserialize, JsonSchema, Clone)]
 #[serde(rename_all = "lowercase")]
 pub enum AnalyticsConfig {
     /// Use Google Analytics

@@ -1,5 +1,5 @@
 use schemars::JsonSchema;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 use crate::config::{ApplyLayer, ApplyValExt};
 
@@ -43,7 +43,7 @@ pub struct ArtifactsConfig {
 }
 
 /// Setting for downloadable artifacts, installers, and package-managers
-#[derive(Debug, Default, Deserialize, JsonSchema)]
+#[derive(Debug, Default, Serialize, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct ArtifactsLayer {
     /// Whether to enable auto-detection of artifacts/installers in your Github Releases
