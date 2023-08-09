@@ -13,6 +13,8 @@ pub struct WorkspaceLayer {
     pub generate_index: Option<bool>,
     /// A list of workspace members
     pub members: Option<Vec<WorkspaceMember>>,
+    /// A list of members given priority in display
+    pub preferred_members: Option<Vec<String>>,
     /// Whether to enable workspace autodetection
     pub auto: Option<bool>,
     /// The path to additional documentation to render
@@ -33,6 +35,7 @@ pub struct WorkspaceConfig {
     pub name: Option<String>,
     pub generate_index: bool,
     pub members: Vec<WorkspaceMember>,
+    pub preferred_members: Vec<String>,
     pub auto: bool,
     pub docs_path: Option<String>,
 }
@@ -43,6 +46,7 @@ impl Default for WorkspaceConfig {
             name: Some("My Oranda Config".to_string()),
             generate_index: true,
             members: Vec::new(),
+            preferred_members: Vec::new(),
             auto: false,
             docs_path: None,
         }
@@ -55,6 +59,7 @@ impl ApplyLayer for WorkspaceConfig {
         let WorkspaceLayer {
             name,
             members,
+            preferred_members,
             generate_index,
             auto,
             docs_path,
@@ -62,6 +67,7 @@ impl ApplyLayer for WorkspaceConfig {
         self.name.apply_opt(name);
         self.generate_index.apply_val(generate_index);
         self.members.apply_val(members);
+        self.preferred_members.apply_val(preferred_members);
         self.auto.apply_val(auto);
         self.docs_path = docs_path
     }

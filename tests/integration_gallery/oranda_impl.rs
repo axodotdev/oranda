@@ -141,6 +141,7 @@ impl Tools {
                 name: Some("oranda gallery".to_owned()),
                 generate_index: Some(true),
                 members: Some(vec![]),
+                preferred_members: None,
                 auto: Some(false),
                 docs_path: None,
             }),

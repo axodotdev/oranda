@@ -6,6 +6,17 @@
 {% endif %}
 
 <ul class="index-grid">
+    {% for preferred in page.preferred_members %}
+    <li>
+                <div class="index-about">
+                    <h2>{{ preferred.name }}</h2>
+                    {% if preferred.description %}
+                        <div class="index-description">{{ preferred.description }}</div>
+                    {% endif %}
+                </div>
+    {% endfor %}
+</ul>
+<ul class="index-grid">
     {% for member in page.members %}
         <li>
             <div class="content">

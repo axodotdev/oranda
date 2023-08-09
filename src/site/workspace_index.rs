@@ -11,6 +11,7 @@ use serde::Serialize;
 pub struct WorkspaceIndexContext {
     pub members: Vec<WorkspaceIndexMember>,
     pub docs_content: Option<String>,
+    pub preferred_members: Vec<WorkspaceIndexMember>,
 }
 
 #[derive(Serialize, Debug)]
@@ -24,7 +25,9 @@ pub struct WorkspaceIndexMember {
 
 impl WorkspaceIndexContext {
     pub fn new(members: &Vec<WorkspaceData>, workspace_config: &Config) -> Result<Self> {
-        let mut ret = Vec::new();
+        let mut index_members = Vec::new();
+        let mut index_preferred_members = Vec::new();
+
         for member in members {
             let logo = if let Some(logo) = &member.config.styles.logo {
                 Some(Self::find_logo_path(logo, member, workspace_config)?)
@@ -38,12 +41,21 @@ impl WorkspaceIndexContext {
                 repository: member.config.project.repository.clone(),
                 logo,
             };
-            ret.push(context);
+            if workspace_config
+                .workspace
+                .preferred_members
+                .contains(&context.slug)
+            {
+                index_preferred_members.push(context);
+            } else {
+                index_members.push(context);
+            }
         }
 
         let mut workspace = Self {
-            members: ret,
             docs_content: None,
+            members: index_members,
+            preferred_members: index_preferred_members,
         };
 
         if let Some(docs_path) = &workspace_config.workspace.docs_path {
