@@ -15,7 +15,7 @@ use super::repo::{Repo, TestContext, TestContextLock, ToolsImpl};
 ///
 /// (RFC 3339 entry on utctime.net)
 const DEFAULT_DATA_CLAMP: &str = "2023-08-08T20:56:30+00:00";
-/// Set this at runtime to override DEFAULT_DATA_CLAMP           
+/// Set this at runtime to override DEFAULT_DATA_CLAMP
 const ENV_DATA_CLAMP: &str = "DEBUG_DATA_CLAMP_DATE";
 /// Set this at runtime to override STATIC_CARGO_DIST_BIN
 const ENV_RUNTIME_ORANDA_BIN: &str = "OVERRIDE_CARGO_BIN_EXE_oranda";
@@ -142,6 +142,7 @@ impl Tools {
                 generate_index: Some(true),
                 members: Some(vec![]),
                 auto: Some(false),
+                docs_path: None,
             }),
             _schema: None,
         };

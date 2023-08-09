@@ -1,6 +1,10 @@
 {% extends "workspace_index/layout.html" %}
 
 {% block content %}
+{% if page.docs_content %}
+    {{ page.docs_content|safe }}
+{% endif %}
+
 <ul class="index-grid">
     {% for member in page.members %}
         <li>

@@ -15,6 +15,8 @@ pub struct WorkspaceLayer {
     pub members: Option<Vec<WorkspaceMember>>,
     /// Whether to enable workspace autodetection
     pub auto: Option<bool>,
+    /// The path to additional documentation to render
+    pub docs_path: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize, JsonSchema, Clone, Hash, PartialEq, Eq)]
@@ -32,6 +34,7 @@ pub struct WorkspaceConfig {
     pub generate_index: bool,
     pub members: Vec<WorkspaceMember>,
     pub auto: bool,
+    pub docs_path: Option<String>,
 }
 
 impl Default for WorkspaceConfig {
@@ -41,6 +44,7 @@ impl Default for WorkspaceConfig {
             generate_index: true,
             members: Vec::new(),
             auto: false,
+            docs_path: None,
         }
     }
 }
@@ -53,10 +57,12 @@ impl ApplyLayer for WorkspaceConfig {
             members,
             generate_index,
             auto,
+            docs_path,
         } = layer;
         self.name.apply_opt(name);
         self.generate_index.apply_val(generate_index);
         self.members.apply_val(members);
         self.auto.apply_val(auto);
+        self.docs_path = docs_path
     }
 }
