@@ -1,10 +1,6 @@
 {% extends "workspace_index/layout.html" %}
 
 {% block content %}
-{% if page.docs_content %}
-    {{ page.docs_content|safe }}
-{% endif %}
-
 <ul class="index-grid">
     {% for preferred in page.preferred_members %}
         <li class="preferred">
@@ -25,6 +21,10 @@
         </li>
     {% endfor %}
 </ul>
+
+{% if page.docs_content %}
+    {{ page.docs_content|safe }}
+{% endif %}
 
 <ul class="index-grid">
     {% for member in page.members %}
