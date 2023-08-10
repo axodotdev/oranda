@@ -2,12 +2,15 @@ use crate::config::Config;
 use crate::data::workspaces::WorkspaceData;
 use crate::errors::Result;
 use crate::site::link::determine_path;
+use crate::site::markdown::to_html;
+use axoasset::LocalAsset;
 use camino::Utf8PathBuf;
 use serde::Serialize;
 
 #[derive(Serialize, Debug)]
 pub struct WorkspaceIndexContext {
     pub members: Vec<WorkspaceIndexMember>,
+    pub docs_content: Option<String>,
 }
 
 #[derive(Serialize, Debug)]
@@ -38,7 +41,18 @@ impl WorkspaceIndexContext {
             ret.push(context);
         }
 
-        Ok(Self { members: ret })
+        let mut workspace = Self {
+            members: ret,
+            docs_content: None,
+        };
+
+        if let Some(docs_path) = &workspace_config.workspace.docs_path {
+            let res = LocalAsset::load_string(docs_path)?;
+            let html = to_html(&res, &workspace_config.styles.syntax_theme)?;
+            workspace.docs_content = Some(html);
+        }
+
+        Ok(workspace)
     }
 
     fn find_logo_path(
