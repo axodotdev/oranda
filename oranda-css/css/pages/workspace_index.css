@@ -23,3 +23,11 @@ ul.index-grid {
 .index-grid .content .index-logo {
     @apply relative flex-shrink-0 w-20 h-20;
 }
+
+.index-grid li.preferred {
+    @apply col-span-2;
+}
+
+.index-about h2 {
+    @apply mt-0;
+}

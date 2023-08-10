@@ -1,6 +1,27 @@
 {% extends "workspace_index/layout.html" %}
 
 {% block content %}
+<ul class="index-grid">
+    {% for preferred in page.preferred_members %}
+        <li class="preferred">
+            <div class="content">
+                <div class="index-about">
+                    <h2>{{ preferred.name }}</h2>
+                    {% if preferred.description %}
+                        <div class="index-description">{{ preferred.description }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="links">
+                <a href="{{ preferred.slug | generate_link(layout.path_prefix) }}">Website</a>
+                {% if preferred.repository %}
+                    <a href="{{ preferred.repository }}">Repository</a>
+                {% endif %}
+            </div>
+        </li>
+    {% endfor %}
+</ul>
+
 {% if page.docs_content %}
     {{ page.docs_content|safe }}
 {% endif %}
