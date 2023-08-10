@@ -1,7 +1,32 @@
-mod gallery;
-use std::{collections::BTreeSet, env::set_current_dir};
+#![allow(dead_code)]
 
-use gallery::*;
+mod command;
+mod errors;
+mod oranda_impl;
+mod repo;
+
+pub use errors::*;
+pub use oranda_impl::*;
+use std::collections::BTreeSet;
+use std::env::set_current_dir;
+
+/// Taken from cargo-insta to avoid copy-paste errors
+///
+/// Gets the ~name of the function running this macro
+#[macro_export]
+macro_rules! _function_name {
+    () => {{
+        fn f() {}
+        fn type_name_of_val<T>(_: T) -> &'static str {
+            std::any::type_name::<T>()
+        }
+        let mut name = type_name_of_val(f).strip_suffix("::f").unwrap_or("");
+        while let Some(rest) = name.strip_suffix("::{{closure}}") {
+            name = rest;
+        }
+        name.split("::").last().unwrap_or(name)
+    }};
+}
 
 #[test]
 fn gal_axolotlsay() -> Result<()> {

@@ -1,4 +1,5 @@
 pub mod utils;
 
-mod build;
-mod config;
+mod autodetect;
+mod integration;
+mod integration_gallery;

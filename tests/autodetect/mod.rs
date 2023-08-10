@@ -88,6 +88,41 @@ fn it_loads_a_rust_project_config() {
 }
 
 #[test]
+fn it_loads_a_workspace() {
+    let _guard = TEST_RUNTIME.enter();
+    let tempdir = assert_fs::TempDir::new().expect("failed creating tempdir");
+    let workspace_toml = tempdir.child("Cargo.toml");
+    workspace_toml
+        .write_str(project_config::workspace_toml())
+        .expect("failed to write workspace Cargo.toml");
+    let cargo_toml_one = tempdir.child("axo/Cargo.toml");
+    cargo_toml_one
+        .write_str(project_config::cargo_toml())
+        .expect("failed to write workspace member Cargo.toml");
+    let cargo_toml_two = tempdir.child("axo2/Cargo.toml");
+    cargo_toml_two
+        .write_str(project_config::workspace_member_toml())
+        .expect("failed to write workspace member Cargo.toml");
+    let main_one = tempdir.child("axo/src/main.rs");
+    main_one
+        .write_str(project_config::main_rs())
+        .expect("failed to write main.rs");
+    let main_two = tempdir.child("axo2/src/main.rs");
+    main_two
+        .write_str(project_config::main_rs())
+        .expect("failed to write main.rs");
+
+    let configs = AxoprojectLayer::load_workspace(Utf8Path::from_path(tempdir.path()).unwrap())
+        .expect("failed to load workspace")
+        .unwrap();
+    assert!(configs.members.is_some());
+    let members = configs.members.unwrap();
+    assert_eq!(members.len(), 2);
+    assert_eq!(members[0].slug, "axo");
+    assert_eq!(members[1].slug, "axo2");
+}
+
+#[test]
 fn it_can_successfully_not_detect_a_project() {
     let tempdir = assert_fs::TempDir::new().expect("failed creating tempdir");
     let temppath = Utf8Path::from_path(tempdir.path()).expect("non-utf8 temp path");
