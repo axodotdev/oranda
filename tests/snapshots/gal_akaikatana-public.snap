@@ -27,7 +27,7 @@ expression: "&snapshots"
             <div class="page-body">
                 
                     <div class="repo_banner">
-                        <a href="https://github.com/mistydemeo/akaikatana-repack">
+                        <a href="https://github.com/oranda-gallery/akaikatana-repack">
                             <div class="github-icon" aria-hidden="true"></div>
                             Check out our GitHub!
                         </a>
@@ -131,7 +131,7 @@ expression: "&snapshots"
                     
                     
                     <tr>
-                        <td><a href="https://github.com/mistydemeo/akaikatana-repack/releases/download/v0.2.0/akaikatana-repack-aarch64-apple-darwin.tar.xz">akaikatana-repack-aarch64-apple-darwin.tar.xz</a></td>
+                        <td><a href="https://github.com/oranda-gallery/akaikatana-repack/releases/download/v0.2.0/akaikatana-repack-aarch64-apple-darwin.tar.xz">akaikatana-repack-aarch64-apple-darwin.tar.xz</a></td>
                         <td>
                             
                                 
@@ -145,7 +145,7 @@ expression: "&snapshots"
                     
                     
                     <tr>
-                        <td><a href="https://github.com/mistydemeo/akaikatana-repack/releases/download/v0.2.0/akaikatana-repack-x86_64-apple-darwin.tar.xz">akaikatana-repack-x86_64-apple-darwin.tar.xz</a></td>
+                        <td><a href="https://github.com/oranda-gallery/akaikatana-repack/releases/download/v0.2.0/akaikatana-repack-x86_64-apple-darwin.tar.xz">akaikatana-repack-x86_64-apple-darwin.tar.xz</a></td>
                         <td>
                             
                                 
@@ -159,7 +159,7 @@ expression: "&snapshots"
                     
                     
                     <tr>
-                        <td><a href="https://github.com/mistydemeo/akaikatana-repack/releases/download/v0.2.0/akaikatana-repack-x86_64-pc-windows-msvc.zip">akaikatana-repack-x86_64-pc-windows-msvc.zip</a></td>
+                        <td><a href="https://github.com/oranda-gallery/akaikatana-repack/releases/download/v0.2.0/akaikatana-repack-x86_64-pc-windows-msvc.zip">akaikatana-repack-x86_64-pc-windows-msvc.zip</a></td>
                         <td>
                             
                                 
@@ -173,7 +173,7 @@ expression: "&snapshots"
                     
                     
                     <tr>
-                        <td><a href="https://github.com/mistydemeo/akaikatana-repack/releases/download/v0.2.0/akaikatana-repack-x86_64-unknown-linux-gnu.tar.xz">akaikatana-repack-x86_64-unknown-linux-gnu.tar.xz</a></td>
+                        <td><a href="https://github.com/oranda-gallery/akaikatana-repack/releases/download/v0.2.0/akaikatana-repack-x86_64-unknown-linux-gnu.tar.xz">akaikatana-repack-x86_64-unknown-linux-gnu.tar.xz</a></td>
                         <td>
                             
                                 
@@ -194,7 +194,7 @@ expression: "&snapshots"
 
             <footer>
                 
-                    <a href="https://github.com/mistydemeo/akaikatana-repack"><div class="github-icon" aria-hidden="true"></div></a>
+                    <a href="https://github.com/oranda-gallery/akaikatana-repack"><div class="github-icon" aria-hidden="true"></div></a>
                 
                 <span>
                     akaikatana-repack, GPL-2.0-or-later
@@ -235,7 +235,7 @@ expression: "&snapshots"
             <div class="page-body">
                 
                     <div class="repo_banner">
-                        <a href="https://github.com/mistydemeo/akaikatana-repack">
+                        <a href="https://github.com/oranda-gallery/akaikatana-repack">
                             <div class="github-icon" aria-hidden="true"></div>
                             Check out our GitHub!
                         </a>
@@ -277,7 +277,7 @@ expression: "&snapshots"
     <div class="artifact-header target">
         <h4>Install v0.2.0</h4>
         
-            <div><small class="published-date">Published on Jun 30 2023 at 03:29 UTC</small></div>
+            <div><small class="published-date">Published on Aug  8 2023 at 16:03 UTC</small></div>
         
 
         <ul class="arches">
@@ -335,7 +335,7 @@ expression: "&snapshots"
                                 
                                     
                                      <div class="download-wrapper">
-                                         <a href="https://github.com/mistydemeo/akaikatana-repack/releases/download/v0.2.0/akaikatana-repack-aarch64-apple-darwin.tar.xz">
+                                         <a href="https://github.com/oranda-gallery/akaikatana-repack/releases/download/v0.2.0/akaikatana-repack-aarch64-apple-darwin.tar.xz">
                                              <button class="button primary">
                                                  <span>Download</span>
                                                  <span class="button-subtitle">akaikatana-repack-aarch64-apple-darwin.tar.xz</span>
@@ -401,7 +401,7 @@ expression: "&snapshots"
                                 
                                     
                                      <div class="download-wrapper">
-                                         <a href="https://github.com/mistydemeo/akaikatana-repack/releases/download/v0.2.0/akaikatana-repack-x86_64-apple-darwin.tar.xz">
+                                         <a href="https://github.com/oranda-gallery/akaikatana-repack/releases/download/v0.2.0/akaikatana-repack-x86_64-apple-darwin.tar.xz">
                                              <button class="button primary">
                                                  <span>Download</span>
                                                  <span class="button-subtitle">akaikatana-repack-x86_64-apple-darwin.tar.xz</span>
@@ -467,7 +467,7 @@ expression: "&snapshots"
                                 
                                     
                                      <div class="download-wrapper">
-                                         <a href="https://github.com/mistydemeo/akaikatana-repack/releases/download/v0.2.0/akaikatana-repack-x86_64-pc-windows-msvc.zip">
+                                         <a href="https://github.com/oranda-gallery/akaikatana-repack/releases/download/v0.2.0/akaikatana-repack-x86_64-pc-windows-msvc.zip">
                                              <button class="button primary">
                                                  <span>Download</span>
                                                  <span class="button-subtitle">akaikatana-repack-x86_64-pc-windows-msvc.zip</span>
@@ -533,7 +533,7 @@ expression: "&snapshots"
                                 
                                     
                                      <div class="download-wrapper">
-                                         <a href="https://github.com/mistydemeo/akaikatana-repack/releases/download/v0.2.0/akaikatana-repack-x86_64-unknown-linux-gnu.tar.xz">
+                                         <a href="https://github.com/oranda-gallery/akaikatana-repack/releases/download/v0.2.0/akaikatana-repack-x86_64-unknown-linux-gnu.tar.xz">
                                              <button class="button primary">
                                                  <span>Download</span>
                                                  <span class="button-subtitle">akaikatana-repack-x86_64-unknown-linux-gnu.tar.xz</span>
@@ -610,7 +610,7 @@ expression: "&snapshots"
 
             <footer>
                 
-                    <a href="https://github.com/mistydemeo/akaikatana-repack"><div class="github-icon" aria-hidden="true"></div></a>
+                    <a href="https://github.com/oranda-gallery/akaikatana-repack"><div class="github-icon" aria-hidden="true"></div></a>
                 
                 <span>
                     akaikatana-repack, GPL-2.0-or-later

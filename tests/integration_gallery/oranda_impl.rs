@@ -1,5 +1,6 @@
 use std::sync::Mutex;
 
+use crate::utils::snapshots::snapshot_settings;
 use camino::{Utf8Path, Utf8PathBuf};
 use miette::IntoDiagnostic;
 use oranda::config::{OrandaLayer, WorkspaceLayer, WorkspaceMember};
@@ -20,8 +21,6 @@ const ENV_DATA_CLAMP: &str = "DEBUG_DATA_CLAMP_DATE";
 const ENV_RUNTIME_ORANDA_BIN: &str = "OVERRIDE_CARGO_BIN_EXE_oranda";
 /// oranda binary that was built with `cargo test`
 const STATIC_ORANDA_BIN: &str = env!("CARGO_BIN_EXE_oranda");
-/// root dir of oranda so we can set the tests/snapshots/ dir reliably
-const ROOT_DIR: &str = env!("CARGO_MANIFEST_DIR");
 static TOOLS: Mutex<Option<Tools>> = Mutex::new(None);
 
 /// axolotlsay 0.1.0 is a nice simple project with shell+powershell+npm installers in its release
@@ -30,7 +29,7 @@ pub static AXOLOTLSAY: TestContextLock<Tools> = TestContextLock::new(
     &Repo {
         repo_owner: "oranda-gallery",
         repo_name: "axolotlsay",
-        commit_ref: "4b9bfe65973726271699421cc58026e3fc341e32",
+        commit_ref: "main",
         app_name: "axolotlsay",
         subdir: None,
         bins: &["axolotlsay"],
@@ -42,7 +41,7 @@ pub static AKAIKATANA_REPACK: TestContextLock<Tools> = TestContextLock::new(
     &Repo {
         repo_owner: "oranda-gallery",
         repo_name: "akaikatana-repack",
-        commit_ref: "c9ab9a2c6fb9d50f91915b7f61a6e9a1a8bbd4ec",
+        commit_ref: "main",
         app_name: "akaikatana-repack",
         subdir: None,
         bins: &["akextract", "akmetadata", "akrepack"],
@@ -55,7 +54,7 @@ pub static EMPTY_TEST: TestContextLock<Tools> = TestContextLock::new(
     &Repo {
         repo_owner: "oranda-gallery",
         repo_name: "oranda-empty-test",
-        commit_ref: "28b8e2462a3f7bfbe7ea75cdac2fc4eb7ebb27cd",
+        commit_ref: "main",
         app_name: "oranda-empty-test",
         subdir: None,
         bins: &["oranda-empty-test"],
@@ -68,7 +67,7 @@ pub static INFERENCE_TEST: TestContextLock<Tools> = TestContextLock::new(
     &Repo {
         repo_owner: "oranda-gallery",
         repo_name: "oranda-inference-test",
-        commit_ref: "ad34864371fbe503c889ce555e9eee500663b2b9",
+        commit_ref: "main",
         app_name: "oranda-inference-test",
         subdir: None,
         bins: &["oranda-inference-test"],
@@ -81,7 +80,7 @@ pub static ORANDA: TestContextLock<Tools> = TestContextLock::new(
     &Repo {
         repo_owner: "oranda-gallery",
         repo_name: "oranda",
-        commit_ref: "0bd132c59c34e791713ee158fe5839cf29fcb6af",
+        commit_ref: "main",
         app_name: "oranda",
         subdir: None,
         bins: &["oranda"],
@@ -305,14 +304,6 @@ impl OrandaResult {
         writeln!(out, "{val}").unwrap();
         Ok(())
     }
-}
-
-pub fn snapshot_settings() -> insta::Settings {
-    let mut settings = insta::Settings::clone_current();
-    let snapshot_dir = Utf8Path::new(ROOT_DIR).join("tests").join("snapshots");
-    settings.set_snapshot_path(snapshot_dir);
-    settings.set_prepend_module_to_snapshot(false);
-    settings
 }
 
 pub fn snapshot_settings_with_version_filter() -> insta::Settings {

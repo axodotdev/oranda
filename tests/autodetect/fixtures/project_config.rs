@@ -8,11 +8,28 @@ pub fn cargo_toml() -> &'static str {
     "#
 }
 
+pub fn workspace_member_toml() -> &'static str {
+    r#"
+[package]
+"name" = "axo2"
+"version" = "0.0.0"
+"description" = "aaaaahhhhh"
+"respository" = "https://github.com/axodotdev/not-a-real-project-too"
+    "#
+}
+
 pub fn main_rs() -> &'static str {
     r#"
 fn main() {
     println!("hello world!);
 }
+    "#
+}
+
+pub fn workspace_toml() -> &'static str {
+    r#"
+[workspace]
+members = ["axo", "axo2"] 
     "#
 }
 

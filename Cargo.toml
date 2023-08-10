@@ -60,10 +60,14 @@ assert_cmd = "2"
 assert_fs = "1.0.7"
 insta = { version = "1.31.0", features = ["filters"] }
 glob = "0.3.1"
+scraper = "0.17.1"
 
 [build-dependencies]
 oranda-generate-css = { version = "0.3.0-prerelease.4", path = "generate-css" }
 tokio = { version = "1.20.1", features = ["full"] }
+
+[profile.test]
+debug-assertions = false
 
 # The profile that 'cargo dist' will build with
 [profile.dist]
