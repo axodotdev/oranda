@@ -81,7 +81,6 @@ impl Page {
         let src_path = Utf8PathBuf::from_path_buf(std::env::current_dir()?)
             .expect("Current directory is not UTF-8");
         let path = determine_path(src_path, &None::<Utf8PathBuf>, source)?;
-        dbg!(&path);
         let source = SourceFile::load_local(path)?;
         let contents = source.contents();
         markdown::to_html(contents, syntax_theme)

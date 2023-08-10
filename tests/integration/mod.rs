@@ -6,6 +6,7 @@ use serde_json::json;
 mod fixtures;
 use super::utils::tokio_utils::TEST_RUNTIME;
 use fixtures::oranda_config;
+use oranda::config::style::ORANDA_CSS_TAG;
 use oranda::site::page::Page;
 use oranda::site::Site;
 
@@ -97,9 +98,10 @@ fn it_adds_oranda_css() {
     let mut t = temp_build_dir();
     let config = oranda_config::from_json(json!({}), &mut t);
     let site = Site::build_single(&config, None).unwrap();
-    assert!(t.child("oranda.css").exists());
+    let css_name = format!("oranda-{}.css", ORANDA_CSS_TAG);
+    assert!(t.child(&css_name).exists());
     let page = find_page(&site.pages, "index.html");
-    assert_selector_exists(&page.contents, "link[href='/oranda.css']");
+    assert_selector_exists(&page.contents, &format!("link[href='/{}']", css_name));
 }
 
 #[test]

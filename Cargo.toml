@@ -66,6 +66,9 @@ scraper = "0.17.1"
 oranda-generate-css = { version = "0.3.0-prerelease.4", path = "generate-css" }
 tokio = { version = "1.20.1", features = ["full"] }
 
+[profile.test]
+debug-assertions = false
+
 # The profile that 'cargo dist' will build with
 [profile.dist]
 inherits = "release"
