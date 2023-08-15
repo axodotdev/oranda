@@ -76,6 +76,11 @@ impl ReleaseSource {
             ReleaseSource::CurrentState(_src) => None,
         }
     }
+
+    /// Find out if we're working with a current state release
+    pub fn is_current_state(&self) -> bool {
+        matches!(self, ReleaseSource::CurrentState(_))
+    }
 }
 
 #[derive(Serialize, Clone, Debug)]

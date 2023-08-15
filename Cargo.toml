@@ -18,7 +18,7 @@ members = ["generate-css"]
 ammonia = "3"
 axoasset = { version = "0.4.0", features = ["json-serde", "toml-edit"] }
 axocli = "0.1.0"
-axoproject = { version = "0.4.2", default-features = false, features = ["cargo-projects", "npm-projects"] }
+axoproject = { version = "0.4.3", default-features = false, features = ["cargo-projects", "npm-projects"] }
 axum = "0.6.18"
 cargo-dist-schema = "=0.1.0-prerelease.4"
 chrono = "0.4.26"
@@ -30,6 +30,8 @@ lazy_static = "1.4.0"
 minifier = "0.2.2"
 octolotl = "0.1.1"
 reqwest = { version = "0.11.13", default-features = false, features = ["json", "rustls-tls"] }
+semver = "1.0.17"
+node-semver = "2.1.0"
 serde = { version = "1.0.144", features = ["derive"] }
 serde_json = { version = "1.0.85" }
 serde_yaml = "0.9.21"

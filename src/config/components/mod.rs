@@ -2,14 +2,16 @@ use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
 mod artifacts;
+mod changelog;
 mod funding;
 mod mdbooks;
 
+use crate::config::components::changelog::{ChangelogConfig, ChangelogLayer};
 pub use artifacts::{ArtifactsConfig, ArtifactsLayer, PackageManagersConfig, PackageManagersLayer};
 pub use funding::{FundingConfig, FundingLayer};
 pub use mdbooks::{MdBookConfig, MdBookLayer};
 
-use super::{ApplyBoolLayerExt, ApplyLayer, ApplyValExt, BoolOr};
+use super::{ApplyBoolLayerExt, ApplyLayer, BoolOr};
 
 /// Extra components (complete version)
 #[derive(Debug, Clone)]
@@ -17,7 +19,7 @@ pub struct ComponentConfig {
     /// Whether to enable the changelog page
     ///
     /// In the future this may become more complex, but for now this is it
-    pub changelog: bool,
+    pub changelog: Option<ChangelogConfig>,
     /// The config for using mdbook for a "docs" page
     ///
     /// This defaults to Some(Default) and is set to None
@@ -44,7 +46,7 @@ pub struct ComponentLayer {
     /// Whether to enable the changelog page
     ///
     /// In the future this may become more complex, but for now this is just a bool
-    pub changelog: Option<bool>,
+    pub changelog: Option<BoolOr<ChangelogLayer>>,
     /// The config for building and embedding an mdbook on your site
     ///
     /// The book will be linked as "docs" in the nav, and restyled to match
@@ -173,7 +175,7 @@ pub struct ComponentLayer {
 impl Default for ComponentConfig {
     fn default() -> Self {
         ComponentConfig {
-            changelog: false,
+            changelog: Some(ChangelogConfig::default()),
             mdbook: Some(MdBookConfig::default()),
             funding: Some(FundingConfig::default()),
             artifacts: Some(ArtifactsConfig::default()),
@@ -190,7 +192,7 @@ impl ApplyLayer for ComponentConfig {
             funding,
             artifacts,
         } = layer;
-        self.changelog.apply_val(changelog);
+        self.changelog.apply_bool_layer(changelog);
         self.mdbook.apply_bool_layer(mdbook);
         self.funding.apply_bool_layer(funding);
         self.artifacts.apply_bool_layer(artifacts);

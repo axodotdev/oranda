@@ -121,6 +121,9 @@ pub enum OrandaError {
         details: AxoassetError,
     },
 
+    #[error("Failed to parse package version {version}")]
+    PackageVersionParse { version: String },
+
     #[error("Unable to create a path to {path} from root path {root_path}.")]
     #[diagnostic(help(
         "It can help to have your workspace members in a subdirectory under your workspace root."
@@ -148,6 +151,15 @@ pub enum OrandaError {
         #[diagnostic_source]
         cause: axoproject::errors::AxoprojectError,
     },
+    #[error("Unable to parse changelog for {name} version {version}")]
+    #[diagnostic(help("Make sure that your changelog file lists the version in a header!"))]
+    ChangelogParseFailed {
+        name: String,
+        version: String,
+        #[source]
+        details: axoproject::errors::AxoprojectError,
+    },
+
     #[error("Failed to loading funding details at {path}")]
     #[diagnostic(severity = "warn")]
     FundingLoadFailed {

@@ -1,5 +1,5 @@
 ---
-source: tests/gallery/oranda_impl.rs
+source: tests/integration_gallery/oranda_impl.rs
 expression: "&snapshots"
 ---
 ================ public/artifacts/index.html ================
@@ -53,6 +53,8 @@ expression: "&snapshots"
 
             
 
+            
+                <li><a href="/akaikatana-repack/changelog/">Changelog</a></li>
             
         </ul>
     </nav>
@@ -210,6 +212,244 @@ expression: "&snapshots"
 
     </body>
 </html>
+================ public/changelog/index.html ================
+<!DOCTYPE html>
+<html lang="en" id="oranda" class="axo">
+    <head>
+        <title>akaikatana-repack</title>
+        
+        
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="akaikatana-repack" />
+        
+        
+        
+        <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
+        <link rel="stylesheet" href="/akaikatana-repack/oranda.css" />
+        
+        
+    </head>
+    <body>
+        <div class="container">
+            <div class="page-body">
+                
+                    <div class="repo_banner">
+                        <a href="https://github.com/oranda-gallery/akaikatana-repack">
+                            <div class="github-icon" aria-hidden="true"></div>
+                            Check out our GitHub!
+                        </a>
+                    </div>
+                
+
+                <main>
+                    <header>
+                        
+                        <h1 class="title">akaikatana-repack</h1>
+                        
+    <nav class="nav">
+        <ul>
+            <li><a href="/akaikatana-repack/">Home</a></li>
+
+            
+
+            
+                <li><a href="/akaikatana-repack/artifacts/">Install</a></li>
+            
+
+            
+
+            
+
+            
+                <li><a href="/akaikatana-repack/changelog/">Changelog</a></li>
+            
+        </ul>
+    </nav>
+
+                    </header>
+
+                    
+<div>
+    <h1>Releases</h1>
+    <div class="releases-wrapper">
+        <nav class="releases-nav">
+            
+
+            
+            <ul>
+                
+                     <li class="">
+                         <a href="v0.2.0/">v0.2.0</a>
+                     </li>
+                
+            </ul>
+        </nav>
+
+        <div class="releases-list">
+            
+                
+                <section class="release ">
+    <h2 id="tag-v0.2.0">
+        <a href="v0.2.0/">
+            
+                v0.2.0
+            
+        </a>
+    </h2>
+    <div class="release-info">
+        <span class="flex items-center gap-2">
+            <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6'>
+    <path stroke-linecap='round' stroke-linejoin='round' d='M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z' />
+    <path stroke-linecap='round' stroke-linejoin='round' d='M6 6h.008v.008H6V6z' /></svg>
+            v0.2.0
+        </span>
+        <span class="flex items-center gap-2">
+            
+                <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6'><path stroke-linecap='round' stroke-linejoin='round' d='M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5' /></svg>
+                Aug  8 2023 at 16:03 UTC
+            
+        </span>
+    </div>
+    <div class="release-body">
+        
+    </div>
+</section>
+            
+        </div>
+    </div>
+</div>
+
+                </main>
+            </div>
+
+            <footer>
+                
+                    <a href="https://github.com/oranda-gallery/akaikatana-repack"><div class="github-icon" aria-hidden="true"></div></a>
+                
+                <span>
+                    akaikatana-repack, GPL-2.0-or-later
+                </span>
+            </footer>
+        </div>
+
+        
+        
+
+        
+<script src="/akaikatana-repack/artifacts.js"></script>
+
+    </body>
+</html>
+================ public/changelog/v0.2.0/index.html ================
+<!DOCTYPE html>
+<html lang="en" id="oranda" class="axo">
+    <head>
+        <title>akaikatana-repack</title>
+        
+        
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="akaikatana-repack" />
+        
+        
+        
+        <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
+        <link rel="stylesheet" href="/akaikatana-repack/oranda.css" />
+        
+        
+    </head>
+    <body>
+        <div class="container">
+            <div class="page-body">
+                
+                    <div class="repo_banner">
+                        <a href="https://github.com/oranda-gallery/akaikatana-repack">
+                            <div class="github-icon" aria-hidden="true"></div>
+                            Check out our GitHub!
+                        </a>
+                    </div>
+                
+
+                <main>
+                    <header>
+                        
+                        <h1 class="title">akaikatana-repack</h1>
+                        
+    <nav class="nav">
+        <ul>
+            <li><a href="/akaikatana-repack/">Home</a></li>
+
+            
+
+            
+                <li><a href="/akaikatana-repack/artifacts/">Install</a></li>
+            
+
+            
+
+            
+
+            
+                <li><a href="/akaikatana-repack/changelog/">Changelog</a></li>
+            
+        </ul>
+    </nav>
+
+                    </header>
+
+                    
+<div>
+    <h1>v0.2.0</h1>
+    <div class="releases-body">
+        
+        
+        <section class="release ">
+    
+    <div class="release-info">
+        <span class="flex items-center gap-2">
+            <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6'>
+    <path stroke-linecap='round' stroke-linejoin='round' d='M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z' />
+    <path stroke-linecap='round' stroke-linejoin='round' d='M6 6h.008v.008H6V6z' /></svg>
+            v0.2.0
+        </span>
+        <span class="flex items-center gap-2">
+            
+                <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6'><path stroke-linecap='round' stroke-linejoin='round' d='M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5' /></svg>
+                Aug  8 2023 at 16:03 UTC
+            
+        </span>
+    </div>
+    <div class="release-body">
+        
+    </div>
+</section>
+    </div>
+</div>
+
+                </main>
+            </div>
+
+            <footer>
+                
+                    <a href="https://github.com/oranda-gallery/akaikatana-repack"><div class="github-icon" aria-hidden="true"></div></a>
+                
+                <span>
+                    akaikatana-repack, GPL-2.0-or-later
+                </span>
+            </footer>
+        </div>
+
+        
+        
+
+        
+    </body>
+</html>
 ================ public/index.html ================
 <!DOCTYPE html>
 <html lang="en" id="oranda" class="axo">
@@ -261,6 +501,8 @@ expression: "&snapshots"
 
             
 
+            
+                <li><a href="/akaikatana-repack/changelog/">Changelog</a></li>
             
         </ul>
     </nav>

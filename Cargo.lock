@@ -187,6 +187,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "axoasset"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e85821647adf8212563f921ee791cbc75c0247d579a5ace3abcd6ab2cf87fe8d"
+dependencies = [
+ "camino",
+ "image",
+ "miette",
+ "mime",
+ "serde",
+ "serde_json",
+ "thiserror",
+ "toml_edit",
+ "url",
+ "walkdir",
+]
+
+[[package]]
 name = "axocli"
 version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -205,11 +223,11 @@ dependencies = [
 
 [[package]]
 name = "axoproject"
-version = "0.4.2"
+version = "0.4.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "eb23f8ea307ae166f1f8adaec070fc079500891b61515c3207bd22443220de43"
+checksum = "8779432e837cc1580e86ac5be2df7cf20b57e3c96f660da7c418ba17fa2300b6"
 dependencies = [
- "axoasset",
+ "axoasset 0.5.0",
  "camino",
  "clap",
  "console",
@@ -219,6 +237,7 @@ dependencies = [
  "node-semver",
  "oro-common",
  "oro-package-spec",
+ "parse-changelog",
  "pathdiff",
  "semver",
  "serde",
@@ -226,6 +245,7 @@ dependencies = [
  "thiserror",
  "toml_edit",
  "tracing",
+ "url",
 ]
 
 [[package]]
@@ -1500,6 +1520,7 @@ checksum = "d5477fe2230a79769d8dc68e0eabf5437907c0457a5614a9e8dddb67f65eb65d"
 dependencies = [
  "equivalent",
  "hashbrown 0.14.0",
+ "serde",
 ]
 
 [[package]]
@@ -1634,6 +1655,12 @@ name = "lebe"
 version = "0.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "03087c2bad5e1034e8cace5926dec053fb3790248370865f5117a7d0213354c8"
+
+[[package]]
+name = "lexopt"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "baff4b617f7df3d896f97fe922b64817f6cd9a756bb81d40f8883f2f66dcb401"
 
 [[package]]
 name = "libc"
@@ -2064,7 +2091,7 @@ dependencies = [
  "ammonia",
  "assert_cmd",
  "assert_fs",
- "axoasset",
+ "axoasset 0.4.0",
  "axocli",
  "axoproject",
  "axum",
@@ -2085,6 +2112,7 @@ dependencies = [
  "miette",
  "minifier",
  "minijinja",
+ "node-semver",
  "notify-debouncer-mini",
  "octolotl",
  "oranda-generate-css",
@@ -2092,6 +2120,7 @@ dependencies = [
  "reqwest",
  "schemars",
  "scraper",
+ "semver",
  "serde",
  "serde_json",
  "serde_yaml",
@@ -2111,7 +2140,7 @@ dependencies = [
 name = "oranda-generate-css"
 version = "0.3.0-prerelease.5"
 dependencies = [
- "axoasset",
+ "axoasset 0.4.0",
  "camino",
  "directories",
  "miette",
@@ -2188,6 +2217,22 @@ dependencies = [
  "redox_syscall 0.3.5",
  "smallvec",
  "windows-targets 0.48.1",
+]
+
+[[package]]
+name = "parse-changelog"
+version = "0.6.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4b9325ebdf7f45ff257f87e1ab938263ec03abfc5495f02d5445224b56c055a7"
+dependencies = [
+ "anyhow",
+ "indexmap 2.0.0",
+ "lexopt",
+ "memchr",
+ "once_cell",
+ "regex",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]
