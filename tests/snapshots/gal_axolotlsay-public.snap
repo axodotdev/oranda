@@ -1,5 +1,5 @@
 ---
-source: tests/gallery/oranda_impl.rs
+source: tests/integration_gallery/oranda_impl.rs
 expression: "&snapshots"
 ---
 ================ public/artifacts/index.html ================
@@ -374,6 +374,7 @@ expression: "&snapshots"
         <nav class="releases-nav">
             
 
+            
             <ul>
                 
                      <li class="">

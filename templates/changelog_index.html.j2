@@ -15,6 +15,9 @@
                 </div>
             {% endif %}
 
+            {% if page.releases|length == 0 %}
+                <p>No releases yet!</p>
+            {% endif %}
             <ul>
                 {% for release in page.releases %}
                      <li class="{% if release.is_prerelease %}pre-release hidden{% endif %}">

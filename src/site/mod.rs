@@ -6,7 +6,7 @@ use indexmap::IndexMap;
 use minijinja::context;
 use tracing::instrument;
 
-use crate::config::Config;
+use crate::config::{AxoprojectLayer, Config};
 use crate::data::{funding::Funding, github::GithubRepo, workspaces, Context};
 use crate::errors::*;
 
@@ -84,6 +84,37 @@ impl Site {
     pub fn build_single(config: &Config, prefix: Option<String>) -> Result<Site> {
         Self::clean_dist_dir(&config.build.dist_dir)?;
         css::place_css(&config.build.dist_dir, &config.styles.oranda_css_version)?;
+        let needs_context = Self::needs_context(config)?;
+        let context = if needs_context {
+            Some(
+                config
+                    .project
+                    .repository
+                    .as_ref()
+                    .and_then(|repo_url| {
+                        match Context::new_github(
+                            repo_url,
+                            &config.project,
+                            config.components.artifacts.as_ref(),
+                        ) {
+                            Ok(c) => Some(c),
+                            Err(e) => {
+                                // We don't want to hard error here, as we can most likely keep on going even
+                                // without a well-formed context.
+                                eprintln!("{:?}", miette::Report::new(e));
+                                None
+                            }
+                        }
+                    })
+                    .map(Ok)
+                    .unwrap_or_else(|| {
+                        Context::new_current(&config.project, config.components.artifacts.as_ref())
+                    })?,
+            )
+        } else {
+            None
+        };
+
         let templates = Templates::new(config)?;
 
         let mut pages = vec![];
@@ -95,33 +126,10 @@ impl Site {
         }
 
         let mut index = None;
-        let needs_context = Self::needs_context(config)?;
         Self::print_plan(config);
 
         if needs_context {
-            let mut context = config
-                .project
-                .repository
-                .as_ref()
-                .and_then(|repo_url| {
-                    match Context::new_github(
-                        repo_url,
-                        &config.project,
-                        config.components.artifacts.as_ref(),
-                    ) {
-                        Ok(c) => Some(c),
-                        Err(e) => {
-                            // We don't want to hard error here, as we can most likely keep on going even
-                            // without a well-formed context.
-                            eprintln!("{:?}", miette::Report::new(e));
-                            None
-                        }
-                    }
-                })
-                .map(Ok)
-                .unwrap_or_else(|| {
-                    Context::new_current(&config.project, config.components.artifacts.as_ref())
-                })?;
+            let mut context = context.unwrap();
             if config.components.artifacts_enabled() {
                 if let Some(latest) = context.latest_mut() {
                     // Give especially nice treatment to the latest release and make
@@ -146,7 +154,7 @@ impl Site {
                     pages.push(artifacts_page);
                 }
             }
-            if config.components.changelog {
+            if config.components.changelog.is_some() {
                 let mut changelog_pages =
                     Self::build_changelog_pages(&context, &templates, config)?;
                 pages.append(&mut changelog_pages);
@@ -186,7 +194,7 @@ impl Site {
 
     fn needs_context(config: &Config) -> Result<bool> {
         Ok(config.components.artifacts_enabled()
-            || config.components.changelog
+            || config.components.changelog.is_some()
             || config.components.funding.is_some()
             || Self::has_repo_and_releases(&config.project.repository)?)
     }
@@ -204,7 +212,7 @@ impl Site {
         if config.components.artifacts_enabled() {
             planned_components.push("artifacts");
         }
-        if config.components.changelog {
+        if config.components.changelog.is_some() {
             planned_components.push("changelog");
         }
         if config.components.funding.is_some() {
@@ -255,7 +263,12 @@ impl Site {
         config: &Config,
     ) -> Result<Vec<Page>> {
         let mut pages = vec![];
-        let index_context = changelog::index_context(context, config)?;
+        // Recompute the axoproject layer here (unfortunately we don't pass it around)
+        let cur_dir = std::env::current_dir()?;
+        let project = AxoprojectLayer::get_best_workspace(
+            &Utf8PathBuf::from_path_buf(cur_dir).expect("Current directory isn't UTF-8?"),
+        );
+        let index_context = changelog::index_context(context, config, project.as_ref())?;
         let changelog_page = Page::new_from_template(
             "changelog.html",
             templates,
@@ -263,15 +276,17 @@ impl Site {
             index_context,
         )?;
         pages.push(changelog_page);
-        for release in context.releases.iter() {
-            let single_context = changelog::single_context(release, config);
-            let page = Page::new_from_template(
-                &format!("changelog/{}.html", single_context.version_tag),
-                templates,
-                "changelog_single.html",
-                context!(release => single_context),
-            )?;
-            pages.push(page);
+        if !(context.releases.len() == 1 && context.releases[0].source.is_current_state()) {
+            for release in context.releases.iter() {
+                let single_context = changelog::single_context(release, config, project.as_ref());
+                let page = Page::new_from_template(
+                    &format!("changelog/{}.html", single_context.version_tag),
+                    templates,
+                    "changelog_single.html",
+                    context!(release => single_context),
+                )?;
+                pages.push(page);
+            }
         }
         Ok(pages)
     }

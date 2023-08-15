@@ -1,5 +1,5 @@
 ---
-source: tests/gallery/oranda_impl.rs
+source: tests/integration_gallery/oranda_impl.rs
 expression: "&snapshots"
 ---
 ================ public/artifacts/index.html ================
@@ -464,6 +464,7 @@ expression: "&snapshots"
                 </div>
             
 
+            
             <ul>
                 
                      <li class="pre-release hidden">

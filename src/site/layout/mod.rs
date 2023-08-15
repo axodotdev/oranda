@@ -94,7 +94,8 @@ impl LayoutContext {
         let changelog_link = &config
             .components
             .changelog
-            .then(|| link::generate(&config.build.path_prefix, "changelog/"));
+            .as_ref()
+            .map(|_| link::generate(&config.build.path_prefix, "changelog/"));
         let has_nav = additional_pages.is_some()
             || artifacts_link.is_some()
             || mdbook_link.is_some()

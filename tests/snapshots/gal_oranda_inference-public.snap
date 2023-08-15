@@ -1,5 +1,5 @@
 ---
-source: tests/gallery/oranda_impl.rs
+source: tests/integration_gallery/oranda_impl.rs
 expression: "&snapshots"
 ---
 ================ public/artifacts/index.html ================
@@ -47,6 +47,8 @@ expression: "&snapshots"
             
 
             
+                <li><a href="/changelog/">Changelog</a></li>
+            
         </ul>
     </nav>
 
@@ -69,6 +71,98 @@ expression: "&snapshots"
                 
             </tbody>
         </table>
+    </div>
+</div>
+
+                </main>
+            </div>
+
+            <footer>
+                
+                <span>
+                    My Oranda Project
+                </span>
+            </footer>
+        </div>
+
+        
+        
+
+        
+<script src="/artifacts.js"></script>
+
+    </body>
+</html>
+================ public/changelog/index.html ================
+<!DOCTYPE html>
+<html lang="en" id="oranda" class="dark">
+    <head>
+        <title>My Oranda Project</title>
+        
+        
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="My Oranda Project" />
+        
+        
+        
+        <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
+        <link rel="stylesheet" href="/oranda.css" />
+        
+        
+    </head>
+    <body>
+        <div class="container">
+            <div class="page-body">
+                
+
+                <main>
+                    <header>
+                        
+                        <h1 class="title">My Oranda Project</h1>
+                        
+    <nav class="nav">
+        <ul>
+            <li><a href="/">Home</a></li>
+
+            
+
+            
+                <li><a href="/artifacts/">Install</a></li>
+            
+
+            
+
+            
+
+            
+                <li><a href="/changelog/">Changelog</a></li>
+            
+        </ul>
+    </nav>
+
+                    </header>
+
+                    
+<div>
+    <h1>Releases</h1>
+    <div class="releases-wrapper">
+        <nav class="releases-nav">
+            
+
+            
+                <p>No releases yet!</p>
+            
+            <ul>
+                
+            </ul>
+        </nav>
+
+        <div class="releases-list">
+            
+        </div>
     </div>
 </div>
 
@@ -135,6 +229,8 @@ expression: "&snapshots"
 
             
 
+            
+                <li><a href="/changelog/">Changelog</a></li>
             
         </ul>
     </nav>
