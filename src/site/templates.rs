@@ -6,6 +6,7 @@
 //! can also use features such as imports, inheritance, extends, and so on.
 
 use crate::config::Config;
+use crate::data::Context;
 use crate::errors::Result;
 use crate::site::layout::LayoutContext;
 use crate::site::markdown::SyntaxTheme;
@@ -26,7 +27,7 @@ pub struct Templates<'a> {
 }
 
 impl<'a> Templates<'a> {
-    pub fn new(config: &Config) -> Result<Self> {
+    pub fn new(config: &Config, context: Option<&Context>) -> Result<Self> {
         let mut env = Environment::new();
         let mut files = HashMap::new();
         // These two `expects` should never happen in production, because all of these things are
@@ -43,7 +44,7 @@ impl<'a> Templates<'a> {
         env.add_filter("syntax_highlight", Self::syntax_highlight);
         // Use opt-in autoescape
         env.set_auto_escape_callback(|_| AutoEscape::None);
-        let layout = LayoutContext::new(config)?;
+        let layout = LayoutContext::new(config, context)?;
         Ok(Self { env, layout })
     }
 

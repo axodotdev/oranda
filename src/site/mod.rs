@@ -115,7 +115,7 @@ impl Site {
             None
         };
 
-        let templates = Templates::new(config)?;
+        let templates = Templates::new(config, context.as_ref())?;
 
         let mut pages = vec![];
 
@@ -193,10 +193,11 @@ impl Site {
     }
 
     fn needs_context(config: &Config) -> Result<bool> {
-        Ok(config.components.artifacts_enabled()
-            || config.components.changelog.is_some()
-            || config.components.funding.is_some()
-            || Self::has_repo_and_releases(&config.project.repository)?)
+        Ok(config.project.repository.is_some()
+            && (config.components.artifacts_enabled()
+                || config.components.changelog.is_some()
+                || config.components.funding.is_some()
+                || Self::has_repo_and_releases(&config.project.repository)?))
     }
 
     fn has_repo_and_releases(repo_config: &Option<String>) -> Result<bool> {
