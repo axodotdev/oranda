@@ -62,6 +62,20 @@ impl Dev {
             }
             // Also watch oranda-workspace.json
             ret.push(Utf8PathBuf::from("oranda-workspace.json"));
+
+            // Watch individual manifest files
+            let project = axoproject::get_workspaces(&root_path, Some(&root_path));
+            if let WorkspaceSearch::Found(workspace) = project.rust {
+                for package in workspace.package_info {
+                    ret.push(package.manifest_path);
+                }
+            }
+            if let WorkspaceSearch::Found(workspace) = project.javascript {
+                for package in workspace.package_info {
+                    ret.push(package.manifest_path);
+                }
+            }
+
             (config, ret)
         } else {
             let config = Config::build(
@@ -234,22 +248,6 @@ impl Dev {
             }
         }
 
-        // Watch for any project manifest files
-        let project = axoproject::get_workspaces("./".into(), None);
-        if let WorkspaceSearch::Found(workspace) = project.rust {
-            paths_to_watch.push(determine_path(
-                root_path,
-                &member_path,
-                workspace.manifest_path,
-            )?);
-        }
-        if let WorkspaceSearch::Found(workspace) = project.javascript {
-            paths_to_watch.push(determine_path(
-                root_path,
-                &member_path,
-                workspace.manifest_path,
-            )?);
-        }
         Ok(paths_to_watch)
     }
 }
