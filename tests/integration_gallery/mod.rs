@@ -8,7 +8,8 @@ mod repo;
 pub use errors::*;
 pub use oranda_impl::*;
 use std::collections::BTreeSet;
-use std::env::set_current_dir;
+
+use self::command::CommandInfo;
 
 /// Taken from cargo-insta to avoid copy-paste errors
 ///
@@ -89,7 +90,7 @@ fn gal_workspace() -> Result<()> {
         AXOLOTLSAY.run_test(|ctx| {
             num_iters += 1;
             // Go to the root
-            set_current_dir(ctx.tools.temp_root()).unwrap();
+            CommandInfo::set_working_dir(ctx.tools.temp_root());
 
             // Load the oranda-workspace.json and check if all tests are done
             let json = ctx.tools.load_oranda_workspace_json()?;
