@@ -2,14 +2,70 @@
 
 ## Unreleased
 
+### BREAKING CHANGES
+
+- **Changelog autodetect** - [shadows-withal]/[pr583]
+
+  oranda's [changelog feature][changelog-docs] is now opt-out instead of opt-in, meaning that even if you haven't set
+  `components.changelog = true`, oranda will now generate a (maybe empty) changelog page. You can opt out of this by
+  setting `components.changelog = false`.
+
+  Additionally, oranda will now attempt to read changelog information from a local `CHANGELOG(.md)` or `RELEASES(.md)`
+  file, should it exist. If you want oranda to use GitHub release bodies instead, set
+  `components.changelog.read_changelog_file = false`.
+
+  **Migration instructions from 0.2.0 to 0.3.0**
+
+  Set `components.changelog` to `false` in your `oranda.json` file if you previously didn't use the changelog feature.
+
+
 ### Features
 
-- **Workspace Support - [shadows-withal]/many PRs, [jamesmunns]/[i493]**
+- **Workspace Support** - [shadows-withal]/many PRs, [mistydemeo]/many PRs, [jamesmunns]/[i493]
   
   You can now tell oranda to build multiple sites at once! By default, this will also generate a separate "root"
   page, providing an index into all projects defined within your workspace.
 
-  Details TBD
+  To enable this feature, create a new file called `oranda-workspace.json` in your workspace root. This file
+  can contain all regular oranda configuration, which will in turn be passed down to each of its children, but it
+  also listens to the `workspace` key, which is where you properly configure your workspace. A sample workspace configuration
+  would look like this:
+
+  ```json
+  {
+    "workspace": {
+      "auto": true,
+      "docs_path": "README.md"
+    },
+    "styles": {
+      "theme": "hacker"
+    }
+  }
+  ```
+  
+  This configuration will attempt to auto-detect a Cargo or npm workspace, set the Hacker theme for all members, and
+  embed the contents of the top-level `README.md` file into the workspace index page.
+
+  You can also specify workspace members manually, like this:
+
+  ```json
+  {
+    "workspace": {
+      "members": [
+        {
+          "slug": "memberone",
+          "path": "./member-one"
+        },
+        {
+          "slug": "membertwo",
+          "path": "./member-two"
+        }
+      ]
+    }
+  }
+  ```
+  
+  For more information on workspace members, [take a look at the docs][workspace-docs]!
 
 - **Inlining CSS** - [shadows-withal]/[pr565], [pr566], [i554]
 
@@ -17,24 +73,24 @@
   to fetch a CSS version over and over. As a bonus, we removed the internal dependency on a Node.js toolchain to build
   the CSS in development, which should make hacking on oranda and its themes a lot easier!
 
-- **Basic CSS caching - [jamesmunns]/[pr551]**
+- **Basic CSS caching** - [jamesmunns]/[pr551]
 
   In line with workspace support, oranda will now attempt to keep already downloaded versions of its CSS in-memory, which
   helps tremendously when you have a lot of workspace members all using a custom CSS version.
 
 ### Fixes
 
-- **Display platforms alphabetically in install widget - [Plecra]/[pr544], [shadows-withal]/[i480]**
+- **Display platforms alphabetically in install widget** - [Plecra]/[pr544], [shadows-withal]/[i480]
 
   Platforms are now sorted alphabetically in the install widget dropdown. This is an improvement over the
   previous unsorted state.
 
-- **Show prerelease contents on changelog pages - [shadows-withal]/[pr549]**
+- **Show prerelease contents on changelog pages** - [shadows-withal]/[pr549]
 
   This is a simple bug fix. Previously, we accidentally hid the body of a prerelease on its own separate changelog page
   (but mysteriously, it showed up on the main changelog page when prereleases were toggled!)
 
-- **Restrict parsed repo URLs to GitHub only - [Plecra]/[pr553]**
+- **Restrict parsed repo URLs to GitHub only** - [Plecra]/[pr553]
 
   Right now, we only support GitHub repository URLs to get context from. This fixed an issue where technically, oranda
   would attempt to do this with GitLab URLs as well, which would cause unintended behavior.
@@ -44,10 +100,20 @@
   oranda now correctly handles `git+https://yourrepo` repository URLs, and is a lot more informative when it encounters
   one that it _can't_ parse.
 
+- **Re-add logo class to logo `img` element** - [shadows-withal]/[pr585], [tertsdiepraam]/[i582]
+
+### Housekeeping
+
+- **Testing rework** - [Gankra]/[pr575], [shadows-withal]/[pr581]
+  
+  oranda's tests have long been suboptimal, but we now sport a pretty good test suite, with automated integration
+  snapshot testing for multiple external projects, and improved HTML-aware integration tests.
+
 [i480]: https://github.com/axodotdev/oranda/issues/480
 [i493]: https://github.com/axodotdev/oranda/issues/493
 [i531]: https://github.com/axodotdev/oranda/issues/531
 [i554]: https://github.com/axodotdev/oranda/issues/554
+[i582]: https://github.com/axodotdev/oranda/issues/582
 [pr532]: https://github.com/axodotdev/oranda/pull/532
 [pr544]: https://github.com/axodotdev/oranda/pull/544
 [pr549]: https://github.com/axodotdev/oranda/pull/549
@@ -56,10 +122,19 @@
 [pr563]: https://github.com/axodotdev/oranda/pull/563
 [pr565]: https://github.com/axodotdev/oranda/pull/565
 [pr566]: https://github.com/axodotdev/oranda/pull/566
+[pr575]: https://github.com/axodotdev/oranda/pull/575
+[pr581]: https://github.com/axodotdev/oranda/pull/581
+[pr581]: https://github.com/axodotdev/oranda/pull/583
+[pr585]: https://github.com/axodotdev/oranda/pull/585
 [shadows-withal]: https://github.com/shadows-withal
 [Plecra]: https://github.com/Plecra
 [jamesmunns]: https://github.com/jamesmunns
 [geelen]: https://github.com/geelen
+[mistydemeo]: https://github.com/mistydemeo
+[tertsdiepraam]: https://github.com/tertsdiepraam
+
+[workspace-docs]: https://opensource.axo.dev/oranda/book/configuration/workspaces.html
+[changelog-docs]: https://opensource.axo.dev/oranda/book/configuration/changelog.html
 
 ## 0.2.0 - 2023-07-19
 
