@@ -85,7 +85,9 @@ impl ReleaseSource {
 
 #[derive(Serialize, Clone, Debug)]
 pub struct Release {
+    #[serde(skip_serializing)]
     pub manifest: Option<DistManifest>,
+    #[serde(skip_serializing)]
     pub source: ReleaseSource,
     pub artifacts: ReleaseArtifacts,
 }

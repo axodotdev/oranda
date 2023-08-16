@@ -128,8 +128,7 @@ impl Site {
         let mut index = None;
         Self::print_plan(config);
 
-        if needs_context {
-            let mut context = context.unwrap();
+        if let Some(mut context) = context {
             if config.components.artifacts_enabled() {
                 if let Some(latest) = context.latest_mut() {
                     // Give especially nice treatment to the latest release and make
@@ -152,6 +151,9 @@ impl Site {
                         &template_context,
                     )?;
                     pages.push(artifacts_page);
+                    if let Some(template_context) = template_context {
+                        artifacts::write_artifacts_json(config, &template_context)?;
+                    }
                 }
             }
             if config.components.changelog.is_some() {
