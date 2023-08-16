@@ -6,6 +6,7 @@ use serde::Serialize;
 pub mod css;
 mod header;
 pub mod javascript;
+use crate::data::Context;
 use crate::site::layout::header::get_logo;
 use crate::site::{link, page};
 use javascript::analytics::Analytics;
@@ -42,7 +43,7 @@ pub struct AdditionalPageContext {
 }
 
 impl LayoutContext {
-    pub fn new(config: &Config) -> Result<Self> {
+    pub fn new(config: &Config, context: Option<&Context>) -> Result<Self> {
         let css_path =
             css::get_css_link(&config.build.path_prefix, &config.styles.oranda_css_version)?;
         let additional_pages = if config.build.additional_pages.is_empty() {
@@ -91,11 +92,15 @@ impl LayoutContext {
             .funding
             .as_ref()
             .map(|_| link::generate(&config.build.path_prefix, "funding/"));
-        let changelog_link = &config
-            .components
-            .changelog
-            .as_ref()
-            .map(|_| link::generate(&config.build.path_prefix, "changelog/"));
+        let changelog_link = if context.is_some() {
+            config
+                .components
+                .changelog
+                .as_ref()
+                .map(|_| link::generate(&config.build.path_prefix, "changelog/"))
+        } else {
+            None
+        };
         let has_nav = additional_pages.is_some()
             || artifacts_link.is_some()
             || mdbook_link.is_some()
