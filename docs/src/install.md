@@ -25,14 +25,16 @@ cargo install oranda --locked --profile=dist
 > the cost of not getting any bugfixes from newer releases of its dependencies.
 
 
-## Download Prebuilt Binaries From Github Releases
+## Download Prebuilt Binaries From GitHub Releases
 
-[See The Latest Release](https://github.com/axodotdev/oranda/releases/latest)!
+[See the latest release](https://github.com/axodotdev/oranda/releases/latest)!
 
 ## Install With NPM
 
 ```sh
-npm install oranda
+npm install @axodotdev/oranda
+# alternatively:
+npx @axodotdev/oranda build
 ```
 
 ## Install With Nix

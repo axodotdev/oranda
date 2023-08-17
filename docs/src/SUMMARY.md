@@ -11,6 +11,7 @@
     - [dev](./cli/dev.md)
 - [Tips and Tricks](./tips.md)
 - [Configuration](./configuration.md)
+    - [Reference](./configuration/reference.md)
     - [Artifacts & `cargo-dist`](./configuration/artifacts.md)
     - [Additional Pages](./configuration/additional-pages.md)
     - [Analytics](./configuration/analytics.md)

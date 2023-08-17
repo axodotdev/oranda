@@ -17,7 +17,7 @@ such, we have to take care to only run the build process when _relevant_ files c
 - Files immediately relevant to certain components oranda renders (funding, for example)
 - Any other paths you give it using `--include-paths`
 
-This command also support several options:
+This command also supports several options:
 
 - `--port` to set a custom port for the file server
 - `--project-root` to change the root directory from where your site will be built

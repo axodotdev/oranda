@@ -6,3 +6,4 @@ src = "src"
 
 [output.markdown]
 [output.html]
+edit-url-template = "https://github.com/axodotdev/oranda/edit/main/docs/{path}"
