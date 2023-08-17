@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.1 - 2023-08-17
+
+### Fixed
+
+- Updated the published versions of the README on crates.io and npm.
+
 ## 0.3.0 - 2023-08-17
 
 ### BREAKING CHANGES
