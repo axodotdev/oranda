@@ -1,5 +1,8 @@
+use camino::{Utf8Path, Utf8PathBuf};
 use miette::{miette, Context, IntoDiagnostic};
-use std::process::Command;
+use std::{process::Command, sync::Mutex};
+
+pub static WORKING_DIR: Mutex<String> = Mutex::new(String::new());
 
 pub struct CommandInfo {
     name: String,
@@ -9,10 +12,21 @@ pub struct CommandInfo {
 }
 
 impl CommandInfo {
+    pub fn set_working_dir(dir: &Utf8Path) {
+        *WORKING_DIR.lock().unwrap() = dir.to_string();
+    }
+    pub fn get_working_dir() -> Utf8PathBuf {
+        Utf8PathBuf::from(&*WORKING_DIR.lock().unwrap())
+    }
+
     /// Create a new command, checking that it works by running it with `--version`
     pub fn new(name: &str, path: Option<&str>) -> Option<Self> {
         let cmd = path.unwrap_or(name).to_owned();
-        let output = Command::new(&cmd).arg("--version").output().ok()?;
+        let output = Command::new(&cmd)
+            .arg("--version")
+            .current_dir(Self::get_working_dir())
+            .output()
+            .ok()?;
 
         Some(CommandInfo {
             name: name.to_owned(),
@@ -41,6 +55,7 @@ impl CommandInfo {
             .arg("-Command")
             .arg("Get-Command")
             .arg(name)
+            .current_dir(Self::get_working_dir())
             .output()
             .ok()?;
         if !output.status.success() {
@@ -61,6 +76,7 @@ impl CommandInfo {
     ) -> Result<std::process::Output, miette::Report> {
         let mut command = Command::new(&self.cmd);
         command.args(&self.args);
+        command.current_dir(Self::get_working_dir());
         builder(&mut command);
         let output = command
             .output()
@@ -92,6 +108,7 @@ impl CommandInfo {
         builder: impl FnOnce(&mut Command) -> &mut Command,
     ) -> Result<std::process::Output, miette::Report> {
         let mut command = Command::new(&self.cmd);
+        command.current_dir(Self::get_working_dir());
         command.args(&self.args);
         builder(&mut command);
         let output = command
