@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.3.0 - 2023-08-17
 
 ### BREAKING CHANGES
 
@@ -17,13 +17,15 @@
   **Migration instructions from 0.2.0 to 0.3.0**
 
   Set `components.changelog` to `false` in your `oranda.json` file if you previously didn't use the changelog feature.
+  Also, oranda will now attempt to read changelog information from your local `CHANGELOG.md`/`RELEASES.md` file. If you want
+  oranda to use GitHub release bodies instead, set `components.changelog.read_changelog_file = false`.
 
 
 ### Features
 
 - **Workspace Support** - [shadows-withal]/many PRs, [mistydemeo]/many PRs, [jamesmunns]/[i493]
   
-  You can now tell oranda to build multiple sites at once! By default, this will also generate a separate "root"
+  You can now tell oranda to build sites from multiple projects in the same directory at the same time! By default, this will also generate a separate "root"
   page, providing an index into all projects defined within your workspace.
 
   To enable this feature, create a new file called `oranda-workspace.json` in your workspace root. This file
@@ -65,18 +67,27 @@
   }
   ```
   
+  > Aside: If you have a use-case for an oranda page that combines multiple different projects _outside_ of a shared directory,
+    please let us know on [Discord][discord]!
+  
   For more information on workspace members, [take a look at the docs][workspace-docs]!
 
 - **Inlining CSS** - [shadows-withal]/[pr565], [pr566], [i554]
 
   oranda now uses a CSS version that's included in the binary it's shipped with! This means no more HTTP requests to GitHub
-  to fetch a CSS version over and over. As a bonus, we removed the internal dependency on a Node.js toolchain to build
+  to fetch a CSS version multiple times per build. As a bonus, we removed the internal dependency on a Node.js toolchain to build
   the CSS in development, which should make hacking on oranda and its themes a lot easier!
 
 - **Basic CSS caching** - [jamesmunns]/[pr551]
 
   In line with workspace support, oranda will now attempt to keep already downloaded versions of its CSS in-memory, which
   helps tremendously when you have a lot of workspace members all using a custom CSS version.
+
+- **Artifacts JSON output** - [shadows-withal]/[pr589]
+
+  oranda will now spit out an extra `artifacts.json` file that contains most of the info we use to construct our artifacts page.
+  The intention is for this file to be used for external integrations, since JSON is a lot easier to read.
+  We've also added a new `--json-only` flag to the build command that only outputs this JSON file.
 
 ### Fixes
 
@@ -124,8 +135,9 @@
 [pr566]: https://github.com/axodotdev/oranda/pull/566
 [pr575]: https://github.com/axodotdev/oranda/pull/575
 [pr581]: https://github.com/axodotdev/oranda/pull/581
-[pr581]: https://github.com/axodotdev/oranda/pull/583
+[pr583]: https://github.com/axodotdev/oranda/pull/583
 [pr585]: https://github.com/axodotdev/oranda/pull/585
+[pr589]: https://github.com/axodotdev/oranda/pull/589
 [shadows-withal]: https://github.com/shadows-withal
 [Plecra]: https://github.com/Plecra
 [jamesmunns]: https://github.com/jamesmunns
@@ -135,6 +147,7 @@
 
 [workspace-docs]: https://opensource.axo.dev/oranda/book/configuration/workspaces.html
 [changelog-docs]: https://opensource.axo.dev/oranda/book/configuration/changelog.html
+[discord]: https://discord.gg/8BwyXQmeUT
 
 ## 0.2.0 - 2023-07-19
 
