@@ -23,64 +23,39 @@ GLOBAL OPTIONS:
 --verbose <VERBOSE> How verbose logging should be (log level) [default: warn] [possible values:
 off, error, warn, info, debug, trace]
 --output-format <OUTPUT_FORMAT> The format of the output [default: human] [possible values: human, json]
-
 ```
 
-## Basic Setup
+Since `oranda` is designed to work without configuration, the quickest start is to just run `oranda dev` in an
+existing project with at least a `README.md` file! This will spawn a web server that serves your site, plus
+an extra process that watches for changes in files relevant to `oranda`'s build process.
 
-oranda is designed to be a tool you can simply drop into an existing project. For the purposes of this
-guide, we're going to use [minimal-axolotlsay], a simple CLI project, but you can use one of your own
-projects, or even set up a new one from scratch! The only hard requirement oranda has is for your
-project to have a readme file (`README.md`).
+## In a Cargo project
 
-The easiest way to get a feedback loop going with oranda is to move into the directory and run `oranda dev`:
+`oranda` integrates with Cargo projects seamlessly. `oranda build` will pick up relevant
+metadata from your `Cargo.toml` file automatically, including [`cargo-dist`] configuration,
+if you have that set up.
 
-```
-git clone https://github.com/axodotdev/minimal-axolotlsay
-cd minimal-axolotlsay
-oranda dev
-```
+## In a Node project
 
-[`oranda dev`](./cli/dev.md) is a command that will automatically recompile your oranda build when you change
-one of the files relevant to it. It also launches a file server that'll allow you to look at the output -
-if you open localhost:7979, you'll see something like this:
-
-![an image of the default oranda output when ran on `axolotlsay`](./images/quickstart-1.png)
-
-oranda has picked up on our readme file and converted it into a static page! How nice!
-
-`minimal-axolotlsay` also has integration with [cargo-dist] already set up - a powerful way to streamline
-cross-platform releases of applications. Since oranda and cargo-dist integrate, oranda already knows
-about our cargo-dist releases, and automatically shows a widget and page to download the latest binaries.
-
-How does oranda know where our repository is? It extracts the `repository` key from our `Cargo.toml` file!
-oranda can do this for Rust and JavaScript/Node.js-based projects at the moment. This way, you don't need to
-explicitly specify a lot of info you may already be keeping elsewhere.
-
-## Beyond the Basics
-
-If we want to work with the more advanced features that oranda offers, we'll have to create a configuration file.
-The default location of this file is `oranda.json` in the same directory where your project manifest is located.
-You can view a full reference of the configuration schema [here](./configuration.md). Let's start by making the simplest and highest impact change: telling oranda that our project has changelogs that it should make pages for!
+If you use Node.js, oranda can not only be installed via npm, but also supports reading metadata
+from your package manifest file. Additionally, npm scripts make it easy to integrate `oranda` into
+your workflows, for example like this:
 
 ```json
 {
-  "components": {
-    "changelog": true
+  "scripts": {
+    "build:site": "oranda build"
+  },
+  "dependencies": {
+    "@axodotdev/oranda": "~0.3.0"
   }
 }
 ```
 
-If you now build again (you may have to restart `oranda dev` since we added a new file to watch), it should look like this:
-
-![an image of oranda with changelogs enabled](./images/quickstart-2.png)
-
-oranda pulled our project's releases from GitHub automatically, without us having to specify any further configuration
-than enabling the changelog setting!
-
 ## Further Steps
 
-For more specific configuration, check out the [configuration page](./configuration.md) and its sub-pages.
+- Explore the [`oranda` configuration options](./configuration.md)
+- Read the [CLI docs](./cli.md)
+- Learn more about [hosting `oranda` sites](./hosting.md)
 
-[minimal-axolotlsay]: https://github.com/axodotdev/minimal-axolotlsay
-[cargo-dist]: https://opensource.axo.dev/cargo-dist
+[`cargo-dist`]: https://opensource.axo.dev/cargo-dist

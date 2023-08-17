@@ -1,37 +1,5 @@
 # Configuration
 
-- [Configuration](#configuration)
-  - [Manifest file: `oranda.json`](#manifest-file-orandajson)
-  - [Workspace manifest file: `oranda-workspace.json`](#workspace-manifest-file-oranda-workspacejson)
-  - [Project Configuration](#project-configuration)
-    - [`name`](#name) 📦 - the name of your application
-    - [`version`](#version) 📦 - current version of your project
-    - [`description`](#description) 📦 - brief description of your project
-    - [`homepage`](#homepage) 📦 - url to the homepage of your project
-    - [`repository`](#repository) 📦 - url to the repository of your project
-    - [`readme_path`](#readme_path) - relative custom path to your project's readme file
-    - [`license`](#license) 📦 - license of your project (in SPDX format)
-  - [Build Configuration](#build-configuration)
-    - [`dist_dir`](#dist_dir) - path to where built output should be placed
-    - [`static_dir`](#static_dir) - path to a directory containing static assets
-    - [`path_prefix`](#path_prefix) - a URL fragment to prepend to URLs, useful if hosting from a subfolder
-    - [`additional_pages`](#additional_pages) - additional pages to be rendered and linked to
-  - [Marketing Configuration](#marketing-configuration)
-    - [`analytics`](#analytics) - automatically insert analytics snippets for several providers
-    - [`social`](#social) - additional configuration for SEO-related inserts
-  - [Theme/Style Configuration](#style-configuration)
-    - [`theme`](#theme) - change oranda's CSS theme
-    - [`additional_css`](#additional_css) - additional CSS to insert into your pages
-    - [`oranda_css_version`](#oranda_css_version) - custom version of oranda's built-in CSS to use
-    - [`logo`](#logo) - custom site logo
-    - [`favicon`](#favicon) - custom site favicon
-  - [Components Configuration](#components-configuration)
-    - [`changelog`](#changelog) - extract your changelog from GitHub automatically
-    - [`mdbook`](#mdbook-or-mdbook) - let us render a mdbook site for you
-    - [`funding`](#funding) - configuration for rendering a site related to project funding methods
-    - [`artifacts`](#artifacts) - configuration for displaying downloadable artifacts/installers
-
-> 📦 = automatically collected from your package metadata!
 
 **`oranda` is designed to work with no configuration**- for projects with a
 `package.json` or `Cargo.toml`, `oranda` will grab the project metadata it needs
@@ -90,6 +58,8 @@ For example:
 
 > **NOTE:** All paths in `oranda.json` are relative to the `oranda.json` file.
 
+**See the [configuration reference](./configuration/reference.md) for a detailed explanations of all options!**
+
 ## Workspace manifest file: `oranda-workspace.json`
 
 > Added in version 0.3.0.
@@ -100,190 +70,7 @@ file, and build the workspace members accordingly.
 
 The workspace file supports all other oranda config keys, which will be passed down to each workspace members.
 
-[Read more about workspaces](configuration/workspaces.md)
-
-## Project Configuration
-
-### name
-
-> Added in version 0.1.0.
-
-- Default value: Project manifest `name` field
-
-Your project's name.
-
-### version
-
-> Added in version 0.1.0.
-
-- Default value: Project manifest `version` field.
-
-Your project's current version.
-
-### description
-
-> Added in version 0.1.0.
-
-- Default value: Project manifest `description` field
-
-Your project's description.
-
-### homepage
-
-> Added in version 0.1.0.
-
-- Default value: Project manifest `homepage` field
-
-Your project's homepage.
-
-### repository
-
-> Added in version 0.1.0.
-
-- Default value: Project manifest `repository` field
-
-Your project's Git repository.
-
-### readme_path
-
-> Added in version 0.1.0.
-
-- Default value: A variation of the standard `README.md`
-
-The path to your project's readme file.
-
-### license
-
-> Added in version 0.1.0.
-
-- Default value: Project manifest `license` field.
-
-Your project's license.
-
-## Build Configuration
-
-### dist_dir
-
-> Added in version 0.1.0.
-
-- Default value: `public/`
-
-The directory where your static files will be output to. This must be relative to the `oranda.json` file.
-
-### static_dir
-
-> Added in version 0.1.0.
-
-- Default value: `static/`
-
-Static content that oranda will copy to its output folder. This must be relative to the `oranda.json` file.
-
-### path_prefix
-
-> Added in version 0.1.0.
-
-If you're hosting oranda on a nested path (e.g. `mysite.cool/myproject`), you should set `path_prefix` to
-`myproject` in your configuration in order for oranda to generate correct links.
-
-### additional_pages
-
-> Added in version 0.1.0.
-
-An object of additional Markdown pages that you'd like to be included. All of these will appear in the site header.
-
-[More information](./configuration/additional-pages.md)
-
-## Marketing Configuration
-
-### analytics
-
-> Added in version 0.1.0.
-
-Configuration for page analytics.
-
-[More information](./configuration/analytics.md)
-
-### social
-
-> Added in version 0.1.0.
-
-Options useful for SEO features.
-
-[More information](./configuration/social.md)
-
-## Style Configuration
-
-### theme
-
-> Added in version 0.1.0.
-
-- Default value: `dark`
-
-Choose which built-in theme to use. 
-
-[More information](./configuration/theme.md)
-
-### additional_css
-
-> Added in version 0.1.0.
-
-Add extra CSS to your pages' header.
-
-[More information](./configuration/theme.md)
-
-### oranda_css_version
-
-> Added in version 0.1.0.
-
-Specify a version of the embedded oranda CSS. This can be used to opt into newer CSS releases that don't have
-an oranda release associated with them yet. (Internally, this looks for a `oranda.css` release artifact on the given
-tag in the `axodotdev/oranda` GitHub repository)
-
-## logo
-
-> Added in version 0.1.0.
-
-Path to a custom logo to be shown in your website header.
-
-### favicon
-
-> Added in version 0.1.0.
-
-Path to a custom favicon.
-
-## Components Configuration
-
-### artifacts
-
-> Added in version 0.1.0.
-
-Configuration for enabling downloadable artifacts, as well as the `cargo-dist` integration.
-
-[More information](./configuration/artifacts.md)
-
-### mdbook or md_book
-
-> Added in version 0.1.0.
-
-Configuration for mdbook.
-
-[More information](./configuration/mdbook.md)
-
-### changelog
-
-> Added in version 0.1.0.
-
-Enable changelog generation.
-
-[More information](./configuration/changelog.md)
-
-### funding
-
-> Added in version 0.1.0.
-
-Allows you to tweak or disable oranda's funding page.
-
-[More information](./configuration/funding.md)
+[Read more about workspaces](configuration/workspaces.md) or [see the workspace reference](./configuration/reference.md#workspace)
 
 ## Configuration before 0.1.0
 
@@ -330,3 +117,4 @@ configuration format looked like this:
   "changelog": true
 }
 ```
+

@@ -33,18 +33,3 @@ and contain a valid header structure like this:
 
 - Beep booping is now consistent
 ```
-
-## Changelog settings
-
-The changelog option supports the following sub-settings:
-
-- [`read_changelog_file`](#read_changelog_file) - disable reading the changelog file
-
-### read_changelog_file
-
-> Added in version 0.3.0.
-
-Disables reading the changelog file, meaning that oranda will fall back to embedding the GitHub release body instead.
-Defaults to `true`.
-
-
