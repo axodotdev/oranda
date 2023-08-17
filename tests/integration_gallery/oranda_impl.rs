@@ -96,6 +96,9 @@ pub struct Tools {
 impl Tools {
     fn new() -> Self {
         eprintln!("getting tools...");
+        CommandInfo::set_working_dir(
+            &Utf8PathBuf::from_path_buf(std::env::current_dir().unwrap()).unwrap(),
+        );
         let git = CommandInfo::new("git", None).expect("git isn't installed");
 
         // If OVERRIDE_* is set, prefer that over the version that cargo built for us,

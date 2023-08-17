@@ -1,7 +1,6 @@
 use std::sync::{Mutex, MutexGuard};
 
 use camino::{Utf8Path, Utf8PathBuf};
-use miette::IntoDiagnostic;
 
 use super::command::CommandInfo;
 use super::errors::Result;
@@ -113,7 +112,7 @@ where
 
         let ctx = TestContext { raw_ctx, tools };
         // Ensure we're in the right dir before running the test
-        std::env::set_current_dir(&ctx.working_dir).unwrap();
+        CommandInfo::set_working_dir(&ctx.working_dir);
 
         test(&ctx)
     }
@@ -189,14 +188,14 @@ where
     ) -> Result<()> {
         if repo_dir.exists() {
             eprintln!("repo already cloned, updating it...");
-            std::env::set_current_dir(repo_dir).into_diagnostic()?;
+            CommandInfo::set_working_dir(repo_dir);
             git.output_checked(|c| c.arg("remote").arg("set-url").arg("origin").arg(repo_url))?;
             git.output_checked(|c| c.arg("fetch").arg("origin").arg(commit_ref))?;
             git.output_checked(|c| c.arg("reset").arg("--hard").arg("FETCH_HEAD"))?;
         } else {
             eprintln!("fetching {repo_url}");
             axoasset::LocalAsset::create_dir_all(repo_dir)?;
-            std::env::set_current_dir(repo_dir).into_diagnostic()?;
+            CommandInfo::set_working_dir(repo_dir);
             git.output_checked(|c| c.arg("init"))?;
             git.output_checked(|c| c.arg("remote").arg("add").arg("origin").arg(repo_url))?;
             git.output_checked(|c| c.arg("fetch").arg("origin").arg(commit_ref))?;
