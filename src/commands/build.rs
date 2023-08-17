@@ -22,6 +22,10 @@ pub struct Build {
     #[clap(hide = true)]
     #[arg(long, default_value = "./oranda.json")]
     config_path: Utf8PathBuf,
+    /// Only build the artifacts JSON file (if applicable) and other files that may be used to
+    /// support it, such as installer source files.
+    #[arg(long)]
+    json_only: bool,
 }
 
 impl Build {
@@ -29,14 +33,14 @@ impl Build {
         Build {
             project_root: project_root.unwrap_or(Utf8PathBuf::from("./")),
             config_path: config_path.unwrap_or(Utf8PathBuf::from("./oranda.json")),
+            json_only: false,
         }
     }
 
     pub fn run(&self) -> Result<()> {
         if let Some(config) = Site::get_workspace_config()? {
-            let sites = Site::build_multi(&config)?;
-            // FIXME: Let the user turn this off
-            if config.workspace.generate_index {
+            let sites = Site::build_multi(&config, self.json_only)?;
+            if config.workspace.generate_index && !self.json_only {
                 tracing::info!("Building workspace index page...");
                 let mut member_data = Vec::new();
                 for site in &sites {
@@ -58,7 +62,11 @@ impl Build {
             tracing::info!(success = true, "{}", &msg);
         } else {
             let config = Config::build(&self.config_path)?;
-            Site::build_single(&config, None)?.write(Some(&config))?;
+            if self.json_only {
+                Site::build_single_json_only(&config, None)?;
+            } else {
+                Site::build_single(&config, None)?.write(Some(&config))?;
+            }
             let msg = format!("Your site build is located in `{}`.", {
                 config.build.dist_dir
             });

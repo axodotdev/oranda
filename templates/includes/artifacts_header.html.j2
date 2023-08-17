@@ -11,13 +11,13 @@
 
         <ul class="arches">
             {% for platform in artifacts.platforms_with_downloads %}
-                <li class="arch{% if not simple_platforms %} hidden{% endif %}" data-arch="{{ platform.target }}">
+                <li class="arch{% if not simple_platforms %} hidden{% endif %}" data-arch="{{ platform.target | first }}">
                     {% if platform.installers | length > 1 %}
                         <ul class="tabs">
                             {% for i in platform.installers %}
                                 {% set installer = artifacts.release.artifacts.installers[i] %}
                                 {# Select the first tab #}
-                                <li class="install-tab{% if simple_platforms and loop.first %} selected{% endif %}" data-id="{{ i }}" data-triple="{{ platform.target }}">
+                                <li class="install-tab{% if simple_platforms and loop.first %} selected{% endif %}" data-id="{{ i }}" data-triple="{{ platform.target | first }}">
                                     {{ installer.label }}
                                 </li>
                             {% endfor %}
@@ -27,7 +27,7 @@
                     <ul class="contents">
                         {% for i in platform.installers %}
                             {% set installer = artifacts.release.artifacts.installers[i] %}
-                            <li data-id="{{ i }}" data-triple="{{ platform.target }}" class="install-content{% if not simple_platforms and not loop.first %} hidden{% endif %}">
+                            <li data-id="{{ i }}" data-triple="{{ platform.target | first }}" class="install-content{% if not simple_platforms and not loop.first %} hidden{% endif %}">
                                 {% if installer.method.type == "Run" %}
                                     {% set release = artifacts.release %}
                                     {% include "includes/installer_run.html" %}
@@ -63,7 +63,7 @@
     <div class="mac-switch hidden">This project doesn't offer Apple Silicon downloads, but you can run Intel macOS binaries via Rosetta 2.</div>
 
     {# Get the target from the first platform #}
-    {% set first_target = artifacts.platforms_with_downloads | first | attr("target") %}
+    {% set first_target = artifacts.platforms_with_downloads | first | attr("target") | first %}
     <div class="bottom-options {% if simple_platforms and first_target != "all" %}one{% endif %}">
         <a href="{{ "artifacts/" | generate_link(layout.path_prefix) }}" class="backup-download primary">View all installation options</a>
         {% if simple_platforms %}
@@ -75,7 +75,7 @@
                 <select id="install-arch-select">
                     <option disabled="true" selected="true" value=""></option>
                     {% for platform in artifacts.platforms_with_downloads | sort(attribute = "display_name") %}
-                        <option value="{{ platform.target }}">{{ platform.display_name }}</option>
+                        <option value="{{ platform.target | first }}">{{ platform.display_name }}</option>
                     {% endfor %}
                 </select>
             </div>

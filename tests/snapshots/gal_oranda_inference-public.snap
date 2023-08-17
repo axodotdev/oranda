@@ -118,6 +118,8 @@ expression: "&snapshots"
 
     </body>
 </html>
+================ public/artifacts.json ================
+{"format_version":"0.3.0-prerelease.6","tag":"v0.1.0","formatted_date":"Aug  8 2023 at 16:27 UTC","platforms_with_downloads":[{"target":["x86_64-unknown-linux-gnu"],"display_name":"Linux x64","installers":[0]}],"downloadable_files":[[0,{"name":"oranda-inference-test-x86_64-unknown-linux-gnu.tar.gz","download_url":"https://github.com/oranda-gallery/oranda-inference-test/releases/download/v0.1.0/oranda-inference-test-x86_64-unknown-linux-gnu.tar.gz","view_path":null,"checksum_file":null},["Linux x64"]]],"release":{"artifacts":{"files":[{"name":"oranda-inference-test-x86_64-unknown-linux-gnu.tar.gz","download_url":"https://github.com/oranda-gallery/oranda-inference-test/releases/download/v0.1.0/oranda-inference-test-x86_64-unknown-linux-gnu.tar.gz","view_path":null,"checksum_file":null}],"installers":[{"label":"tarball","description":"","method":{"type":"Download","file":0}}],"targets":{"x86_64-unknown-linux-gnu":[0]}}},"os_script":"/artifacts.js","has_checksum_files":false}
 ================ public/changelog/index.html ================
 <!DOCTYPE html>
 <html lang="en" id="oranda" class="dark">

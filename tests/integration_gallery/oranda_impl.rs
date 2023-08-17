@@ -264,8 +264,13 @@ impl OrandaResult {
         let Some(src_path) = &self.public_dir else {
             return Ok(());
         };
-        for path in glob::glob(&format!("{}/**/*.html", src_path)).unwrap() {
+        for path in glob::glob(&format!("{}/**/*", src_path)).unwrap() {
             let path = path.unwrap();
+            if !vec!["html", "json"]
+                .contains(&path.extension().unwrap_or_default().to_str().unwrap())
+            {
+                continue;
+            }
 
             let path = Utf8PathBuf::from_path_buf(path).unwrap();
             // We don't want to test another tool's output, so we filter out mdbook files. This

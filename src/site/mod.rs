@@ -36,7 +36,7 @@ pub struct Site {
 }
 
 impl Site {
-    pub fn build_multi(workspace_config: &Config) -> Result<Vec<Site>> {
+    pub fn build_multi(workspace_config: &Config, json_only: bool) -> Result<Vec<Site>> {
         tracing::info!("Workspace detected, gathering info...");
         // We assume the root path is wherever oranda-workspace.json is located (current dir)
         let root_path = Utf8PathBuf::from_path_buf(std::env::current_dir()?).unwrap_or_default();
@@ -49,7 +49,11 @@ impl Site {
         tracing::info!("Building {} workspace member(s)...", members.len());
         for member in &members {
             std::env::set_current_dir(&member.path)?;
-            let mut site = Self::build_single(&member.config, Some(member.slug.to_string()))?;
+            let mut site = if json_only {
+                Self::build_single_json_only(&member.config, Some(member.slug.to_string()))?
+            } else {
+                Self::build_single(&member.config, Some(member.slug.to_string()))?
+            };
             site.workspace_data = Some(member.clone());
             results.push(site);
             std::env::set_current_dir(&root_path)?;
@@ -86,31 +90,7 @@ impl Site {
         css::place_css(&config.build.dist_dir, &config.styles.oranda_css_version)?;
         let needs_context = Self::needs_context(config)?;
         let context = if needs_context {
-            Some(
-                config
-                    .project
-                    .repository
-                    .as_ref()
-                    .and_then(|repo_url| {
-                        match Context::new_github(
-                            repo_url,
-                            &config.project,
-                            config.components.artifacts.as_ref(),
-                        ) {
-                            Ok(c) => Some(c),
-                            Err(e) => {
-                                // We don't want to hard error here, as we can most likely keep on going even
-                                // without a well-formed context.
-                                eprintln!("{:?}", miette::Report::new(e));
-                                None
-                            }
-                        }
-                    })
-                    .map(Ok)
-                    .unwrap_or_else(|| {
-                        Context::new_current(&config.project, config.components.artifacts.as_ref())
-                    })?,
-            )
+            Some(Self::build_context(config)?)
         } else {
             None
         };
@@ -128,8 +108,7 @@ impl Site {
         let mut index = None;
         Self::print_plan(config);
 
-        if needs_context {
-            let mut context = context.unwrap();
+        if let Some(mut context) = context {
             if config.components.artifacts_enabled() {
                 if let Some(latest) = context.latest_mut() {
                     // Give especially nice treatment to the latest release and make
@@ -152,6 +131,9 @@ impl Site {
                         &template_context,
                     )?;
                     pages.push(artifacts_page);
+                    if let Some(template_context) = template_context {
+                        artifacts::write_artifacts_json(config, &template_context)?;
+                    }
                 }
             }
             if config.components.changelog.is_some() {
@@ -178,6 +160,33 @@ impl Site {
         )?));
         Ok(Site {
             pages,
+            workspace_data: None,
+        })
+    }
+
+    #[instrument("workspace_page", fields(prefix = prefix))]
+    pub fn build_single_json_only(config: &Config, prefix: Option<String>) -> Result<Site> {
+        Self::clean_dist_dir(&config.build.dist_dir)?;
+        let context = if Self::needs_context(config)? {
+            Some(Self::build_context(config)?)
+        } else {
+            None
+        };
+
+        if let Some(mut context) = context {
+            if config.components.artifacts_enabled() {
+                if let Some(latest) = context.latest_mut() {
+                    latest.artifacts.make_scripts_viewable(config)?;
+                    let template_context = artifacts::template_context(&context, config)?;
+                    if let Some(template_context) = template_context {
+                        artifacts::write_artifacts_json(config, &template_context)?;
+                    }
+                }
+            }
+        }
+
+        Ok(Site {
+            pages: vec![],
             workspace_data: None,
         })
     }
@@ -235,6 +244,32 @@ impl Site {
         if !joined.is_empty() {
             tracing::info!("Building components: {}", joined);
         }
+    }
+
+    fn build_context(config: &Config) -> Result<Context> {
+        config
+            .project
+            .repository
+            .as_ref()
+            .and_then(|repo_url| {
+                match Context::new_github(
+                    repo_url,
+                    &config.project,
+                    config.components.artifacts.as_ref(),
+                ) {
+                    Ok(c) => Some(c),
+                    Err(e) => {
+                        // We don't want to hard error here, as we can most likely keep on going even
+                        // without a well-formed context.
+                        eprintln!("{:?}", miette::Report::new(e));
+                        None
+                    }
+                }
+            })
+            .map(Ok)
+            .unwrap_or_else(|| {
+                Context::new_current(&config.project, config.components.artifacts.as_ref())
+            })
     }
 
     fn build_additional_pages(

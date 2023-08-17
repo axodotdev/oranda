@@ -1,3 +1,5 @@
+use axoasset::LocalAsset;
+use camino::Utf8PathBuf;
 use std::collections::BTreeMap;
 
 use crate::config::Config;
@@ -15,14 +17,25 @@ use serde::Serialize;
 type DownloadableFiles = Vec<(FileIdx, File, Vec<String>)>;
 /// A map from TargetTriples to Installers that support that platform
 type Platforms = BTreeMap<TargetTriple, Vec<InstallerIdx>>;
-#[derive(Serialize, Debug)]
+
+/// Current version of the JSON artifacts format
+const JSON_VERSION: &str = env!("CARGO_PKG_VERSION");
+
+#[derive(Serialize, Debug, Clone)]
 pub struct Platform {
-    target: TargetTriple,
+    target: Vec<TargetTriple>,
     display_name: String,
     installers: Vec<InstallerIdx>,
 }
 
 #[derive(Serialize, Debug)]
+pub struct ArtifactsJson {
+    pub format_version: String,
+    #[serde(flatten)]
+    pub inner: ArtifactsContext,
+}
+
+#[derive(Serialize, Debug, Clone)]
 pub struct ArtifactsContext {
     tag: String,
     formatted_date: Option<String>,
@@ -44,7 +57,7 @@ pub fn template_context(context: &Context, config: &Config) -> Result<Option<Art
             display_name: triple_to_display_name(&target)
                 .map(|s| s.to_string())
                 .unwrap_or_else(|| target.clone()),
-            target,
+            target: vec![target],
             installers,
         })
         .collect::<Vec<_>>();
@@ -89,6 +102,20 @@ pub fn template_context(context: &Context, config: &Config) -> Result<Option<Art
         os_script,
         has_checksum_files,
     }))
+}
+
+/// Write a JSON file containing a representation of the template context, for external integration
+pub fn write_artifacts_json(config: &Config, context: &ArtifactsContext) -> Result<()> {
+    let cloned = (*context).clone();
+    let json_struct = ArtifactsJson {
+        format_version: JSON_VERSION.to_string(),
+        inner: cloned,
+    };
+    let json_str = serde_json::to_string(&json_struct)?;
+    let mut path = Utf8PathBuf::from(config.build.dist_dir.clone());
+    path.push("artifacts.json");
+    LocalAsset::write_new_all(&json_str, path)?;
+    Ok(())
 }
 
 /// Only grab platforms that we can actually provide downloadable files for.
