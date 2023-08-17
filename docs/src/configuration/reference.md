@@ -1,39 +1,39 @@
 # Configuration Reference
 
 - [`project`](#project)
-    - [`name`](#name) 📦 - the name of your application
-    - [`version`](#version) 📦 - current version of your project
-    - [`description`](#description) 📦 - brief description of your project
-    - [`homepage`](#homepage) 📦 - url to the homepage of your project
-    - [`repository`](#repository) 📦 - url to the repository of your project
-    - [`readme_path`](#readme_path) - relative custom path to your project's readme file
-    - [`license`](#license) 📦 - license of your project (in SPDX format)
+    - [`name`](#projectname) 📦 - the name of your application
+    - [`version`](#projectversion) 📦 - current version of your project
+    - [`description`](#projectdescription) 📦 - brief description of your project
+    - [`homepage`](#projecthomepage) 📦 - url to the homepage of your project
+    - [`repository`](#projectrepository) 📦 - url to the repository of your project
+    - [`readme_path`](#projectreadme_path) - relative custom path to your project's readme file
+    - [`license`](#projectlicense) 📦 - license of your project (in SPDX format)
 - [`build`](#build)
-    - [`dist_dir`](#dist_dir) - path to where built output should be placed
-    - [`static_dir`](#static_dir) - path to a directory containing static assets
-    - [`path_prefix`](#path_prefix) - a URL fragment to prepend to URLs, useful if hosting from a subfolder
-    - [`additional_pages`](#additional_pages) - additional pages to be rendered and linked to
+    - [`dist_dir`](#builddist_dir) - path to where built output should be placed
+    - [`static_dir`](#buildstatic_dir) - path to a directory containing static assets
+    - [`path_prefix`](#buildpath_prefix) - a URL fragment to prepend to URLs, useful if hosting from a subfolder
+    - [`additional_pages`](#buildadditional_pages) - additional pages to be rendered and linked to
 - [`marketing`](#marketing)
-    - [`analytics`](#analytics) - automatically insert analytics snippets for several providers
-    - [`social`](#social) - additional configuration for SEO-related inserts
+    - [`analytics`](#marketinganalytics) - automatically insert analytics snippets for several providers
+    - [`social`](#marketingsocial) - additional configuration for SEO-related inserts
 - [`styles`](#styles)
-    - [`theme`](#theme) - change oranda's CSS theme
-    - [`additional_css`](#additional_css) - additional CSS to insert into your pages
-    - [`oranda_css_version`](#oranda_css_version) - custom version of oranda's built-in CSS to use
-    - [`logo`](#logo) - custom site logo
-    - [`favicon`](#favicon) - custom site favicon
+    - [`theme`](#stylestheme) - change oranda's CSS theme
+    - [`additional_css`](#stylesadditional_css) - additional CSS to insert into your pages
+    - [`oranda_css_version`](#stylesoranda_css_version) - custom version of oranda's built-in CSS to use
+    - [`logo`](#styleslogo) - custom site logo
+    - [`favicon`](#stylesfavicon) - custom site favicon
 - [`components`](#components)
-    - [`changelog`](#changelog) - extract your changelog from GitHub automatically
-    - [`mdbook`](#mdbook-or-mdbook) - let us render a mdbook site for you
-    - [`funding`](#funding) - configuration for rendering a site related to project funding methods
-    - [`artifacts`](#artifacts) - configuration for displaying downloadable artifacts/installers
+    - [`changelog`](#componentschangelog) - extract your changelog from GitHub automatically
+    - [`mdbook`](#componentsmdbook-or-componentsmd_book) - let us render a mdbook site for you
+    - [`funding`](#componentsfunding) - configuration for rendering a site related to project funding methods
+    - [`artifacts`](#componentsartifacts) - configuration for displaying downloadable artifacts/installers
 - [`workspace`](#workspace) - **`oranda-workspace.json` only!!**
-  - [`name`](#name-1) - set the overarching workspace name
-  - [`auto`](#auto) - enable workspace autodetection
-  - [`generate_index`](#generate_index) - disable generating a workspace index page
-  - [`members`](#members) - list the workspace members
-  - [`docs_path`](#docs_path) - path to a markdown file to embed into your workspace index page
-  - [`preferred_members`](#preferred_members) - list of workspace members to highlight at the top of the index page
+  - [`name`](#workspacename) - set the overarching workspace name
+  - [`auto`](#workspaceauto) - enable workspace autodetection
+  - [`generate_index`](#workspacegenerate_index) - disable generating a workspace index page
+  - [`members`](#workspacemembers) - list the workspace members
+  - [`docs_path`](#workspacedocs_path) - path to a markdown file to embed into your workspace index page
+  - [`preferred_members`](#workspacepreferred_members) - list of workspace members to highlight at the top of the index page
 
 > 📦 = automatically collected from your package metadata!
 
@@ -42,7 +42,7 @@
 Configuration for metadata about your project. Most of the info in here can be automatically collected
 for Cargo and npm projects.
 
-### name
+### project.name
 
 > Added in version 0.1.0.
 
@@ -50,7 +50,7 @@ for Cargo and npm projects.
 
 Your project's name. Will be used for the page title and header.
 
-### version
+### project.version
 
 > Added in version 0.1.0.
 
@@ -58,7 +58,7 @@ Your project's name. Will be used for the page title and header.
 
 Your project's current version.
 
-### description
+### project.description
 
 > Added in version 0.1.0.
 
@@ -66,7 +66,7 @@ Your project's current version.
 
 Your project's description. Will be used for site metadata.
 
-### homepage
+### project.homepage
 
 > Added in version 0.1.0.
 
@@ -74,7 +74,7 @@ Your project's description. Will be used for site metadata.
 
 Your project's homepage. Will be used for backlinks and site metadata.
 
-### repository
+### project.repository
 
 > Added in version 0.1.0.
 
@@ -83,7 +83,7 @@ Your project's homepage. Will be used for backlinks and site metadata.
 Your project's Git repository. If set to GitHub, this enables `oranda` to fetch data from GitHub releases
 (see [artifacts](./artifacts.md))
 
-### readme_path
+### project.readme_path
 
 > Added in version 0.1.0.
 
@@ -91,7 +91,7 @@ Your project's Git repository. If set to GitHub, this enables `oranda` to fetch 
 
 The path to your project's readme file. The contents of this will be used for your index page.
 
-### license
+### project.license
 
 > Added in version 0.1.0.
 
@@ -103,7 +103,7 @@ Your project's license. Will be embedded into the page footer.
 
 Configuration regarding the specifics of how and where you want your site built.
 
-### dist_dir
+### build.dist_dir
 
 > Added in version 0.1.0.
 
@@ -111,7 +111,7 @@ Configuration regarding the specifics of how and where you want your site built.
 
 The directory where your static files will be output to. This must be relative to the `oranda.json` file.
 
-### static_dir
+### build.static_dir
 
 > Added in version 0.1.0.
 
@@ -119,7 +119,7 @@ The directory where your static files will be output to. This must be relative t
 
 Static content that oranda will copy to its output folder. This must be relative to the `oranda.json` file.
 
-### path_prefix
+### build.path_prefix
 
 > Added in version 0.1.0.
 
@@ -130,7 +130,7 @@ If you're hosting oranda on a nested path (e.g. `mysite.cool/myproject`), you sh
 GitHub pages, which, unless the repository name is `username.github.io` or you have a custom domain set, will host
 projects in a subfolder (e.g. `username.github.io/projectname`, so you'd set this option to `projectname`).
 
-### additional_pages
+### build.additional_pages
 
 > Added in version 0.1.0.
 
@@ -145,7 +145,7 @@ and they will all be rendered into separate pages.
 
 Configuration regarding SEO, site metadata, and other "marketing"-related aspects of your page.
 
-### analytics
+### marketing.analytics
 
 > Added in version 0.1.0.
 
@@ -155,7 +155,7 @@ Configuration regarding SEO, site metadata, and other "marketing"-related aspect
 
 Configuration for page analytics. Can be any combination of the following:
 
-#### analytics.google_analytics
+#### marketing.analytics.google_analytics
 
 > Added in version 0.1.0.
 
@@ -164,7 +164,7 @@ Configuration for page analytics. Can be any combination of the following:
 Set `google_analytics.tracking_id` to your site tracking ID to include the relevant
 snippet to your page.
 
-#### analytics.plausible
+#### marketing.analytics.plausible
 
 - Type: object, Default: none
 
@@ -174,7 +174,7 @@ Set `plausible.domain` to your Plausible domain. Optionally, you can set `plausi
 if you're self-hosting.
 
 
-#### analytics.fathom
+#### marketing.analytics.fathom
 
 - Type: object, Default: none
 
@@ -182,14 +182,14 @@ if you're self-hosting.
 
 Set `fathom.site` to your Fathom site.
 
-#### analytics.unami
+#### marketing.analytics.unami
 
 - Type: object, Default: none
 
 Set `unami.website` to your Unami website identifier, and `unami.script_url` to the location
 where you're hosting your Unami script.
 
-### social
+### marketing.social
 
 > Added in version 0.1.0.
 
@@ -199,7 +199,7 @@ where you're hosting your Unami script.
 
 Options useful for SEO features.
 
-#### social.image
+#### marketing.social.image
 
 > Added in version 0.1.0.
 
@@ -207,7 +207,7 @@ Options useful for SEO features.
 
 An image URL to use for page embeds.
 
-#### social.image_alt
+#### marketing.social.image_alt
 
 > Added in version 0.1.0.
 
@@ -215,7 +215,7 @@ An image URL to use for page embeds.
 
 An alt text for said image embed.
 
-#### social.twitter_account
+#### marketing.social.twitter_account
 
 > Added in version 0.1.0.
 
@@ -223,13 +223,13 @@ An alt text for said image embed.
 
 Name of a Twitter/X account, to be used for Twitter/X embeds (including the `@`).
 
-## style
+## styles
 
 - Type: object
 
 Configuration regarding the looks of your site.
 
-### theme
+### styles.theme
 
 > Added in version 0.1.0.
 
@@ -247,7 +247,7 @@ Choose which built-in theme to use. Possible choices:
 - `hacker`
 - `cupcake`
 
-### additional_css
+### styles.additional_css
 
 > Added in version 0.1.0.
 
@@ -257,7 +257,7 @@ Choose which built-in theme to use. Possible choices:
 
 An array of local or remote CSS files that will be merged together and loaded into your page.
 
-### oranda_css_version
+### styles.oranda_css_version
 
 > Added in version 0.1.0.
 
@@ -267,7 +267,7 @@ Specify a version of the embedded oranda CSS. This can be used to opt into newer
 an oranda release associated with them yet. (Internally, this looks for a `oranda.css` release artifact on the given
 tag in the `axodotdev/oranda` GitHub repository)
 
-### logo
+### styles.logo
 
 > Added in version 0.1.0.
 
@@ -275,7 +275,7 @@ tag in the `axodotdev/oranda` GitHub repository)
 
 Path to a custom logo to be shown in your website header and in your site metadata.
 
-### favicon
+### styles.favicon
 
 > Added in version 0.1.0.
 
@@ -287,7 +287,7 @@ Path to a custom favicon.
 
 Configuration regarding extra components/functionality that oranda supports.
 
-### artifacts
+### components.artifacts
 
 > Added in version 0.1.0.
 
@@ -297,7 +297,7 @@ Configuration regarding extra components/functionality that oranda supports.
 
 Configuration for enabling downloadable artifacts, as well as the `cargo-dist` integration.
 
-#### artifacts.package_managers
+#### components.artifacts.package_managers
 
 > Added in version 0.1.0.
 
@@ -327,7 +327,7 @@ The syntax for both of these is the same:
 }
 ```
 
-#### artifacts.cargo_dist
+#### components.artifacts.cargo_dist
 
 > Added in version 0.1.0.
 
@@ -336,7 +336,7 @@ The syntax for both of these is the same:
 Enables/disables `cargo-dist` support. oranda may autodetect this if you have `cargo-dist`
 configuration in your `Cargo.toml`, but you can always explicitly disable it here.
 
-#### artifacts.auto
+#### components.artifacts.auto
 
 > Added in version 0.2.0.
 
@@ -346,7 +346,7 @@ Enables/disables artifacts autodetection, even without `cargo-dist`. This is tur
 default, but if you provide GitHub release artifacts in a target-triple-like format, chances
 are that oranda can autodetect them, so it may be worth turning this on.
 
-### mdbook or md_book
+### components.mdbook (or components.md_book)
 
 > Added in version 0.1.0.
 
@@ -358,7 +358,7 @@ Configuration for mdbook support. You don't need mdbook itself installed to make
 since it also provides a Rust library that we use. oranda will attempt to autodetect
 this at several common paths, so you can disable it by setting `components.mdbook` to `false`.
 
-#### mdbook.path
+#### components.mdbook.path
 
 > Added in version 0.1.0.
 
@@ -367,7 +367,7 @@ this at several common paths, so you can disable it by setting `components.mdboo
 Path to your mdbook directory, the one containing `book.toml`, relative to your
 configuration file.
 
-#### mdbook.theme
+#### components.mdbook.theme
 
 > Added in version 0.1.0.
 
@@ -377,7 +377,7 @@ Whether to enable or disable custom mdbook themes. We try to match your mdbook t
 the main oranda page look visually by default, but you can disable this by setting this
 option to `false`.
 
-### changelog
+### components.changelog
 
 > Added in version 0.1.0.
 
@@ -388,7 +388,7 @@ option to `false`.
 Enable/disable changelog generation. This is enabled if you have a repository URL set,
 and you can disable it by setting `false` here.
 
-#### changelog.read_changelog_file
+#### components.changelog.read_changelog_file
 
 > Added in version 0.3.0.
 
@@ -396,7 +396,7 @@ and you can disable it by setting `false` here.
 
 Disables reading the changelog file, meaning that oranda will fall back to embedding the GitHub release body instead.
 
-### funding
+### components.funding
 
 > Added in version 0.1.0.
 
@@ -406,7 +406,7 @@ Disables reading the changelog file, meaning that oranda will fall back to embed
 
 Allows you to tweak or disable oranda's funding page.
 
-#### funding.md_path
+#### components.funding.md_path
 
 > Added in version 0.1.0.
 
@@ -414,7 +414,7 @@ Allows you to tweak or disable oranda's funding page.
 
 Path to a Markdown file which will be embedded into the funding page.
 
-#### funding.yml_path
+#### components.funding.yml_path
 
 > Added in version 0.1.0.
 
@@ -430,7 +430,7 @@ Configuration for a workspace. This option and its sub-keys will only be honored
 in the `oranda-workspace.json` file, in a normal configuration file, they will be
 ignored.
 
-### name
+### workspace.name
 
 > Added in version 0.3.0.
 
@@ -439,7 +439,7 @@ ignored.
 Set the overarching workspace name. This is optional, and will fall back to "My Oranda Workspace" if not set (not very
 intuitive, I know).
 
-### auto
+### workspace.auto
 
 > Added in version 0.3.0.
 
@@ -449,7 +449,7 @@ Enables workspace autodetection if set to `true`. This will cause oranda to atte
 under the current directory, and to attempt to build all of its members (all members must therefore have at least a
 readme file). Members manually listed under the `members` key override these automatically detected workspace members.
 
-### generate_index
+### workspace.generate_index
 
 > Added in version 0.3.0.
 
@@ -458,7 +458,7 @@ readme file). Members manually listed under the `members` key override these aut
 If set to `false`, does not generate a workspace index page that links between all workspace members. Use this if you
 just want to use oranda's workspace functionality to build multiple unrelated sites in one go.
 
-### members
+### workspace.members
 
 > Added in version 0.3.0.
 
@@ -466,7 +466,7 @@ just want to use oranda's workspace functionality to build multiple unrelated si
 
 An array of objects representing the workspace members.
 
-#### members.slug
+#### workspace.members.slug
 
 > Added in version 0.3.0.
 
@@ -475,7 +475,7 @@ An array of objects representing the workspace members.
 The URL-safe slug this page will be built at. This needs to be something that can be parsed as a URL, as well as a folder
 name on your target system (because oranda is a static site generator, after all).
 
-#### members.path
+#### workspace.members.path
 
 > Added in version 0.3.0.
 
@@ -483,7 +483,7 @@ name on your target system (because oranda is a static site generator, after all
 
 The path to the page source. Point this to the same directory that the `oranda.json` would be in.
 
-### docs_path
+### workspace.docs_path
 
 > Added in version 0.3.0.
 
@@ -491,7 +491,7 @@ The path to the page source. Point this to the same directory that the `oranda.j
 
 Path to a Markdown file whose content is going to be rendered into the workspace index file.
 
-### preferred_members
+### workspace.preferred_members
 
 > Added in version 0.3.0.
 
