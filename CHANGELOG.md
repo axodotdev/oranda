@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.1 - 2023-08-18
+
+### Fixes
+
+- Updated the published version of the README on crates.io and npm.
+- Our integration tests now use fixtures that have frozen GitHub releases, so that test data doesn't unexpectedly change.
+
 ## 0.3.0 - 2023-08-17
 
 ### BREAKING CHANGES
