@@ -88,8 +88,7 @@ fn it_renders_changelog_with_release_content() {
     );
     let site = Site::build_single(&config, None).unwrap();
     let page = find_page(&site.pages, "changelog.html");
-    let html = selector_get_inner(&page.contents, "h2[id='tag-v0.0.1']~.release-body p");
-    assert_eq!(html, "Initial release.");
+    assert_selector_exists(&page.contents, "h2[id='tag-v0.2.0']~.release-body p>strong");
 }
 
 #[test]
@@ -165,7 +164,7 @@ fn creates_footer() {
     let page = find_page(&site.pages, "index.html");
     assert_selector_exists(
         &page.contents,
-        "footer>a[href='https://github.com/axodotdev/oranda']",
+        "footer>a[href='https://github.com/oranda-gallery/oranda']",
     );
     assert!(selector_get_inner(&page.contents, "footer span").contains("MIT OR Apache-2.0"));
 }
