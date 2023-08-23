@@ -57,8 +57,6 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: recursive
-      - name: Install Rust
-        run: rustup update "stable" --no-self-update && rustup default "stable"
       - name: Install cargo-dist
         run: "curl --proto '=https' --tlsv1.2 -LsSf https://github.com/axodotdev/cargo-dist/releases/download/v0.2.0-prerelease.4/cargo-dist-installer.sh | sh"
       - id: create-release
@@ -112,8 +110,6 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: recursive
-      - name: Install Rust
-        run: rustup update "stable" --no-self-update && rustup default "stable"
       - name: Install cargo-dist
         run: ${{ matrix.install-dist }}
       - name: Run cargo-dist
@@ -144,8 +140,6 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: recursive
-      - name: Install Rust
-        run: rustup update "stable" --no-self-update && rustup default "stable"
       - name: Install cargo-dist
         run: "curl --proto '=https' --tlsv1.2 -LsSf https://github.com/axodotdev/cargo-dist/releases/download/v0.2.0-prerelease.4/cargo-dist-installer.sh | sh"
       # Get all the local artifacts for the global tasks to use (for e.g. checksums)
@@ -168,6 +162,7 @@ jobs:
           cat uploads.txt
           gh release upload ${{ github.ref_name }} $(cat uploads.txt)
           echo "uploaded!"
+
   upload-homebrew-formula:
     needs: [create-release, upload-global-artifacts]
     runs-on: "ubuntu-20.04"
