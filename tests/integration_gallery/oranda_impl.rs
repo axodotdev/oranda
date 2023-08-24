@@ -266,9 +266,7 @@ impl OrandaResult {
         };
         for path in glob::glob(&format!("{}/**/*", src_path)).unwrap() {
             let path = path.unwrap();
-            if !vec!["html", "json"]
-                .contains(&path.extension().unwrap_or_default().to_str().unwrap())
-            {
+            if !["html", "json"].contains(&path.extension().unwrap_or_default().to_str().unwrap()) {
                 continue;
             }
 
