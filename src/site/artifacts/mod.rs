@@ -1,4 +1,5 @@
 use axoasset::LocalAsset;
+use axoproject::platforms::triple_to_display_name;
 use camino::Utf8PathBuf;
 use std::collections::BTreeMap;
 
@@ -7,7 +8,6 @@ use crate::data::artifacts::{File, FileIdx, InstallMethod, InstallerIdx, TargetT
 use crate::data::{Context, Release};
 use crate::errors::*;
 
-use crate::data::artifacts::inference::triple_to_display_name;
 use crate::site::javascript;
 use serde::Serialize;
 

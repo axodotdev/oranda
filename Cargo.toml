@@ -18,7 +18,7 @@ members = ["generate-css"]
 ammonia = "3"
 axoasset = { version = "0.4.0", features = ["json-serde", "toml-edit"] }
 axocli = "0.1.0"
-axoproject = { version = "0.4.4", default-features = false, features = ["cargo-projects", "npm-projects"] }
+axoproject = { version = "0.4.6", default-features = false, features = ["cargo-projects", "npm-projects"] }
 axum = "0.6.18"
 cargo-dist-schema = "=0.1.0-prerelease.4"
 chrono = "0.4.26"

@@ -15,6 +15,7 @@
 use std::collections::{BTreeMap, HashMap};
 
 use axoasset::{LocalAsset, RemoteAsset};
+use axoproject::platforms::KNOWN_TARGET_TRIPLES;
 use camino::Utf8PathBuf;
 use indexmap::IndexMap;
 use serde::{Serialize, Serializer};
@@ -23,7 +24,7 @@ use crate::config::ArtifactsConfig;
 use crate::config::Config;
 use crate::errors::*;
 
-use inference::{KNOWN_SCRIPT_EXTS, KNOWN_TARGET_TRIPLES};
+use inference::KNOWN_SCRIPT_EXTS;
 
 pub mod inference;
 
