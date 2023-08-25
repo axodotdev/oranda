@@ -67,11 +67,11 @@ impl GithubRelease {
                     .into_iter()
                     .filter(|r| {
                         let Some(clamp) = parsed_clamp else {
-                        return true;
-                    };
+                            return true;
+                        };
                         let Ok(timestamp) = DateTime::parse_from_rfc3339(&r.created_at) else {
-                        return true;
-                    };
+                            return true;
+                        };
 
                         timestamp <= clamp
                     })
