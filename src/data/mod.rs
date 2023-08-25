@@ -1,5 +1,5 @@
 use crate::config::{ArtifactsConfig, ProjectConfig};
-use crate::data::github::{GithubRelease, GithubRepo};
+use crate::data::github::GithubRelease;
 use crate::data::release::CurrentStateRelease;
 use crate::errors::*;
 
@@ -13,6 +13,8 @@ pub mod workspaces;
 pub use release::Release;
 
 use self::release::ReleaseSource;
+
+use axoproject::GithubRepo;
 
 #[derive(Debug)]
 pub struct Context {

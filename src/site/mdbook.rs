@@ -35,7 +35,7 @@ const KEY_BUTTON_ID: &str = "{{THEME-ID}}";
 /// THEME_BUTTON_HTML_TEMPLATE needs us to substitute this with a user-facing name for the theme
 const KEY_BUTTON_NAME: &str = "{{THEME-NAME}}";
 /// Template for the HTML for a button in the theme selector
-const THEME_BUTTON_HTML_TEMPLATE: &str = r###"                            <li role="none"><button role="menuitem" class="theme" id="{{THEME-ID}}">{{THEME-NAME}}</button></li>"###;
+const THEME_BUTTON_HTML_TEMPLATE: &str = r#"                            <li role="none"><button role="menuitem" class="theme" id="{{THEME-ID}}">{{THEME-NAME}}</button></li>"#;
 
 /// the css class used for dark themes
 const CLASS_ORANDA_DARK: &str = "oranda-dark";

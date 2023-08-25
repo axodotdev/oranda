@@ -100,7 +100,11 @@ impl Release {
     ) -> Result<Self> {
         // If artifacts are disabled then bail out, because all this code is just artifacts stuff
         let Some(artifacts_config) = artifacts_config else {
-            return Ok(Self { manifest: None, source, artifacts: ReleaseArtifacts::new(None)} )
+            return Ok(Self {
+                manifest: None,
+                source,
+                artifacts: ReleaseArtifacts::new(None),
+            });
         };
 
         let manifest = if let (ReleaseSource::Github(gh_release), Some(repo)) = (&source, repo) {

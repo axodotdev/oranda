@@ -28,6 +28,10 @@ pub enum OrandaError {
 
     #[error(transparent)]
     #[diagnostic(transparent)]
+    AxoProject(#[from] axoproject::errors::AxoprojectError),
+
+    #[error(transparent)]
+    #[diagnostic(transparent)]
     Octolotl(#[from] octolotl::OctolotlError),
 
     #[error(transparent)]
@@ -81,14 +85,6 @@ pub enum OrandaError {
 
     #[error("failed to read {filedesc} at {path}")]
     FileNotFound { filedesc: String, path: String },
-
-    #[error("failed to parse your repo, current config has repo as: {repo}")]
-    #[diagnostic(help("please make sure this is correct."))]
-    RepoParseError {
-        repo: String,
-        #[diagnostic_source]
-        details: miette::Report,
-    },
 
     #[error("Could not find a build in {dist_dir}")]
     #[diagnostic(help("Did you remember to run `oranda build`?"))]
