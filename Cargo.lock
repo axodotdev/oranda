@@ -223,9 +223,9 @@ dependencies = [
 
 [[package]]
 name = "axoproject"
-version = "0.4.3"
+version = "0.4.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8779432e837cc1580e86ac5be2df7cf20b57e3c96f660da7c418ba17fa2300b6"
+checksum = "ad981761504d1d8516420ba773304602b0b7afe75034d583a03e2950ba55967e"
 dependencies = [
  "axoasset 0.5.0",
  "camino",

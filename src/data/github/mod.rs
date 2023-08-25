@@ -1,11 +1,9 @@
 use crate::errors::*;
 
 use axoasset::SourceFile;
+use axoproject::GithubRepo;
 use chrono::DateTime;
 use serde::{Deserialize, Serialize};
-
-mod repo;
-pub use repo::GithubRepo;
 
 use super::artifacts::{File, ReleaseArtifacts};
 
@@ -94,6 +92,24 @@ impl GithubRelease {
             }
         }
         None
+    }
+
+    pub fn repo_has_releases(repo: &GithubRepo) -> Result<bool> {
+        if let Ok(releases) =
+            tokio::runtime::Handle::current().block_on(GithubRelease::fetch_all(repo))
+        {
+            if releases.is_empty() {
+                Ok(false)
+            } else {
+                Ok(true)
+            }
+        } else {
+            let warning = OrandaError::ReleasesCheckFailed {
+                repo: repo.to_string(),
+            };
+            eprintln!("{:?}", miette::Report::new(warning));
+            Ok(false)
+        }
     }
 }
 

@@ -1,13 +1,15 @@
 use std::path::Path;
 
 use axoasset::{Asset, LocalAsset};
+use axoproject::GithubRepo;
 use camino::{Utf8Path, Utf8PathBuf};
 use indexmap::IndexMap;
 use minijinja::context;
 use tracing::instrument;
 
 use crate::config::{AxoprojectLayer, Config};
-use crate::data::{funding::Funding, github::GithubRepo, workspaces, Context};
+use crate::data::github::GithubRelease;
+use crate::data::{funding::Funding, workspaces, Context};
 use crate::errors::*;
 
 use crate::data::workspaces::WorkspaceData;
@@ -211,7 +213,7 @@ impl Site {
 
     fn has_repo_and_releases(repo_config: &Option<String>) -> Result<bool> {
         if let Some(repo) = repo_config {
-            GithubRepo::from_url(repo)?.has_releases()
+            GithubRelease::repo_has_releases(&GithubRepo::from_url(repo)?)
         } else {
             Ok(false)
         }
