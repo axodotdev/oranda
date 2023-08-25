@@ -13,4 +13,7 @@ pub enum GenerateCssError {
 
     #[error(transparent)]
     AxoAsset(#[from] axoasset::AxoassetError),
+
+    #[error(transparent)]
+    NonUtf8Path(#[from] std::str::Utf8Error),
 }
