@@ -49,8 +49,9 @@
               license = with licenses; [ asl20 mit ];
             };
 
-            nativeBuildInputs = [
-              pkgs.pkg-config
+            nativeBuildInputs = with pkgs; [
+              pkg-config
+              tailwindcss
             ];
 
             buildInputs = with pkgs; ([
@@ -80,9 +81,7 @@
 
         devShells = with pkgs; {
           default = mkShell {
-            nativeBuildInputs = [
-              pkg-config
-            ];
+            nativeBuildInputs = package.nativeBuildInputs;
 
             buildInputs =
               [
