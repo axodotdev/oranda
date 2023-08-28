@@ -28,6 +28,53 @@ pub fn default_css_output_dir() -> Utf8PathBuf {
 }
 
 pub fn build_css(dist_dir: &Utf8Path) -> Result<()> {
+    let binary_path = tailwind_path()?;
+
+    tracing::info!("Building oranda CSS using Tailwind...");
+    let css_src_path = manifest_dir().join(CSS_SRC_PATH);
+    let tailwind_config_path = manifest_dir().join(TAILWIND_SRC_PATH);
+    let output_path = dist_dir.join("oranda.css");
+    let output = Command::new(binary_path)
+        .args([
+            "-c",
+            tailwind_config_path.as_str(),
+            "-i",
+            css_src_path.as_str(),
+            "-o",
+            output_path.as_str(),
+            "--minify",
+        ])
+        .output()?;
+    std::io::stderr().write_all(&output.stderr)?;
+    output
+        .status
+        .success()
+        .then_some(true)
+        .expect("Tailwind failed to compile CSS!");
+
+    Ok(())
+}
+
+/// Returns the path to execute the Tailwind binary.
+///
+/// If a `tailwindcss` binary already exists on the current path (determined
+/// using `tailwindcss --help`), then the existing Tailwind is used. Otherwise,
+/// a Tailwind binary is installed from GitHub releases into the user's cache
+/// directory.
+fn tailwind_path() -> Result<Utf8PathBuf> {
+    // First, see if tailwind is already present
+    let result = Command::new("tailwindcss").arg("--help").status();
+    if let Ok(status) = result {
+        if status.success() {
+            tracing::info!("Found Tailwind binary on the path!");
+
+            return Ok(Utf8PathBuf::from("tailwindcss"));
+        }
+        // Otherwise, no tailwind binary exists.
+    } else {
+        tracing::info!(?result, "Couldn't find Tailwind binary");
+    }
+
     // Fetch our cache dir
     let project_dir = ProjectDirs::from("dev", "axo", "oranda")
         .expect("Unable to create cache dir for downloading Tailwind!");
@@ -71,27 +118,5 @@ pub fn build_css(dist_dir: &Utf8Path) -> Result<()> {
         }
     }
 
-    tracing::info!("Building oranda CSS using Tailwind...");
-    let css_src_path = manifest_dir().join(CSS_SRC_PATH);
-    let tailwind_config_path = manifest_dir().join(TAILWIND_SRC_PATH);
-    let output_path = dist_dir.join("oranda.css");
-    let output = Command::new(binary_path)
-        .args([
-            "-c",
-            tailwind_config_path.as_str(),
-            "-i",
-            css_src_path.as_str(),
-            "-o",
-            output_path.as_str(),
-            "--minify",
-        ])
-        .output()?;
-    std::io::stderr().write_all(&output.stderr)?;
-    output
-        .status
-        .success()
-        .then_some(true)
-        .expect("Tailwind failed to compile CSS!");
-
-    Ok(())
+    Ok(binary_path)
 }
