@@ -106,6 +106,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      ORANDA_USE_TAILWIND_BINARY: true
     steps:
       - uses: actions/checkout@v3
         with:

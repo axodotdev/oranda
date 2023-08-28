@@ -66,6 +66,7 @@
             RUSTONIG_SYSTEM_LIBONIG = true;
             ZSTD_SYS_USE_PKG_CONFIG = true;
             NIX_LDFLAGS = nixLdFlags;
+            ORANDA_USE_TAILWIND_BINARY = true;
           };
 
         # Darwin-specific build requirements

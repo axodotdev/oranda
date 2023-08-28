@@ -19,29 +19,40 @@ cargo watch -x "run dev" --ignore "*.png"  --ignore "*.jpg"
 
 ## ...plus working on the CSS
 
-As long as you're working with a development build of oranda (by running `cargo run` without the `--release` flag),
-oranda will automatically download a version of the Tailwind compiler and compile the CSS from your
-local checkout for you.
+We provide an environment variable (`ORANDA_USE_TAILWIND_BINARY`) that, when set, will cause oranda to
+use a prebuilt Tailwind binary to rebuild the CSS on the fly. You can use it like this:
+
+```shell
+ORANDA_USE_TAILWIND_BINARY=true cargo run dev
+# for fish shell:
+env ORANDA_USE_TAILWIND_BINARY=true cargo run dev
+```
+
+(if you don't use this flag, oranda will most likely revert to fetching CSS from the current GitHub release.
+Read [this section](./building.md#the-trouble-with-css) in the build documentation for more in-depth info)
 
 `oranda dev` doesn't automatically reload on CSS changes (because it's meant to be used by users),
 but you can include the CSS directory manually like such:
 
 ```shell
-cargo run dev -i oranda-css/css/
+ORANDA_USE_TAILWIND_BINARY=true cargo run dev -i oranda-css/css/
 ```
 
 ## Updating syntax highlighting languages
 
 We use [syntect] to support syntax highlighting in Markdown code blocks. If you want to add support for a new language
 that's not included in syntect's default set of languages or the ones oranda provides, you'll need to extend the
-`oranda::site::markdown::syntax_highlight::dump_syntax_themes` function to load your new `.sublime-syntax` file from disk
+`oranda::site::markdown::syntax_highlight::dump_syntax_themes` function to load your new `.sublime-syntax` file from
+disk
 and to include it in our syntax set dump. This function, once adjusted, only needs to be ran once manually, by including
 it anywhere in the call path of the application (I recommend somewhere close to the top of the build CLI function).
 
 ### Converting from .tmLanguage
 
-`syntect` accepts `.sublime-syntax` files, but Sublime Text can also accept `.tmLanguage` (TextMate syntax bundles) files,
-so sometimes we need to convert from one to the other. Thankfully, the Sublime Text editor has a built-in feature for this.
+`syntect` accepts `.sublime-syntax` files, but Sublime Text can also accept `.tmLanguage` (TextMate syntax bundles)
+files,
+so sometimes we need to convert from one to the other. Thankfully, the Sublime Text editor has a built-in feature for
+this.
 Here's what you need to do:
 
 1. Download and install Sublime Text
