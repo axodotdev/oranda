@@ -35,23 +35,28 @@ pub fn get_css_link(path_prefix: &Option<String>, release_tag: &str) -> Result<S
     Ok(crate::site::link::generate(path_prefix, &filename))
 }
 
-/// Places the CSS into the output folder. Depending on if we're running in local development or in
-/// a released binary, the method of obtaining said CSS will differ.
+/// Places CSS in the destination directory. Depending on the results of the build script, the
+/// output of this will differ.
 pub fn place_css(dist_dir: &str, release_tag: &str) -> Result<()> {
-    // Even if you're running a development build, we still respect the custom CSS version preference
-    // by falling back to fetching said version from GitHub.
+    // Above all, we respect specifying `style.oranda_css_version`.
     if release_tag == ORANDA_CSS_TAG {
-        // If we're running a development build, we fetch a Tailwind binary and compile the CSS
-        // on the spot. This is useful if we're working on oranda-css locally.
-        #[cfg(debug_assertions)]
+        // If the user has set `ORANDA_USE_TAILWIND_BINARY`, build using the Tailwind binary.
+        #[cfg(css = "tailwind")]
         {
             oranda_generate_css::build_css(Utf8Path::new(dist_dir))?;
         }
-        // If not, we rely on the `build.rs` file to have pre-compiled the CSS for us.
-        #[cfg(not(debug_assertions))]
+
+        // If a `oranda-css/dist/oranda.css` file exists, inline it into the binary.
+        #[cfg(css = "file")]
         {
             let css = include_str!("../../../oranda-css/dist/oranda.css");
             LocalAsset::write_new_all(css, format!("{dist_dir}/oranda-{release_tag}.css"))?;
+        }
+
+        // Otherwise, fall back to fetching from GitHub releases.
+        #[cfg(css = "fetch")]
+        {
+            fetch_css(dist_dir, release_tag)?;
         }
         Ok(())
     } else {
@@ -114,7 +119,7 @@ async fn fetch_oranda(release_tag: &str) -> Result<String> {
 }
 
 fn get_css_filename(release_tag: &str) -> String {
-    if (cfg!(debug_assertions) && release_tag == ORANDA_CSS_TAG) || env::var("ORANDA_CSS").is_ok() {
+    if (release_tag == ORANDA_CSS_TAG && cfg!(css = "tailwind")) || env::var("ORANDA_CSS").is_ok() {
         "oranda.css".into()
     } else {
         format!("oranda-{release_tag}.css")

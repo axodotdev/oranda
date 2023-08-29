@@ -1,0 +1,11 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "tailwindcss -c tailwind.config.js -i ./css/main.css -o ./dist/oranda.css --minify"
+  },
+  "dependencies": {
+    "@tailwindcss/forms": "^0.5.5",
+    "@tailwindcss/typography": "^0.5.9",
+    "tailwindcss": "^3.3.3"
+  }
+}
