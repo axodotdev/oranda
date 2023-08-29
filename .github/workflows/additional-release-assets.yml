@@ -53,7 +53,7 @@ jobs:
           echo "uploading CSS to ${{ github.event.workflow_run.head_branch }}"
           curl --proto '=https' --tlsv1.2 -LsSf https://github.com/axodotdev/oranda/releases/download/${{ github.event.workflow_run.head_branch }}/oranda-installer.sh | sh
           oranda generate-css
-          ls dist
+          ls oranda-css/dist
           echo "built css!"
           # Upload css to the Github Release™
           gh release upload ${{ github.event.workflow_run.head_branch }} oranda-css/dist/oranda.css
