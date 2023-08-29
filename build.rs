@@ -7,7 +7,8 @@ fn main() {
     // development cycle.
     // Alternatively, a packager can set this for a release build to prebuild the CSS using the
     // Tailwind binary.
-    if std::env::var("ORANDA_USE_TAILWIND_BINARY").is_ok() {
+    if std::env::var("ORANDA_USE_TAILWIND_BINARY").is_ok() || cfg!(feature = "build-with-tailwind")
+    {
         if cfg!(debug_assertions) {
             println!("cargo:rustc-cfg=css=\"tailwind\"");
         } else {

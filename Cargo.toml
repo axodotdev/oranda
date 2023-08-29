@@ -68,6 +68,9 @@ scraper = "0.17.1"
 oranda-generate-css = { version = "0.3.0-prerelease.4", path = "generate-css" }
 tokio = { version = "1.20.1", features = ["full"] }
 
+[features]
+build-with-tailwind = []
+
 [profile.test]
 debug-assertions = false
 
@@ -79,7 +82,7 @@ lto = "thin"
 # Config for 'cargo dist'
 [workspace.metadata.dist]
 # The preferred cargo-dist version to use in CI (Cargo.toml SemVer syntax)
-cargo-dist-version = "0.2.0-prerelease.5"
+cargo-dist-version = "0.2.0-prerelease.6"
 # CI backends to support (see 'cargo dist generate-ci')
 ci = ["github"]
 # The installers to generate for each app
@@ -96,3 +99,4 @@ windows-archive = ".tar.gz"
 unix-archive = ".tar.gz"
 # A namespace to use when publishing this package to the npm registry
 npm-scope = "@axodotdev"
+features = ["build-with-tailwind"]
