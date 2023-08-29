@@ -1,5 +1,40 @@
 # Changelog
 
+## Unreleased
+
+### Features
+
+- **Improved CSS generation** - [shadows-withal]/[pr617], [ashleygwilliams]/[i610]
+  
+  Users and distributors now have more control over how oranda and especially its CSS gets built! You can choose to 
+  opt-in to building CSS at build or runtime using the Tailwind binary, or you can explicitly prebuild the CSS using 
+  npm. For more information, see the [docs](https://opensource.axo.dev/oranda/book/building.html#the-trouble-with-css).
+
+### Fixes
+
+- **Fixed Tailwind breaking the Nix flake** - [hawkw]/[pr609]
+
+  Because Tailwind was being downloaded on each build in a global cache directory (which Nix doesn't support),
+  @hawkw added the Tailwind binary as an explicit dependency, and enhanced our Tailwind build code with the
+  ability to use a preexisting Tailwind binary.
+- **Hide changelog sidebar on mobile** - [shadows-withal]/[pr614], [zkat]/[i612]
+
+### Housekeeping
+
+- `oranda` is now available on Homebrew! Run `brew install axodotdev/tap/oranda` to install it.
+- Factored out a bunch of code into `axoproject` - [mistydemeo]/[pr590]
+
+[i610]: https://github.com/axodotdev/oranda/issues/610
+[i612]: https://github.com/axodotdev/oranda/issues/612
+[pr590]: https://github.com/axodotdev/oranda/pull/590
+[pr609]: https://github.com/axodotdev/oranda/pull/609
+[pr614]: https://github.com/axodotdev/oranda/pull/614
+[pr617]: https://github.com/axodotdev/oranda/pull/617
+[mistydemeo]: https://github.com/mistydemeo
+[hawkw]: https://github.com/hawkw
+[zkat]: https://github.com/zkat
+[ashleygwilliams]: https://github.com/ashleygwilliams
+
 ## 0.3.1 - 2023-08-18
 
 ### Fixes
