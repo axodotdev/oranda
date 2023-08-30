@@ -52,10 +52,11 @@ toml_edit = "0.19.9"
 schemars = { version = "0.8.12", features = ["indexmap1"] }
 indexmap = { version = "1.9.3", features = ["serde-1"] }
 pathdiff = { version = "0.2.1", features = ["camino"] }
-minijinja = { version = "1.0.3", features = ["loader", "preserve_order"] }
+minijinja = { version = "1.0.3", features = ["loader", "preserve_order", "custom_syntax"] }
 include_dir = "0.7.3"
 slug = "0.1.4"
 oranda-generate-css = { version = "0.4.0-prerelease.1", path = "generate-css" }
+inquire = "0.6.2"
 
 [dev-dependencies]
 assert_cmd = "2"
