@@ -1,6 +1,7 @@
 use crate::errors::Result;
 use axoasset::LocalAsset;
 use camino::Utf8PathBuf;
+use inquire::ui::{Color, RenderConfig, Styled};
 use inquire::Confirm;
 use minijinja::{context, Environment};
 
@@ -20,6 +21,8 @@ pub fn generate_ci(path: Utf8PathBuf) -> Result<()> {
         comment_end: "#}}".into(),
     })?;
     env.add_template_owned("web.yml", CI_TEMPLATE)?;
+    let prompt_prefix = Styled::new("? >o_o<").with_fg(Color::DarkGreen);
+    let render_config = RenderConfig::default().with_prompt_prefix(prompt_prefix);
 
     // Does the file already exist? If so, prompt the user to overwrite.
     let existing_file = if path.exists() {
@@ -28,6 +31,7 @@ pub fn generate_ci(path: Utf8PathBuf) -> Result<()> {
             path
         ))
         .with_default(false)
+        .with_render_config(render_config)
         .prompt();
 
         if let Ok(false) = confirm_prompt {
@@ -47,6 +51,7 @@ pub fn generate_ci(path: Utf8PathBuf) -> Result<()> {
             .with_help_message(
                 "Read more about the link checker tool: https://github.com/untitaker/hyperlink",
             )
+            .with_render_config(render_config)
             .prompt()
             .expect("Error while prompting!");
 
