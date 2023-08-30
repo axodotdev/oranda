@@ -10,19 +10,31 @@ $ oranda
 Usage: oranda [OPTIONS] <COMMAND>
 
 Commands:
-build
-dev
-serve
-help Print this message or the help of the given subcommand(s)
+  build     Build an oranda site
+  dev       Start a local development server that recompiles your oranda site if a file changes
+  serve     Start a file server to access your oranda site in a browser
+  generate  Generate infrastructure files for oranda sites
+  help      Print this message or the help of the given subcommand(s)
 
 Options:
--h, --help Print help (see more with '--help')
--V, --version Print version
+  -h, --help
+          Print help (see a summary with '-h')
+
+  -V, --version
+          Print version
 
 GLOBAL OPTIONS:
---verbose <VERBOSE> How verbose logging should be (log level) [default: warn] [possible values:
-off, error, warn, info, debug, trace]
---output-format <OUTPUT_FORMAT> The format of the output [default: human] [possible values: human, json]
+  -v, --verbose
+          Whether to output more detailed debug information
+
+      --output-format <OUTPUT_FORMAT>
+          The format of the output
+          
+          [default: human]
+
+          Possible values:
+          - human: Human-readable output
+          - json:  Machine-readable JSON output
 ```
 
 Since `oranda` is designed to work without configuration, the quickest start is to just run `oranda dev` in an
@@ -55,6 +67,7 @@ your workflows, for example like this:
 ## Further Steps
 
 - Explore the [`oranda` configuration options](./configuration.md)
+- [Host your site](./hosting.md), on GitHub Pages or elsewhere
 - Read the [CLI docs](./cli.md)
 - Learn more about [hosting `oranda` sites](./hosting.md)
 
