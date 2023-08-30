@@ -40,6 +40,7 @@ thiserror = "1.0.37"
 tokio = { version = "1.20.1", features = ["full"] }
 toml = "0.5.9"
 tower-http = { version = "0.3.0", features = ["fs", "trace"] }
+tower-livereload = "0.8.0"
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["fmt"] }
 url = "2.3.1"
