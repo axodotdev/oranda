@@ -13,44 +13,7 @@ use super::*;
 // const OS_LINUX_MUSL: &str = "unknown-linux-musl";
 // const OS_MAC: &str = "apple-darwin";
 
-// Various target triples
-const TARGET_X86_WINDOWS: &Targ = "i686-pc-windows-msvc";
-const TARGET_X64_WINDOWS: &Targ = "x86_64-pc-windows-msvc";
-const TARGET_ARM64_WINDOWS: &Targ = "aarch64-pc-windows-msvc";
-const KNOWN_WINDOWS_TARGETS: &[&Targ] =
-    &[TARGET_X86_WINDOWS, TARGET_X64_WINDOWS, TARGET_ARM64_WINDOWS];
-
-const TARGET_X86_MAC: &Targ = "i686-apple-darwin";
-const TARGET_X64_MAC: &Targ = "x86_64-apple-darwin";
-const TARGET_ARM64_MAC: &Targ = "aarch64-apple-darwin";
-const KNOWN_MAC_TARGETS: &[&Targ] = &[TARGET_X86_MAC, TARGET_X64_MAC, TARGET_ARM64_MAC];
-
-const TARGET_X86_LINUX_GNU: &Targ = "i686-unknown-linux-gnu";
-const TARGET_X64_LINUX_GNU: &Targ = "x86_64-unknown-linux-gnu";
-const TARGET_ARM64_LINUX_GNU: &Targ = "aarch64-unknown-linux-gnu";
-const KNOWN_LINUX_GNU_TARGETS: &[&Targ] = &[
-    TARGET_X86_LINUX_GNU,
-    TARGET_X64_LINUX_GNU,
-    TARGET_ARM64_LINUX_GNU,
-];
-
-const TARGET_X86_LINUX_MUSL: &Targ = "i686-unknown-linux-musl";
-const TARGET_X64_LINUX_MUSL: &Targ = "x86_64-unknown-linux-musl";
-const TARGET_ARM64_LINUX_MUSL: &Targ = "aarch64-unknown-linux-musl";
-const KNOWN_LINUX_MUSL_TARGETS: &[&Targ] = &[
-    TARGET_X86_LINUX_MUSL,
-    TARGET_X64_LINUX_MUSL,
-    TARGET_ARM64_LINUX_MUSL,
-];
-
-const KNOWN_LINUX_TARGETS: &[&[&Targ]] = &[KNOWN_LINUX_GNU_TARGETS, KNOWN_LINUX_MUSL_TARGETS];
-
-pub const KNOWN_TARGET_TRIPLES: &[&[&Targ]] = &[
-    KNOWN_WINDOWS_TARGETS,
-    KNOWN_MAC_TARGETS,
-    KNOWN_LINUX_GNU_TARGETS,
-    KNOWN_LINUX_MUSL_TARGETS,
-];
+use axoproject::platforms::{KNOWN_LINUX_TARGETS, KNOWN_MAC_TARGETS, KNOWN_WINDOWS_TARGETS};
 
 // Various extensions for known archive formats
 const EXTS_FOR_TAR_BZIP2: &[&str] = &[".tar.bz2", ".tb2", ".tbz", ".tbz2", ".tz2"];
@@ -324,29 +287,5 @@ fn infer_label_for_script(file: &File) -> String {
             .extension()
             .expect("we determined a file was a script based on its extension, but it had none?")
             .to_owned()
-    }
-}
-
-pub fn triple_to_display_name(name: &str) -> Option<&str> {
-    match name.trim() {
-        TARGET_X86_LINUX_GNU => Some("Linux x86"),
-        TARGET_X64_LINUX_GNU => Some("Linux x64"),
-        TARGET_ARM64_LINUX_GNU => Some("Linux arm64"),
-
-        TARGET_X86_LINUX_MUSL => Some("musl Linux x86"),
-        TARGET_X64_LINUX_MUSL => Some("musl Linux x64"),
-        TARGET_ARM64_LINUX_MUSL => Some("musl Linux arm64"),
-
-        TARGET_X86_WINDOWS => Some("Windows x86"),
-        TARGET_X64_WINDOWS => Some("Windows x64"),
-        TARGET_ARM64_WINDOWS => Some("Windows arm64"),
-
-        TARGET_X86_MAC => Some("macOS x86"),
-        TARGET_X64_MAC => Some("macOS Intel"),
-        TARGET_ARM64_MAC => Some("macOS Apple Silicon"),
-
-        "all" => Some("All Platforms"),
-
-        _ => None,
     }
 }
