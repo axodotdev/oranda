@@ -7,7 +7,7 @@ use minijinja::{context, Environment};
 
 const CI_TEMPLATE: &str = include_str!("../templates/generate/web.yml.j2");
 
-pub fn generate_ci(path: Utf8PathBuf) -> Result<()> {
+pub fn generate_ci(path: Utf8PathBuf, site_dir: &Option<Utf8PathBuf>) -> Result<()> {
     tracing::info!("Generating a CI deploy workflow for your site...");
 
     let mut env = Environment::new();
@@ -55,7 +55,14 @@ pub fn generate_ci(path: Utf8PathBuf) -> Result<()> {
             .prompt()
             .expect("Error while prompting!");
 
-    let context = context!(check_links => check_links_prompt);
+    let use_latest_oranda_prompt = Confirm::new("Do you want to always use the latest version of oranda?")
+        .with_default(false)
+        .with_help_message("Using the latest version means you don't have to rerun this command when oranda updates, but it may also break your site if you use a lot of configuration!")
+        .with_render_config(render_config)
+        .prompt()
+        .expect("Error while prompting!");
+
+    let context = context!(check_links => check_links_prompt, use_latest_oranda => use_latest_oranda_prompt, site_dir => site_dir);
     let template = env.get_template("web.yml")?;
     let rendered = template.render(context)?;
     if existing_file.is_some_and(|file| file == rendered) {

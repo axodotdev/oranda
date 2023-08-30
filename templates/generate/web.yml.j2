@@ -27,7 +27,9 @@ on:
   # the latest release. The workflow_run trigger below will properly wait for
   # cargo-dist, and so this half-published state will only last for ~10 minutes.
   #
-  # If you only want docs to update with releases, disable this one.
+  # If you only want docs to update with releases, disable this, or change it to
+  # a "release" branch. You can, of course, also manually trigger a workflow run
+  # when you want the docs to update.
   push:
     branches:
       - main
@@ -58,11 +60,20 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - uses: swatinem/rust-cache@v2
 
+      # If you use any mdbook plugins, here's the place to install them!
+
       # Install and run oranda (and mdbook)
       # This will write all output to ./public/ (including copying mdbook's output to there)
       - name: Install and run oranda
         run: |
+          {{%- if use_latest_oranda %}}
+          curl --proto '=https' --tlsv1.2 -LsSf https://github.com/axodotdev/oranda/releases/latest/download/oranda-installer.sh | sh
+          {{%- else %}}
           curl --proto '=https' --tlsv1.2 -LsSf https://github.com/axodotdev/oranda/releases/download/v0.3.1/oranda-installer.sh | sh
+          {{%- endif %}}
+          {{%- if site_dir %}}
+          cd {{{ site_dir }}}
+          {{%- endif %}}
           oranda build
       {{% if check_links %}}
       - name: Prepare HTML for link checking
