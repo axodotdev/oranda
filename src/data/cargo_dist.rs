@@ -55,7 +55,10 @@ impl ReleaseArtifacts {
                             // If there's an install-hint, assume this is something we're telling them to run
                             //
                             // Special hack: demote npm-packages, which cargo-dist presents kind of weird
-                            let file = if id.contains("npm-package") {
+                            // Also demote Homebrew packages
+                            let file = if id.contains("npm-package")
+                                || install_hint.contains("brew install")
+                            {
                                 preference = InstallerPreference::Custom;
                                 None
                             } else {
@@ -82,6 +85,8 @@ impl ReleaseArtifacts {
                             "powershell".to_owned()
                         } else if id.contains("npm-package") {
                             "npm".to_owned()
+                        } else if id.ends_with(".rb") {
+                            "homebrew".to_owned()
                         } else {
                             Utf8PathBuf::from(id).extension().unwrap_or(id).to_owned()
                         };
