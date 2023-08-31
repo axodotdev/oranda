@@ -10,6 +10,17 @@
   opt-in to building CSS at build or runtime using the Tailwind binary, or you can explicitly prebuild the CSS using 
   npm. For more information, see the [docs](https://opensource.axo.dev/oranda/book/building.html#the-trouble-with-css).
 
+- **New `generate` command** - [shadows-withal]/[pr621], [ashleygwilliams]/[i188]
+  
+  You can now generate a GitHub Actions CI file that'll build your site and deploy it to GitHub Pages by running 
+  `oranda generate ci`, which runs you through an interactive wizard! In the future, we'll add more types of 
+  generatable files.
+
+- **LiveReload support for `oranda dev`** - [shadows-withal]/[pr622], [jamesmunns]/[i556]
+
+  A pretty simple change that has a lot of quality-of-life: Your `oranda dev` browser tab now reloads automatically 
+  when you change a relevant file and oranda rebuilds your site!
+
 ### Fixes
 
 - **Fixed Tailwind breaking the Nix flake** - [hawkw]/[pr609]
@@ -24,16 +35,21 @@
 - `oranda` is now available on Homebrew! Run `brew install axodotdev/tap/oranda` to install it.
 - Factored out a bunch of code into `axoproject` - [mistydemeo]/[pr590]
 
+[i188]: https://github.com/axodotdev/oranda/issues/188
+[i556]: https://github.com/axodotdev/oranda/issues/556
 [i610]: https://github.com/axodotdev/oranda/issues/610
 [i612]: https://github.com/axodotdev/oranda/issues/612
 [pr590]: https://github.com/axodotdev/oranda/pull/590
 [pr609]: https://github.com/axodotdev/oranda/pull/609
 [pr614]: https://github.com/axodotdev/oranda/pull/614
 [pr617]: https://github.com/axodotdev/oranda/pull/617
+[pr621]: https://github.com/axodotdev/oranda/pull/621
+[pr622]: https://github.com/axodotdev/oranda/pull/622
 [mistydemeo]: https://github.com/mistydemeo
 [hawkw]: https://github.com/hawkw
 [zkat]: https://github.com/zkat
 [ashleygwilliams]: https://github.com/ashleygwilliams
+[shadows-withal]: httpS://github.com/shadows-withal
 
 ## 0.3.1 - 2023-08-18
 
