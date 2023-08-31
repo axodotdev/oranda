@@ -153,19 +153,20 @@ impl Release {
         gh_release: &GithubRelease,
         repo: &GithubRepo,
     ) -> Result<Option<DistManifest>> {
-        let tag = &gh_release.tag_name;
+        let mut encoded_tag = String::new();
+        url_escape::encode_component_to_string(&gh_release.tag_name, &mut encoded_tag);
         if gh_release.has_dist_manifest() {
             let request = octolotl::request::ReleaseAsset::new(
                 &repo.owner,
                 &repo.name,
-                tag,
+                &encoded_tag,
                 cargo_dist::MANIFEST_FILENAME,
             );
             let response = octolotl::Request::send(&request, true)
                 .await?
                 .error_for_status()?;
 
-            Ok(Self::parse_response(response, tag).await?)
+            Ok(Self::parse_response(response, &gh_release.tag_name).await?)
         } else {
             Ok(None)
         }
