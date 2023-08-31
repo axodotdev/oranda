@@ -9,6 +9,7 @@
     - [build](./cli/build.md)
     - [serve](./cli/serve.md)
     - [dev](./cli/dev.md)
+    - [generate](./cli/generate.md)
 - [Tips and Tricks](./tips.md)
 - [Configuration](./configuration.md)
     - [Reference](./configuration/reference.md)

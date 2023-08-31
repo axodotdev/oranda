@@ -16,7 +16,7 @@ use minijinja::value::Value;
 use minijinja::{context, AutoEscape, Environment, Template};
 use std::collections::HashMap;
 
-const TEMPLATE_DIR: Dir<'_> = include_dir!("$CARGO_MANIFEST_DIR/templates");
+const TEMPLATE_DIR: Dir<'_> = include_dir!("$CARGO_MANIFEST_DIR/templates/site");
 
 /// Main templates struct that gets passed around in the application.
 pub struct Templates<'a> {

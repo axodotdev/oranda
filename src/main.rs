@@ -10,6 +10,7 @@ mod commands;
 use commands::{Build, ConfigSchema, Dev, GenerateCss, Serve};
 
 pub mod formatter;
+use crate::commands::Generate;
 use formatter::OutputFormat;
 
 #[derive(Parser, Debug)]
@@ -32,9 +33,14 @@ struct Cli {
 
 #[derive(Subcommand, Debug)]
 enum Command {
+    /// Build an oranda site.
     Build(Build),
+    /// Start a local development server that recompiles your oranda site if a file changes.
     Dev(Dev),
+    /// Start a file server to access your oranda site in a browser.
     Serve(Serve),
+    /// Generate infrastructure files for oranda sites.
+    Generate(Generate),
     #[clap(hide = true)]
     ConfigSchema(ConfigSchema),
     #[clap(hide = true)]
@@ -75,6 +81,7 @@ fn run(cli: &axocli::CliApp<Cli>) -> Result<(), Report> {
         Command::Serve(cmd) => cmd.run()?,
         Command::ConfigSchema(cmd) => cmd.run()?,
         Command::GenerateCss(cmd) => cmd.run()?,
+        Command::Generate(cmd) => cmd.run()?,
     };
     Ok(())
 }

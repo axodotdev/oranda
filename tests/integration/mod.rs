@@ -4,6 +4,7 @@ use scraper::{Html, Selector};
 use serde_json::json;
 
 mod fixtures;
+
 use super::utils::tokio_utils::TEST_RUNTIME;
 use fixtures::oranda_config;
 use oranda::config::style::ORANDA_CSS_TAG;

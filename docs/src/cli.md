@@ -1,10 +1,11 @@
 # Command Line
 
-Oranda currently has three subcommands that work in similar, but nuanced ways.
+Oranda currently has four subcommands that work in similar, but nuanced ways.
 
 - [`build`](./cli/build.md)
 - [`serve`](./cli/serve.md)
 - [`dev`](./cli/dev.md)
+- [`generate`](./cli/generate.md)
 
 Oranda supports some common options on each command:
 

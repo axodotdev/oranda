@@ -5,4 +5,5 @@ pub mod config;
 pub mod data;
 pub mod errors;
 pub mod formatter;
+pub mod generate;
 pub mod site;
