@@ -124,8 +124,12 @@ impl Dev {
             Build::new(self.project_root.clone(), self.config_path.clone()).run()?;
         }
 
-        // Spawn the serve process out into a separate thread so that we can loop through received events on this thread
-        let _ = std::thread::spawn(move || Serve::new(self.port).run());
+        let (ws_tx, ws_rx) = std::sync::mpsc::channel();
+        // Spawn the serve process out into a separate thread so that we can loop through received
+        // events on this thread.
+        let _thread_handle = std::thread::spawn(move || {
+            Serve::new(self.port).run_with_livereload(ws_rx).unwrap();
+        });
         let addr = SocketAddr::from(([127, 0, 0, 1], self.port.unwrap_or(7979)));
         let msg = if config.build.path_prefix.is_some() {
             format!(
@@ -167,6 +171,12 @@ impl Dev {
                 {
                     eprintln!("{:?}", Report::new(e));
                     continue;
+                } else {
+                    // Reload page (this goes into the serve thread, which has spawned a subthread
+                    // to handle messages)
+                    ws_tx
+                        .send(())
+                        .expect("error when sending livereload message");
                 }
             }
         }
