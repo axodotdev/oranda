@@ -2,7 +2,7 @@
     /* 
       This part is just defining constants which fringe/oranda-css should probably
       be injecting into this file. For now, they're hardcoded.
-    */ 
+    */
     --color-cupcake-white: rgb(250, 247, 245);
     --color-cupcake-black: rgb(41, 19, 52);
     --color-cupcake-faded-black: rgba(41, 19, 52, 0.8);
@@ -58,5 +58,5 @@
     --searchresults-header-fg: var(--title-fg);
     --searchresults-border-color: var(--border-color);
     --searchresults-li-bg: var(--well-bg);
-    --search-mark-bg: var(--well-bg);
+    --search-mark-bg: var(--well-bg-highlight);
 }
