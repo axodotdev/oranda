@@ -4,7 +4,7 @@ use crate::site::oranda_theme::OrandaTheme;
 use serde::Serialize;
 
 pub mod css;
-mod header;
+pub mod header;
 pub mod javascript;
 use crate::data::Context;
 use crate::site::layout::header::get_logo;
@@ -18,7 +18,7 @@ pub struct LayoutContext {
     project_name: String,
     homepage: Option<String>,
     repository: Option<String>,
-    favicon_url: Option<String>,
+    favicon_url: String,
     description: Option<String>,
     oranda_css_path: String,
     has_additional_css: bool,
@@ -65,11 +65,7 @@ impl LayoutContext {
             Some(ret)
         };
 
-        let favicon_url = config
-            .styles
-            .favicon
-            .clone()
-            .map(|_| link::generate(&config.build.path_prefix, "favicon.ico"));
+        let favicon_url = link::generate(&config.build.path_prefix, "favicon.ico");
         let logo = if let Some(logo) = config.styles.logo.as_deref() {
             let path = get_logo(logo, config)?;
             Some(path)

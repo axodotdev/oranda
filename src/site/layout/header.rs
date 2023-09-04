@@ -2,7 +2,16 @@ use crate::config::Config;
 use crate::errors::*;
 use crate::site::link;
 
-use axoasset::Asset;
+use axoasset::{Asset, LocalAsset};
+
+const DEFAULT_FAVICON: &[u8] = include_bytes!("../../../assets/favicon.ico");
+
+/// Copies the favicon into the dist dir
+pub fn place_default_favicon(config: &Config) -> Result<()> {
+    let asset = LocalAsset::new("favicon.ico", DEFAULT_FAVICON.to_vec())?;
+    asset.write(&config.build.dist_dir)?;
+    Ok(())
+}
 
 /// Fetches the logo and adds it to the dist_dir, then returns the path to link it with
 pub fn get_logo(logo: &str, config: &Config) -> Result<String> {

@@ -69,6 +69,9 @@ impl Site {
         member_data: &Vec<WorkspaceData>,
     ) -> Result<()> {
         let templates = Templates::new_for_workspace_index(workspace_config)?;
+        if workspace_config.styles.favicon.is_none() {
+            layout::header::place_default_favicon(workspace_config)?;
+        }
         css::place_css(
             &workspace_config.build.dist_dir,
             &workspace_config.styles.oranda_css_version,
@@ -89,6 +92,9 @@ impl Site {
     #[instrument("workspace_page", fields(prefix = prefix))]
     pub fn build_single(config: &Config, prefix: Option<String>) -> Result<Site> {
         Self::clean_dist_dir(&config.build.dist_dir)?;
+        if config.styles.favicon.is_none() {
+            layout::header::place_default_favicon(config)?;
+        }
         css::place_css(&config.build.dist_dir, &config.styles.oranda_css_version)?;
         let needs_context = Self::needs_context(config)?;
         let context = if needs_context {
