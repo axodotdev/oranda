@@ -34,8 +34,8 @@
     --title-fg: var(--color-axo-pink);
     --subtitle-fg: var(--color-axo-purple);
     --border-color: var(--color-slate-700);
-    --main-font: Comfortaa,Comfortaa override,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
-    --mono-font: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;
+    --main-font: Comfortaa, Comfortaa override, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+    --mono-font: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
 
     --sidebar-bg: var(--bg);
     --sidebar-fg: var(--fg);
@@ -71,7 +71,7 @@
     --searchresults-header-fg: var(--title-fg);
     --searchresults-border-color: var(--border-color);
     --searchresults-li-bg: var(--well-bg);
-    --search-mark-bg: var(--well-bg);
+    --search-mark-bg: var(--color-axo-highlighter);
 }
 
 .oranda-light {
@@ -111,8 +111,8 @@
     --title-fg: var(--color-axo-pink);
     --subtitle-fg: var(--color-axo-purple);
     --border-color: var(--color-slate-700);
-    --main-font: Comfortaa,Comfortaa override,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
-    --mono-font: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;
+    --main-font: Comfortaa, Comfortaa override, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+    --mono-font: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
 
     --sidebar-bg: var(--bg);
     --sidebar-fg: var(--fg);
@@ -148,5 +148,5 @@
     --searchresults-header-fg: var(--title-fg);
     --searchresults-border-color: var(--border-color);
     --searchresults-li-bg: var(--well-bg);
-    --search-mark-bg: var(--well-bg);
+    --search-mark-bg: var(--color-axo-highlighter);
 }

@@ -1,135 +1,135 @@
 .oranda-dark {
-  /* 
-      This part is just defining constants that are consistent
-      between both oranda themes, which oranda-css should probably
-      be injecting into this file. For now, they're hardcoded.
-    */
-  --dark-color: #141414;
-  --light-color: #ffffff;
-  --link-color: #0284c7;
-  --light-highlight-bg-color: #ededed;
-  --light-highlight-fg-color: #595959;
-  --dark-highlight-bg-color: #595959;
-  --dark-highlight-fg-color: #ededed;
-  --font-face: "Fira Sans", sans-serif;
+    /*
+        This part is just defining constants that are consistent
+        between both oranda themes, which oranda-css should probably
+        be injecting into this file. For now, they're hardcoded.
+      */
+    --dark-color: #141414;
+    --light-color: #ffffff;
+    --link-color: #0284c7;
+    --light-highlight-bg-color: #ededed;
+    --light-highlight-fg-color: #595959;
+    --dark-highlight-bg-color: #595959;
+    --dark-highlight-fg-color: #ededed;
+    --font-face: "Fira Sans", sans-serif;
 
-  /* 
-      Here we select which colors/fonts to use for this specific theme.
-      This first block calls a lot of the shots, most other definitions just
-      defer to these values.
-    */
-  --bg: var(--dark-color);
-  --fg: var(--light-color);
-  --well-bg: var(--dark-color);
-  --well-bg-highlight: var(--dark-color);
-  --title-fg: var(--light-color);
-  --subtitle-fg: var(--light-color);
-  --border-color: var(--dark-highlight-fg-color);
-  --main-font: var(--font-face);
-  --mono-font: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    /*
+        Here we select which colors/fonts to use for this specific theme.
+        This first block calls a lot of the shots, most other definitions just
+        defer to these values.
+      */
+    --bg: var(--dark-color);
+    --fg: var(--light-color);
+    --well-bg: var(--dark-color);
+    --well-bg-highlight: var(--dark-color);
+    --title-fg: var(--light-color);
+    --subtitle-fg: var(--light-color);
+    --border-color: var(--dark-highlight-fg-color);
+    --main-font: var(--font-face);
+    --mono-font: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
     Liberation Mono, Courier New, monospace;
 
-  --sidebar-bg: var(--bg);
-  --sidebar-fg: var(--fg);
-  --sidebar-non-existant: var(--bg);
-  --sidebar-active: var(--link-color);
-  --sidebar-spacer: var(--border-color);
+    --sidebar-bg: var(--bg);
+    --sidebar-fg: var(--fg);
+    --sidebar-non-existant: var(--bg);
+    --sidebar-active: var(--link-color);
+    --sidebar-spacer: var(--border-color);
 
-  --scrollbar: default;
+    --scrollbar: default;
 
-  --icons: var(--light-color);
-  --icons-hover: var(--light-color);
+    --icons: var(--light-color);
+    --icons-hover: var(--light-color);
 
-  --links: var(--link-color);
-  --links-hover: var(--link-color);
+    --links: var(--link-color);
+    --links-hover: var(--link-color);
 
-  --inline-code-color: var(--link-color);
+    --inline-code-color: var(--link-color);
 
-  --theme-popup-bg: var(--well-bg);
-  --theme-popup-border: var(--border-color);
-  --theme-hover: var(--well-bg-highlight);
+    --theme-popup-bg: var(--well-bg);
+    --theme-popup-border: var(--border-color);
+    --theme-hover: var(--well-bg-highlight);
 
-  --quote-bg: var(--bg);
-  --quote-border: var(--border-color);
+    --quote-bg: var(--bg);
+    --quote-border: var(--border-color);
 
-  --table-border-color: var(--border-color);
-  --table-header-bg: var(--well-bg-highlight);
-  --table-alternate-bg: var(--well-bg);
+    --table-border-color: var(--border-color);
+    --table-header-bg: var(--well-bg-highlight);
+    --table-alternate-bg: var(--well-bg);
 
-  --searchbar-border-color: var(--border-color);
-  --searchbar-bg: var(--well-bg);
-  --searchbar-fg: var(--fg);
-  --searchbar-shadow-color: var(--border-color);
-  --searchresults-header-fg: var(--title-fg);
-  --searchresults-border-color: var(--border-color);
-  --searchresults-li-bg: var(--well-bg);
-  --search-mark-bg: var(--well-bg);
+    --searchbar-border-color: var(--border-color);
+    --searchbar-bg: var(--well-bg);
+    --searchbar-fg: var(--fg);
+    --searchbar-shadow-color: var(--border-color);
+    --searchresults-header-fg: var(--title-fg);
+    --searchresults-border-color: var(--border-color);
+    --searchresults-li-bg: var(--well-bg);
+    --search-mark-bg: var(--links);
 }
 
 .oranda-light {
-  /* 
-      This part is just defining constants that are consistent
-      between both oranda themes, which fringe/oranda-css should probably
-      be injecting into this file. For now, they're hardcoded.
-    */
-  --dark-color: #141414;
-  --light-color: #ffffff;
-  --link-color: #0284c7;
-  --light-highlight-bg-color: #ededed;
-  --light-highlight-fg-color: #595959;
-  --dark-highlight-bg-color: #595959;
-  --dark-highlight-fg-color: #ededed;
-  --font-face: "Fira Sans", sans-serif;
+    /*
+        This part is just defining constants that are consistent
+        between both oranda themes, which fringe/oranda-css should probably
+        be injecting into this file. For now, they're hardcoded.
+      */
+    --dark-color: #141414;
+    --light-color: #ffffff;
+    --link-color: #0284c7;
+    --light-highlight-bg-color: #ededed;
+    --light-highlight-fg-color: #595959;
+    --dark-highlight-bg-color: #595959;
+    --dark-highlight-fg-color: #ededed;
+    --font-face: "Fira Sans", sans-serif;
 
-  /* 
-      Here we select which colors/fonts to use for this specific theme.
-      This first block calls a lot of the shots, most other definitions just
-      defer to these values.
-    */
-  --bg: var(--light-color);
-  --fg: var(--dark-color);
-  --well-bg: var(--light-color);
-  --well-bg-highlight: var(--light-color);
-  --title-fg: var(--dark-color);
-  --subtitle-fg: var(--dark-color);
-  --border-color: var(--dark-color);
-  --main-font: var(--font-face);
-  --mono-font: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    /*
+        Here we select which colors/fonts to use for this specific theme.
+        This first block calls a lot of the shots, most other definitions just
+        defer to these values.
+      */
+    --bg: var(--light-color);
+    --fg: var(--dark-color);
+    --well-bg: var(--light-color);
+    --well-bg-highlight: var(--light-color);
+    --title-fg: var(--dark-color);
+    --subtitle-fg: var(--dark-color);
+    --border-color: var(--dark-color);
+    --main-font: var(--font-face);
+    --mono-font: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
     Liberation Mono, Courier New, monospace;
 
-  --sidebar-bg: var(--bg);
-  --sidebar-fg: var(--fg);
-  --sidebar-non-existant: var(--bg);
-  --sidebar-active: var(--link-color);
-  --sidebar-spacer: var(--border-color);
+    --sidebar-bg: var(--bg);
+    --sidebar-fg: var(--fg);
+    --sidebar-non-existant: var(--bg);
+    --sidebar-active: var(--link-color);
+    --sidebar-spacer: var(--border-color);
 
-  --scrollbar: default;
+    --scrollbar: default;
 
-  --icons: var(--dark-color);
-  --icons-hover: var(--dark-color);
+    --icons: var(--dark-color);
+    --icons-hover: var(--dark-color);
 
-  --links: var(--link-color);
-  --links-hover: var(--link-color);
+    --links: var(--link-color);
+    --links-hover: var(--link-color);
 
-  --inline-code-color: var(--link-color);
+    --inline-code-color: var(--link-color);
 
-  --theme-popup-bg: var(--well-bg);
-  --theme-popup-border: var(--border-color);
-  --theme-hover: var(--well-bg-highlight);
+    --theme-popup-bg: var(--well-bg);
+    --theme-popup-border: var(--border-color);
+    --theme-hover: var(--well-bg-highlight);
 
-  --quote-bg: var(--bg);
-  --quote-border: var(--border-color);
+    --quote-bg: var(--bg);
+    --quote-border: var(--border-color);
 
-  --table-border-color: var(--border-color);
-  --table-header-bg: var(--well-bg-highlight);
-  --table-alternate-bg: var(--well-bg);
+    --table-border-color: var(--border-color);
+    --table-header-bg: var(--well-bg-highlight);
+    --table-alternate-bg: var(--well-bg);
 
-  --searchbar-border-color: var(--border-color);
-  --searchbar-bg: var(--well-bg);
-  --searchbar-fg: var(--fg);
-  --searchbar-shadow-color: var(--border-color);
-  --searchresults-header-fg: var(--title-fg);
-  --searchresults-border-color: var(--border-color);
-  --searchresults-li-bg: var(--well-bg);
-  --search-mark-bg: var(--well-bg);
+    --searchbar-border-color: var(--border-color);
+    --searchbar-bg: var(--well-bg);
+    --searchbar-fg: var(--fg);
+    --searchbar-shadow-color: var(--border-color);
+    --searchresults-header-fg: var(--title-fg);
+    --searchresults-border-color: var(--border-color);
+    --searchresults-li-bg: var(--well-bg);
+    --search-mark-bg: var(--links);
 }
