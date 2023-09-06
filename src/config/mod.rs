@@ -328,26 +328,42 @@ pub trait ApplyBoolLayerExt {
 
 impl<T> ApplyBoolLayerExt for Option<T>
 where
-    T: ApplyLayer,
+    T: ApplyLayer + Default,
 {
     type Inner = T::Layer;
+
+    /// Apply a layer that can either be a boolean, or a Layer Value (most likely an object).
+    ///
+    /// Possible cases (lhs is the resultant config, rhs is the incoming layer):
+    /// lhs == Some && rhs == true  = nothing happens
+    /// lhs == Some && rhs == false = lhs gets set to None
+    /// lhs == Some && rhs == value = layer gets applied to lhs
+    /// lhs == None && rhs == true  = lhs gets set to layer default
+    /// lhs == None && rhs == false = nothing happens
+    /// lhs == None && rhs == value = lhs gets set to layer default with layer applied
+    /// rhs = nothing               = we do nothing
     fn apply_bool_layer(&mut self, layer: Option<BoolOr<Self::Inner>>) {
         match layer {
             Some(BoolOr::Val(val)) => {
                 if let Some(this) = self {
                     this.apply_layer(val);
                 } else {
-                    // If self is None, then a previous layer completely disabled this.
-                    // For now we respect that and drop this request completely.
+                    let mut t = T::default();
+                    t.apply_layer(val);
+                    *self = Some(t);
                 }
             }
             Some(BoolOr::Bool(false)) => {
                 // Disable this setting
                 *self = None;
             }
-            Some(BoolOr::Bool(true)) | None => {
-                // Do nothing, no opinion
+            Some(BoolOr::Bool(true)) => {
+                // Enable if self was previously set to None
+                if self.is_none() {
+                    *self = Some(T::default());
+                }
             }
+            None => {}
         }
     }
 }
