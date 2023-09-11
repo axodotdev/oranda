@@ -21,7 +21,7 @@ axocli = "0.1.0"
 axoproject = { version = "0.4.6", default-features = false, features = ["cargo-projects", "npm-projects"] }
 axum = "0.6.18"
 cargo-dist-schema = "=0.1.0-prerelease.4"
-chrono = "0.4.26"
+chrono = "0.4.30"
 clap = { version = "4", features = ["derive", "help", "usage", "error-context", "wrap_help"] }
 comrak = "0.17"
 console = "0.15.5"
