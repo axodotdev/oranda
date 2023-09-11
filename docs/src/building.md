@@ -22,9 +22,7 @@ oranda includes some CSS to style pages - we call this oranda-css. This CSS uses
 and therefore needs to be compiled before it can be included. To figure out _how_ to build and/or include this CSS,
 we use a `build.rs` file. This file sets configuration variables for one of these cases:
 
-> **Note**: this is true to the `main` branch and all `0.4.0`-prereleases, but not to 0.3.0. In oranda 0.3.0, the CSS
-> will
-> always be built using a Tailwind binary, either at build time or at runtime.
+> Added in version 0.4.0.
 
 - You have the environment variable `ORANDA_USE_TAILWIND_BINARY` set. This causes oranda to attempt to download a
   `tailwindcss` binary, and build using that.
@@ -43,7 +41,7 @@ we use a `build.rs` file. This file sets configuration variables for one of thes
 > For `cargo install` users: Your `oranda` binary is of the third type in the list above. This is unfortunately a
 > shortcoming of Cargo's build pipeline, but if you're fine with using a slightly slower version of
 > oranda, `cargo install`
-> works fine. If you want a regular binary, check the [install page](./install.md).
+> works fine. If you want a regular binary, check the [install page](./install.md)!
 
 If you're distributing binaries anywhere, you can either use the Node toolchain, or the Tailwind binary
 using `ORANDA_USE_TAILWIND_BINARY`, depending on which is easier/more conformant in your build environment.
