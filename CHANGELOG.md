@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.4.0 - 2023-09-11
 
 ### Features
 
@@ -21,6 +21,15 @@
   A pretty simple change that has a lot of quality-of-life: Your `oranda dev` browser tab now reloads automatically 
   when you change a relevant file and oranda rebuilds your site!
 
+- **Use Axo's favicon by default** - [shadows-withal]/[pr628], [ashleygwilliams]/[i110]
+
+  Oranda sites that don't have a custom favicon now fall back to Axo's favicon, just so that the space in the tab 
+  bar isn't so drab and lonely.
+
+- **`oranda` is now available on Homebrew!** - [shadows-withal]/[pr602], the cargo dist team <3
+
+  Run `brew install axodotdev/tap/oranda` to install it!
+
 ### Fixes
 
 - **Fixed Tailwind breaking the Nix flake** - [hawkw]/[pr609]
@@ -28,28 +37,43 @@
   Because Tailwind was being downloaded on each build in a global cache directory (which Nix doesn't support),
   @hawkw added the Tailwind binary as an explicit dependency, and enhanced our Tailwind build code with the
   ability to use a preexisting Tailwind binary.
+- **Improved workspace member precedence handling** - [shadows-withal]/[pr626], [shadows-withal]/[i615]
+
+  There were a couple of tough corner cases when using workspace functionality that would incorrectly cascade to the 
+  members, which is fixed now!
 - **Hide changelog sidebar on mobile** - [shadows-withal]/[pr614], [zkat]/[i612]
+- **Fixed mdbook text highlighting colors having too little contrast** - [shadows-withal]/[pr627], [Gankra]/[i578]
 
 ### Housekeeping
 
-- `oranda` is now available on Homebrew! Run `brew install axodotdev/tap/oranda` to install it.
 - Factored out a bunch of code into `axoproject` - [mistydemeo]/[pr590]
+- Updated `chrono` to drop a very old `time` version - [mistydemeo]/[pr632]
 
+[i110]: https://github.com/axodotdev/oranda/issues/110
 [i188]: https://github.com/axodotdev/oranda/issues/188
 [i556]: https://github.com/axodotdev/oranda/issues/556
+[i578]: https://github.com/axodotdev/oranda/issues/578
 [i610]: https://github.com/axodotdev/oranda/issues/610
 [i612]: https://github.com/axodotdev/oranda/issues/612
+[i615]: https://github.com/axodotdev/oranda/issues/615
 [pr590]: https://github.com/axodotdev/oranda/pull/590
+[pr602]: https://github.com/axodotdev/oranda/pull/602
 [pr609]: https://github.com/axodotdev/oranda/pull/609
 [pr614]: https://github.com/axodotdev/oranda/pull/614
 [pr617]: https://github.com/axodotdev/oranda/pull/617
 [pr621]: https://github.com/axodotdev/oranda/pull/621
 [pr622]: https://github.com/axodotdev/oranda/pull/622
+[pr626]: https://github.com/axodotdev/oranda/pull/626
+[pr627]: https://github.com/axodotdev/oranda/pull/627
+[pr628]: https://github.com/axodotdev/oranda/pull/628
+[pr632]: https://github.com/axodotdev/oranda/pull/632
 [mistydemeo]: https://github.com/mistydemeo
 [hawkw]: https://github.com/hawkw
 [zkat]: https://github.com/zkat
 [ashleygwilliams]: https://github.com/ashleygwilliams
-[shadows-withal]: httpS://github.com/shadows-withal
+[shadows-withal]: https://github.com/shadows-withal
+[jamesmunns]: https://github.com/jamesmunns
+[Gankra]: https://github.com/Gankra
 
 ## 0.3.1 - 2023-08-18
 
