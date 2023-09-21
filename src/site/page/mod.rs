@@ -27,10 +27,10 @@ impl Page {
         filename: &str,
         templates: &Templates,
         template_name: &str,
-        context: T,
+        context: &T,
     ) -> Result<Self> {
         let contents =
-            templates.render_to_string(template_name, Value::from_serializable(&context))?;
+            templates.render_to_string(template_name, Value::from_serializable(context))?;
         Ok(Self {
             contents,
             filename: filename.to_string(),

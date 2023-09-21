@@ -32,7 +32,7 @@ fn concat_minify(css_files: &[String]) -> Result<String> {
 
 pub fn get_css_link(path_prefix: &Option<String>, release_tag: &str) -> Result<String> {
     let filename = get_css_filename(release_tag);
-    Ok(crate::site::link::generate(path_prefix, &filename))
+    Ok(crate::site::link::generate_relative(path_prefix, &filename))
 }
 
 /// Places CSS in the destination directory. Depending on the results of the build script, the

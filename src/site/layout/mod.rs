@@ -54,7 +54,10 @@ impl LayoutContext {
                 if page::source::is_markdown(path) {
                     let file_path = page::source::get_filename_with_dir(path)?;
                     if let Some(path) = file_path {
-                        let href = link::generate(&config.build.path_prefix, &format!("{}/", path));
+                        let href = link::generate_relative(
+                            &config.build.path_prefix,
+                            &format!("{}/", path),
+                        );
                         ret.push(AdditionalPageContext {
                             name: name.clone(),
                             path: href,
@@ -65,7 +68,7 @@ impl LayoutContext {
             Some(ret)
         };
 
-        let favicon_url = link::generate(&config.build.path_prefix, "favicon.ico");
+        let favicon_url = link::generate_relative(&config.build.path_prefix, "favicon.ico");
         let logo = if let Some(logo) = config.styles.logo.as_deref() {
             let path = get_logo(logo, config)?;
             Some(path)
@@ -73,7 +76,7 @@ impl LayoutContext {
             None
         };
         let artifacts_link = if config.components.artifacts_enabled() {
-            let link = link::generate(&config.build.path_prefix, "artifacts/");
+            let link = link::generate_relative(&config.build.path_prefix, "artifacts/");
             Some(link)
         } else {
             None
@@ -82,18 +85,18 @@ impl LayoutContext {
             .components
             .mdbook
             .as_ref()
-            .map(|_| link::generate(&config.build.path_prefix, "book/"));
+            .map(|_| link::generate_relative(&config.build.path_prefix, "book/"));
         let funding_link = &config
             .components
             .funding
             .as_ref()
-            .map(|_| link::generate(&config.build.path_prefix, "funding/"));
+            .map(|_| link::generate_relative(&config.build.path_prefix, "funding/"));
         let changelog_link = if context.is_some() {
             config
                 .components
                 .changelog
                 .as_ref()
-                .map(|_| link::generate(&config.build.path_prefix, "changelog/"))
+                .map(|_| link::generate_relative(&config.build.path_prefix, "changelog/"))
         } else {
             None
         };

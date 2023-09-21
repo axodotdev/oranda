@@ -9,7 +9,7 @@ pub mod analytics;
 const ARTIFACTS_SCRIPT_SOURCE: &str = include_str!("./artifacts.js");
 
 pub fn build_os_script_path(path_prefix: &Option<String>) -> String {
-    link::generate(path_prefix, "artifacts.js")
+    link::generate_relative(path_prefix, "artifacts.js")
 }
 
 pub fn write_os_script(dist_dir: &Utf8Path) -> Result<()> {

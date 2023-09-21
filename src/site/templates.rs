@@ -102,7 +102,7 @@ impl<'a> Templates<'a> {
         } else {
             Some(path_prefix)
         };
-        link::generate(&path_prefix, &base)
+        link::generate_relative(&path_prefix, &base)
     }
 
     fn syntax_highlight(code: String, lang: String, _syntax_theme: String) -> String {

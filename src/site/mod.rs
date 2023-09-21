@@ -28,6 +28,7 @@ pub mod markdown;
 pub mod mdbook;
 pub mod oranda_theme;
 pub mod page;
+pub mod rss;
 pub mod templates;
 mod workspace_index;
 
@@ -81,7 +82,7 @@ impl Site {
             "index.html",
             &templates,
             "workspace_index/index.html",
-            context,
+            &context,
         )?;
         let mut dist = Utf8PathBuf::from(&workspace_config.build.dist_dir);
         let additional_css = &workspace_config.styles.additional_css;
@@ -157,7 +158,7 @@ impl Site {
                 let funding = Funding::new(funding_cfg, &config.styles)?;
                 let context = funding::context(funding_cfg, &funding)?;
                 let page =
-                    Page::new_from_template("funding.html", &templates, "funding.html", context)?;
+                    Page::new_from_template("funding.html", &templates, "funding.html", &context)?;
                 pages.push(page);
             }
         }
@@ -326,9 +327,14 @@ impl Site {
             "changelog.html",
             templates,
             "changelog_index.html",
-            index_context,
+            &index_context,
         )?;
         pages.push(changelog_page);
+        let changelog_rss = rss::generate_rss_feed(&index_context, config)?;
+        pages.push(Page {
+            contents: changelog_rss.to_string(),
+            filename: "changelog.rss".to_string(),
+        });
         if !(context.releases.len() == 1 && context.releases[0].source.is_current_state()) {
             for release in context.releases.iter() {
                 let single_context = changelog::single_context(release, config, project.as_ref());
@@ -336,7 +342,7 @@ impl Site {
                     &format!("changelog/{}.html", single_context.version_tag),
                     templates,
                     "changelog_single.html",
-                    context!(release => single_context),
+                    &context!(release => single_context),
                 )?;
                 pages.push(page);
             }
@@ -374,7 +380,9 @@ impl Site {
             // Prepare to write a "pretty link" for pages that aren't index.html already.
             // This essentially means that we rewrite the page from "page.html" to
             // "page/index.html", so that it can be loaded as "mysite.com/page" in the browser.
-            let full_path: Utf8PathBuf = if !filename_path.ends_with("index.html") {
+            let full_path: Utf8PathBuf = if !filename_path.ends_with("index.html")
+                && filename_path.extension() == Some("html")
+            {
                 // Surely we can't we do anything BUT unwrap here? A file without a name is a mess.
                 let file_stem = filename_path.file_stem().expect("missing file_stem???");
                 let parent = filename_path.parent().unwrap_or("".into());
