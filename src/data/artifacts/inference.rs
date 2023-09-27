@@ -133,7 +133,7 @@ impl ReleaseArtifacts {
                     file: Some(file_idx),
                     run_hint,
                 };
-            } else if KNOWN_BUNDLE_EXTS.iter().any(|ext| file.name.contains(ext)) {
+            } else if KNOWN_BUNDLE_EXTS.iter().any(|ext| file.name.ends_with(ext)) {
                 // Looks like an installer bundle! Recommend a download.
                 //
                 // NOTE: the above check is intentionally "contains" and not "ends_with" because
