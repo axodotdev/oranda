@@ -69,7 +69,7 @@ jobs:
           {{%- if use_latest_oranda %}}
           curl --proto '=https' --tlsv1.2 -LsSf https://github.com/axodotdev/oranda/releases/latest/download/oranda-installer.sh | sh
           {{%- else %}}
-          curl --proto '=https' --tlsv1.2 -LsSf https://github.com/axodotdev/oranda/releases/download/v0.4.0/oranda-installer.sh | sh
+          curl --proto '=https' --tlsv1.2 -LsSf https://github.com/axodotdev/oranda/releases/download/v0.4.1/oranda-installer.sh | sh
           {{%- endif %}}
           {{%- if site_dir %}}
           cd {{{ site_dir }}}

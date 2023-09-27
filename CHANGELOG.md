@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.4.1 - 2023-09-27
+
+### Fixes
+
+- **Fixed MSI checksums getting displayed as separate downloads** - [shadows-withal]/[pr637], [Gankra]/[i636]
+
+  As [cargo-dist 0.3.0](https://github.com/axodotdev/cargo-dist/releases/tag/v0.3.0) supports MSI installers, we noticed
+  a small bug in the way oranda tries to infer artifacts, where a checksum for certain types of files can get
+  misinterpreted as its own downloadable file. This is now fixed!
+
+[i636]: https://github.com/axodotdev/oranda/issues/636
+[pr637]: https://github.com/axodotdev/oranda/pull/637
+[shadows-withal]: https://github.com/shadows-withal
+[Gankra]: https://github.com/Gankra
+
 ## 0.4.0 - 2023-09-11
 
 ### Features
