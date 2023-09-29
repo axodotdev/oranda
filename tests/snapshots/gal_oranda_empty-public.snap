@@ -105,7 +105,7 @@ expression: "&snapshots"
     </body>
 </html>
 ================ public/artifacts.json ================
-{"format_version":"0.4.1","tag":"0.1.0","formatted_date":null,"platforms_with_downloads":[],"downloadable_files":[],"release":{"artifacts":{"files":[],"installers":[],"targets":{}}},"os_script":"/artifacts.js","has_checksum_files":false}
+{"format_version":"0.5.0-prerelease.1","tag":"0.1.0","formatted_date":null,"platforms_with_downloads":[],"downloadable_files":[],"release":{"artifacts":{"files":[],"installers":[],"targets":{}}},"os_script":"/artifacts.js","has_checksum_files":false}
 ================ public/changelog/index.html ================
 <!DOCTYPE html>
 <html lang="en" id="oranda" class="dark">

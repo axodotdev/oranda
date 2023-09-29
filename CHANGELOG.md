@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+## Features
+
+- **Removed hard dependency on README.md**
+
+## Fixes
+
+- **Improved errors for when explicitly declared paths don't exist**
+
 ## 0.4.1 - 2023-09-27
 
 ### Fixes
