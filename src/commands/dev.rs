@@ -12,7 +12,7 @@ use oranda::site::mdbook::mdbook_dir;
 use crate::commands::{Build, Serve};
 use oranda::data::workspaces;
 use oranda::data::workspaces::WorkspaceData;
-use oranda::site::link::determine_path;
+use oranda::paths::determine_path;
 use oranda::site::Site;
 use oranda::{
     config::Config,
@@ -193,26 +193,30 @@ impl Dev {
         let mut paths_to_watch = vec![];
 
         // Watch for the readme file
-        paths_to_watch.push(determine_path(
-            root_path,
-            &member_path,
-            config.project.readme_path,
-        )?);
+        if let Some(path) = determine_path(root_path, &member_path, config.project.readme_path)? {
+            paths_to_watch.push(path);
+        }
 
         // Watch for the oranda config file
         let cfg_file = self
             .config_path
             .clone()
             .unwrap_or_else(|| Utf8PathBuf::from("./oranda.json"));
-        paths_to_watch.push(determine_path(root_path, &member_path, cfg_file)?);
+        if let Some(path) = determine_path(root_path, &member_path, cfg_file)? {
+            paths_to_watch.push(path);
+        }
 
         // Watch for the funding.md page and the funding.yml file
         if let Some(funding) = &config.components.funding {
             if let Some(path) = &funding.yml_path {
-                paths_to_watch.push(determine_path(root_path, &member_path, path)?);
+                if let Some(path) = determine_path(root_path, &member_path, path)? {
+                    paths_to_watch.push(path);
+                }
             }
             if let Some(path) = &funding.md_path {
-                paths_to_watch.push(determine_path(root_path, &member_path, path)?);
+                if let Some(path) = determine_path(root_path, &member_path, path)? {
+                    paths_to_watch.push(path);
+                }
             }
         }
 
@@ -223,7 +227,13 @@ impl Dev {
                 .additional_pages
                 .values()
                 .cloned()
-                .map(|p| determine_path(root_path, &member_path, p))
+                .map(|p| {
+                    if let Ok(Some(path)) = determine_path(root_path, &member_path, p.clone()) {
+                        Ok(path)
+                    } else {
+                        Err(OrandaError::PathDoesNotExist { path: p.clone() })
+                    }
+                })
                 .collect::<Result<Vec<Utf8PathBuf>>>()?;
             paths_to_watch.append(&mut additional_pages);
         }
@@ -243,8 +253,12 @@ impl Dev {
                 &member_path,
                 md.source_dir().display().to_string(),
             )?;
-            paths_to_watch.push(book_path);
-            paths_to_watch.push(source_path);
+            if let Some(path) = book_path {
+                paths_to_watch.push(path);
+            }
+            if let Some(path) = source_path {
+                paths_to_watch.push(path);
+            }
 
             // If we're not clobbering the theme, also watch the theme dir
             // (note that this may not exist on the fs, mdbook reports the path regardless)
@@ -254,7 +268,9 @@ impl Dev {
                     &member_path,
                     md.theme_dir().display().to_string(),
                 )?;
-                paths_to_watch.push(theme_path);
+                if let Some(path) = theme_path {
+                    paths_to_watch.push(path);
+                }
             }
         }
 

@@ -7,8 +7,8 @@ use crate::data::workspaces::WorkspaceData;
 use crate::errors::*;
 use crate::site::{oranda_theme::OrandaTheme, Site};
 
-use super::link::determine_path;
 use super::markdown::SyntaxTheme;
+use crate::paths::determine_path;
 
 // Files we're importing
 const THEME_GENERAL_CSS_PATH: &str = "css/general.css";
@@ -169,7 +169,13 @@ pub fn mdbook_dir(
         .as_ref()
         .expect("Had no mdbook.path, but config code didn't disable mdbook?");
     let path = determine_path(root_path, &member_path, book_path)?;
-    Ok(path)
+    if let Some(path) = path {
+        Ok(path)
+    } else {
+        Err(OrandaError::PathDoesNotExist {
+            path: book_path.clone(),
+        })
+    }
 }
 
 /// Gets the custom theme to set in an mdbook
