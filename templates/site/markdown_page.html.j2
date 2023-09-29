@@ -1,4 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
-{{ page.body }}
+{% if page.body %}
+    {{ page.body }}
+{% endif %}
 {% endblock %}

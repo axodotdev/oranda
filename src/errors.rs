@@ -210,6 +210,12 @@ pub enum OrandaError {
     #[diagnostic(help = "You can manually specify path in your components.mdbook config")]
     MdBookConfigInvalid,
 
+    #[error("Specified path `{path}` was not found on your filesystem!")]
+    #[diagnostic(
+        help = "Make sure you specify your path relative to the oranda.json/manifest file/README file of your project!"
+    )]
+    PathDoesNotExist { path: String },
+
     #[error("{0}")]
     Other(String),
 }

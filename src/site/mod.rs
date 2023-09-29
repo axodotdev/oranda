@@ -158,14 +158,19 @@ impl Site {
             }
         }
 
-        pages.push(index.unwrap_or(Page::new_from_both(
-            &config.project.readme_path,
-            "index.html",
-            &templates,
-            "index.html",
-            context!(),
-            config,
-        )?));
+        let index = if let Some(index) = index {
+            index
+        } else {
+            Page::new_from_both(
+                &config.project.readme_path,
+                "index.html",
+                &templates,
+                "index.html",
+                context!(),
+                config,
+            )?
+        };
+        pages.push(index);
         Ok(Site {
             pages,
             workspace_data: None,
@@ -288,7 +293,7 @@ impl Site {
         let mut pages = vec![];
         for file_path in files.values() {
             if page::source::is_markdown(file_path) {
-                let additional_page = Page::new_from_markdown(file_path, templates, config)?;
+                let additional_page = Page::new_from_markdown(file_path, templates, config, true)?;
                 pages.push(additional_page)
             } else {
                 let msg = format!(

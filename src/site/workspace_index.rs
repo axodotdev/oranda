@@ -1,7 +1,7 @@
 use crate::config::Config;
 use crate::data::workspaces::WorkspaceData;
-use crate::errors::Result;
-use crate::site::link::determine_path;
+use crate::errors::{OrandaError, Result};
+use crate::paths::determine_path;
 use crate::site::markdown::to_html;
 use axoasset::LocalAsset;
 use camino::Utf8PathBuf;
@@ -90,8 +90,12 @@ impl WorkspaceIndexContext {
             path.push(&member.slug);
             path.push(filename);
             Ok(path)
+        } else if let Some(path) = determine_path(root_path, &Some(&member.slug), logo_url)? {
+            Ok(path)
         } else {
-            determine_path(root_path, &Some(&member.slug), logo_url)
+            Err(OrandaError::PathDoesNotExist {
+                path: logo_url.clone(),
+            })
         }
     }
 }

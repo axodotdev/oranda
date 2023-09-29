@@ -1068,7 +1068,8 @@ expression: "&snapshots"
 
 <a href="/axolotlsay/artifacts/" class="button mobile-download primary">View all installation options</a>
 
-<h1>axolotlsay</h1>
+
+    <h1>axolotlsay</h1>
 <blockquote>
 <p>💬 a CLI for learning to distribute CLIs in rust</p>
 </blockquote>
@@ -1089,6 +1090,7 @@ expression: "&snapshots"
 <li>MIT license (<a href="LICENSE-MIT" rel="noopener noreferrer">LICENSE-MIT</a> or <a href="https://opensource.org/licenses/MIT" rel="noopener noreferrer">opensource.org/licenses/MIT</a>)</li>
 </ul>
 <p>at your option.</p>
+
 
 
                 </main>

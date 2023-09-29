@@ -836,7 +836,8 @@ expression: "&snapshots"
 
 <a href="/akaikatana-repack/artifacts/" class="button mobile-download primary">View all installation options</a>
 
-<h2>Akai Katana music repacker</h2>
+
+    <h2>Akai Katana music repacker</h2>
 <p>This set of tools allows you to extract and replace the music from the <a href="https://store.steampowered.com/app/2076220/Akai_Katana_Shin/" rel="noopener noreferrer">Steam release of Akai Katana</a>. I was inspired to make it because I love the FM arranged soundtrack from the Nin2 Jump/Akai Katana CD, but there's no way to actually use it in game. If there won't be an official one, why not make my own?</p>
 <h3>Getting the tool</h3>
 <p>Prebuilt copies of the tool can be found in the <a href="https://github.com/mistydemeo/akaikatana-repack/releases" rel="noopener noreferrer">"releases" tab</a> in GitHub. You should be able to just download and run the ZIP file or tarball.</p>
@@ -855,6 +856,7 @@ expression: "&snapshots"
 <p>Contributions are always welcome! Please open issues if you run into any issues, and pull requests are always a big help.</p>
 <h3>License</h3>
 <p>GPL 2.0 or later.</p>
+
 
 
                 </main>

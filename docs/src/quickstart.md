@@ -38,8 +38,10 @@ GLOBAL OPTIONS:
 ```
 
 Since `oranda` is designed to work without configuration, the quickest start is to just run `oranda dev` in an
-existing project with at least a `README.md` file! This will spawn a web server that serves your site, plus
-an extra process that watches for changes in files relevant to `oranda`'s build process.
+existing project! This will spawn a web server that serves your site, plus an extra process that watches for 
+changes in files relevant to `oranda`'s build process.
+
+> __NOTE__: Prior to version 0.5.0, oranda expects there to be a README.md file in your root directory!
 
 ## In a Cargo project
 

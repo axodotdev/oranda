@@ -1612,7 +1612,8 @@ one that it <em>can't</em> parse.</p>
 
 <a href="/oranda/artifacts/" class="button mobile-download primary">View all installation options</a>
 
-<div class="oranda-hide">
+
+    <div class="oranda-hide">
 <h1>oranda</h1>
 </div>
 <blockquote>
@@ -1660,6 +1661,7 @@ using <code>cargo-dist</code> you can add this to your <code>oranda.json</code>:
 
 <p>This will link <code>oranda</code> and <code>cargo-dist</code> such that <code>oranda</code> can display your
 installers and downloadable artifacts on your page.</p>
+
 
 
                 </main>
