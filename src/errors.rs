@@ -212,7 +212,7 @@ pub enum OrandaError {
 
     #[error("Specified path `{path}` was not found on your filesystem!")]
     #[diagnostic(
-        help = "Make sure you're in the same directory where your oranda.json or README file is!"
+        help = "Make sure you specify your path relative to the oranda.json/manifest file/README file of your project!"
     )]
     PathDoesNotExist { path: String },
 

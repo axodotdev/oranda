@@ -41,6 +41,8 @@ Since `oranda` is designed to work without configuration, the quickest start is 
 existing project! This will spawn a web server that serves your site, plus an extra process that watches for 
 changes in files relevant to `oranda`'s build process.
 
+> __NOTE__: Prior to version 0.5.0, oranda expects there to be a README.md file in your root directory!
+
 ## In a Cargo project
 
 `oranda` integrates with Cargo projects seamlessly. `oranda build` will pick up relevant
