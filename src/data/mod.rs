@@ -127,10 +127,10 @@ impl Context {
         let mut latest_prerelease = None;
 
         for (idx, release) in releases.iter().enumerate() {
-            // If we're using package-specific releases, we want to skip any releases
+            // If we're matching package names to releases, we want to skip any releases
             // which tag name doesn't contain the project name
             if artifacts_config
-                .map(|a| a.package_specific_releases)
+                .map(|a| a.match_package_names)
                 .unwrap_or(false)
             {
                 if !release.source.version_tag().contains(&project_config.name) {

@@ -38,7 +38,7 @@ enum ArtifactSystem {
 pub struct ArtifactsConfig {
     pub auto: bool,
     pub cargo_dist: bool,
-    pub package_specific_releases: bool,
+    pub match_package_names: bool,
     pub package_managers: PackageManagersConfig,
     pub hidden: Vec<String>,
 }
@@ -90,7 +90,7 @@ pub struct ArtifactsLayer {
     /// show releases for that specific project on the generated project page.
     ///
     /// This defaults to false.
-    pub package_specific_releases: Option<bool>,
+    pub match_package_names: Option<bool>,
     /// Snippets saying how to install your project using various package-managers
     ///
     /// These are grouped into "preferred" and "additional"
@@ -138,7 +138,7 @@ impl Default for ArtifactsConfig {
         ArtifactsConfig {
             auto: false,
             cargo_dist: false,
-            package_specific_releases: false,
+            match_package_names: false,
             package_managers: PackageManagersConfig::default(),
             hidden: vec![],
         }
@@ -151,15 +151,14 @@ impl ApplyLayer for ArtifactsConfig {
         let ArtifactsLayer {
             auto,
             cargo_dist,
-            package_specific_releases,
+            match_package_names,
             package_managers,
             hidden,
         } = layer;
 
         self.auto.apply_val(auto);
         self.cargo_dist.apply_val(cargo_dist);
-        self.package_specific_releases
-            .apply_val(package_specific_releases);
+        self.match_package_names.apply_val(match_package_names);
         self.package_managers.apply_val_layer(package_managers);
         // In the future this might want to be `extend`
         self.hidden.apply_val(hidden);
