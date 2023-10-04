@@ -46,7 +46,12 @@ impl Context {
             project_config,
             artifacts_config,
         ))?;
-        Ok(Self::with_releases(None, releases, artifacts_config))
+        Ok(Self::with_releases(
+            None,
+            releases,
+            artifacts_config,
+            project_config,
+        ))
     }
     /// Get releases using github
     pub fn new_github(
@@ -63,7 +68,12 @@ impl Context {
                 artifacts_config,
             ))?;
         }
-        Ok(Self::with_releases(Some(repo), releases, artifacts_config))
+        Ok(Self::with_releases(
+            Some(repo),
+            releases,
+            artifacts_config,
+            project_config,
+        ))
     }
 
     /// Get the latest release, if it exists
@@ -100,6 +110,7 @@ impl Context {
         repo: Option<GithubRepo>,
         releases: Vec<Release>,
         artifacts_config: Option<&ArtifactsConfig>,
+        project_config: &ProjectConfig,
     ) -> Self {
         // Walk through all the releases (from newest to oldest) to find the latest ones
         //
@@ -116,6 +127,17 @@ impl Context {
         let mut latest_prerelease = None;
 
         for (idx, release) in releases.iter().enumerate() {
+            // If we're using package-specific releases, we want to skip any releases
+            // which tag name doesn't contain the project name
+            if artifacts_config
+                .map(|a| a.package_specific_releases)
+                .unwrap_or(false)
+            {
+                if !release.source.version_tag().contains(&project_config.name) {
+                    continue;
+                }
+            }
+
             // Make note of whether anything has artifacts
             if release.has_installers() {
                 has_artifacts = true;

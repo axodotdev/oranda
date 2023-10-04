@@ -38,6 +38,7 @@ enum ArtifactSystem {
 pub struct ArtifactsConfig {
     pub auto: bool,
     pub cargo_dist: bool,
+    pub package_specific_releases: bool,
     pub package_managers: PackageManagersConfig,
     pub hidden: Vec<String>,
 }
@@ -83,6 +84,13 @@ pub struct ArtifactsLayer {
     ///
     /// We default this to true if we find `[workspace.metadata.dist]` in your Cargo.toml
     pub cargo_dist: Option<bool>,
+    /// Whether to only show releases that contain the project name in their tag name
+    ///
+    /// This is useful if you have multiple projects in the same repo and want to only
+    /// show releases for that specific project on the generated project page.
+    ///
+    /// This defaults to false.
+    pub package_specific_releases: Option<bool>,
     /// Snippets saying how to install your project using various package-managers
     ///
     /// These are grouped into "preferred" and "additional"
@@ -130,6 +138,7 @@ impl Default for ArtifactsConfig {
         ArtifactsConfig {
             auto: false,
             cargo_dist: false,
+            package_specific_releases: false,
             package_managers: PackageManagersConfig::default(),
             hidden: vec![],
         }
@@ -142,12 +151,15 @@ impl ApplyLayer for ArtifactsConfig {
         let ArtifactsLayer {
             auto,
             cargo_dist,
+            package_specific_releases,
             package_managers,
             hidden,
         } = layer;
 
         self.auto.apply_val(auto);
         self.cargo_dist.apply_val(cargo_dist);
+        self.package_specific_releases
+            .apply_val(package_specific_releases);
         self.package_managers.apply_val_layer(package_managers);
         // In the future this might want to be `extend`
         self.hidden.apply_val(hidden);
