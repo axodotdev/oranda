@@ -132,10 +132,9 @@ impl Context {
             if artifacts_config
                 .map(|a| a.match_package_names)
                 .unwrap_or(false)
+                && !release.source.version_tag().contains(&project_config.name)
             {
-                if !release.source.version_tag().contains(&project_config.name) {
-                    continue;
-                }
+                continue;
             }
 
             // Make note of whether anything has artifacts
