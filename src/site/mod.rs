@@ -84,6 +84,10 @@ impl Site {
             context,
         )?;
         let mut dist = Utf8PathBuf::from(&workspace_config.build.dist_dir);
+        let additional_css = &workspace_config.styles.additional_css;
+        if !additional_css.is_empty() {
+            css::write_additional_css(additional_css, &dist)?;
+        }
         dist.push("index.html");
         LocalAsset::write_new_all(&page.contents, dist)?;
         Ok(())

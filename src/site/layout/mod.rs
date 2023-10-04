@@ -143,6 +143,7 @@ impl LayoutContext {
             project_name: workspace_config.workspace.name.clone().unwrap_or_default(),
             theme: workspace_config.styles.theme.as_css_classes(),
             oranda_css_path: css_path,
+            has_additional_css: !workspace_config.styles.additional_css.is_empty(),
             path_prefix: workspace_config.build.path_prefix.clone(),
             ..Default::default()
         })
