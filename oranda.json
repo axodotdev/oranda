@@ -3,7 +3,7 @@
     "path_prefix": "oranda"
   },
   "styles": {
-    "theme": "light",
+    "theme": "axodark",
     "favicon": "https://www.axo.dev/favicon.ico"
   },
   "marketing": {

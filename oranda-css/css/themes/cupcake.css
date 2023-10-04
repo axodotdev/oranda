@@ -89,10 +89,6 @@ html.cupcake .prereleases-toggle input:checked {
   background-color: var(--primary);
 }
 
-html.cupcake .artifacts {
-  @apply p-8;
-}
-
 html.cupcake .releases-nav ul li a {
   color: var(--links);
 }
