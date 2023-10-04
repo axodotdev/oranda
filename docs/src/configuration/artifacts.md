@@ -42,6 +42,13 @@ repository. It does this by trying to see if it can recognize any known target t
 it will recognize `mytool-aarch64-apple-darwin.tar.gz`. If you would like to completely disable this, set
 `components.artifacts` to `false` (we may offer a more fine-grained setting for this in the future).
 
+## Enabling matching a release to a specific package
+
+If you have multiple packages being produced by a workspace and need to match a release to a specific package, you can do
+so by setting `components.artifacts.match_package_names` to `true`. Upon enabling, while working to determine the latest
+release oranda will check if the release tag contains the name of the project being generated. If no match is found
+that particular release will be skipped.
+
 ## Adding package manager installation instructions
 
 You can add custom installation instructions for package managers or package manager-esque methods using the
