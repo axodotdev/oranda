@@ -3,53 +3,75 @@
 {% set simple_platforms = artifacts.platforms_with_downloads|length == 1 %}
 
 <div class="artifacts" data-tag="{{ artifacts.tag }}">
-    <div class="artifact-header target">
-        <h4>Install {{ artifacts.tag }}</h4>
-        {% if artifacts.formatted_date %}
-            <div><small class="published-date">Published on {{ artifacts.formatted_date }}</small></div>
-        {% endif %}
+    <div class="artifacts-main">
+        <div class="artifact-header target">
+            <h5><span>Install</span> <span class="bold">{{ artifacts.tag }}</span></h5>
+            {% if artifacts.formatted_date %}
+                <div><small class="published-date">Published on {{ artifacts.formatted_date }}</small></div>
+            {% endif %}
+        </div>
+        <div class="artifact-body">
+            <ul class="arches">
+                {% for platform in artifacts.platforms_with_downloads %}
+                    <li class="arch{% if not simple_platforms %} hidden{% endif %}" data-arch="{{ platform.target | first }}">
+                        {% if platform.installers | length > 1 %}
+                            <ul class="tabs">
+                                {% for i in platform.installers %}
+                                    {% set installer = artifacts.release.artifacts.installers[i] %}
+                                    {# Select the first tab #}
+                                    <li class="install-tab{% if simple_platforms and loop.first %} selected{% endif %}" data-id="{{ i }}" data-triple="{{ platform.target | first }}">
+                                        {{ installer.label }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
 
-        <ul class="arches">
-            {% for platform in artifacts.platforms_with_downloads %}
-                <li class="arch{% if not simple_platforms %} hidden{% endif %}" data-arch="{{ platform.target | first }}">
-                    {% if platform.installers | length > 1 %}
-                        <ul class="tabs">
+                        <ul class="contents">
                             {% for i in platform.installers %}
                                 {% set installer = artifacts.release.artifacts.installers[i] %}
-                                {# Select the first tab #}
-                                <li class="install-tab{% if simple_platforms and loop.first %} selected{% endif %}" data-id="{{ i }}" data-triple="{{ platform.target | first }}">
-                                    {{ installer.label }}
+                                <li data-id="{{ i }}" data-triple="{{ platform.target | first }}" class="install-content{% if not simple_platforms and not loop.first %} hidden{% endif %}">
+                                    {% if installer.method.type == "Run" %}
+                                        {% set release = artifacts.release %}
+                                        {% include "includes/installer_run.html" %}
+                                    {% endif %}
+
+                                    {% if installer.method.type == "Download" %}
+                                        {% set file = artifacts.release.artifacts.files[installer.method.file] %}
+                                        <div class="download-wrapper">
+                                            <a href="{{ file.download_url }}">
+                                                <button class="button primary">
+                                                    <span>Download <span class="monospace">{{ file.name }}</span></span>
+                                                </button>
+                                            </a>
+                                        </div>
+                                    {% endif %}
                                 </li>
                             {% endfor %}
                         </ul>
+                    </li>
+                {% endfor %}
+            </ul>
+
+            {# Get the target from the first platform #}
+            {% set first_target = artifacts.platforms_with_downloads | first | attr("target") | first %}
+            <div class="bottom-options {% if simple_platforms and first_target != "all" %}one{% endif %}">
+                <a href="{{ "artifacts/" | generate_link(layout.path_prefix) }}" class="backup-download primary">View all installation options</a>
+                {% if simple_platforms %}
+                    {% if first_target and first_target != "all" %}
+                        <div class="arch-select">Platform: {{ artifacts.platforms_with_downloads | first | attr("display_name") }}</div>
                     {% endif %}
-
-                    <ul class="contents">
-                        {% for i in platform.installers %}
-                            {% set installer = artifacts.release.artifacts.installers[i] %}
-                            <li data-id="{{ i }}" data-triple="{{ platform.target | first }}" class="install-content{% if not simple_platforms and not loop.first %} hidden{% endif %}">
-                                {% if installer.method.type == "Run" %}
-                                    {% set release = artifacts.release %}
-                                    {% include "includes/installer_run.html" %}
-                                {% endif %}
-
-                                {% if installer.method.type == "Download" %}
-                                    {% set file = artifacts.release.artifacts.files[installer.method.file] %}
-                                     <div class="download-wrapper">
-                                         <a href="{{ file.download_url }}">
-                                             <button class="button primary">
-                                                 <span>Download</span>
-                                                 <span class="button-subtitle">{{ file.name }}</span>
-                                             </button>
-                                         </a>
-                                     </div>
-                                {% endif %}
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </li>
-            {% endfor %}
-        </ul>
+                {% else %}
+                    <div class="arch-select hidden">
+                        <select id="install-arch-select">
+                            <option disabled="true" selected="true" value=""></option>
+                            {% for platform in artifacts.platforms_with_downloads | sort(attribute = "display_name") %}
+                                <option value="{{ platform.target | first }}">{{ platform.display_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
     </div>
 
     {% if not simple_platforms %}
@@ -62,25 +84,7 @@
     {% endif %}
     <div class="mac-switch hidden">This project doesn't offer Apple Silicon downloads, but you can run Intel macOS binaries via Rosetta 2.</div>
 
-    {# Get the target from the first platform #}
-    {% set first_target = artifacts.platforms_with_downloads | first | attr("target") | first %}
-    <div class="bottom-options {% if simple_platforms and first_target != "all" %}one{% endif %}">
-        <a href="{{ "artifacts/" | generate_link(layout.path_prefix) }}" class="backup-download primary">View all installation options</a>
-        {% if simple_platforms %}
-            {% if first_target and first_target != "all" %}
-                <div class="arch-select">Platform: {{ artifacts.platforms_with_downloads | first | attr("display_name") }}</div>
-            {% endif %}
-        {% else %}
-            <div class="arch-select hidden">
-                <select id="install-arch-select">
-                    <option disabled="true" selected="true" value=""></option>
-                    {% for platform in artifacts.platforms_with_downloads | sort(attribute = "display_name") %}
-                        <option value="{{ platform.target | first }}">{{ platform.display_name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-        {% endif %}
-    </div>
+
 </div>
 
 <a href="{{ "artifacts/" | generate_link(layout.path_prefix) }}" class="button mobile-download primary">View all installation options</a>

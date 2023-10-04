@@ -41,6 +41,10 @@
   @apply text-xl sm:text-xl leading-tight text-slate-800 dark:text-slate-300 font-bold mb-4;
 }
 
+.monospace {
+    @apply font-mono;
+}
+
 .hidden {
   display: none;
 }

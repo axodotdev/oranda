@@ -54,7 +54,7 @@ impl ReleaseSource {
     pub fn formatted_date(&self) -> Option<String> {
         self.date().map(|date| {
             if let Ok(parsed_date) = DateTime::parse_from_rfc3339(date) {
-                parsed_date.format("%b %e %Y at %R UTC").to_string()
+                parsed_date.format("%b %e %Y").to_string()
             } else {
                 date.to_owned()
             }
