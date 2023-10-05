@@ -462,6 +462,11 @@ ul#searchresults span.teaser em {
     color: var(--sidebar-fg);
 }
 
+.chapter li.chapter-item div {
+    color: var(--sidebar-fg);
+    filter: brightness(60%);
+}
+
 .chapter li a:hover {
     color: var(--sidebar-active);
 }
