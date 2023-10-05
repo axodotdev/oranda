@@ -346,6 +346,15 @@ Enables/disables artifacts autodetection, even without `cargo-dist`. This is tur
 default, but if you provide GitHub release artifacts in a target-triple-like format, chances
 are that oranda can autodetect them, so it may be worth turning this on.
 
+### components.artifacts.match_package_names
+
+> Added in version 0.5.0.
+
+- Type: bool, Default: `false`
+
+Only uses release tags that contain the name of the project being generated. Useful in a workspace environment,
+where multiple published projects are stored in the same repository.
+
 ### components.mdbook (or components.md_book)
 
 > Added in version 0.1.0.
