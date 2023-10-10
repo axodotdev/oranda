@@ -1,7 +1,12 @@
 {% extends "layout.html" %}
 {% block content %}
 <div>
-    <h1>Releases</h1>
+    <h1>
+        Releases
+        {% if page.has_rss_feed %}
+          <a href="{{ "changelog.rss" | generate_link(layout.path_prefix) }}" class="inline-icon">{% include "icons/rss.html" %}</a>
+        {% endif %}
+    </h1>
     <div class="releases-wrapper">
         <nav class="releases-nav">
             {% if page.has_prereleases %}

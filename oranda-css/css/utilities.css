@@ -44,3 +44,9 @@
 .hidden {
   display: none;
 }
+
+.inline-icon > svg {
+  height: 25px;
+  width: 25px;
+  display: inline-block;
+}

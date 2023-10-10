@@ -29,7 +29,7 @@ async fn fetch_logo(
     let copy_result = Asset::copy(origin_path, dist_dir).await?;
 
     let path_as_string = copy_result.strip_prefix(dist_dir)?.to_string_lossy();
-    let src = link::generate(path_prefix, &path_as_string);
+    let src = link::generate_relative(path_prefix, &path_as_string);
 
     Ok(src)
 }

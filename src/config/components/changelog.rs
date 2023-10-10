@@ -7,6 +7,8 @@ use serde::{Deserialize, Serialize};
 pub struct ChangelogConfig {
     /// Whether to attempt to read from the local changelog file
     pub read_changelog_file: bool,
+    /// Whether to generate a RSS file
+    pub rss_feed: bool,
 }
 
 /// The config for generating a separate changelog page
@@ -16,12 +18,15 @@ pub struct ChangelogLayer {
     /// it, and try and match version headings to release versions that we
     /// detect.
     pub read_changelog_file: Option<bool>,
+    /// Whether to generate a RSS file under `changelog.rss`.
+    pub rss_feed: Option<bool>,
 }
 
 impl Default for ChangelogConfig {
     fn default() -> Self {
         ChangelogConfig {
             read_changelog_file: true,
+            rss_feed: true,
         }
     }
 }
@@ -32,7 +37,9 @@ impl ApplyLayer for ChangelogConfig {
         // This is intentionally written slightly cumbersome to make you update this
         let ChangelogLayer {
             read_changelog_file,
+            rss_feed,
         } = layer;
         self.read_changelog_file.apply_val(read_changelog_file);
+        self.rss_feed.apply_val(rss_feed);
     }
 }
