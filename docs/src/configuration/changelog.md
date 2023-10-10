@@ -12,6 +12,8 @@ feature, set it to false in the `oranda.json`:
 }
 ```
 
+By default, oranda will also generate a `changelog.rss` file which you can plug into RSS readers or other automation!
+
 ## Controlling where changelogs are read from
 
 By default, oranda will try to read changelog contents from a file called `CHANGELOG(.md)`. This file needs to be formatted

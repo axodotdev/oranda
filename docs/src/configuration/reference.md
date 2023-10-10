@@ -405,6 +405,14 @@ and you can disable it by setting `false` here.
 
 Disables reading the changelog file, meaning that oranda will fall back to embedding the GitHub release body instead.
 
+#### components.changelog.generate_rss_feed
+
+> Added in version 0.5.0.
+
+- Type: bool, Default: `true`
+
+Disables the built-in generation of a RSS feed file for your changelog.
+
 ### components.funding
 
 > Added in version 0.1.0.
