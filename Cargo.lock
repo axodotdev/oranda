@@ -2169,7 +2169,7 @@ checksum = "04744f49eae99ab78e0d5c0b603ab218f515ea8cfe5a456d7629ad883a3b6e7d"
 
 [[package]]
 name = "oranda"
-version = "0.5.0-prerelease.2"
+version = "0.5.0"
 dependencies = [
  "ammonia",
  "assert_cmd",
@@ -2225,7 +2225,7 @@ dependencies = [
 
 [[package]]
 name = "oranda-generate-css"
-version = "0.5.0-prerelease.2"
+version = "0.5.0"
 dependencies = [
  "axoasset 0.4.0",
  "camino",
