@@ -34,7 +34,7 @@ pub fn index_context(
         return Ok(ChangelogContext {
             releases: Vec::new(),
             has_prereleases: false,
-            has_rss_feed: config.components.changelog.clone().is_some_and(|c| c.generate_rss_feed),
+            has_rss_feed: config.components.changelog.clone().is_some_and(|c| c.rss_feed),
             os_script: javascript::build_os_script_path(&config.build.path_prefix),
         });
     }
@@ -46,7 +46,7 @@ pub fn index_context(
     Ok(ChangelogContext {
         releases,
         has_prereleases: context.has_prereleases,
-        has_rss_feed: config.components.changelog.clone().is_some_and(|c| c.generate_rss_feed),
+        has_rss_feed: config.components.changelog.clone().is_some_and(|c| c.rss_feed),
         os_script: javascript::build_os_script_path(&config.build.path_prefix),
     })
 }

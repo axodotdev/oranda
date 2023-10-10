@@ -8,7 +8,7 @@ pub struct ChangelogConfig {
     /// Whether to attempt to read from the local changelog file
     pub read_changelog_file: bool,
     /// Whether to generate a RSS file
-    pub generate_rss_feed: bool,
+    pub rss_feed: bool,
 }
 
 /// The config for generating a separate changelog page
@@ -19,14 +19,14 @@ pub struct ChangelogLayer {
     /// detect.
     pub read_changelog_file: Option<bool>,
     /// Whether to generate a RSS file under `changelog.rss`.
-    pub generate_rss_feed: Option<bool>,
+    pub rss_feed: Option<bool>,
 }
 
 impl Default for ChangelogConfig {
     fn default() -> Self {
         ChangelogConfig {
             read_changelog_file: true,
-            generate_rss_feed: true,
+            rss_feed: true,
         }
     }
 }
@@ -37,9 +37,9 @@ impl ApplyLayer for ChangelogConfig {
         // This is intentionally written slightly cumbersome to make you update this
         let ChangelogLayer {
             read_changelog_file,
-            generate_rss_feed,
+            rss_feed,
         } = layer;
         self.read_changelog_file.apply_val(read_changelog_file);
-        self.generate_rss_feed.apply_val(generate_rss_feed);
+        self.rss_feed.apply_val(rss_feed);
     }
 }

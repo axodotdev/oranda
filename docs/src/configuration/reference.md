@@ -405,7 +405,7 @@ and you can disable it by setting `false` here.
 
 Disables reading the changelog file, meaning that oranda will fall back to embedding the GitHub release body instead.
 
-#### components.changelog.generate_rss_feed
+#### components.changelog.rss_feed
 
 > Added in version 0.5.0.
 
