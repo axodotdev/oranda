@@ -2,13 +2,17 @@
 
 ## Unreleased
 
-## Features
+### Features
 
 - **Removed hard dependency on README.md**
+- **RSS feed support**
+- **New `match_package_names` option for workspace config**
+- **Workspace index now supports `additional_css`**
 
-## Fixes
+### Fixes
 
 - **Improved errors for when explicitly declared paths don't exist**
+- **Set correct colors for mdbook draft chapters**
 
 ## 0.4.1 - 2023-09-27
 
