@@ -1,18 +1,67 @@
 # Changelog
 
-## Unreleased
+## 0.5.0 - 2023-10-10
 
 ### Features
 
-- **Removed hard dependency on README.md**
-- **RSS feed support**
-- **New `match_package_names` option for workspace config**
-- **Workspace index now supports `additional_css`**
+- **RSS feed support** - [shadows-withal]/[pr656], [zkat]
+
+  When you have changelog functionality enabled, oranda will now automatically
+  generate a RSS feed for it! This means you can plug it into your RSS reader, or
+  use further automation that works with RSS files 🙌
+
+  The link to the RSS feed will also be shown on the changelog page. You can disable
+  the feed using the new `components.changelog.rss_feed` option.
+
+- **Removed hard dependency on README.md** - [shadows-withal]/[pr640]
+
+  In previous releases, you needed to have a README.md file for oranda to work.
+  This is a holdover from the earliest version of oranda (which was literally just
+  a tool to generate HTML from your readme files), but with all the since added
+  functionality, there's no real reason to keep this requirement. This means that
+  **oranda now works without a readme file**!!
+
+- **New `match_package_names` option for workspace config** - [06chaynes]/[pr652]
+
+  When you have a workspace with multiple projects that all publish releases in the same
+  GitHub repository, oranda will get confused and think that every release belongs to
+  every project. With the new `components.artifacts.match_package_names`, each workspace
+  member will now only include releases that contain their project name in the Git tag
+  (`v0.4.0-myproject`, for example).
+
+- **Ignore `public/` directory when running `oranda generate ci`** - [shadows-withal]/[pr649], [konstin]/[i643]
+
+  When running the CI generator command, it'll now prompt you whether it should append the `public/`
+  directory to your `.gitignore` file.
 
 ### Fixes
 
-- **Improved errors for when explicitly declared paths don't exist**
-- **Set correct colors for mdbook draft chapters**
+- **Improved errors for when explicitly declared paths don't exist** - [shadows-withal]/[pr640], [konstin]
+  
+  There used to be some cryptic errors oranda would throw if it couldn't find a path you'd manually
+  specified in the configuration file - these errors are much nicer now, and their handling is more consistent.
+
+- **Workspace index now supports `additional_css`** - [06chaynes]/[pr653]
+
+  The `additional_css` option will now be respected on the workspace index page!
+
+- **Set correct colors for mdbook draft chapters** - [06chaynes]/[pr655], [hawkw]/[i654]
+
+  In custom oranda themes, mdbook draft chapter titles in the sidebar were unreadable. This has been fixed!
+
+[i643]: https://github.com/axodotdev/oranda/issues/643
+[i654]: https://github.com/axodotdev/oranda/issues/654
+[pr640]: https://github.com/axodotdev/oranda/pull/640
+[pr649]: https://github.com/axodotdev/oranda/pull/649
+[pr652]: https://github.com/axodotdev/oranda/pull/652
+[pr653]: https://github.com/axodotdev/oranda/pull/653
+[pr655]: https://github.com/axodotdev/oranda/pull/655
+[pr656]: https://github.com/axodotdev/oranda/pull/656
+[shadows-withal]: https://github.com/shadows-withal
+[zkat]: https://github.com/zkat
+[konstin]: https://github.com/konstin
+[06chaynes]: https://github.com/06chaynes
+[hawkw]: https://github.com/hawkw
 
 ## 0.4.1 - 2023-09-27
 
