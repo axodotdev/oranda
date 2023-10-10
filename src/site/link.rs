@@ -1,6 +1,5 @@
 use crate::config::Config;
-use crate::errors::{OrandaError, Result};
-use camino::{Utf8Path, Utf8PathBuf};
+use camino::Utf8PathBuf;
 
 pub fn generate_relative(path_prefix: &Option<String>, file_name: &str) -> String {
     // NOTE: intentionally no leading `/` here because it makes camino add a phantom `/` or `\`
