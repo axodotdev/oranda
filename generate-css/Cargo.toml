@@ -1,6 +1,6 @@
 [package]
 name = "oranda-generate-css"
-version = "0.5.0-prerelease.1"
+version = "0.5.0-prerelease.2"
 description = "the part of oranda that generates CSS"
 repository = "https://github.com/axodotdev/oranda"
 homepage = "https://opensource.axo.dev/oranda"
