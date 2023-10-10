@@ -330,11 +330,13 @@ impl Site {
             &index_context,
         )?;
         pages.push(changelog_page);
-        let changelog_rss = rss::generate_rss_feed(&index_context, config)?;
-        pages.push(Page {
-            contents: changelog_rss.to_string(),
-            filename: "changelog.rss".to_string(),
-        });
+        if config.components.changelog.clone().is_some_and(|c| c.rss_feed) {
+            let changelog_rss = rss::generate_rss_feed(&index_context, config)?;
+            pages.push(Page {
+                contents: changelog_rss.to_string(),
+                filename: "changelog.rss".to_string(),
+            });
+        }
         if !(context.releases.len() == 1 && context.releases[0].source.is_current_state()) {
             for release in context.releases.iter() {
                 let single_context = changelog::single_context(release, config, project.as_ref());
