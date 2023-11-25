@@ -1,4 +1,6 @@
 use camino::Utf8PathBuf;
+use std::fmt::Write;
+
 pub use cargo_dist_schema::{ArtifactKind, DistManifest};
 
 use super::artifacts::{
@@ -25,7 +27,7 @@ impl ReleaseArtifacts {
             }
 
             for (id, artifact) in manifest.artifacts_for_release(app) {
-                let label;
+                let mut label;
                 let method;
                 let preference;
                 let file = artifact.name.as_ref().and_then(|n| self.file_idx(n));
@@ -97,6 +99,11 @@ impl ReleaseArtifacts {
                         continue;
                     }
                 };
+
+                if manifest.releases.len() > 1 {
+                    let _ = write!(label, "<br /><i style=\"font-size: small;\">({})</i>", app.app_name);
+                }
+
                 let targets = preference_to_targets(artifact.target_triples.clone(), preference);
                 let installer = Installer {
                     label,
