@@ -108,3 +108,11 @@ npm-scope = "@axodotdev"
 features = ["build-with-tailwind"]
 # Publish jobs to run in CI
 pr-run-mode = "plan"
+
+[[workspace.metadata.dist.extra-artifacts]]
+artifacts = ["oranda-config-schema.json"]
+build = ["cargo", "run", "--", "config-schema", "--output=oranda-config-schema.json"]
+
+[[workspace.metadata.dist.extra-artifacts]]
+artifacts = ["oranda-css/dist/oranda.css"]
+build = ["cargo", "run", "--", "generate-css"]
