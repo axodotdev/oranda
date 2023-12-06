@@ -1,29 +1,29 @@
 {% if layout.has_nav %}
-    <nav class="nav">
-        <ul>
-            <li><a href="{{ layout.home_link }}">Home</a></li>
+  <nav class="nav">
+    <ul>
+      <li><a href="{{ layout.home_link }}">Home</a></li>
 
-            {% if layout.additional_pages %}
-                {% for page in layout.additional_pages %}
-                    <li><a href="{{ page.path }}">{{ page.name }}</a></li>
-                {% endfor %}
-            {% endif %}
+      {% if layout.additional_pages %}
+        {% for page in layout.additional_pages %}
+          <li><a href="{{ page.path }}">{{ page.name }}</a></li>
+        {% endfor %}
+      {% endif %}
 
-            {% if layout.artifacts_link %}
-                <li><a href="{{ layout.artifacts_link }}">Install</a></li>
-            {% endif %}
+      {% if layout.artifacts_link %}
+        <li><a href="{{ layout.artifacts_link }}">Install</a></li>
+      {% endif %}
 
-            {% if layout.mdbook_link %}
-                <li><a href="{{ layout.mdbook_link }}">Docs</a></li>
-            {% endif %}
+      {% if layout.mdbook_link %}
+        <li><a href="{{ layout.mdbook_link }}">Docs</a></li>
+      {% endif %}
 
-            {% if layout.funding_link %}
-                <li><a href="{{ layout.funding_link }}">Funding</a></li>
-            {% endif %}
+      {% if layout.funding_link %}
+        <li><a href="{{ layout.funding_link }}">Funding</a></li>
+      {% endif %}
 
-            {% if layout.changelog_link %}
-                <li><a href="{{ layout.changelog_link }}">Changelog</a></li>
-            {% endif %}
-        </ul>
-    </nav>
+      {% if layout.changelog_link %}
+        <li><a href="{{ layout.changelog_link }}">Changelog</a></li>
+      {% endif %}
+    </ul>
+  </nav>
 {% endif %}

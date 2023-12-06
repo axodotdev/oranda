@@ -5,490 +5,490 @@ expression: "&snapshots"
 ================ public/artifacts/index.html ================
 <!DOCTYPE html>
 <html lang="en" id="oranda" class="dark">
-    <head>
-        <title>oranda-inference-test</title>
+  <head>
+    <title>oranda-inference-test</title>
+    
+    
+      <link rel="icon" href="/favicon.ico" />
+    
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="oranda-inference-test" />
+    
+    
+    
+    <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
+    <link rel="stylesheet" href="/oranda.css" />
+    
+    
+  </head>
+  <body>
+    <div class="container">
+      <div class="page-body">
         
+          <div class="repo_banner">
+            <a href="https://github.com/oranda-gallery/oranda-inference-test">
+              <div class="github-icon" aria-hidden="true"></div>
+              Check out our GitHub!
+            </a>
+          </div>
         
-            <link rel="icon" href="/favicon.ico" />
-        
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="oranda-inference-test" />
-        
-        
-        
-        <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
-        <link rel="stylesheet" href="/oranda.css" />
-        
-        
-    </head>
-    <body>
-        <div class="container">
-            <div class="page-body">
-                
-                    <div class="repo_banner">
-                        <a href="https://github.com/oranda-gallery/oranda-inference-test">
-                            <div class="github-icon" aria-hidden="true"></div>
-                            Check out our GitHub!
-                        </a>
-                    </div>
-                
 
-                <main>
-                    <header>
-                        
-                        <h1 class="title">oranda-inference-test</h1>
-                        
-    <nav class="nav">
-        <ul>
-            <li><a href="/">Home</a></li>
-
+        <main>
+          <header>
             
-
+            <h1 class="title">oranda-inference-test</h1>
             
-                <li><a href="/artifacts/">Install</a></li>
-            
+  <nav class="nav">
+    <ul>
+      <li><a href="/">Home</a></li>
 
-            
+      
 
-            
+      
+        <li><a href="/artifacts/">Install</a></li>
+      
 
-            
-                <li><a href="/changelog/">Changelog</a></li>
-            
-        </ul>
-    </nav>
+      
 
-                    </header>
+      
 
-                    
-<div>
+      
+        <li><a href="/changelog/">Changelog</a></li>
+      
+    </ul>
+  </nav>
+
+          </header>
+
+          
+  <div>
     <div class="package-managers-downloads">
+      
         
-            
-        
+      
     </div>
     <div>
-        <h3>Downloads</h3>
-        <table class="artifacts-table">
-            <tbody>
-                <tr>
-                    <th>File</th>
-                    <th>Platform</th>
-                    
-                </tr>
+      <h3>Downloads</h3>
+      <table class="artifacts-table">
+        <tbody>
+          <tr>
+            <th>File</th>
+            <th>Platform</th>
+            
+          </tr>
+          
+            
+            
+            <tr>
+              <td><a href="https://github.com/oranda-gallery/oranda-inference-test/releases/download/v0.1.0/oranda-inference-test-x86_64-unknown-linux-gnu.tar.gz">oranda-inference-test-x86_64-unknown-linux-gnu.tar.gz</a></td>
+              <td>
                 
-                    
-                    
-                    <tr>
-                        <td><a href="https://github.com/oranda-gallery/oranda-inference-test/releases/download/v0.1.0/oranda-inference-test-x86_64-unknown-linux-gnu.tar.gz">oranda-inference-test-x86_64-unknown-linux-gnu.tar.gz</a></td>
-                        <td>
-                            
-                                
-                                    Linux x64
-                                
-                            
-                        </td>
-                        
-                    </tr>
+                  
+                    Linux x64
+                  
                 
-            </tbody>
-        </table>
+              </td>
+              
+            </tr>
+          
+        </tbody>
+      </table>
     </div>
-</div>
+  </div>
 
-                </main>
-            </div>
+        </main>
+      </div>
 
-            <footer>
-                
-                    <a href="https://github.com/oranda-gallery/oranda-inference-test"><div class="github-icon" aria-hidden="true"></div></a>
-                
-                <span>
-                    oranda-inference-test
-                </span>
-            </footer>
-        </div>
-
+      <footer>
         
+          <a href="https://github.com/oranda-gallery/oranda-inference-test"><div class="github-icon" aria-hidden="true"></div></a>
         
+        <span>
+          oranda-inference-test
+        </span>
+      </footer>
+    </div>
 
-        
-<script src="/artifacts.js"></script>
+    
+    
 
-    </body>
+    
+  <script src="/artifacts.js"></script>
+
+  </body>
 </html>
 ================ public/artifacts.json ================
 {"format_version":"0.5.0","tag":"v0.1.0","formatted_date":"Aug  8 2023 at 16:27 UTC","platforms_with_downloads":[{"target":["x86_64-unknown-linux-gnu"],"display_name":"Linux x64","installers":[0]}],"downloadable_files":[[0,{"name":"oranda-inference-test-x86_64-unknown-linux-gnu.tar.gz","download_url":"https://github.com/oranda-gallery/oranda-inference-test/releases/download/v0.1.0/oranda-inference-test-x86_64-unknown-linux-gnu.tar.gz","view_path":null,"checksum_file":null},["Linux x64"]]],"release":{"artifacts":{"files":[{"name":"oranda-inference-test-x86_64-unknown-linux-gnu.tar.gz","download_url":"https://github.com/oranda-gallery/oranda-inference-test/releases/download/v0.1.0/oranda-inference-test-x86_64-unknown-linux-gnu.tar.gz","view_path":null,"checksum_file":null}],"installers":[{"label":"tarball","description":"","method":{"type":"Download","file":0}}],"targets":{"x86_64-unknown-linux-gnu":[0]}}},"os_script":"/artifacts.js","has_checksum_files":false}
 ================ public/changelog/index.html ================
 <!DOCTYPE html>
 <html lang="en" id="oranda" class="dark">
-    <head>
-        <title>oranda-inference-test</title>
+  <head>
+    <title>oranda-inference-test</title>
+    
+    
+      <link rel="icon" href="/favicon.ico" />
+    
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="oranda-inference-test" />
+    
+    
+    
+    <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
+    <link rel="stylesheet" href="/oranda.css" />
+    
+    
+  </head>
+  <body>
+    <div class="container">
+      <div class="page-body">
         
+          <div class="repo_banner">
+            <a href="https://github.com/oranda-gallery/oranda-inference-test">
+              <div class="github-icon" aria-hidden="true"></div>
+              Check out our GitHub!
+            </a>
+          </div>
         
-            <link rel="icon" href="/favicon.ico" />
-        
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="oranda-inference-test" />
-        
-        
-        
-        <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
-        <link rel="stylesheet" href="/oranda.css" />
-        
-        
-    </head>
-    <body>
-        <div class="container">
-            <div class="page-body">
-                
-                    <div class="repo_banner">
-                        <a href="https://github.com/oranda-gallery/oranda-inference-test">
-                            <div class="github-icon" aria-hidden="true"></div>
-                            Check out our GitHub!
-                        </a>
-                    </div>
-                
 
-                <main>
-                    <header>
-                        
-                        <h1 class="title">oranda-inference-test</h1>
-                        
-    <nav class="nav">
-        <ul>
-            <li><a href="/">Home</a></li>
-
+        <main>
+          <header>
             
-
+            <h1 class="title">oranda-inference-test</h1>
             
-                <li><a href="/artifacts/">Install</a></li>
-            
+  <nav class="nav">
+    <ul>
+      <li><a href="/">Home</a></li>
 
-            
+      
 
-            
+      
+        <li><a href="/artifacts/">Install</a></li>
+      
 
-            
-                <li><a href="/changelog/">Changelog</a></li>
-            
-        </ul>
-    </nav>
+      
 
-                    </header>
+      
 
-                    
-<div>
+      
+        <li><a href="/changelog/">Changelog</a></li>
+      
+    </ul>
+  </nav>
+
+          </header>
+
+          
+  <div>
     <h1>
-        Releases
-        
-          <a href="/changelog.rss" class="inline-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+      Releases
+      
+        <a href="/changelog.rss" class="inline-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
   <path d="M3.75 3a.75.75 0 00-.75.75v.5c0 .414.336.75.75.75H4c6.075 0 11 4.925 11 11v.25c0 .414.336.75.75.75h.5a.75.75 0 00.75-.75V16C17 8.82 11.18 3 4 3h-.25z" />
   <path d="M3 8.75A.75.75 0 013.75 8H4a8 8 0 018 8v.25a.75.75 0 01-.75.75h-.5a.75.75 0 01-.75-.75V16a6 6 0 00-6-6h-.25A.75.75 0 013 9.25v-.5zM7 15a2 2 0 11-4 0 2 2 0 014 0z" />
 </svg></a>
-        
+      
     </h1>
     <div class="releases-wrapper">
-        <nav class="releases-nav">
-            
+      <nav class="releases-nav">
+        
 
-            
-            <ul>
-                
-                     <li class="">
-                         <a href="v0.1.0/">v0.1.0</a>
-                     </li>
-                
-            </ul>
-        </nav>
+        
+        <ul>
+          
+            <li class="">
+              <a href="v0.1.0/">v0.1.0</a>
+            </li>
+          
+        </ul>
+      </nav>
 
-        <div class="releases-list">
-            
-                
-                <section class="release ">
-    <h2 id="tag-v0.1.0">
-        <a href="v0.1.0/">
-            
-                v0.1.0
-            
-        </a>
-    </h2>
-    <div class="release-info">
-        <span class="flex items-center gap-2">
-            <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6'>
+      <div class="releases-list">
+        
+          
+          <section class="release ">
+  <h2 id="tag-v0.1.0">
+    <a href="v0.1.0/">
+      
+        v0.1.0
+      
+    </a>
+  </h2>
+  <div class="release-info">
+    <span class="flex items-center gap-2">
+      <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6'>
     <path stroke-linecap='round' stroke-linejoin='round' d='M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z' />
     <path stroke-linecap='round' stroke-linejoin='round' d='M6 6h.008v.008H6V6z' /></svg>
-            v0.1.0
-        </span>
-        <span class="flex items-center gap-2">
-            
-                <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6'><path stroke-linecap='round' stroke-linejoin='round' d='M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5' /></svg>
-                Aug  8 2023 at 16:27 UTC
-            
-        </span>
-    </div>
-    <div class="release-body">
-        
-    </div>
+      v0.1.0
+    </span>
+    <span class="flex items-center gap-2">
+      
+        <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6'><path stroke-linecap='round' stroke-linejoin='round' d='M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5' /></svg>
+        Aug  8 2023 at 16:27 UTC
+      
+    </span>
+  </div>
+  <div class="release-body">
+    
+  </div>
 </section>
-            
-        </div>
+        
+      </div>
     </div>
-</div>
+  </div>
 
-                </main>
-            </div>
+        </main>
+      </div>
 
-            <footer>
-                
-                    <a href="https://github.com/oranda-gallery/oranda-inference-test"><div class="github-icon" aria-hidden="true"></div></a>
-                
-                <span>
-                    oranda-inference-test
-                </span>
-            </footer>
-        </div>
-
+      <footer>
         
+          <a href="https://github.com/oranda-gallery/oranda-inference-test"><div class="github-icon" aria-hidden="true"></div></a>
         
+        <span>
+          oranda-inference-test
+        </span>
+      </footer>
+    </div>
 
-        
-<script src="/artifacts.js"></script>
+    
+    
 
-    </body>
+    
+  <script src="/artifacts.js"></script>
+
+  </body>
 </html>
 ================ public/changelog/v0.1.0/index.html ================
 <!DOCTYPE html>
 <html lang="en" id="oranda" class="dark">
-    <head>
-        <title>oranda-inference-test</title>
+  <head>
+    <title>oranda-inference-test</title>
+    
+    
+      <link rel="icon" href="/favicon.ico" />
+    
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="oranda-inference-test" />
+    
+    
+    
+    <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
+    <link rel="stylesheet" href="/oranda.css" />
+    
+    
+  </head>
+  <body>
+    <div class="container">
+      <div class="page-body">
         
+          <div class="repo_banner">
+            <a href="https://github.com/oranda-gallery/oranda-inference-test">
+              <div class="github-icon" aria-hidden="true"></div>
+              Check out our GitHub!
+            </a>
+          </div>
         
-            <link rel="icon" href="/favicon.ico" />
-        
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="oranda-inference-test" />
-        
-        
-        
-        <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
-        <link rel="stylesheet" href="/oranda.css" />
-        
-        
-    </head>
-    <body>
-        <div class="container">
-            <div class="page-body">
-                
-                    <div class="repo_banner">
-                        <a href="https://github.com/oranda-gallery/oranda-inference-test">
-                            <div class="github-icon" aria-hidden="true"></div>
-                            Check out our GitHub!
-                        </a>
-                    </div>
-                
 
-                <main>
-                    <header>
-                        
-                        <h1 class="title">oranda-inference-test</h1>
-                        
-    <nav class="nav">
-        <ul>
-            <li><a href="/">Home</a></li>
-
+        <main>
+          <header>
             
-
+            <h1 class="title">oranda-inference-test</h1>
             
-                <li><a href="/artifacts/">Install</a></li>
-            
+  <nav class="nav">
+    <ul>
+      <li><a href="/">Home</a></li>
 
-            
+      
 
-            
+      
+        <li><a href="/artifacts/">Install</a></li>
+      
 
-            
-                <li><a href="/changelog/">Changelog</a></li>
-            
-        </ul>
-    </nav>
+      
 
-                    </header>
+      
 
-                    
-<div>
+      
+        <li><a href="/changelog/">Changelog</a></li>
+      
+    </ul>
+  </nav>
+
+          </header>
+
+          
+  <div>
     <h1>v0.1.0</h1>
     <div class="releases-body">
-        
-        
-        <section class="release ">
-    
-    <div class="release-info">
-        <span class="flex items-center gap-2">
-            <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6'>
+      
+      
+      <section class="release ">
+  
+  <div class="release-info">
+    <span class="flex items-center gap-2">
+      <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6'>
     <path stroke-linecap='round' stroke-linejoin='round' d='M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z' />
     <path stroke-linecap='round' stroke-linejoin='round' d='M6 6h.008v.008H6V6z' /></svg>
-            v0.1.0
-        </span>
-        <span class="flex items-center gap-2">
-            
-                <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6'><path stroke-linecap='round' stroke-linejoin='round' d='M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5' /></svg>
-                Aug  8 2023 at 16:27 UTC
-            
-        </span>
-    </div>
-    <div class="release-body">
-        
-    </div>
+      v0.1.0
+    </span>
+    <span class="flex items-center gap-2">
+      
+        <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6'><path stroke-linecap='round' stroke-linejoin='round' d='M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5' /></svg>
+        Aug  8 2023 at 16:27 UTC
+      
+    </span>
+  </div>
+  <div class="release-body">
+    
+  </div>
 </section>
     </div>
-</div>
+  </div>
 
-                </main>
-            </div>
+        </main>
+      </div>
 
-            <footer>
-                
-                    <a href="https://github.com/oranda-gallery/oranda-inference-test"><div class="github-icon" aria-hidden="true"></div></a>
-                
-                <span>
-                    oranda-inference-test
-                </span>
-            </footer>
-        </div>
-
+      <footer>
         
+          <a href="https://github.com/oranda-gallery/oranda-inference-test"><div class="github-icon" aria-hidden="true"></div></a>
         
+        <span>
+          oranda-inference-test
+        </span>
+      </footer>
+    </div>
 
-        
-    </body>
+    
+    
+
+    
+  </body>
 </html>
 ================ public/index.html ================
 <!DOCTYPE html>
 <html lang="en" id="oranda" class="dark">
-    <head>
-        <title>oranda-inference-test</title>
+  <head>
+    <title>oranda-inference-test</title>
+    
+    
+      <link rel="icon" href="/favicon.ico" />
+    
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="oranda-inference-test" />
+    
+    
+    
+    <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
+    <link rel="stylesheet" href="/oranda.css" />
+    
+    
+  </head>
+  <body>
+    <div class="container">
+      <div class="page-body">
         
+          <div class="repo_banner">
+            <a href="https://github.com/oranda-gallery/oranda-inference-test">
+              <div class="github-icon" aria-hidden="true"></div>
+              Check out our GitHub!
+            </a>
+          </div>
         
-            <link rel="icon" href="/favicon.ico" />
-        
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="oranda-inference-test" />
-        
-        
-        
-        <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
-        <link rel="stylesheet" href="/oranda.css" />
-        
-        
-    </head>
-    <body>
-        <div class="container">
-            <div class="page-body">
-                
-                    <div class="repo_banner">
-                        <a href="https://github.com/oranda-gallery/oranda-inference-test">
-                            <div class="github-icon" aria-hidden="true"></div>
-                            Check out our GitHub!
-                        </a>
-                    </div>
-                
 
-                <main>
-                    <header>
-                        
-                        <h1 class="title">oranda-inference-test</h1>
-                        
-    <nav class="nav">
-        <ul>
-            <li><a href="/">Home</a></li>
-
+        <main>
+          <header>
             
-
+            <h1 class="title">oranda-inference-test</h1>
             
-                <li><a href="/artifacts/">Install</a></li>
-            
+  <nav class="nav">
+    <ul>
+      <li><a href="/">Home</a></li>
 
-            
+      
 
-            
+      
+        <li><a href="/artifacts/">Install</a></li>
+      
 
-            
-                <li><a href="/changelog/">Changelog</a></li>
-            
-        </ul>
-    </nav>
+      
 
-                    </header>
+      
 
-                    
+      
+        <li><a href="/changelog/">Changelog</a></li>
+      
+    </ul>
+  </nav>
+
+          </header>
+
+          
 
     
 
 
 
 <div class="artifacts" data-tag="v0.1.0">
-    <div class="artifact-header target">
-        <h4>Install v0.1.0</h4>
-        
-            <div><small class="published-date">Published on Aug  8 2023 at 16:27 UTC</small></div>
-        
-
-        <ul class="arches">
-            
-                <li class="arch" data-arch="x86_64-unknown-linux-gnu">
-                    
-
-                    <ul class="contents">
-                        
-                            
-                            <li data-id="0" data-triple="x86_64-unknown-linux-gnu" class="install-content">
-                                
-
-                                
-                                    
-                                     <div class="download-wrapper">
-                                         <a href="https://github.com/oranda-gallery/oranda-inference-test/releases/download/v0.1.0/oranda-inference-test-x86_64-unknown-linux-gnu.tar.gz">
-                                             <button class="button primary">
-                                                 <span>Download</span>
-                                                 <span class="button-subtitle">oranda-inference-test-x86_64-unknown-linux-gnu.tar.gz</span>
-                                             </button>
-                                         </a>
-                                     </div>
-                                
-                            </li>
-                        
-                    </ul>
-                </li>
-            
-        </ul>
-    </div>
-
+  <div class="artifact-header target">
+    <h4>Install v0.1.0</h4>
     
-    <div class="mac-switch hidden">This project doesn't offer Apple Silicon downloads, but you can run Intel macOS binaries via Rosetta 2.</div>
+      <div><small class="published-date">Published on Aug  8 2023 at 16:27 UTC</small></div>
+    
 
-    
-    
-    <div class="bottom-options one">
-        <a href="/artifacts/" class="backup-download primary">View all installation options</a>
-        
+    <ul class="arches">
+      
+        <li class="arch" data-arch="x86_64-unknown-linux-gnu">
+          
+
+          <ul class="contents">
             
-                <div class="arch-select">Platform: Linux x64</div>
+              
+              <li data-id="0" data-triple="x86_64-unknown-linux-gnu" class="install-content">
+                
+
+                
+                  
+                  <div class="download-wrapper">
+                    <a href="https://github.com/oranda-gallery/oranda-inference-test/releases/download/v0.1.0/oranda-inference-test-x86_64-unknown-linux-gnu.tar.gz">
+                      <button class="button primary">
+                        <span>Download</span>
+                        <span class="button-subtitle">oranda-inference-test-x86_64-unknown-linux-gnu.tar.gz</span>
+                      </button>
+                    </a>
+                  </div>
+                
+              </li>
             
-        
-    </div>
+          </ul>
+        </li>
+      
+    </ul>
+  </div>
+
+  
+  <div class="mac-switch hidden">This project doesn't offer Apple Silicon downloads, but you can run Intel macOS binaries via Rosetta 2.</div>
+
+  
+  
+  <div class="bottom-options one">
+    <a href="/artifacts/" class="backup-download primary">View all installation options</a>
+    
+      
+        <div class="arch-select">Platform: Linux x64</div>
+      
+    
+  </div>
 </div>
 
 <a href="/artifacts/" class="button mobile-download primary">View all installation options</a>
@@ -498,27 +498,27 @@ expression: "&snapshots"
 
 
 
-                </main>
-            </div>
+        </main>
+      </div>
 
-            <footer>
-                
-                    <a href="https://github.com/oranda-gallery/oranda-inference-test"><div class="github-icon" aria-hidden="true"></div></a>
-                
-                <span>
-                    oranda-inference-test
-                </span>
-            </footer>
-        </div>
+      <footer>
+        
+          <a href="https://github.com/oranda-gallery/oranda-inference-test"><div class="github-icon" aria-hidden="true"></div></a>
+        
+        <span>
+          oranda-inference-test
+        </span>
+      </footer>
+    </div>
 
-        
-        
+    
+    
 
-        
+    
 
     <script src="/artifacts.js"></script>
 
 
-    </body>
+  </body>
 </html>
 

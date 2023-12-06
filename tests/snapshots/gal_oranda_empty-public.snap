@@ -5,307 +5,307 @@ expression: "&snapshots"
 ================ public/artifacts/index.html ================
 <!DOCTYPE html>
 <html lang="en" id="oranda" class="dark">
-    <head>
-        <title>oranda-empty-test</title>
+  <head>
+    <title>oranda-empty-test</title>
+    
+    
+      <link rel="icon" href="/favicon.ico" />
+    
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="oranda-empty-test" />
+    
+    
+    
+    <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
+    <link rel="stylesheet" href="/oranda.css" />
+    
+    
+  </head>
+  <body>
+    <div class="container">
+      <div class="page-body">
         
+          <div class="repo_banner">
+            <a href="https://github.com/oranda-gallery/oranda-empty-test">
+              <div class="github-icon" aria-hidden="true"></div>
+              Check out our GitHub!
+            </a>
+          </div>
         
-            <link rel="icon" href="/favicon.ico" />
-        
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="oranda-empty-test" />
-        
-        
-        
-        <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
-        <link rel="stylesheet" href="/oranda.css" />
-        
-        
-    </head>
-    <body>
-        <div class="container">
-            <div class="page-body">
-                
-                    <div class="repo_banner">
-                        <a href="https://github.com/oranda-gallery/oranda-empty-test">
-                            <div class="github-icon" aria-hidden="true"></div>
-                            Check out our GitHub!
-                        </a>
-                    </div>
-                
 
-                <main>
-                    <header>
-                        
-                        <h1 class="title">oranda-empty-test</h1>
-                        
-    <nav class="nav">
-        <ul>
-            <li><a href="/">Home</a></li>
-
+        <main>
+          <header>
             
-
+            <h1 class="title">oranda-empty-test</h1>
             
-                <li><a href="/artifacts/">Install</a></li>
-            
+  <nav class="nav">
+    <ul>
+      <li><a href="/">Home</a></li>
 
-            
+      
 
-            
+      
+        <li><a href="/artifacts/">Install</a></li>
+      
 
-            
-                <li><a href="/changelog/">Changelog</a></li>
-            
-        </ul>
-    </nav>
+      
 
-                    </header>
+      
 
-                    
-<div>
+      
+        <li><a href="/changelog/">Changelog</a></li>
+      
+    </ul>
+  </nav>
+
+          </header>
+
+          
+  <div>
     <div class="package-managers-downloads">
-        
+      
     </div>
     <div>
-        <h3>Downloads</h3>
-        <table class="artifacts-table">
-            <tbody>
-                <tr>
-                    <th>File</th>
-                    <th>Platform</th>
-                    
-                </tr>
-                
-            </tbody>
-        </table>
+      <h3>Downloads</h3>
+      <table class="artifacts-table">
+        <tbody>
+          <tr>
+            <th>File</th>
+            <th>Platform</th>
+            
+          </tr>
+          
+        </tbody>
+      </table>
     </div>
-</div>
+  </div>
 
-                </main>
-            </div>
+        </main>
+      </div>
 
-            <footer>
-                
-                    <a href="https://github.com/oranda-gallery/oranda-empty-test"><div class="github-icon" aria-hidden="true"></div></a>
-                
-                <span>
-                    oranda-empty-test
-                </span>
-            </footer>
-        </div>
-
+      <footer>
         
+          <a href="https://github.com/oranda-gallery/oranda-empty-test"><div class="github-icon" aria-hidden="true"></div></a>
         
+        <span>
+          oranda-empty-test
+        </span>
+      </footer>
+    </div>
 
-        
-<script src="/artifacts.js"></script>
+    
+    
 
-    </body>
+    
+  <script src="/artifacts.js"></script>
+
+  </body>
 </html>
 ================ public/artifacts.json ================
 {"format_version":"0.5.0","tag":"0.1.0","formatted_date":null,"platforms_with_downloads":[],"downloadable_files":[],"release":{"artifacts":{"files":[],"installers":[],"targets":{}}},"os_script":"/artifacts.js","has_checksum_files":false}
 ================ public/changelog/index.html ================
 <!DOCTYPE html>
 <html lang="en" id="oranda" class="dark">
-    <head>
-        <title>oranda-empty-test</title>
+  <head>
+    <title>oranda-empty-test</title>
+    
+    
+      <link rel="icon" href="/favicon.ico" />
+    
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="oranda-empty-test" />
+    
+    
+    
+    <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
+    <link rel="stylesheet" href="/oranda.css" />
+    
+    
+  </head>
+  <body>
+    <div class="container">
+      <div class="page-body">
         
+          <div class="repo_banner">
+            <a href="https://github.com/oranda-gallery/oranda-empty-test">
+              <div class="github-icon" aria-hidden="true"></div>
+              Check out our GitHub!
+            </a>
+          </div>
         
-            <link rel="icon" href="/favicon.ico" />
-        
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="oranda-empty-test" />
-        
-        
-        
-        <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
-        <link rel="stylesheet" href="/oranda.css" />
-        
-        
-    </head>
-    <body>
-        <div class="container">
-            <div class="page-body">
-                
-                    <div class="repo_banner">
-                        <a href="https://github.com/oranda-gallery/oranda-empty-test">
-                            <div class="github-icon" aria-hidden="true"></div>
-                            Check out our GitHub!
-                        </a>
-                    </div>
-                
 
-                <main>
-                    <header>
-                        
-                        <h1 class="title">oranda-empty-test</h1>
-                        
-    <nav class="nav">
-        <ul>
-            <li><a href="/">Home</a></li>
-
+        <main>
+          <header>
             
-
+            <h1 class="title">oranda-empty-test</h1>
             
-                <li><a href="/artifacts/">Install</a></li>
-            
+  <nav class="nav">
+    <ul>
+      <li><a href="/">Home</a></li>
 
-            
+      
 
-            
+      
+        <li><a href="/artifacts/">Install</a></li>
+      
 
-            
-                <li><a href="/changelog/">Changelog</a></li>
-            
-        </ul>
-    </nav>
+      
 
-                    </header>
+      
 
-                    
-<div>
+      
+        <li><a href="/changelog/">Changelog</a></li>
+      
+    </ul>
+  </nav>
+
+          </header>
+
+          
+  <div>
     <h1>
-        Releases
-        
-          <a href="/changelog.rss" class="inline-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+      Releases
+      
+        <a href="/changelog.rss" class="inline-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
   <path d="M3.75 3a.75.75 0 00-.75.75v.5c0 .414.336.75.75.75H4c6.075 0 11 4.925 11 11v.25c0 .414.336.75.75.75h.5a.75.75 0 00.75-.75V16C17 8.82 11.18 3 4 3h-.25z" />
   <path d="M3 8.75A.75.75 0 013.75 8H4a8 8 0 018 8v.25a.75.75 0 01-.75.75h-.5a.75.75 0 01-.75-.75V16a6 6 0 00-6-6h-.25A.75.75 0 013 9.25v-.5zM7 15a2 2 0 11-4 0 2 2 0 014 0z" />
 </svg></a>
-        
+      
     </h1>
     <div class="releases-wrapper">
-        <nav class="releases-nav">
-            
+      <nav class="releases-nav">
+        
 
-            
-                <p>No releases yet!</p>
-            
-            <ul>
-                
-            </ul>
-        </nav>
+        
+          <p>No releases yet!</p>
+        
+        <ul>
+          
+        </ul>
+      </nav>
 
-        <div class="releases-list">
-            
-        </div>
+      <div class="releases-list">
+        
+      </div>
     </div>
-</div>
+  </div>
 
-                </main>
-            </div>
+        </main>
+      </div>
 
-            <footer>
-                
-                    <a href="https://github.com/oranda-gallery/oranda-empty-test"><div class="github-icon" aria-hidden="true"></div></a>
-                
-                <span>
-                    oranda-empty-test
-                </span>
-            </footer>
-        </div>
-
+      <footer>
         
+          <a href="https://github.com/oranda-gallery/oranda-empty-test"><div class="github-icon" aria-hidden="true"></div></a>
         
+        <span>
+          oranda-empty-test
+        </span>
+      </footer>
+    </div>
 
-        
-<script src="/artifacts.js"></script>
+    
+    
 
-    </body>
+    
+  <script src="/artifacts.js"></script>
+
+  </body>
 </html>
 ================ public/index.html ================
 <!DOCTYPE html>
 <html lang="en" id="oranda" class="dark">
-    <head>
-        <title>oranda-empty-test</title>
+  <head>
+    <title>oranda-empty-test</title>
+    
+    
+      <link rel="icon" href="/favicon.ico" />
+    
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="oranda-empty-test" />
+    
+    
+    
+    <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
+    <link rel="stylesheet" href="/oranda.css" />
+    
+    
+  </head>
+  <body>
+    <div class="container">
+      <div class="page-body">
         
+          <div class="repo_banner">
+            <a href="https://github.com/oranda-gallery/oranda-empty-test">
+              <div class="github-icon" aria-hidden="true"></div>
+              Check out our GitHub!
+            </a>
+          </div>
         
-            <link rel="icon" href="/favicon.ico" />
-        
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="oranda-empty-test" />
-        
-        
-        
-        <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
-        <link rel="stylesheet" href="/oranda.css" />
-        
-        
-    </head>
-    <body>
-        <div class="container">
-            <div class="page-body">
-                
-                    <div class="repo_banner">
-                        <a href="https://github.com/oranda-gallery/oranda-empty-test">
-                            <div class="github-icon" aria-hidden="true"></div>
-                            Check out our GitHub!
-                        </a>
-                    </div>
-                
 
-                <main>
-                    <header>
-                        
-                        <h1 class="title">oranda-empty-test</h1>
-                        
-    <nav class="nav">
-        <ul>
-            <li><a href="/">Home</a></li>
-
+        <main>
+          <header>
             
-
+            <h1 class="title">oranda-empty-test</h1>
             
-                <li><a href="/artifacts/">Install</a></li>
-            
+  <nav class="nav">
+    <ul>
+      <li><a href="/">Home</a></li>
 
-            
+      
 
-            
+      
+        <li><a href="/artifacts/">Install</a></li>
+      
 
-            
-                <li><a href="/changelog/">Changelog</a></li>
-            
-        </ul>
-    </nav>
+      
 
-                    </header>
+      
 
-                    
+      
+        <li><a href="/changelog/">Changelog</a></li>
+      
+    </ul>
+  </nav>
+
+          </header>
+
+          
 
 
     <p>hey</p>
 
 
 
-                </main>
-            </div>
+        </main>
+      </div>
 
-            <footer>
-                
-                    <a href="https://github.com/oranda-gallery/oranda-empty-test"><div class="github-icon" aria-hidden="true"></div></a>
-                
-                <span>
-                    oranda-empty-test
-                </span>
-            </footer>
-        </div>
+      <footer>
+        
+          <a href="https://github.com/oranda-gallery/oranda-empty-test"><div class="github-icon" aria-hidden="true"></div></a>
+        
+        <span>
+          oranda-empty-test
+        </span>
+      </footer>
+    </div>
 
-        
-        
+    
+    
 
-        
+    
 
     <script src="/artifacts.js"></script>
 
 
-    </body>
+  </body>
 </html>
 
