@@ -29,7 +29,12 @@ ul.tabs li {
   @apply hover:cursor-pointer m-0 px-3 py-2 text-base;
 }
 
-ul.tabs li.selected {
+ul.tabs li small {
+  @apply text-xs text-gray-400 block;
+}
+
+ul.tabs li.selected,
+ul.tabs li.selected small {
   color: var(--highlight-bg-color);
   background-color: var(--highlight-fg-color);
 }

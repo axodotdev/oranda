@@ -19,6 +19,10 @@
                 {# Select the first tab #}
                 <li class="install-tab{% if simple_platforms and loop.first %} selected{% endif %}" data-id="{{ i }}" data-triple="{{ platform.target | first }}">
                   {{ installer.label }}
+
+                  {% if installer.app_name %}
+                    <small>({{ installer.app_name }})</small>
+                  {% endif %}
                 </li>
               {% endfor %}
             </ul>
