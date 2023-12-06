@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
 {% if page.artifacts and page.artifacts.downloadable_files | length != 0 %}
-    {% include "includes/artifacts_header.html" %}
+    {% include "includes/install_widget.html" %}
 {% endif %}
 {% if markdown_content %}
     {{ markdown_content }}
