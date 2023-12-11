@@ -170,6 +170,7 @@ impl ReleaseArtifacts {
             let installer = Installer {
                 label,
                 description,
+                app_name: self.app_name.clone(),
                 targets,
                 method,
                 display: DisplayPreference::Preferred,

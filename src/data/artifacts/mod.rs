@@ -87,6 +87,9 @@ pub struct Installer {
     pub label: String,
     /// A longer description of the installer
     pub description: String,
+    /// Which application this installer belongs to. Optional because it's only needed if we have multiple
+    /// similar install methods for different apps (e.g. two "sh" installer scripts)
+    pub app_name: Option<String>,
     /// What targets this supports, and how this installer should be preferred on that target
     #[serde(skip)]
     pub targets: HashMap<TargetTriple, InstallerPreference>,
@@ -339,6 +342,7 @@ fn simple_run_installer(label: &str, script: &str) -> Installer {
     Installer {
         label: label.to_owned(),
         description: String::new(),
+        app_name: None,
         targets: preference_to_targets(vec![], InstallerPreference::Custom),
         method: InstallMethod::Run {
             file: None,

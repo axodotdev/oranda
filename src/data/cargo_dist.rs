@@ -101,6 +101,7 @@ impl ReleaseArtifacts {
                 let installer = Installer {
                     label,
                     description: artifact.description.clone().unwrap_or_default(),
+                    app_name: (manifest.releases.len() > 1).then_some(app.app_name.clone()),
                     targets,
                     method,
                     display: DisplayPreference::Preferred,
