@@ -44,6 +44,9 @@ pub enum OrandaError {
     UrlParse(#[from] url::ParseError),
 
     #[error(transparent)]
+    Gazenot(#[from] gazenot::error::GazenotError),
+
+    #[error(transparent)]
     #[diagnostic(transparent)]
     GenerateCss(#[from] oranda_generate_css::errors::GenerateCssError),
 
@@ -63,6 +66,9 @@ pub enum OrandaError {
         #[source]
         details: octolotl::OctolotlError,
     },
+
+    #[error("Failed fetching releases from axo Releases.")]
+    AxoReleasesFetchError,
 
     #[error("Failed parsing response when fetching releases from Github.")]
     GithubReleaseParseError {

@@ -11,7 +11,7 @@ pub use artifacts::{ArtifactsConfig, ArtifactsLayer, PackageManagersConfig, Pack
 pub use funding::{FundingConfig, FundingLayer};
 pub use mdbooks::{MdBookConfig, MdBookLayer};
 
-use super::{ApplyBoolLayerExt, ApplyLayer, BoolOr};
+use super::{ApplyBoolLayerExt, ApplyLayer, ApplyOptExt, BoolOr};
 
 /// Extra components (complete version)
 #[derive(Debug, Clone)]
@@ -38,6 +38,8 @@ pub struct ComponentConfig {
     /// if we fail to auto-detect necessary information or if the user
     /// manually disables it.
     pub artifacts: Option<ArtifactsConfig>,
+    /// Which source to fetch release data from.
+    pub source: Option<ReleasesSource>,
 }
 /// Extra components
 #[derive(Debug, Serialize, Deserialize, JsonSchema)]
@@ -171,7 +173,24 @@ pub struct ComponentLayer {
     /// turn on plain GitHub Releases integration. You either need to have cargo-dist
     /// integration enabled, or add a random package_manager to make us enable it.
     pub artifacts: Option<BoolOr<ArtifactsLayer>>,
+    /// Where we should attempt to fetch release data from.
+    pub source: Option<ReleasesSource>,
 }
+
+/// Denotes a host for releases. Historically, this has only been GitHub, but we now also
+/// support alternative providers.
+///
+/// - "github": Attempt to fetch releases from the GitHub repository the user set in their
+///   configuration.
+/// - "axodotdev": Attempt to fetch from axo Releases, using the GitHub repository the user
+///   has set in their configuration as the project name.
+#[derive(Serialize, Deserialize, Clone, Debug, JsonSchema)]
+#[serde(rename_all = "lowercase")]
+pub enum ReleasesSource {
+    GitHub,
+    Axodotdev,
+}
+
 impl Default for ComponentConfig {
     fn default() -> Self {
         ComponentConfig {
@@ -179,6 +198,7 @@ impl Default for ComponentConfig {
             mdbook: Some(MdBookConfig::default()),
             funding: Some(FundingConfig::default()),
             artifacts: Some(ArtifactsConfig::default()),
+            source: Some(ReleasesSource::GitHub),
         }
     }
 }
@@ -191,11 +211,13 @@ impl ApplyLayer for ComponentConfig {
             mdbook,
             funding,
             artifacts,
+            source,
         } = layer;
         self.changelog.apply_bool_layer(changelog);
         self.mdbook.apply_bool_layer(mdbook);
         self.funding.apply_bool_layer(funding);
         self.artifacts.apply_bool_layer(artifacts);
+        self.source.apply_opt(source);
     }
 }
 impl ComponentConfig {

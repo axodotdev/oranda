@@ -23,6 +23,7 @@
     - [`logo`](#styleslogo) - custom site logo
     - [`favicon`](#stylesfavicon) - custom site favicon
 - [`components`](#components)
+    - [`source`](#componentssource) - change where oranda pulls your release data from
     - [`changelog`](#componentschangelog) - extract your changelog from GitHub automatically
     - [`mdbook`](#componentsmdbook-or-componentsmd_book) - let us render a mdbook site for you
     - [`funding`](#componentsfunding) - configuration for rendering a site related to project funding methods
@@ -286,6 +287,23 @@ Path to a custom favicon.
 ## components
 
 Configuration regarding extra components/functionality that oranda supports.
+
+### components.source
+
+> Added in version 0.6.0.
+
+- Type: string, Default: `github`
+
+Controls where oranda should pull releases data from. Possible choices are:
+
+#### `github` (default)
+
+Attempts to pull release data from GitHub Releases, using the repository specified for your project.
+
+#### `axodotdev`
+
+Attempts to pull release data from axo Releases. Since you can have multiple packages under the
+same project namespace on axo Releases, we use your project's name as the package name. 
 
 ### components.artifacts
 

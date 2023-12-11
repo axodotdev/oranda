@@ -1,9 +1,12 @@
 use crate::config::{ArtifactsConfig, ProjectConfig};
+use crate::data::axodotdev::AxoRelease;
 use crate::data::github::GithubRelease;
 use crate::data::release::CurrentStateRelease;
+use crate::data::release::ReleaseSource;
 use crate::errors::*;
 
 pub mod artifacts;
+pub mod axodotdev;
 pub mod cargo_dist;
 pub mod funding;
 pub mod github;
@@ -11,8 +14,6 @@ mod release;
 pub mod workspaces;
 
 pub use release::Release;
-
-use self::release::ReleaseSource;
 
 use axoproject::GithubRepo;
 
@@ -60,7 +61,31 @@ impl Context {
         artifacts_config: Option<&ArtifactsConfig>,
     ) -> Result<Self> {
         let repo = GithubRepo::from_url(repo_url)?;
-        let mut releases = Self::fetch_all_releases(&repo, artifacts_config)?;
+        let mut releases = Self::fetch_all_github_releases(&repo, artifacts_config)?;
+        if releases.is_empty() {
+            releases = tokio::runtime::Handle::current().block_on(Self::make_current_release(
+                Some(&repo),
+                project_config,
+                artifacts_config,
+            ))?;
+        }
+        Ok(Self::with_releases(
+            Some(repo),
+            releases,
+            artifacts_config,
+            project_config,
+        ))
+    }
+
+    /// Get releases using axo Releases
+    pub fn new_axodotdev(
+        package_name: &str,
+        repo_url: &str,
+        project_config: &ProjectConfig,
+        artifacts_config: Option<&ArtifactsConfig>,
+    ) -> Result<Self> {
+        let repo = GithubRepo::from_url(repo_url)?;
+        let mut releases = Self::fetch_all_axodotdev_releases(package_name, &repo, artifacts_config)?;
         if releases.is_empty() {
             releases = tokio::runtime::Handle::current().block_on(Self::make_current_release(
                 Some(&repo),
@@ -88,7 +113,7 @@ impl Context {
     }
 
     /// Fetch and process all the Github Releases to produce a final result
-    pub fn fetch_all_releases(
+    pub fn fetch_all_github_releases(
         repo: &GithubRepo,
         artifacts_config: Option<&ArtifactsConfig>,
     ) -> Result<Vec<Release>> {
@@ -98,6 +123,26 @@ impl Context {
             futures_util::future::try_join_all(gh_releases.into_iter().map(|gh_release| {
                 Release::new(
                     ReleaseSource::Github(gh_release),
+                    Some(repo),
+                    artifacts_config,
+                )
+            })),
+        )?;
+        Ok(all)
+    }
+
+    /// Fetch and process all the axo Releases to produce a final result
+    pub fn fetch_all_axodotdev_releases(
+        package_name: &str,
+        repo: &GithubRepo,
+        artifacts_config: Option<&ArtifactsConfig>,
+    ) -> Result<Vec<Release>> {
+        let axo_releases =
+            tokio::runtime::Handle::current().block_on(AxoRelease::fetch_all(package_name, repo))?;
+        let all = tokio::runtime::Handle::current().block_on(
+            futures_util::future::try_join_all(axo_releases.into_iter().map(|axo_release| {
+                Release::new(
+                    ReleaseSource::Axodotdev(axo_release),
                     Some(repo),
                     artifacts_config,
                 )

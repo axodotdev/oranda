@@ -8,11 +8,13 @@ use crate::data::{cargo_dist, github::GithubRelease, GithubRepo};
 use crate::errors::*;
 
 use super::artifacts::ReleaseArtifacts;
+use super::axodotdev::AxoRelease;
 
 #[allow(clippy::large_enum_variant)]
 #[derive(Serialize, Debug, Clone)]
 pub enum ReleaseSource {
     Github(GithubRelease),
+    Axodotdev(AxoRelease),
     CurrentState(CurrentStateRelease),
 }
 
@@ -30,6 +32,7 @@ impl ReleaseSource {
     pub fn version_tag(&self) -> &str {
         match self {
             ReleaseSource::Github(src) => &src.tag_name,
+            ReleaseSource::Axodotdev(src) => &src.tag_name,
             ReleaseSource::CurrentState(src) => src.version.as_deref().unwrap_or("current"),
         }
     }
@@ -38,6 +41,7 @@ impl ReleaseSource {
     pub fn is_prerelease(&self) -> bool {
         match self {
             ReleaseSource::Github(src) => src.prerelease,
+            ReleaseSource::Axodotdev(src) => src.prerelease,
             ReleaseSource::CurrentState(src) => src.prerelease,
         }
     }
@@ -46,6 +50,7 @@ impl ReleaseSource {
     pub fn date(&self) -> Option<&str> {
         match self {
             ReleaseSource::Github(src) => Some(src.published_at.as_str()),
+            ReleaseSource::Axodotdev(src) => Some(src.created_at.as_str()),
             ReleaseSource::CurrentState(src) => src.date.as_deref(),
         }
     }
@@ -65,6 +70,7 @@ impl ReleaseSource {
     pub fn name(&self) -> Option<&str> {
         match self {
             ReleaseSource::Github(src) => src.name.as_deref(),
+            ReleaseSource::Axodotdev(src) => Some(src.name.as_str()),
             ReleaseSource::CurrentState(_src) => None,
         }
     }
@@ -73,6 +79,7 @@ impl ReleaseSource {
     pub(crate) fn body(&self) -> Option<&str> {
         match self {
             ReleaseSource::Github(src) => src.body.as_deref(),
+            ReleaseSource::Axodotdev(src) => Some(src.body.as_str()),
             ReleaseSource::CurrentState(_src) => None,
         }
     }
@@ -109,7 +116,13 @@ impl Release {
 
         let manifest = if let (ReleaseSource::Github(gh_release), Some(repo)) = (&source, repo) {
             if artifacts_config.cargo_dist {
-                Self::fetch_manifest(gh_release, repo).await?
+                Self::fetch_manifest_github(gh_release, repo).await?
+            } else {
+                None
+            }
+        } else if let ReleaseSource::Axodotdev(axo_release) = &source {
+            if artifacts_config.cargo_dist {
+                Self::fetch_manifest_axodotdev(axo_release).await?
             } else {
                 None
             }
@@ -127,6 +140,9 @@ impl Release {
         // Add data from various sources
         if let ReleaseSource::Github(gh_release) = &source {
             artifacts.add_github(gh_release);
+        }
+        if let ReleaseSource::Axodotdev(axo_release) = &source {
+            artifacts.add_axodotdev(axo_release);
         }
         if let Some(manifest) = &manifest {
             artifacts.add_cargo_dist(manifest);
@@ -149,7 +165,7 @@ impl Release {
         !self.artifacts.installers_by_target().is_empty()
     }
 
-    async fn fetch_manifest(
+    async fn fetch_manifest_github(
         gh_release: &GithubRelease,
         repo: &GithubRepo,
     ) -> Result<Option<DistManifest>> {
@@ -167,6 +183,20 @@ impl Release {
                 .error_for_status()?;
 
             Ok(Self::parse_response(response, &gh_release.tag_name).await?)
+        } else {
+            Ok(None)
+        }
+    }
+
+    async fn fetch_manifest_axodotdev(axo_release: &AxoRelease) -> Result<Option<DistManifest>> {
+        let mut encoded_tag = String::new();
+        url_escape::encode_component_to_string(&axo_release.tag_name, &mut encoded_tag);
+        if axo_release.has_dist_manifest() {
+            let response = reqwest::get(axo_release.asset_url("dist-manifest.json").unwrap())
+                .await?
+                .error_for_status()?;
+
+            Ok(Self::parse_response(response, &axo_release.tag_name).await?)
         } else {
             Ok(None)
         }

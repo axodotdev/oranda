@@ -100,7 +100,7 @@ pub use self::oranda_config::OrandaLayer;
 pub use builds::{BuildConfig, BuildLayer};
 pub use components::{
     ArtifactsConfig, ArtifactsLayer, ComponentConfig, ComponentLayer, FundingConfig, FundingLayer,
-    MdBookConfig, MdBookLayer, PackageManagersConfig, PackageManagersLayer,
+    MdBookConfig, MdBookLayer, PackageManagersConfig, PackageManagersLayer, ReleasesSource,
 };
 pub use marketing::{AnalyticsConfig, MarketingConfig, MarketingLayer, SocialConfig, SocialLayer};
 pub use workspace::{WorkspaceConfig, WorkspaceLayer, WorkspaceMember};
