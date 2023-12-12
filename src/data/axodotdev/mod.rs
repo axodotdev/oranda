@@ -33,8 +33,13 @@ pub struct AxoReleaseAsset {
 impl AxoRelease {
     pub async fn fetch_all(package_name: &str, repo: &GithubRepo) -> Result<Vec<AxoRelease>> {
         let abyss = Gazenot::new_unauthed("github".to_string(), repo.owner.clone())?;
-        let list = abyss.list_releases_many(vec![package_name.to_string()]).await?;
-        let list = list.into_iter().find(|r| r.package_name == package_name).ok_or(OrandaError::AxoReleasesFetchError)?;
+        let list = abyss
+            .list_releases_many(vec![package_name.to_string()])
+            .await?;
+        let list = list
+            .into_iter()
+            .find(|r| r.package_name == package_name)
+            .ok_or(OrandaError::AxoReleasesFetchError)?;
 
         Ok(list.releases.into_iter().map(|r| r.into()).collect())
     }
@@ -86,14 +91,13 @@ impl ReleaseArtifacts {
     }
 }
 
-
 impl From<ReleaseAsset> for AxoReleaseAsset {
     fn from(value: ReleaseAsset) -> Self {
-       let ReleaseAsset {
-           browser_download_url,
-           name,
-           uploaded_at,
-       } = value;
+        let ReleaseAsset {
+            browser_download_url,
+            name,
+            uploaded_at,
+        } = value;
 
         Self {
             browser_download_url,
@@ -104,15 +108,15 @@ impl From<ReleaseAsset> for AxoReleaseAsset {
 }
 impl From<PublicRelease> for AxoRelease {
     fn from(value: PublicRelease) -> Self {
-       let PublicRelease {
-           tag_name,
-           version,
-           name,
-           body,
-           prerelease,
-           created_at,
-           assets,
-       } = value;
+        let PublicRelease {
+            tag_name,
+            version,
+            name,
+            body,
+            prerelease,
+            created_at,
+            assets,
+        } = value;
 
         let assets: Vec<AxoReleaseAsset> = assets.into_iter().map(|a| a.into()).collect();
 

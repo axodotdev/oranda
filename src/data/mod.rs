@@ -85,7 +85,8 @@ impl Context {
         artifacts_config: Option<&ArtifactsConfig>,
     ) -> Result<Self> {
         let repo = GithubRepo::from_url(repo_url)?;
-        let mut releases = Self::fetch_all_axodotdev_releases(package_name, &repo, artifacts_config)?;
+        let mut releases =
+            Self::fetch_all_axodotdev_releases(package_name, &repo, artifacts_config)?;
         if releases.is_empty() {
             releases = tokio::runtime::Handle::current().block_on(Self::make_current_release(
                 Some(&repo),
@@ -137,8 +138,8 @@ impl Context {
         repo: &GithubRepo,
         artifacts_config: Option<&ArtifactsConfig>,
     ) -> Result<Vec<Release>> {
-        let axo_releases =
-            tokio::runtime::Handle::current().block_on(AxoRelease::fetch_all(package_name, repo))?;
+        let axo_releases = tokio::runtime::Handle::current()
+            .block_on(AxoRelease::fetch_all(package_name, repo))?;
         let all = tokio::runtime::Handle::current().block_on(
             futures_util::future::try_join_all(axo_releases.into_iter().map(|axo_release| {
                 Release::new(
