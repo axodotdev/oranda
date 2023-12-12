@@ -7,7 +7,7 @@ use indexmap::IndexMap;
 use minijinja::context;
 use tracing::instrument;
 
-use crate::config::{AxoprojectLayer, Config};
+use crate::config::{AxoprojectLayer, Config, ReleasesSource};
 use crate::data::github::GithubRelease;
 use crate::data::{funding::Funding, workspaces, Context};
 use crate::errors::*;
@@ -265,29 +265,35 @@ impl Site {
     }
 
     fn build_context(config: &Config) -> Result<Context> {
-        config
-            .project
-            .repository
-            .as_ref()
-            .and_then(|repo_url| {
-                match Context::new_github(
-                    repo_url,
+        let Some(repo_url) = config.project.repository.as_ref() else {
+            return Context::new_current(&config.project, config.components.artifacts.as_ref());
+        };
+        let maybe_ctx = match config.components.source {
+            Some(ReleasesSource::GitHub) | None => Context::new_github(
+                repo_url,
+                &config.project,
+                config.components.artifacts.as_ref(),
+            ),
+            Some(ReleasesSource::Axodotdev) => Context::new_axodotdev(
+                &config.project.name,
+                repo_url,
+                &config.project,
+                config.components.artifacts.as_ref(),
+            ),
+        };
+
+        match maybe_ctx {
+            Ok(c) => Ok(c),
+            Err(e) => {
+                // We don't want to hard error here, as we can most likely keep on going even
+                // without a well-formed context.
+                eprintln!("{:?}", miette::Report::new(e));
+                Ok(Context::new_current(
                     &config.project,
                     config.components.artifacts.as_ref(),
-                ) {
-                    Ok(c) => Some(c),
-                    Err(e) => {
-                        // We don't want to hard error here, as we can most likely keep on going even
-                        // without a well-formed context.
-                        eprintln!("{:?}", miette::Report::new(e));
-                        None
-                    }
-                }
-            })
-            .map(Ok)
-            .unwrap_or_else(|| {
-                Context::new_current(&config.project, config.components.artifacts.as_ref())
-            })
+                )?)
+            }
+        }
     }
 
     fn build_additional_pages(

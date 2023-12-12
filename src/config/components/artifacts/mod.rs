@@ -47,9 +47,9 @@ pub struct ArtifactsConfig {
 #[derive(Debug, Default, Serialize, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct ArtifactsLayer {
-    /// Whether to enable auto-detection of artifacts/installers in your Github Releases
+    /// Whether to enable auto-detection of artifacts/installers in your Releases
     ///
-    /// This allows us to look at the assets listed in a Github Release and use their
+    /// This allows us to look at the assets listed in a Release and use their
     /// names to guess their platforms and what they're for.
     ///
     /// If `cargo_dist` is also enabled, that data source will be preferred over this one
@@ -75,9 +75,9 @@ pub struct ArtifactsLayer {
     pub auto: Option<bool>,
     /// Whether to enable cargo-dist integration
     ///
-    /// If enabled, we will check every GitHub Release of your project for a dist-manifest.json
+    /// If enabled, we will check every Release of your project for a dist-manifest.json
     /// and use that as the authoritative source of information on the artifacts uploaded to your
-    /// Github Release.
+    /// Release.
     ///
     /// This integration only works if `project.repository` points to a GitHub repo (see that field's
     /// docs for details).
