@@ -1,5 +1,46 @@
 # Changelog
 
+## Unreleased
+
+### Features
+
+- **axo Releases support** - [impl](https://github.com/axodotdev/oranda/pull/672)
+  
+  oranda how supports axo's homegrown release hosting service, axo Releases! At the time of drafting these notes,
+  axo Releases is still in closed beta, however, if you have access and want to try it out, you can set the following
+  configuration parameter:
+
+  ```json
+  {
+    "components": {
+      "source": "axodotdev"
+    }
+  }
+  ```
+  
+- **App names show on multi-app releases** - [impl](https://github.com/axodotdev/oranda/pull/671), issue [#1](https://github.com/axodotdev/oranda/pull/666), [#2](https://github.com/axodotdev/oranda/issues/665) (thanks 
+  to [aumetra]!)
+  
+  If you use oranda to work with a project that publishes multiple differently-named binaries, your install widget may
+  end up looking very confusing, with lots of similarly-named tabs. Previously, your options were to set up a
+  [workspace][workspace-docs], or to set the [`components.artifacts.match_package_names`][package-names] configuration
+  setting. With this release, if you want to keep everything inside of a single website, the install widget will now
+  show the app names in the tabs, like this:
+
+  ![picture of an app with lots of tabs and app names](https://i.imgur.com/K0NG2SQ.png)
+
+  There's no configuration for this, it'll automatically enable if oranda detects that you have multiple "installable"
+  apps in your release assets.
+
+### Housekeeping
+
+- Minor cleanups to the source code, such as finally settling the "who has the better line endings, Linux or 
+  Windows" debate (it's Linux)
+
+[aumetra]: https://github.com/aumetra
+[workspace-docs]: https://opensource.axo.dev/oranda/book/configuration/workspaces.html
+[package-names]: https://opensource.axo.dev/oranda/book/configuration/reference.html#componentsartifactsmatch_package_names
+
 ## 0.5.0 - 2023-10-10
 
 ### Features
