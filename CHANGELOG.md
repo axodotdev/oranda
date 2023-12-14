@@ -18,6 +18,8 @@
   }
   ```
   
+  Doing so will cause oranda to not fetch from GitHub _at all_, instead using axo Releases as a source of truth for your release data.
+  
 - **App names show on multi-app releases** - [impl](https://github.com/axodotdev/oranda/pull/671), issue [#1](https://github.com/axodotdev/oranda/pull/666), [#2](https://github.com/axodotdev/oranda/issues/665) (thanks 
   to [aumetra]!)
   
@@ -31,6 +33,13 @@
 
   There's no configuration for this, it'll automatically enable if oranda detects that you have multiple "installable"
   apps in your release assets.
+
+### Bug Fixes
+
+- **Fixed a bug that could cause mdbook compilation to recurse infinitely** - [impl](https://github.com/axodotdev/oranda/pull/674), [issue](https://github.com/axodotdev/oranda/issues/669)
+
+  mdbook makes it very easy to put your book destination directory in the same directory as your book source, which in turn
+  causes your built files to be read as source files, over and over again. We detect this now and don't let you do it anymore.
 
 ### Housekeeping
 
