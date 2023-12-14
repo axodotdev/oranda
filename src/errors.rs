@@ -145,6 +145,13 @@ pub enum OrandaError {
         #[source]
         details: mdbook::errors::Error,
     },
+
+    #[error("Can't build mdbook because book output directory {dest_path} is under book source directory {src_path}")]
+    #[diagnostic(help(
+        "Make sure that your book source does not contain your book output directory, as that will lead to infinite recursion. Change either the `src` setting or the `build_dir` setting in your book.toml."
+    ))]
+    MdbookBuildRecursive { src_path: String, dest_path: String },
+
     #[error("We found a potential {kind} project at {manifest_path} but there was an issue")]
     #[diagnostic(severity = "warn")]
     BrokenProject {
