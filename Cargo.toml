@@ -3,7 +3,7 @@ name = "oranda"
 description = "🎁 generate beautiful landing pages for your projects"
 repository = "https://github.com/axodotdev/oranda"
 homepage = "https://opensource.axo.dev/oranda"
-version = "0.6.0-prerelease.1"
+version = "0.6.0-prerelease.2"
 edition = "2021"
 authors = ["Axo Developer Co. <hello@axo.dev>"]
 license = "MIT OR Apache-2.0"
@@ -70,7 +70,7 @@ glob = "0.3.1"
 scraper = "0.17.1"
 
 [build-dependencies]
-oranda-generate-css = { version = "0.6.0-prerelease.1", path = "generate-css" }
+oranda-generate-css = { version = "0.6.0-prerelease.2", path = "generate-css" }
 tokio = { version = "1.20.1", features = ["full"] }
 
 [features]
