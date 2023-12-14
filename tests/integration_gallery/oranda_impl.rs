@@ -323,8 +323,17 @@ pub fn snapshot_settings_with_version_filter() -> insta::Settings {
     settings
 }
 
-pub fn snapshot_settings_with_oranda_css_filter() -> insta::Settings {
+pub fn snapshot_settings_with_format_version_filter() -> insta::Settings {
     let mut settings = snapshot_settings();
+    settings.add_filter(
+        r#""format_version":"[a-zA-Z0-9.-]*""#,
+        r#""format_version":"CENSORED""#,
+    );
+    settings
+}
+
+pub fn snapshot_settings_with_oranda_css_filter() -> insta::Settings {
+    let mut settings = snapshot_settings_with_format_version_filter();
     settings.add_filter(
         r"oranda(-v\d+\.\d+\.\d+(\-prerelease\d*)?(\.\d+)?)?.css",
         "oranda.css",
