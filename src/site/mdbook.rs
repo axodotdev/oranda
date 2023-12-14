@@ -1,6 +1,7 @@
 use axoasset::LocalAsset;
 use camino::{Utf8Path, Utf8PathBuf};
 use mdbook::MDBook;
+use std::path::PathBuf;
 
 use crate::config::MdBookConfig;
 use crate::data::workspaces::WorkspaceData;
@@ -205,6 +206,17 @@ pub fn build_mdbook(
     let book_dir = mdbook_dir(workspace, book_cfg)?;
     let mut md = load_mdbook(&book_dir)?;
 
+    // Check if we'd be infinitely recursing due to mdbook's build output directory being
+    // in the same directory as its source (This Can Happen!)
+    let book_src = homogenize_path(&md.source_dir());
+    let book_dest = homogenize_path(&md.config.build.build_dir.clone());
+    if book_dest.starts_with(&book_src) {
+        return Err(OrandaError::MdbookBuildRecursive {
+            src_path: book_src.display().to_string(),
+            dest_path: book_dest.display().to_string(),
+        });
+    }
+
     // If custom theme is enabled, set that up
     let custom_theme = custom_theme(book_cfg, oranda_theme);
     let theme_dir = custom_theme_dir(book_cfg, dist)?;
@@ -269,6 +281,15 @@ pub fn load_mdbook(book_dir: &Utf8Path) -> Result<MDBook> {
     })?;
 
     Ok(md)
+}
+
+/// Homogenizes a relative path to start with ./
+pub fn homogenize_path(path: &PathBuf) -> PathBuf {
+    if path.is_relative() && !path.starts_with("./") {
+        return PathBuf::from(".").join(path);
+    }
+
+    path.to_owned()
 }
 
 /// Initialize a directory with our custom theme files
