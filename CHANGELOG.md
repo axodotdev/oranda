@@ -1,12 +1,12 @@
 # Changelog
 
-## Unreleased
+## 0.6.0 - 2023-12-14
 
 ### Features
 
 - **axo Releases support** - [impl](https://github.com/axodotdev/oranda/pull/672)
   
-  oranda how supports axo's homegrown release hosting service, axo Releases! At the time of drafting these notes,
+  oranda now supports axo's homegrown release hosting service, axo Releases! At time of writing,
   axo Releases is still in closed beta, however, if you have access and want to try it out, you can set the following
   configuration parameter:
 
@@ -26,7 +26,7 @@
   If you use oranda to work with a project that publishes multiple differently-named binaries, your install widget may
   end up looking very confusing, with lots of similarly-named tabs. Previously, your options were to set up a
   [workspace][workspace-docs], or to set the [`components.artifacts.match_package_names`][package-names] configuration
-  setting. With this release, if you want to keep everything inside of a single website, the install widget will now
+  setting. With this release, if you want to keep everything inside a single website, the install widget will now
   show the app names in the tabs, like this:
 
   ![picture of an app with lots of tabs and app names](https://i.imgur.com/K0NG2SQ.png)
