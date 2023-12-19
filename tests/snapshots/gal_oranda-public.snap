@@ -207,9 +207,9 @@ expression: "&snapshots"
             <h3>powershell</h3>
             <div class="install-code-wrapper">
   <pre style="background-color:#263238;">
-<span style="color:#82aaff;">irm https://github.com/axodotdev/oranda/releases/download/v0.2.0/oranda-installer.ps1 </span><span style="color:#89ddff;">| </span><span style="color:#82aaff;">iex</span></pre>
+<span style="color:#82aaff;">irm https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-installer.ps1 </span><span style="color:#89ddff;">| </span><span style="color:#82aaff;">iex</span></pre>
 
-  <button class="button copy-clipboard-button primary" data-copy="irm https://github.com/axodotdev/oranda/releases/download/v0.2.0/oranda-installer.ps1 | iex">
+  <button class="button copy-clipboard-button primary" data-copy="irm https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-installer.ps1 | iex">
     <svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 20 20' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M8 2a1 1 0 000 2h2a1 1 0 100-2H8z'></path><path d='M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z'></path></svg>
   </button>
   
@@ -230,9 +230,9 @@ expression: "&snapshots"
             <h3>shell</h3>
             <div class="install-code-wrapper">
   <pre style="background-color:#263238;">
-<span style="color:#82aaff;">curl</span><span style="color:#89ddff;"> --</span><span style="color:#f78c6c;">proto </span><span style="color:#89ddff;">&#39;</span><span style="color:#c3e88d;">=https</span><span style="color:#89ddff;">&#39; --</span><span style="color:#f78c6c;">tlsv1</span><span style="color:#82aaff;">.2</span><span style="color:#89ddff;"> -</span><span style="color:#f78c6c;">LsSf</span><span style="color:#82aaff;"> https://github.com/axodotdev/oranda/releases/download/v0.2.0/oranda-installer.sh </span><span style="color:#89ddff;">| </span><span style="color:#82aaff;">sh</span></pre>
+<span style="color:#82aaff;">curl</span><span style="color:#89ddff;"> --</span><span style="color:#f78c6c;">proto </span><span style="color:#89ddff;">&#39;</span><span style="color:#c3e88d;">=https</span><span style="color:#89ddff;">&#39; --</span><span style="color:#f78c6c;">tlsv1</span><span style="color:#82aaff;">.2</span><span style="color:#89ddff;"> -</span><span style="color:#f78c6c;">LsSf</span><span style="color:#82aaff;"> https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-installer.sh </span><span style="color:#89ddff;">| </span><span style="color:#82aaff;">sh</span></pre>
 
-  <button class="button copy-clipboard-button primary" data-copy="curl --proto '=https' --tlsv1.2 -LsSf https://github.com/axodotdev/oranda/releases/download/v0.2.0/oranda-installer.sh | sh">
+  <button class="button copy-clipboard-button primary" data-copy="curl --proto '=https' --tlsv1.2 -LsSf https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-installer.sh | sh">
     <svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 20 20' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M8 2a1 1 0 000 2h2a1 1 0 100-2H8z'></path><path d='M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z'></path></svg>
   </button>
   
@@ -373,7 +373,7 @@ expression: "&snapshots"
   </body>
 </html>
 ================ public/artifacts.json ================
-{"format_version":"CENSORED","tag":"v0.2.0","formatted_date":"Aug  8 2023 at 16:15 UTC","platforms_with_downloads":[{"target":["aarch64-apple-darwin"],"display_name":"macOS Apple Silicon","installers":[0,8,7,3]},{"target":["x86_64-apple-darwin"],"display_name":"macOS Intel","installers":[0,8,7,4]},{"target":["x86_64-pc-windows-msvc"],"display_name":"Windows x64","installers":[1,8,7,5]},{"target":["x86_64-unknown-linux-gnu"],"display_name":"Linux x64","installers":[0,8,7,6]}],"downloadable_files":[[1,{"name":"oranda-aarch64-apple-darwin.tar.gz","download_url":"https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-aarch64-apple-darwin.tar.gz","view_path":null,"checksum_file":2},["macOS Apple Silicon"]],[7,{"name":"oranda-x86_64-apple-darwin.tar.gz","download_url":"https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-x86_64-apple-darwin.tar.gz","view_path":null,"checksum_file":8},["macOS Intel"]],[9,{"name":"oranda-x86_64-pc-windows-msvc.tar.gz","download_url":"https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-x86_64-pc-windows-msvc.tar.gz","view_path":null,"checksum_file":10},["Windows x64"]],[11,{"name":"oranda-x86_64-unknown-linux-gnu.tar.gz","download_url":"https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-x86_64-unknown-linux-gnu.tar.gz","view_path":null,"checksum_file":12},["Linux x64"]]],"release":{"artifacts":{"files":[{"name":"dist-manifest.json","download_url":"https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/dist-manifest.json","view_path":null,"checksum_file":null},{"name":"oranda-aarch64-apple-darwin.tar.gz","download_url":"https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-aarch64-apple-darwin.tar.gz","view_path":null,"checksum_file":2},{"name":"oranda-aarch64-apple-darwin.tar.gz.sha256","download_url":"https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-aarch64-apple-darwin.tar.gz.sha256","view_path":null,"checksum_file":null},{"name":"oranda-config-schema.json","download_url":"https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-config-schema.json","view_path":null,"checksum_file":null},{"name":"oranda-installer.ps1","download_url":"https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-installer.ps1","view_path":"oranda-installer.ps1.txt","checksum_file":null},{"name":"oranda-installer.sh","download_url":"https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-installer.sh","view_path":"oranda-installer.sh.txt","checksum_file":null},{"name":"oranda-npm-package.tar.gz","download_url":"https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-npm-package.tar.gz","view_path":null,"checksum_file":null},{"name":"oranda-x86_64-apple-darwin.tar.gz","download_url":"https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-x86_64-apple-darwin.tar.gz","view_path":null,"checksum_file":8},{"name":"oranda-x86_64-apple-darwin.tar.gz.sha256","download_url":"https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-x86_64-apple-darwin.tar.gz.sha256","view_path":null,"checksum_file":null},{"name":"oranda-x86_64-pc-windows-msvc.tar.gz","download_url":"https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-x86_64-pc-windows-msvc.tar.gz","view_path":null,"checksum_file":10},{"name":"oranda-x86_64-pc-windows-msvc.tar.gz.sha256","download_url":"https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-x86_64-pc-windows-msvc.tar.gz.sha256","view_path":null,"checksum_file":null},{"name":"oranda-x86_64-unknown-linux-gnu.tar.gz","download_url":"https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-x86_64-unknown-linux-gnu.tar.gz","view_path":null,"checksum_file":12},{"name":"oranda-x86_64-unknown-linux-gnu.tar.gz.sha256","download_url":"https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-x86_64-unknown-linux-gnu.tar.gz.sha256","view_path":null,"checksum_file":null}],"installers":[{"label":"shell","description":"Install prebuilt binaries via shell script","app_name":null,"method":{"type":"Run","file":5,"run_hint":"curl --proto '=https' --tlsv1.2 -LsSf https://github.com/axodotdev/oranda/releases/download/v0.2.0/oranda-installer.sh | sh"}},{"label":"powershell","description":"Install prebuilt binaries via powershell script","app_name":null,"method":{"type":"Run","file":4,"run_hint":"irm https://github.com/axodotdev/oranda/releases/download/v0.2.0/oranda-installer.ps1 | iex"}},{"label":"npm","description":"Install prebuilt binaries into your npm project","app_name":null,"method":{"type":"Run","file":null,"run_hint":"npm install @axodotdev/oranda@0.2.0"}},{"label":"tarball","description":"","app_name":null,"method":{"type":"Download","file":1}},{"label":"tarball","description":"","app_name":null,"method":{"type":"Download","file":7}},{"label":"tarball","description":"","app_name":null,"method":{"type":"Download","file":9}},{"label":"tarball","description":"","app_name":null,"method":{"type":"Download","file":11}},{"label":"npm","description":"","app_name":null,"method":{"type":"Run","file":null,"run_hint":"npm install @axodotdev/oranda --save-dev"}},{"label":"cargo","description":"","app_name":null,"method":{"type":"Run","file":null,"run_hint":"cargo install oranda --locked --profile=dist"}},{"label":"npx","description":"","app_name":null,"method":{"type":"Run","file":null,"run_hint":"npx @axodotdev/oranda"}},{"label":"binstall","description":"","app_name":null,"method":{"type":"Run","file":null,"run_hint":"cargo binstall oranda"}},{"label":"nix-env","description":"","app_name":null,"method":{"type":"Run","file":null,"run_hint":"nix-env -i oranda"}},{"label":"nix flake","description":"","app_name":null,"method":{"type":"Run","file":null,"run_hint":"nix profile install github:axodotdev/oranda"}}],"targets":{"aarch64-apple-darwin":[0,8,7,3],"aarch64-pc-windows-msvc":[8,7],"aarch64-unknown-linux-gnu":[8,7],"aarch64-unknown-linux-musl":[8,7],"i686-apple-darwin":[8,7],"i686-pc-windows-msvc":[8,7],"i686-unknown-linux-gnu":[8,7],"i686-unknown-linux-musl":[8,7],"x86_64-apple-darwin":[0,8,7,4],"x86_64-pc-windows-msvc":[1,8,7,5],"x86_64-unknown-linux-gnu":[0,8,7,6],"x86_64-unknown-linux-musl":[8,7]}}},"os_script":"/oranda/artifacts.js","has_checksum_files":true}
+{"format_version":"CENSORED","tag":"v0.2.0","formatted_date":"Aug  8 2023 at 16:15 UTC","platforms_with_downloads":[{"target":["aarch64-apple-darwin"],"display_name":"macOS Apple Silicon","installers":[12,6,5,1]},{"target":["x86_64-apple-darwin"],"display_name":"macOS Intel","installers":[12,6,5,2]},{"target":["x86_64-pc-windows-msvc"],"display_name":"Windows x64","installers":[11,6,5,3]},{"target":["x86_64-unknown-linux-gnu"],"display_name":"Linux x64","installers":[12,6,5,4]}],"downloadable_files":[[1,{"name":"oranda-aarch64-apple-darwin.tar.gz","download_url":"https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-aarch64-apple-darwin.tar.gz","view_path":null,"checksum_file":2},["macOS Apple Silicon"]],[7,{"name":"oranda-x86_64-apple-darwin.tar.gz","download_url":"https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-x86_64-apple-darwin.tar.gz","view_path":null,"checksum_file":8},["macOS Intel"]],[9,{"name":"oranda-x86_64-pc-windows-msvc.tar.gz","download_url":"https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-x86_64-pc-windows-msvc.tar.gz","view_path":null,"checksum_file":10},["Windows x64"]],[11,{"name":"oranda-x86_64-unknown-linux-gnu.tar.gz","download_url":"https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-x86_64-unknown-linux-gnu.tar.gz","view_path":null,"checksum_file":12},["Linux x64"]]],"release":{"artifacts":{"files":[{"name":"dist-manifest.json","download_url":"https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/dist-manifest.json","view_path":null,"checksum_file":null},{"name":"oranda-aarch64-apple-darwin.tar.gz","download_url":"https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-aarch64-apple-darwin.tar.gz","view_path":null,"checksum_file":2},{"name":"oranda-aarch64-apple-darwin.tar.gz.sha256","download_url":"https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-aarch64-apple-darwin.tar.gz.sha256","view_path":null,"checksum_file":null},{"name":"oranda-config-schema.json","download_url":"https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-config-schema.json","view_path":null,"checksum_file":null},{"name":"oranda-installer.ps1","download_url":"https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-installer.ps1","view_path":"oranda-installer.ps1.txt","checksum_file":null},{"name":"oranda-installer.sh","download_url":"https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-installer.sh","view_path":"oranda-installer.sh.txt","checksum_file":null},{"name":"oranda-npm-package.tar.gz","download_url":"https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-npm-package.tar.gz","view_path":null,"checksum_file":null},{"name":"oranda-x86_64-apple-darwin.tar.gz","download_url":"https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-x86_64-apple-darwin.tar.gz","view_path":null,"checksum_file":8},{"name":"oranda-x86_64-apple-darwin.tar.gz.sha256","download_url":"https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-x86_64-apple-darwin.tar.gz.sha256","view_path":null,"checksum_file":null},{"name":"oranda-x86_64-pc-windows-msvc.tar.gz","download_url":"https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-x86_64-pc-windows-msvc.tar.gz","view_path":null,"checksum_file":10},{"name":"oranda-x86_64-pc-windows-msvc.tar.gz.sha256","download_url":"https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-x86_64-pc-windows-msvc.tar.gz.sha256","view_path":null,"checksum_file":null},{"name":"oranda-x86_64-unknown-linux-gnu.tar.gz","download_url":"https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-x86_64-unknown-linux-gnu.tar.gz","view_path":null,"checksum_file":12},{"name":"oranda-x86_64-unknown-linux-gnu.tar.gz.sha256","download_url":"https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-x86_64-unknown-linux-gnu.tar.gz.sha256","view_path":null,"checksum_file":null}],"installers":[{"label":"npm","description":"Install prebuilt binaries into your npm project","app_name":null,"method":{"type":"Run","file":null,"run_hint":"npm install @axodotdev/oranda@0.2.0"}},{"label":"tarball","description":"","app_name":null,"method":{"type":"Download","file":1}},{"label":"tarball","description":"","app_name":null,"method":{"type":"Download","file":7}},{"label":"tarball","description":"","app_name":null,"method":{"type":"Download","file":9}},{"label":"tarball","description":"","app_name":null,"method":{"type":"Download","file":11}},{"label":"npm","description":"","app_name":null,"method":{"type":"Run","file":null,"run_hint":"npm install @axodotdev/oranda --save-dev"}},{"label":"cargo","description":"","app_name":null,"method":{"type":"Run","file":null,"run_hint":"cargo install oranda --locked --profile=dist"}},{"label":"npx","description":"","app_name":null,"method":{"type":"Run","file":null,"run_hint":"npx @axodotdev/oranda"}},{"label":"binstall","description":"","app_name":null,"method":{"type":"Run","file":null,"run_hint":"cargo binstall oranda"}},{"label":"nix-env","description":"","app_name":null,"method":{"type":"Run","file":null,"run_hint":"nix-env -i oranda"}},{"label":"nix flake","description":"","app_name":null,"method":{"type":"Run","file":null,"run_hint":"nix profile install github:axodotdev/oranda"}},{"label":"powershell","description":"","app_name":null,"method":{"type":"Run","file":4,"run_hint":"irm https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-installer.ps1 | iex"}},{"label":"shell","description":"","app_name":null,"method":{"type":"Run","file":5,"run_hint":"curl --proto '=https' --tlsv1.2 -LsSf https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-installer.sh | sh"}}],"targets":{"aarch64-apple-darwin":[12,6,5,1],"aarch64-pc-windows-msvc":[11,6,5],"aarch64-unknown-linux-gnu":[12,6,5],"aarch64-unknown-linux-musl":[12,6,5],"i686-apple-darwin":[12,6,5],"i686-pc-windows-msvc":[11,6,5],"i686-unknown-linux-gnu":[12,6,5],"i686-unknown-linux-musl":[12,6,5],"x86_64-apple-darwin":[12,6,5,2],"x86_64-pc-windows-msvc":[11,6,5,3],"x86_64-unknown-linux-gnu":[12,6,5,4],"x86_64-unknown-linux-musl":[12,6,5]}}},"os_script":"/oranda/artifacts.js","has_checksum_files":true}
 ================ public/changelog/index.html ================
 <!DOCTYPE html>
 <html lang="en" id="oranda" class="dark axo">
@@ -1124,7 +1124,7 @@ one that it <em>can't</em> parse.</p>
               
                 
                 
-                <li class="install-tab" data-id="0" data-triple="aarch64-apple-darwin">
+                <li class="install-tab" data-id="12" data-triple="aarch64-apple-darwin">
                   shell
 
                   
@@ -1132,7 +1132,7 @@ one that it <em>can't</em> parse.</p>
               
                 
                 
-                <li class="install-tab" data-id="8" data-triple="aarch64-apple-darwin">
+                <li class="install-tab" data-id="6" data-triple="aarch64-apple-darwin">
                   cargo
 
                   
@@ -1140,7 +1140,7 @@ one that it <em>can't</em> parse.</p>
               
                 
                 
-                <li class="install-tab" data-id="7" data-triple="aarch64-apple-darwin">
+                <li class="install-tab" data-id="5" data-triple="aarch64-apple-darwin">
                   npm
 
                   
@@ -1148,7 +1148,7 @@ one that it <em>can't</em> parse.</p>
               
                 
                 
-                <li class="install-tab" data-id="3" data-triple="aarch64-apple-darwin">
+                <li class="install-tab" data-id="1" data-triple="aarch64-apple-darwin">
                   tarball
 
                   
@@ -1160,14 +1160,14 @@ one that it <em>can't</em> parse.</p>
           <ul class="contents">
             
               
-              <li data-id="0" data-triple="aarch64-apple-darwin" class="install-content">
+              <li data-id="12" data-triple="aarch64-apple-darwin" class="install-content">
                 
                   
                   <div class="install-code-wrapper">
   <pre style="background-color:#263238;">
-<span style="color:#82aaff;">curl</span><span style="color:#89ddff;"> --</span><span style="color:#f78c6c;">proto </span><span style="color:#89ddff;">&#39;</span><span style="color:#c3e88d;">=https</span><span style="color:#89ddff;">&#39; --</span><span style="color:#f78c6c;">tlsv1</span><span style="color:#82aaff;">.2</span><span style="color:#89ddff;"> -</span><span style="color:#f78c6c;">LsSf</span><span style="color:#82aaff;"> https://github.com/axodotdev/oranda/releases/download/v0.2.0/oranda-installer.sh </span><span style="color:#89ddff;">| </span><span style="color:#82aaff;">sh</span></pre>
+<span style="color:#82aaff;">curl</span><span style="color:#89ddff;"> --</span><span style="color:#f78c6c;">proto </span><span style="color:#89ddff;">&#39;</span><span style="color:#c3e88d;">=https</span><span style="color:#89ddff;">&#39; --</span><span style="color:#f78c6c;">tlsv1</span><span style="color:#82aaff;">.2</span><span style="color:#89ddff;"> -</span><span style="color:#f78c6c;">LsSf</span><span style="color:#82aaff;"> https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-installer.sh </span><span style="color:#89ddff;">| </span><span style="color:#82aaff;">sh</span></pre>
 
-  <button class="button copy-clipboard-button primary" data-copy="curl --proto '=https' --tlsv1.2 -LsSf https://github.com/axodotdev/oranda/releases/download/v0.2.0/oranda-installer.sh | sh">
+  <button class="button copy-clipboard-button primary" data-copy="curl --proto '=https' --tlsv1.2 -LsSf https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-installer.sh | sh">
     <svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 20 20' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M8 2a1 1 0 000 2h2a1 1 0 100-2H8z'></path><path d='M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z'></path></svg>
   </button>
   
@@ -1185,7 +1185,7 @@ one that it <em>can't</em> parse.</p>
               </li>
             
               
-              <li data-id="8" data-triple="aarch64-apple-darwin" class="install-content hidden">
+              <li data-id="6" data-triple="aarch64-apple-darwin" class="install-content hidden">
                 
                   
                   <div class="install-code-wrapper">
@@ -1204,7 +1204,7 @@ one that it <em>can't</em> parse.</p>
               </li>
             
               
-              <li data-id="7" data-triple="aarch64-apple-darwin" class="install-content hidden">
+              <li data-id="5" data-triple="aarch64-apple-darwin" class="install-content hidden">
                 
                   
                   <div class="install-code-wrapper">
@@ -1223,7 +1223,7 @@ one that it <em>can't</em> parse.</p>
               </li>
             
               
-              <li data-id="3" data-triple="aarch64-apple-darwin" class="install-content hidden">
+              <li data-id="1" data-triple="aarch64-apple-darwin" class="install-content hidden">
                 
 
                 
@@ -1248,7 +1248,7 @@ one that it <em>can't</em> parse.</p>
               
                 
                 
-                <li class="install-tab" data-id="0" data-triple="x86_64-apple-darwin">
+                <li class="install-tab" data-id="12" data-triple="x86_64-apple-darwin">
                   shell
 
                   
@@ -1256,7 +1256,7 @@ one that it <em>can't</em> parse.</p>
               
                 
                 
-                <li class="install-tab" data-id="8" data-triple="x86_64-apple-darwin">
+                <li class="install-tab" data-id="6" data-triple="x86_64-apple-darwin">
                   cargo
 
                   
@@ -1264,7 +1264,7 @@ one that it <em>can't</em> parse.</p>
               
                 
                 
-                <li class="install-tab" data-id="7" data-triple="x86_64-apple-darwin">
+                <li class="install-tab" data-id="5" data-triple="x86_64-apple-darwin">
                   npm
 
                   
@@ -1272,7 +1272,7 @@ one that it <em>can't</em> parse.</p>
               
                 
                 
-                <li class="install-tab" data-id="4" data-triple="x86_64-apple-darwin">
+                <li class="install-tab" data-id="2" data-triple="x86_64-apple-darwin">
                   tarball
 
                   
@@ -1284,14 +1284,14 @@ one that it <em>can't</em> parse.</p>
           <ul class="contents">
             
               
-              <li data-id="0" data-triple="x86_64-apple-darwin" class="install-content">
+              <li data-id="12" data-triple="x86_64-apple-darwin" class="install-content">
                 
                   
                   <div class="install-code-wrapper">
   <pre style="background-color:#263238;">
-<span style="color:#82aaff;">curl</span><span style="color:#89ddff;"> --</span><span style="color:#f78c6c;">proto </span><span style="color:#89ddff;">&#39;</span><span style="color:#c3e88d;">=https</span><span style="color:#89ddff;">&#39; --</span><span style="color:#f78c6c;">tlsv1</span><span style="color:#82aaff;">.2</span><span style="color:#89ddff;"> -</span><span style="color:#f78c6c;">LsSf</span><span style="color:#82aaff;"> https://github.com/axodotdev/oranda/releases/download/v0.2.0/oranda-installer.sh </span><span style="color:#89ddff;">| </span><span style="color:#82aaff;">sh</span></pre>
+<span style="color:#82aaff;">curl</span><span style="color:#89ddff;"> --</span><span style="color:#f78c6c;">proto </span><span style="color:#89ddff;">&#39;</span><span style="color:#c3e88d;">=https</span><span style="color:#89ddff;">&#39; --</span><span style="color:#f78c6c;">tlsv1</span><span style="color:#82aaff;">.2</span><span style="color:#89ddff;"> -</span><span style="color:#f78c6c;">LsSf</span><span style="color:#82aaff;"> https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-installer.sh </span><span style="color:#89ddff;">| </span><span style="color:#82aaff;">sh</span></pre>
 
-  <button class="button copy-clipboard-button primary" data-copy="curl --proto '=https' --tlsv1.2 -LsSf https://github.com/axodotdev/oranda/releases/download/v0.2.0/oranda-installer.sh | sh">
+  <button class="button copy-clipboard-button primary" data-copy="curl --proto '=https' --tlsv1.2 -LsSf https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-installer.sh | sh">
     <svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 20 20' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M8 2a1 1 0 000 2h2a1 1 0 100-2H8z'></path><path d='M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z'></path></svg>
   </button>
   
@@ -1309,7 +1309,7 @@ one that it <em>can't</em> parse.</p>
               </li>
             
               
-              <li data-id="8" data-triple="x86_64-apple-darwin" class="install-content hidden">
+              <li data-id="6" data-triple="x86_64-apple-darwin" class="install-content hidden">
                 
                   
                   <div class="install-code-wrapper">
@@ -1328,7 +1328,7 @@ one that it <em>can't</em> parse.</p>
               </li>
             
               
-              <li data-id="7" data-triple="x86_64-apple-darwin" class="install-content hidden">
+              <li data-id="5" data-triple="x86_64-apple-darwin" class="install-content hidden">
                 
                   
                   <div class="install-code-wrapper">
@@ -1347,7 +1347,7 @@ one that it <em>can't</em> parse.</p>
               </li>
             
               
-              <li data-id="4" data-triple="x86_64-apple-darwin" class="install-content hidden">
+              <li data-id="2" data-triple="x86_64-apple-darwin" class="install-content hidden">
                 
 
                 
@@ -1372,7 +1372,7 @@ one that it <em>can't</em> parse.</p>
               
                 
                 
-                <li class="install-tab" data-id="1" data-triple="x86_64-pc-windows-msvc">
+                <li class="install-tab" data-id="11" data-triple="x86_64-pc-windows-msvc">
                   powershell
 
                   
@@ -1380,7 +1380,7 @@ one that it <em>can't</em> parse.</p>
               
                 
                 
-                <li class="install-tab" data-id="8" data-triple="x86_64-pc-windows-msvc">
+                <li class="install-tab" data-id="6" data-triple="x86_64-pc-windows-msvc">
                   cargo
 
                   
@@ -1388,7 +1388,7 @@ one that it <em>can't</em> parse.</p>
               
                 
                 
-                <li class="install-tab" data-id="7" data-triple="x86_64-pc-windows-msvc">
+                <li class="install-tab" data-id="5" data-triple="x86_64-pc-windows-msvc">
                   npm
 
                   
@@ -1396,7 +1396,7 @@ one that it <em>can't</em> parse.</p>
               
                 
                 
-                <li class="install-tab" data-id="5" data-triple="x86_64-pc-windows-msvc">
+                <li class="install-tab" data-id="3" data-triple="x86_64-pc-windows-msvc">
                   tarball
 
                   
@@ -1408,14 +1408,14 @@ one that it <em>can't</em> parse.</p>
           <ul class="contents">
             
               
-              <li data-id="1" data-triple="x86_64-pc-windows-msvc" class="install-content">
+              <li data-id="11" data-triple="x86_64-pc-windows-msvc" class="install-content">
                 
                   
                   <div class="install-code-wrapper">
   <pre style="background-color:#263238;">
-<span style="color:#82aaff;">irm https://github.com/axodotdev/oranda/releases/download/v0.2.0/oranda-installer.ps1 </span><span style="color:#89ddff;">| </span><span style="color:#82aaff;">iex</span></pre>
+<span style="color:#82aaff;">irm https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-installer.ps1 </span><span style="color:#89ddff;">| </span><span style="color:#82aaff;">iex</span></pre>
 
-  <button class="button copy-clipboard-button primary" data-copy="irm https://github.com/axodotdev/oranda/releases/download/v0.2.0/oranda-installer.ps1 | iex">
+  <button class="button copy-clipboard-button primary" data-copy="irm https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-installer.ps1 | iex">
     <svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 20 20' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M8 2a1 1 0 000 2h2a1 1 0 100-2H8z'></path><path d='M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z'></path></svg>
   </button>
   
@@ -1433,7 +1433,7 @@ one that it <em>can't</em> parse.</p>
               </li>
             
               
-              <li data-id="8" data-triple="x86_64-pc-windows-msvc" class="install-content hidden">
+              <li data-id="6" data-triple="x86_64-pc-windows-msvc" class="install-content hidden">
                 
                   
                   <div class="install-code-wrapper">
@@ -1452,7 +1452,7 @@ one that it <em>can't</em> parse.</p>
               </li>
             
               
-              <li data-id="7" data-triple="x86_64-pc-windows-msvc" class="install-content hidden">
+              <li data-id="5" data-triple="x86_64-pc-windows-msvc" class="install-content hidden">
                 
                   
                   <div class="install-code-wrapper">
@@ -1471,7 +1471,7 @@ one that it <em>can't</em> parse.</p>
               </li>
             
               
-              <li data-id="5" data-triple="x86_64-pc-windows-msvc" class="install-content hidden">
+              <li data-id="3" data-triple="x86_64-pc-windows-msvc" class="install-content hidden">
                 
 
                 
@@ -1496,7 +1496,7 @@ one that it <em>can't</em> parse.</p>
               
                 
                 
-                <li class="install-tab" data-id="0" data-triple="x86_64-unknown-linux-gnu">
+                <li class="install-tab" data-id="12" data-triple="x86_64-unknown-linux-gnu">
                   shell
 
                   
@@ -1504,7 +1504,7 @@ one that it <em>can't</em> parse.</p>
               
                 
                 
-                <li class="install-tab" data-id="8" data-triple="x86_64-unknown-linux-gnu">
+                <li class="install-tab" data-id="6" data-triple="x86_64-unknown-linux-gnu">
                   cargo
 
                   
@@ -1512,7 +1512,7 @@ one that it <em>can't</em> parse.</p>
               
                 
                 
-                <li class="install-tab" data-id="7" data-triple="x86_64-unknown-linux-gnu">
+                <li class="install-tab" data-id="5" data-triple="x86_64-unknown-linux-gnu">
                   npm
 
                   
@@ -1520,7 +1520,7 @@ one that it <em>can't</em> parse.</p>
               
                 
                 
-                <li class="install-tab" data-id="6" data-triple="x86_64-unknown-linux-gnu">
+                <li class="install-tab" data-id="4" data-triple="x86_64-unknown-linux-gnu">
                   tarball
 
                   
@@ -1532,14 +1532,14 @@ one that it <em>can't</em> parse.</p>
           <ul class="contents">
             
               
-              <li data-id="0" data-triple="x86_64-unknown-linux-gnu" class="install-content">
+              <li data-id="12" data-triple="x86_64-unknown-linux-gnu" class="install-content">
                 
                   
                   <div class="install-code-wrapper">
   <pre style="background-color:#263238;">
-<span style="color:#82aaff;">curl</span><span style="color:#89ddff;"> --</span><span style="color:#f78c6c;">proto </span><span style="color:#89ddff;">&#39;</span><span style="color:#c3e88d;">=https</span><span style="color:#89ddff;">&#39; --</span><span style="color:#f78c6c;">tlsv1</span><span style="color:#82aaff;">.2</span><span style="color:#89ddff;"> -</span><span style="color:#f78c6c;">LsSf</span><span style="color:#82aaff;"> https://github.com/axodotdev/oranda/releases/download/v0.2.0/oranda-installer.sh </span><span style="color:#89ddff;">| </span><span style="color:#82aaff;">sh</span></pre>
+<span style="color:#82aaff;">curl</span><span style="color:#89ddff;"> --</span><span style="color:#f78c6c;">proto </span><span style="color:#89ddff;">&#39;</span><span style="color:#c3e88d;">=https</span><span style="color:#89ddff;">&#39; --</span><span style="color:#f78c6c;">tlsv1</span><span style="color:#82aaff;">.2</span><span style="color:#89ddff;"> -</span><span style="color:#f78c6c;">LsSf</span><span style="color:#82aaff;"> https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-installer.sh </span><span style="color:#89ddff;">| </span><span style="color:#82aaff;">sh</span></pre>
 
-  <button class="button copy-clipboard-button primary" data-copy="curl --proto '=https' --tlsv1.2 -LsSf https://github.com/axodotdev/oranda/releases/download/v0.2.0/oranda-installer.sh | sh">
+  <button class="button copy-clipboard-button primary" data-copy="curl --proto '=https' --tlsv1.2 -LsSf https://github.com/oranda-gallery/oranda/releases/download/v0.2.0/oranda-installer.sh | sh">
     <svg stroke='currentColor' fill='currentColor' stroke-width='0' viewBox='0 0 20 20' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'><path d='M8 2a1 1 0 000 2h2a1 1 0 100-2H8z'></path><path d='M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z'></path></svg>
   </button>
   
@@ -1557,7 +1557,7 @@ one that it <em>can't</em> parse.</p>
               </li>
             
               
-              <li data-id="8" data-triple="x86_64-unknown-linux-gnu" class="install-content hidden">
+              <li data-id="6" data-triple="x86_64-unknown-linux-gnu" class="install-content hidden">
                 
                   
                   <div class="install-code-wrapper">
@@ -1576,7 +1576,7 @@ one that it <em>can't</em> parse.</p>
               </li>
             
               
-              <li data-id="7" data-triple="x86_64-unknown-linux-gnu" class="install-content hidden">
+              <li data-id="5" data-triple="x86_64-unknown-linux-gnu" class="install-content hidden">
                 
                   
                   <div class="install-code-wrapper">
@@ -1595,7 +1595,7 @@ one that it <em>can't</em> parse.</p>
               </li>
             
               
-              <li data-id="6" data-triple="x86_64-unknown-linux-gnu" class="install-content hidden">
+              <li data-id="4" data-triple="x86_64-unknown-linux-gnu" class="install-content hidden">
                 
 
                 
