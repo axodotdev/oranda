@@ -61,11 +61,14 @@ impl ReleaseArtifacts {
                             {
                                 preference = InstallerPreference::Custom;
                                 None
+                            } else if id.ends_with(".sh") || id.ends_with(".ps1") {
+                                // We have more info to do a better job than cargo-dist on
+                                // `curl | sh` exprs, inference will handle this for us!
+                                continue;
                             } else {
                                 preference = InstallerPreference::Script;
                                 file
                             };
-
                             method = InstallMethod::Run {
                                 file,
                                 run_hint: install_hint.clone(),
