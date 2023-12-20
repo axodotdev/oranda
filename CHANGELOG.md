@@ -1,11 +1,18 @@
 # Changelog
 
+## 0.6.1 - 2023-12-20
+
+This patch release tweaks behaviour to have oranda prefer its own `curl | sh` expressions
+over the ones cargo-dist generates, because it has more context than cargo-dist
+to produce the best possible expression.
+
+
 ## 0.6.0 - 2023-12-14
 
 ### Features
 
 - **axo Releases support** - [impl](https://github.com/axodotdev/oranda/pull/672)
-  
+
   oranda now supports axo's homegrown release hosting service, axo Releases! At time of writing,
   axo Releases is still in closed beta, however, if you have access and want to try it out, you can set the following
   configuration parameter:
@@ -17,12 +24,12 @@
     }
   }
   ```
-  
+
   Doing so will cause oranda to not fetch from GitHub _at all_, instead using axo Releases as a source of truth for your release data.
-  
-- **App names show on multi-app releases** - [impl](https://github.com/axodotdev/oranda/pull/671), issue [#1](https://github.com/axodotdev/oranda/pull/666), [#2](https://github.com/axodotdev/oranda/issues/665) (thanks 
+
+- **App names show on multi-app releases** - [impl](https://github.com/axodotdev/oranda/pull/671), issue [#1](https://github.com/axodotdev/oranda/pull/666), [#2](https://github.com/axodotdev/oranda/issues/665) (thanks
   to [aumetra]!)
-  
+
   If you use oranda to work with a project that publishes multiple differently-named binaries, your install widget may
   end up looking very confusing, with lots of similarly-named tabs. Previously, your options were to set up a
   [workspace][workspace-docs], or to set the [`components.artifacts.match_package_names`][package-names] configuration
@@ -43,7 +50,7 @@
 
 ### Housekeeping
 
-- Minor cleanups to the source code, such as finally settling the "who has the better line endings, Linux or 
+- Minor cleanups to the source code, such as finally settling the "who has the better line endings, Linux or
   Windows" debate (it's Linux)
 
 [aumetra]: https://github.com/aumetra
@@ -87,7 +94,7 @@
 ### Fixes
 
 - **Improved errors for when explicitly declared paths don't exist** - [shadows-withal]/[pr640], [konstin]
-  
+
   There used to be some cryptic errors oranda would throw if it couldn't find a path you'd manually
   specified in the configuration file - these errors are much nicer now, and their handling is more consistent.
 
@@ -133,25 +140,25 @@
 ### Features
 
 - **Improved CSS generation** - [shadows-withal]/[pr617], [ashleygwilliams]/[i610]
-  
-  Users and distributors now have more control over how oranda and especially its CSS gets built! You can choose to 
-  opt-in to building CSS at build or runtime using the Tailwind binary, or you can explicitly prebuild the CSS using 
+
+  Users and distributors now have more control over how oranda and especially its CSS gets built! You can choose to
+  opt-in to building CSS at build or runtime using the Tailwind binary, or you can explicitly prebuild the CSS using
   npm. For more information, see the [docs](https://opensource.axo.dev/oranda/book/building.html#the-trouble-with-css).
 
 - **New `generate` command** - [shadows-withal]/[pr621], [ashleygwilliams]/[i188]
-  
-  You can now generate a GitHub Actions CI file that'll build your site and deploy it to GitHub Pages by running 
-  `oranda generate ci`, which runs you through an interactive wizard! In the future, we'll add more types of 
+
+  You can now generate a GitHub Actions CI file that'll build your site and deploy it to GitHub Pages by running
+  `oranda generate ci`, which runs you through an interactive wizard! In the future, we'll add more types of
   generatable files.
 
 - **LiveReload support for `oranda dev`** - [shadows-withal]/[pr622], [jamesmunns]/[i556]
 
-  A pretty simple change that has a lot of quality-of-life: Your `oranda dev` browser tab now reloads automatically 
+  A pretty simple change that has a lot of quality-of-life: Your `oranda dev` browser tab now reloads automatically
   when you change a relevant file and oranda rebuilds your site!
 
 - **Use Axo's favicon by default** - [shadows-withal]/[pr628], [ashleygwilliams]/[i110]
 
-  Oranda sites that don't have a custom favicon now fall back to Axo's favicon, just so that the space in the tab 
+  Oranda sites that don't have a custom favicon now fall back to Axo's favicon, just so that the space in the tab
   bar isn't so drab and lonely.
 
 - **`oranda` is now available on Homebrew!** - [shadows-withal]/[pr602], the cargo dist team <3
@@ -167,7 +174,7 @@
   ability to use a preexisting Tailwind binary.
 - **Improved workspace member precedence handling** - [shadows-withal]/[pr626], [shadows-withal]/[i615]
 
-  There were a couple of tough corner cases when using workspace functionality that would incorrectly cascade to the 
+  There were a couple of tough corner cases when using workspace functionality that would incorrectly cascade to the
   members, which is fixed now!
 - **Hide changelog sidebar on mobile** - [shadows-withal]/[pr614], [zkat]/[i612]
 - **Fixed mdbook text highlighting colors having too little contrast** - [shadows-withal]/[pr627], [Gankra]/[i578]
@@ -234,7 +241,7 @@
 ### Features
 
 - **Workspace Support** - [shadows-withal]/many PRs, [mistydemeo]/many PRs, [jamesmunns]/[i493]
-  
+
   You can now tell oranda to build sites from multiple projects in the same directory at the same time! By default, this will also generate a separate "root"
   page, providing an index into all projects defined within your workspace.
 
@@ -254,7 +261,7 @@
     }
   }
   ```
-  
+
   This configuration will attempt to auto-detect a Cargo or npm workspace, set the Hacker theme for all members, and
   embed the contents of the top-level `README.md` file into the workspace index page.
 
@@ -276,10 +283,10 @@
     }
   }
   ```
-  
+
   > Aside: If you have a use-case for an oranda page that combines multiple different projects _outside_ of a shared directory,
     please let us know on [Discord][discord]!
-  
+
   For more information on workspace members, [take a look at the docs][workspace-docs]!
 
 - **Inlining CSS** - [shadows-withal]/[pr565], [pr566], [i554]
@@ -326,7 +333,7 @@
 ### Housekeeping
 
 - **Testing rework** - [Gankra]/[pr575], [shadows-withal]/[pr581]
-  
+
   oranda's tests have long been suboptimal, but we now sport a pretty good test suite, with automated integration
   snapshot testing for multiple external projects, and improved HTML-aware integration tests.
 
@@ -400,7 +407,7 @@
 
 ### Fixes
 
-- **Hacker theme highlight color - [SaraVieira], [pr523]/[i522]** 
+- **Hacker theme highlight color - [SaraVieira], [pr523]/[i522]**
 
   Selecting text in the Hacker theme now applies a nice, green, high contrast highlight background
   color, instead of being the same color as the text, therefore hiding the content.
@@ -575,12 +582,12 @@ Despite being formally unannounced, several intrepid folks discovered oranda, an
 ### Features
 
 - **Individual Changelog pages: [shadows-withal]/[↬284]**
-    
+
     When announcing a new release- it's often desirable to link to an individual
     release page that contains the changelog/release notes. Previously, we built
     a single page for all the releases- now we build individual pages as well.
 
-    This is the first shipped feature from our new team member, Liv! Yay and 
+    This is the first shipped feature from our new team member, Liv! Yay and
     welcome :)
 
 - **npm installer: [ashleygwilliams]/[↬288]**
@@ -609,7 +616,7 @@ Despite being formally unannounced, several intrepid folks discovered oranda, an
 
 - **Dev commands has proper default values: [ashleygwilliams]/[#256],[↬260]**
 
-    Due to a false hope that `#[derive(Default)]` would collect defaults from 
+    Due to a false hope that `#[derive(Default)]` would collect defaults from
     the `clap` derive API, we shipped the `dev` command with each argument's
     *type's* defaults, not the oranda ones. `dev` now has the same defaults
     that `serve` does, as is to be expected.
