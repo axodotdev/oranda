@@ -11,7 +11,7 @@ When hosting on GitHub Pages, depending on the name of your repository, your sit
 - If your repo name is `<user/org>.github.io`, your site will be at that URL
 - If you repo name is anything else, it'll be at `<user/org>.github.io/<reponame>`.
 
-For the latter case, you'll need to configure oranda to write its links with `<reponame>` as a prefix:
+For the latter case, you'll need to configure oranda to write its links to your `oranda.json` (more on that on chapter 8) with `<reponame>` as a prefix:
 
 ```json
 {
