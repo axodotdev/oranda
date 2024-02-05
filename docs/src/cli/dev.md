@@ -20,5 +20,6 @@ such, we have to take care to only run the build process when _relevant_ files c
 This command also supports several options:
 
 - `--port` to set a custom port for the file server
+- `--config-path` to specify a custom path for your oranda config (but oranda will still look for an `oranda-workspace.json`) in your current directory).
 - `--no-first-build` to skip the first step mentioned above where oranda builds your site before starting the watch process
 - `-i`, `--include-paths` to specify custom paths for oranda to watch
