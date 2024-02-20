@@ -246,7 +246,7 @@ fn infer_run_hint_for_script(file: &File) -> String {
             file.download_url
         )
     } else if file.name.ends_with(EXT_SCRIPT_POWERSHELL) {
-        format!("irm {} | iex", file.download_url)
+        format!(r#"powershell -c "irm {} | iex""#, file.download_url)
     } else {
         unimplemented!(
             "Looks like someone added a new kind of script but didn't add a run hint for it?"
