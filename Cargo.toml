@@ -87,7 +87,7 @@ lto = "thin"
 # Config for 'cargo dist'
 [workspace.metadata.dist]
 # The preferred cargo-dist version to use in CI (Cargo.toml SemVer syntax)
-cargo-dist-version = "0.11.0-prerelease.1"
+cargo-dist-version = "0.11.0-prerelease.2"
 # CI backends to support
 ci = ["github"]
 # The installers to generate for each app
@@ -108,6 +108,8 @@ npm-scope = "@axodotdev"
 features = ["build-with-tailwind"]
 # Publish jobs to run in CI
 pr-run-mode = "plan"
+# Where to host releases
+hosting = ["axodotdev", "github"]
 
 [[workspace.metadata.dist.extra-artifacts]]
 artifacts = ["oranda-config-schema.json"]
