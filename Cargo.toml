@@ -114,5 +114,5 @@ artifacts = ["oranda-config-schema.json"]
 build = ["cargo", "run", "--", "config-schema", "--output=oranda-config-schema.json"]
 
 [[workspace.metadata.dist.extra-artifacts]]
-artifacts = ["oranda-css/dist/oranda.css"]
-build = ["cargo", "run", "--", "generate-css"]
+artifacts = ["oranda.css"]
+build = ["cargo", "run", "--", "generate-css", "--out-dir=./"]

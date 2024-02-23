@@ -1,4 +1,5 @@
 use axoasset::LocalAsset;
+use camino::Utf8PathBuf;
 use clap::Parser;
 use oranda::errors::*;
 use oranda_generate_css::default_css_output_dir;
@@ -27,13 +28,17 @@ impl ConfigSchema {
 }
 
 #[derive(Debug, Parser)]
-pub struct GenerateCss {}
+pub struct GenerateCss {
+    #[clap(long)]
+    out_dir: Option<Utf8PathBuf>,
+}
 
 impl GenerateCss {
     pub fn run(&self) -> Result<()> {
-        let out_dir = default_css_output_dir();
+        let out_dir = self.out_dir.clone().unwrap_or_else(default_css_output_dir);
+        let out_file = out_dir.join("oranda.css");
         oranda_generate_css::build_css(&out_dir)?;
-        tracing::info!("CSS placed in {out_dir}/oranda.css");
+        tracing::info!("CSS placed in {out_file}");
         Ok(())
     }
 }
