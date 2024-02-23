@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.6.2 - 2024-02-23
+
+oranda will now output `iem | iex` expressions wrapped in `powershell -c` so they can be run from cmd.
+
+special thanks to @jovillarrealm and @lynnpepin for docs fixes!
+
+
 ## 0.6.1 - 2023-12-20
 
 This patch release tweaks behaviour to have oranda prefer its own `curl | sh` expressions
