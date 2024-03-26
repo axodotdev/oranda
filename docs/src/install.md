@@ -21,7 +21,7 @@ cargo install oranda --locked --profile=dist
 
 > `--profile=dist` is the profile we build our shippable binaries with, it's optional.
 >
-> `--locked` asks Cargo to respect the lockfile, improving build reproducibility at the
+> `--locked` asks Cargo to respect the lockfile, improving build reproducibility at
 > the cost of not getting any bugfixes from newer releases of its dependencies.
 
 
