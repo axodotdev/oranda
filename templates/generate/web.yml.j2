@@ -62,8 +62,9 @@ jobs:
 
       # If you use any mdbook plugins, here's the place to install them!
 
-      # Install and run oranda (and mdbook)
-      # This will write all output to ./public/ (including copying mdbook's output to there)
+      # Install and run oranda (and mdbook)!
+      #
+      # This will write all output to ./public/ (including copying mdbook's output to there).
       - name: Install and run oranda
         run: |
           {{%- if use_latest_oranda %}}
@@ -86,13 +87,13 @@ jobs:
         with:
           args: /tmp/public/
       {{% endif %}}
-      # Deploy to our gh-pages branch (creating it if it doesn't exist)
-      # the "public" dir that oranda made above will become the root dir
+      # Deploy to our gh-pages branch (creating it if it doesn't exist).
+      # The "public" dir that oranda made above will become the root dir
       # of this branch.
       #
       # Note that once the gh-pages branch exists, you must
-      # go into repo's settings > pages and set "deploy from branch: gh-pages"
-      # the other defaults work fine.
+      # go into repo's settings > pages and set "deploy from branch: gh-pages".
+      # The other defaults work fine.
       - name: Deploy to Github Pages
         uses: JamesIves/github-pages-deploy-action@v4.4.1
         # ONLY if we're on main (so no PRs or feature branches allowed!)
