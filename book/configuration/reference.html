@@ -1,0 +1,736 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js oranda-dark">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Reference</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+        <link rel="stylesheet" href="../oranda-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "oranda-dark" : "oranda-dark";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('orandamdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('orandamdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('orandamdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('oranda-dark')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../install.html"><strong aria-hidden="true">2.</strong> Install</a></li><li class="chapter-item expanded "><a href="../quickstart.html"><strong aria-hidden="true">3.</strong> Quickstart</a></li><li class="chapter-item expanded "><a href="../hosting.html"><strong aria-hidden="true">4.</strong> Hosting</a></li><li class="chapter-item expanded "><a href="../assets.html"><strong aria-hidden="true">5.</strong> Assets</a></li><li class="chapter-item expanded "><a href="../cli.html"><strong aria-hidden="true">6.</strong> Command Line</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../cli/build.html"><strong aria-hidden="true">6.1.</strong> build</a></li><li class="chapter-item expanded "><a href="../cli/serve.html"><strong aria-hidden="true">6.2.</strong> serve</a></li><li class="chapter-item expanded "><a href="../cli/dev.html"><strong aria-hidden="true">6.3.</strong> dev</a></li><li class="chapter-item expanded "><a href="../cli/generate.html"><strong aria-hidden="true">6.4.</strong> generate</a></li></ol></li><li class="chapter-item expanded "><a href="../tips.html"><strong aria-hidden="true">7.</strong> Tips and Tricks</a></li><li class="chapter-item expanded "><a href="../configuration.html"><strong aria-hidden="true">8.</strong> Configuration</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../configuration/reference.html" class="active"><strong aria-hidden="true">8.1.</strong> Reference</a></li><li class="chapter-item expanded "><a href="../configuration/artifacts.html"><strong aria-hidden="true">8.2.</strong> Artifacts & cargo-dist</a></li><li class="chapter-item expanded "><a href="../configuration/additional-pages.html"><strong aria-hidden="true">8.3.</strong> Additional Pages</a></li><li class="chapter-item expanded "><a href="../configuration/analytics.html"><strong aria-hidden="true">8.4.</strong> Analytics</a></li><li class="chapter-item expanded "><a href="../configuration/changelog.html"><strong aria-hidden="true">8.5.</strong> Changelogs</a></li><li class="chapter-item expanded "><a href="../configuration/mdbook.html"><strong aria-hidden="true">8.6.</strong> mdbook support</a></li><li class="chapter-item expanded "><a href="../configuration/social.html"><strong aria-hidden="true">8.7.</strong> Social</a></li><li class="chapter-item expanded "><a href="../configuration/theme.html"><strong aria-hidden="true">8.8.</strong> Theming</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../configuration/theme/previews.html"><strong aria-hidden="true">8.8.1.</strong> Theme Previews</a></li></ol></li><li class="chapter-item expanded "><a href="../configuration/funding.html"><strong aria-hidden="true">8.9.</strong> Funding</a></li><li class="chapter-item expanded "><a href="../configuration/workspaces.html"><strong aria-hidden="true">8.10.</strong> Workspaces</a></li></ol></li><li class="chapter-item expanded "><a href="../contributing.html"><strong aria-hidden="true">9.</strong> Contributing</a></li><li class="chapter-item expanded "><a href="../building.html"><strong aria-hidden="true">10.</strong> Building oranda</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="oranda-dark">Axo Dark</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="oranda-light">Axo Light</button></li>
+
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title"></h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/axodotdev/oranda/edit/main/docs/src/configuration/reference.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="configuration-reference"><a class="header" href="#configuration-reference">Configuration Reference</a></h1>
+<ul>
+<li><a href="#project"><code>project</code></a>
+<ul>
+<li><a href="#projectname"><code>name</code></a> 📦 - the name of your application</li>
+<li><a href="#projectversion"><code>version</code></a> 📦 - current version of your project</li>
+<li><a href="#projectdescription"><code>description</code></a> 📦 - brief description of your project</li>
+<li><a href="#projecthomepage"><code>homepage</code></a> 📦 - url to the homepage of your project</li>
+<li><a href="#projectrepository"><code>repository</code></a> 📦 - url to the repository of your project</li>
+<li><a href="#projectreadme_path"><code>readme_path</code></a> - relative custom path to your project's readme file</li>
+<li><a href="#projectlicense"><code>license</code></a> 📦 - license of your project (in SPDX format)</li>
+</ul>
+</li>
+<li><a href="#build"><code>build</code></a>
+<ul>
+<li><a href="#builddist_dir"><code>dist_dir</code></a> - path to where built output should be placed</li>
+<li><a href="#buildstatic_dir"><code>static_dir</code></a> - path to a directory containing static assets</li>
+<li><a href="#buildpath_prefix"><code>path_prefix</code></a> - a URL fragment to prepend to URLs, useful if hosting from a subfolder</li>
+<li><a href="#buildadditional_pages"><code>additional_pages</code></a> - additional pages to be rendered and linked to</li>
+</ul>
+</li>
+<li><a href="#marketing"><code>marketing</code></a>
+<ul>
+<li><a href="#marketinganalytics"><code>analytics</code></a> - automatically insert analytics snippets for several providers</li>
+<li><a href="#marketingsocial"><code>social</code></a> - additional configuration for SEO-related inserts</li>
+</ul>
+</li>
+<li><a href="#styles"><code>styles</code></a>
+<ul>
+<li><a href="#stylestheme"><code>theme</code></a> - change oranda's CSS theme</li>
+<li><a href="#stylesadditional_css"><code>additional_css</code></a> - additional CSS to insert into your pages</li>
+<li><a href="#stylesoranda_css_version"><code>oranda_css_version</code></a> - custom version of oranda's built-in CSS to use</li>
+<li><a href="#styleslogo"><code>logo</code></a> - custom site logo</li>
+<li><a href="#stylesfavicon"><code>favicon</code></a> - custom site favicon</li>
+</ul>
+</li>
+<li><a href="#components"><code>components</code></a>
+<ul>
+<li><a href="#componentssource"><code>source</code></a> - change where oranda pulls your release data from</li>
+<li><a href="#componentschangelog"><code>changelog</code></a> - extract your changelog from GitHub automatically</li>
+<li><a href="#componentsmdbook-or-componentsmd_book"><code>mdbook</code></a> - let us render a mdbook site for you</li>
+<li><a href="#componentsfunding"><code>funding</code></a> - configuration for rendering a site related to project funding methods</li>
+<li><a href="#componentsartifacts"><code>artifacts</code></a> - configuration for displaying downloadable artifacts/installers</li>
+</ul>
+</li>
+<li><a href="#workspace"><code>workspace</code></a> - <strong><code>oranda-workspace.json</code> only!!</strong>
+<ul>
+<li><a href="#workspacename"><code>name</code></a> - set the overarching workspace name</li>
+<li><a href="#workspaceauto"><code>auto</code></a> - enable workspace autodetection</li>
+<li><a href="#workspacegenerate_index"><code>generate_index</code></a> - disable generating a workspace index page</li>
+<li><a href="#workspacemembers"><code>members</code></a> - list the workspace members</li>
+<li><a href="#workspacedocs_path"><code>docs_path</code></a> - path to a markdown file to embed into your workspace index page</li>
+<li><a href="#workspacepreferred_members"><code>preferred_members</code></a> - list of workspace members to highlight at the top of the index page</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>📦 = automatically collected from your package metadata!</p>
+</blockquote>
+<h2 id="project"><a class="header" href="#project">project</a></h2>
+<p>Configuration for metadata about your project. Most of the info in here can be automatically collected
+for Cargo and npm projects.</p>
+<h3 id="projectname"><a class="header" href="#projectname">project.name</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: Project manifest <code>name</code> field</li>
+</ul>
+<p>Your project's name. Will be used for the page title and header.</p>
+<h3 id="projectversion"><a class="header" href="#projectversion">project.version</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: Project manifest <code>version</code> field.</li>
+</ul>
+<p>Your project's current version.</p>
+<h3 id="projectdescription"><a class="header" href="#projectdescription">project.description</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: Project manifest <code>description</code> field</li>
+</ul>
+<p>Your project's description. Will be used for site metadata.</p>
+<h3 id="projecthomepage"><a class="header" href="#projecthomepage">project.homepage</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: Project manifest <code>homepage</code> field</li>
+</ul>
+<p>Your project's homepage. Will be used for backlinks and site metadata.</p>
+<h3 id="projectrepository"><a class="header" href="#projectrepository">project.repository</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: Project manifest <code>repository</code> field</li>
+</ul>
+<p>Your project's Git repository. If set to GitHub, this enables <code>oranda</code> to fetch data from GitHub releases
+(see <a href="./artifacts.html">artifacts</a>)</p>
+<h3 id="projectreadme_path"><a class="header" href="#projectreadme_path">project.readme_path</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: A variation of the standard <code>README.md</code></li>
+</ul>
+<p>The path to your project's readme file. The contents of this will be used for your index page.</p>
+<h3 id="projectlicense"><a class="header" href="#projectlicense">project.license</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: Project manifest <code>license</code> field.</li>
+</ul>
+<p>Your project's license. Will be embedded into the page footer.</p>
+<h2 id="build"><a class="header" href="#build">build</a></h2>
+<p>Configuration regarding the specifics of how and where you want your site built.</p>
+<h3 id="builddist_dir"><a class="header" href="#builddist_dir">build.dist_dir</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: <code>public/</code></li>
+</ul>
+<p>The directory where your static files will be output to. This must be relative to the <code>oranda.json</code> file.</p>
+<h3 id="buildstatic_dir"><a class="header" href="#buildstatic_dir">build.static_dir</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: <code>static/</code></li>
+</ul>
+<p>Static content that oranda will copy to its output folder. This must be relative to the <code>oranda.json</code> file.</p>
+<h3 id="buildpath_prefix"><a class="header" href="#buildpath_prefix">build.path_prefix</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: none</li>
+</ul>
+<p>If you're hosting oranda on a nested path (e.g. <code>mysite.cool/myproject</code>), you should set <code>path_prefix</code> to
+<code>myproject</code> in your configuration in order for oranda to generate correct links. This is specifically useful for
+GitHub pages, which, unless the repository name is <code>username.github.io</code> or you have a custom domain set, will host
+projects in a subfolder (e.g. <code>username.github.io/projectname</code>, so you'd set this option to <code>projectname</code>).</p>
+<h3 id="buildadditional_pages"><a class="header" href="#buildadditional_pages">build.additional_pages</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: object, Default: none</li>
+</ul>
+<p>An object of additional Markdown pages that you'd like to be included. Links to these will appear in the site header,
+and they will all be rendered into separate pages.</p>
+<p><a href="./additional-pages.html">More information</a></p>
+<h2 id="marketing"><a class="header" href="#marketing">marketing</a></h2>
+<p>Configuration regarding SEO, site metadata, and other &quot;marketing&quot;-related aspects of your page.</p>
+<h3 id="marketinganalytics"><a class="header" href="#marketinganalytics">marketing.analytics</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: object, Default: none</li>
+</ul>
+<p><a href="./analytics.html">More information</a></p>
+<p>Configuration for page analytics. Can be any combination of the following:</p>
+<h4 id="marketinganalyticsgoogle_analytics"><a class="header" href="#marketinganalyticsgoogle_analytics">marketing.analytics.google_analytics</a></h4>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: object, Default: none</li>
+</ul>
+<p>Set <code>google_analytics.tracking_id</code> to your site tracking ID to include the relevant
+snippet to your page.</p>
+<h4 id="marketinganalyticsplausible"><a class="header" href="#marketinganalyticsplausible">marketing.analytics.plausible</a></h4>
+<ul>
+<li>Type: object, Default: none</li>
+</ul>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<p>Set <code>plausible.domain</code> to your Plausible domain. Optionally, you can set <code>plausible.script_url</code>
+if you're self-hosting.</p>
+<h4 id="marketinganalyticsfathom"><a class="header" href="#marketinganalyticsfathom">marketing.analytics.fathom</a></h4>
+<ul>
+<li>Type: object, Default: none</li>
+</ul>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<p>Set <code>fathom.site</code> to your Fathom site.</p>
+<h4 id="marketinganalyticsunami"><a class="header" href="#marketinganalyticsunami">marketing.analytics.unami</a></h4>
+<ul>
+<li>Type: object, Default: none</li>
+</ul>
+<p>Set <code>unami.website</code> to your Unami website identifier, and <code>unami.script_url</code> to the location
+where you're hosting your Unami script.</p>
+<h3 id="marketingsocial"><a class="header" href="#marketingsocial">marketing.social</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: object, Default: none</li>
+</ul>
+<p><a href="./social.html">More information</a></p>
+<p>Options useful for SEO features.</p>
+<h4 id="marketingsocialimage"><a class="header" href="#marketingsocialimage">marketing.social.image</a></h4>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: none</li>
+</ul>
+<p>An image URL to use for page embeds.</p>
+<h4 id="marketingsocialimage_alt"><a class="header" href="#marketingsocialimage_alt">marketing.social.image_alt</a></h4>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: none</li>
+</ul>
+<p>An alt text for said image embed.</p>
+<h4 id="marketingsocialtwitter_account"><a class="header" href="#marketingsocialtwitter_account">marketing.social.twitter_account</a></h4>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: none</li>
+</ul>
+<p>Name of a Twitter/X account, to be used for Twitter/X embeds (including the <code>@</code>).</p>
+<h2 id="styles"><a class="header" href="#styles">styles</a></h2>
+<ul>
+<li>Type: object</li>
+</ul>
+<p>Configuration regarding the looks of your site.</p>
+<h3 id="stylestheme"><a class="header" href="#stylestheme">styles.theme</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: <code>dark</code></li>
+</ul>
+<p><a href="./theme.html">More information</a></p>
+<p>Choose which built-in theme to use. Possible choices:</p>
+<ul>
+<li><code>dark</code> (default)</li>
+<li><code>light</code></li>
+<li><code>axodark</code></li>
+<li><code>axolight</code></li>
+<li><code>hacker</code></li>
+<li><code>cupcake</code></li>
+</ul>
+<h3 id="stylesadditional_css"><a class="header" href="#stylesadditional_css">styles.additional_css</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: array, Default: none</li>
+</ul>
+<p><a href="./theme.html#customizing-themes">More information</a></p>
+<p>An array of local or remote CSS files that will be merged together and loaded into your page.</p>
+<h3 id="stylesoranda_css_version"><a class="header" href="#stylesoranda_css_version">styles.oranda_css_version</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: none (current version)</li>
+</ul>
+<p>Specify a version of the embedded oranda CSS. This can be used to opt into newer CSS releases that don't have
+an oranda release associated with them yet. (Internally, this looks for a <code>oranda.css</code> release artifact on the given
+tag in the <code>axodotdev/oranda</code> GitHub repository)</p>
+<h3 id="styleslogo"><a class="header" href="#styleslogo">styles.logo</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: none</li>
+</ul>
+<p>Path to a custom logo to be shown in your website header and in your site metadata.</p>
+<h3 id="stylesfavicon"><a class="header" href="#stylesfavicon">styles.favicon</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: none</li>
+</ul>
+<p>Path to a custom favicon.</p>
+<h2 id="components"><a class="header" href="#components">components</a></h2>
+<p>Configuration regarding extra components/functionality that oranda supports.</p>
+<h3 id="componentssource"><a class="header" href="#componentssource">components.source</a></h3>
+<blockquote>
+<p>Added in version 0.6.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: <code>github</code></li>
+</ul>
+<p>Controls where oranda should pull releases data from. Possible choices are:</p>
+<h4 id="github-default"><a class="header" href="#github-default"><code>github</code> (default)</a></h4>
+<p>Attempts to pull release data from GitHub Releases, using the repository specified for your project.</p>
+<h4 id="axodotdev"><a class="header" href="#axodotdev"><code>axodotdev</code></a></h4>
+<p>Attempts to pull release data from axo Releases. Since you can have multiple packages under the
+same project namespace on axo Releases, we use your project's name as the package name. </p>
+<h3 id="componentsartifacts"><a class="header" href="#componentsartifacts">components.artifacts</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: object or bool</li>
+</ul>
+<p><a href="./artifacts.html">More information</a></p>
+<p>Configuration for enabling downloadable artifacts, as well as the <code>cargo-dist</code> integration.</p>
+<h4 id="componentsartifactspackage_managers"><a class="header" href="#componentsartifactspackage_managers">components.artifacts.package_managers</a></h4>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: object, Default: none</li>
+</ul>
+<p>A list of &quot;package manager&quot;-like ways to install your app. These will be displayed on your
+page as extra runnable commands that users can execute to download your project. There's a few
+different &quot;states&quot; these can be in:</p>
+<ul>
+<li><code>package_managers.preferred</code> - Entries here will be shown in the install widget on your front page</li>
+<li><code>package_managers.additional</code> - Entries here will only be shown on the &quot;install&quot; page, but not on the front page</li>
+</ul>
+<p>The syntax for both of these is the same:</p>
+<pre><code class="language-json">{
+  &quot;components&quot;: {
+    &quot;artifacts&quot;: {
+      &quot;package_managers&quot;: {
+        &quot;preferred&quot;: {
+          &quot;user-friendly name&quot;: &quot;command to run&quot;,
+          &quot;for example, npm&quot;: &quot;npm install @axodotdev/oranda --save-dev&quot;
+        }
+      }
+    }
+  }
+}
+</code></pre>
+<h4 id="componentsartifactscargo_dist"><a class="header" href="#componentsartifactscargo_dist">components.artifacts.cargo_dist</a></h4>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: bool, Default: <code>true</code> if we detected support, <code>false</code> otherwise</li>
+</ul>
+<p>Enables/disables <code>cargo-dist</code> support. oranda may autodetect this if you have <code>cargo-dist</code>
+configuration in your <code>Cargo.toml</code>, but you can always explicitly disable it here.</p>
+<h4 id="componentsartifactsauto"><a class="header" href="#componentsartifactsauto">components.artifacts.auto</a></h4>
+<blockquote>
+<p>Added in version 0.2.0.</p>
+</blockquote>
+<ul>
+<li>Type: bool, Default: <code>false</code></li>
+</ul>
+<p>Enables/disables artifacts autodetection, even without <code>cargo-dist</code>. This is turned off by
+default, but if you provide GitHub release artifacts in a target-triple-like format, chances
+are that oranda can autodetect them, so it may be worth turning this on.</p>
+<h3 id="componentsartifactsmatch_package_names"><a class="header" href="#componentsartifactsmatch_package_names">components.artifacts.match_package_names</a></h3>
+<blockquote>
+<p>Added in version 0.5.0.</p>
+</blockquote>
+<ul>
+<li>Type: bool, Default: <code>false</code></li>
+</ul>
+<p>Only uses release tags that contain the name of the project being generated. Useful in a workspace environment,
+where multiple published projects are stored in the same repository.</p>
+<h3 id="componentsmdbook-or-componentsmd_book"><a class="header" href="#componentsmdbook-or-componentsmd_book">components.mdbook (or components.md_book)</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: object or bool</li>
+</ul>
+<p><a href="./mdbook.html">More information</a></p>
+<p>Configuration for mdbook support. You don't need mdbook itself installed to make use of this,
+since it also provides a Rust library that we use. oranda will attempt to autodetect
+this at several common paths, so you can disable it by setting <code>components.mdbook</code> to <code>false</code>.</p>
+<h4 id="componentsmdbookpath"><a class="header" href="#componentsmdbookpath">components.mdbook.path</a></h4>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: none</li>
+</ul>
+<p>Path to your mdbook directory, the one containing <code>book.toml</code>, relative to your
+configuration file.</p>
+<h4 id="componentsmdbooktheme"><a class="header" href="#componentsmdbooktheme">components.mdbook.theme</a></h4>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: bool, Default: <code>true</code></li>
+</ul>
+<p>Whether to enable or disable custom mdbook themes. We try to match your mdbook to
+the main oranda page look visually by default, but you can disable this by setting this
+option to <code>false</code>.</p>
+<h3 id="componentschangelog"><a class="header" href="#componentschangelog">components.changelog</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: object or bool</li>
+</ul>
+<p><a href="./changelog.html">More information</a></p>
+<p>Enable/disable changelog generation. This is enabled if you have a repository URL set,
+and you can disable it by setting <code>false</code> here.</p>
+<h4 id="componentschangelogread_changelog_file"><a class="header" href="#componentschangelogread_changelog_file">components.changelog.read_changelog_file</a></h4>
+<blockquote>
+<p>Added in version 0.3.0.</p>
+</blockquote>
+<ul>
+<li>Type: bool, Default: <code>true</code></li>
+</ul>
+<p>Disables reading the changelog file, meaning that oranda will fall back to embedding the GitHub release body instead.</p>
+<h4 id="componentschangelogrss_feed"><a class="header" href="#componentschangelogrss_feed">components.changelog.rss_feed</a></h4>
+<blockquote>
+<p>Added in version 0.5.0.</p>
+</blockquote>
+<ul>
+<li>Type: bool, Default: <code>true</code></li>
+</ul>
+<p>Disables the built-in generation of a RSS feed file for your changelog.</p>
+<h3 id="componentsfunding"><a class="header" href="#componentsfunding">components.funding</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: object or bool</li>
+</ul>
+<p><a href="./funding.html">More information</a></p>
+<p>Allows you to tweak or disable oranda's funding page.</p>
+<h4 id="componentsfundingmd_path"><a class="header" href="#componentsfundingmd_path">components.funding.md_path</a></h4>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: none</li>
+</ul>
+<p>Path to a Markdown file which will be embedded into the funding page.</p>
+<h4 id="componentsfundingyml_path"><a class="header" href="#componentsfundingyml_path">components.funding.yml_path</a></h4>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: <code>.github/FUNDING.yml</code></li>
+</ul>
+<p>Custom path to the GitHub-formatted <code>FUNDING.yml</code> file.</p>
+<h2 id="workspace"><a class="header" href="#workspace">workspace</a></h2>
+<p><a href="./workspaces.html">More information</a></p>
+<p>Configuration for a workspace. This option and its sub-keys will only be honored
+in the <code>oranda-workspace.json</code> file, in a normal configuration file, they will be
+ignored.</p>
+<h3 id="workspacename"><a class="header" href="#workspacename">workspace.name</a></h3>
+<blockquote>
+<p>Added in version 0.3.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: My Oranda Workspace</li>
+</ul>
+<p>Set the overarching workspace name. This is optional, and will fall back to &quot;My Oranda Workspace&quot; if not set (not very
+intuitive, I know).</p>
+<h3 id="workspaceauto"><a class="header" href="#workspaceauto">workspace.auto</a></h3>
+<blockquote>
+<p>Added in version 0.3.0.</p>
+</blockquote>
+<ul>
+<li>Type: bool, Default: <code>false</code></li>
+</ul>
+<p>Enables workspace autodetection if set to <code>true</code>. This will cause oranda to attempt to find any Cargo or NPM workspaces
+under the current directory, and to attempt to build all of its members (all members must therefore have at least a
+readme file). Members manually listed under the <code>members</code> key override these automatically detected workspace members.</p>
+<h3 id="workspacegenerate_index"><a class="header" href="#workspacegenerate_index">workspace.generate_index</a></h3>
+<blockquote>
+<p>Added in version 0.3.0.</p>
+</blockquote>
+<ul>
+<li>Type: bool, Default: <code>true</code></li>
+</ul>
+<p>If set to <code>false</code>, does not generate a workspace index page that links between all workspace members. Use this if you
+just want to use oranda's workspace functionality to build multiple unrelated sites in one go.</p>
+<h3 id="workspacemembers"><a class="header" href="#workspacemembers">workspace.members</a></h3>
+<blockquote>
+<p>Added in version 0.3.0.</p>
+</blockquote>
+<ul>
+<li>Type: array, Default: none</li>
+</ul>
+<p>An array of objects representing the workspace members.</p>
+<h4 id="workspacemembersslug"><a class="header" href="#workspacemembersslug">workspace.members.slug</a></h4>
+<blockquote>
+<p>Added in version 0.3.0.</p>
+</blockquote>
+<ul>
+<li>Type: string</li>
+</ul>
+<p>The URL-safe slug this page will be built at. This needs to be something that can be parsed as a URL, as well as a folder
+name on your target system (because oranda is a static site generator, after all).</p>
+<h4 id="workspacememberspath"><a class="header" href="#workspacememberspath">workspace.members.path</a></h4>
+<blockquote>
+<p>Added in version 0.3.0.</p>
+</blockquote>
+<ul>
+<li>Type: string</li>
+</ul>
+<p>The path to the page source. Point this to the same directory that the <code>oranda.json</code> would be in.</p>
+<h3 id="workspacedocs_path"><a class="header" href="#workspacedocs_path">workspace.docs_path</a></h3>
+<blockquote>
+<p>Added in version 0.3.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: none</li>
+</ul>
+<p>Path to a Markdown file whose content is going to be rendered into the workspace index file.</p>
+<h3 id="workspacepreferred_members"><a class="header" href="#workspacepreferred_members">workspace.preferred_members</a></h3>
+<blockquote>
+<p>Added in version 0.3.0.</p>
+</blockquote>
+<ul>
+<li>Type: array, Default: none</li>
+</ul>
+<p>A list of workspace member <code>slug</code>s that should be highlighted at the top of the index page. For example:</p>
+<pre><code class="language-json">{
+  &quot;workspace&quot;: {
+    &quot;auto&quot;: true,
+    &quot;preferred_members&quot;: [&quot;projectone&quot;, &quot;projecthree&quot;]
+  }
+}
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../configuration.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../configuration/artifacts.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../configuration.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../configuration/artifacts.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

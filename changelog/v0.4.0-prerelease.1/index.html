@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" id="oranda" class="dark axo">
+    <head>
+        <title>oranda</title>
+        
+            <meta property="og:url" content="https://opensource.axo.dev/oranda" />
+        
+        
+            <link rel="icon" href="/oranda/favicon.ico" />
+        
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        
+            <meta name="description" content="🎁 generate beautiful landing pages for your projects" />
+            <meta property="og:description" content="🎁 generate beautiful landing pages for your projects" />
+        
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="oranda" />
+        
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta property="og:image" content="https://www.axo.dev/meta_small.jpeg" />
+        
+        
+            <meta property="og:image:alt" content="axo" />
+        
+        
+            <meta name="twitter:creator" content="@axodotdev" />
+            <meta name="twitter:site" content="@axodotdev" />
+        
+        <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
+        <link rel="stylesheet" href="/oranda/oranda-v0.4.0.css" />
+        
+        
+    </head>
+    <body>
+        <div class="container">
+            <div class="page-body">
+                
+                    <div class="repo_banner">
+                        <a href="https://github.com/axodotdev/oranda">
+                            <div class="github-icon" aria-hidden="true"></div>
+                            Check out our GitHub!
+                        </a>
+                    </div>
+                
+
+                <main>
+                    <header>
+                        
+                        <h1 class="title">oranda</h1>
+                        
+    <nav class="nav">
+        <ul>
+            <li><a href="/oranda/">Home</a></li>
+
+            
+
+            
+                <li><a href="/oranda/artifacts/">Install</a></li>
+            
+
+            
+                <li><a href="/oranda/book/">Docs</a></li>
+            
+
+            
+
+            
+                <li><a href="/oranda/changelog/">Changelog</a></li>
+            
+        </ul>
+    </nav>
+
+                    </header>
+
+                    
+<div>
+    <h1>Version 0.4.0-prerelease.1</h1>
+    <div class="releases-body">
+        
+        
+        <section class="release pre-release ">
+    
+    <div class="release-info">
+        <span class="flex items-center gap-2">
+            <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6'>
+    <path stroke-linecap='round' stroke-linejoin='round' d='M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z' />
+    <path stroke-linecap='round' stroke-linejoin='round' d='M6 6h.008v.008H6V6z' /></svg>
+            v0.4.0-prerelease.1
+        </span>
+        <span class="flex items-center gap-2">
+            
+                <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6'><path stroke-linecap='round' stroke-linejoin='round' d='M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5' /></svg>
+                Aug 29 2023 at 09:19 UTC
+            
+        </span>
+    </div>
+    <div class="release-body">
+        <h3>Features</h3>
+<ul>
+<li>
+<p><strong>Improved CSS generation</strong> - <a href="https://github.com/shadows-withal" rel="noopener noreferrer">shadows-withal</a>/<a href="https://github.com/axodotdev/oranda/pull/617" rel="noopener noreferrer">pr617</a>, <a href="https://github.com/ashleygwilliams" rel="noopener noreferrer">ashleygwilliams</a>/<a href="https://github.com/axodotdev/oranda/issues/610" rel="noopener noreferrer">i610</a></p>
+<p>Users and distributors now have more control over how oranda and especially its CSS gets built! You can choose to
+opt-in to building CSS at build or runtime using the Tailwind binary, or you can explicitly prebuild the CSS using
+npm. For more information, see the <a href="https://opensource.axo.dev/oranda/book/building.html#the-trouble-with-css" rel="noopener noreferrer">docs</a>.</p>
+</li>
+<li>
+<p><strong>New <code>generate</code> command</strong> - <a href="https://github.com/shadows-withal" rel="noopener noreferrer">shadows-withal</a>/<a href="https://github.com/axodotdev/oranda/pull/621" rel="noopener noreferrer">pr621</a>, <a href="https://github.com/ashleygwilliams" rel="noopener noreferrer">ashleygwilliams</a>/<a href="https://github.com/axodotdev/oranda/issues/188" rel="noopener noreferrer">i188</a></p>
+<p>You can now generate a GitHub Actions CI file that'll build your site and deploy it to GitHub Pages by running
+<code>oranda generate ci</code>, which runs you through an interactive wizard! In the future, we'll add more types of
+generatable files.</p>
+</li>
+<li>
+<p><strong>LiveReload support for <code>oranda dev</code></strong> - <a href="https://github.com/shadows-withal" rel="noopener noreferrer">shadows-withal</a>/<a href="https://github.com/axodotdev/oranda/pull/622" rel="noopener noreferrer">pr622</a>, <a href="https://github.com/jamesmunns" rel="noopener noreferrer">jamesmunns</a>/<a href="https://github.com/axodotdev/oranda/issues/556" rel="noopener noreferrer">i556</a></p>
+<p>A pretty simple change that has a lot of quality-of-life: Your <code>oranda dev</code> browser tab now reloads automatically
+when you change a relevant file and oranda rebuilds your site!</p>
+</li>
+<li>
+<p><strong>Use Axo's favicon by default</strong> - <a href="https://github.com/shadows-withal" rel="noopener noreferrer">shadows-withal</a>/<a href="https://github.com/axodotdev/oranda/pull/628" rel="noopener noreferrer">pr628</a>, <a href="https://github.com/ashleygwilliams" rel="noopener noreferrer">ashleygwilliams</a>/<a href="https://github.com/axodotdev/oranda/issues/110" rel="noopener noreferrer">i110</a></p>
+<p>Oranda sites that don't have a custom favicon now fall back to Axo's favicon, just so that the space in the tab
+bar isn't so drab and lonely.</p>
+</li>
+<li>
+<p><strong><code>oranda</code> is now available on Homebrew!</strong> - <a href="https://github.com/shadows-withal" rel="noopener noreferrer">shadows-withal</a>/<a href="https://github.com/axodotdev/oranda/pull/602" rel="noopener noreferrer">pr602</a>, the cargo dist team &lt;3</p>
+<p>Run <code>brew install axodotdev/tap/oranda</code> to install it!</p>
+</li>
+</ul>
+<h3>Fixes</h3>
+<ul>
+<li>
+<p><strong>Fixed Tailwind breaking the Nix flake</strong> - <a href="https://github.com/hawkw" rel="noopener noreferrer">hawkw</a>/<a href="https://github.com/axodotdev/oranda/pull/609" rel="noopener noreferrer">pr609</a></p>
+<p>Because Tailwind was being downloaded on each build in a global cache directory (which Nix doesn't support),
+@hawkw added the Tailwind binary as an explicit dependency, and enhanced our Tailwind build code with the
+ability to use a preexisting Tailwind binary.</p>
+</li>
+<li>
+<p><strong>Improved workspace member precedence handling</strong> - <a href="https://github.com/shadows-withal" rel="noopener noreferrer">shadows-withal</a>/<a href="https://github.com/axodotdev/oranda/pull/626" rel="noopener noreferrer">pr626</a>, <a href="https://github.com/shadows-withal" rel="noopener noreferrer">shadows-withal</a>/<a href="https://github.com/axodotdev/oranda/issues/615" rel="noopener noreferrer">i615</a></p>
+<p>There were a couple of tough corner cases when using workspace functionality that would incorrectly cascade to the
+members, which is fixed now!</p>
+</li>
+<li>
+<p><strong>Hide changelog sidebar on mobile</strong> - <a href="https://github.com/shadows-withal" rel="noopener noreferrer">shadows-withal</a>/<a href="https://github.com/axodotdev/oranda/pull/614" rel="noopener noreferrer">pr614</a>, <a href="https://github.com/zkat" rel="noopener noreferrer">zkat</a>/<a href="https://github.com/axodotdev/oranda/issues/612" rel="noopener noreferrer">i612</a></p>
+</li>
+<li>
+<p><strong>Fixed mdbook text highlighting colors having too little contrast</strong> - <a href="https://github.com/shadows-withal" rel="noopener noreferrer">shadows-withal</a>/<a href="https://github.com/axodotdev/oranda/pull/627" rel="noopener noreferrer">pr627</a>, <a href="https://github.com/Gankra" rel="noopener noreferrer">Gankra</a>/<a href="https://github.com/axodotdev/oranda/issues/578" rel="noopener noreferrer">i578</a></p>
+</li>
+</ul>
+<h3>Housekeeping</h3>
+<ul>
+<li>Factored out a bunch of code into <code>axoproject</code> - <a href="https://github.com/mistydemeo" rel="noopener noreferrer">mistydemeo</a>/<a href="https://github.com/axodotdev/oranda/pull/590" rel="noopener noreferrer">pr590</a></li>
+<li>Updated <code>chrono</code> to drop a very old <code>time</code> version - <a href="https://github.com/mistydemeo" rel="noopener noreferrer">mistydemeo</a>/<a href="https://github.com/axodotdev/oranda/pull/632" rel="noopener noreferrer">pr632</a></li>
+</ul>
+
+    </div>
+</section>
+    </div>
+</div>
+
+                </main>
+            </div>
+
+            <footer>
+                
+                    <a href="https://github.com/axodotdev/oranda"><div class="github-icon" aria-hidden="true"></div></a>
+                
+                <span>
+                    oranda, MIT OR Apache-2.0
+                </span>
+            </footer>
+        </div>
+
+        
+            <script defer="true" data-domain="opensource.axo.dev" src="https://plausible.io/js/script.js"></script>
+        
+        
+
+        
+    </body>
+</html>

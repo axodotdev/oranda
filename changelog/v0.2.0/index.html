@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" id="oranda" class="dark axo">
+    <head>
+        <title>oranda</title>
+        
+            <meta property="og:url" content="https://opensource.axo.dev/oranda" />
+        
+        
+            <link rel="icon" href="/oranda/favicon.ico" />
+        
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        
+            <meta name="description" content="🎁 generate beautiful landing pages for your projects" />
+            <meta property="og:description" content="🎁 generate beautiful landing pages for your projects" />
+        
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="oranda" />
+        
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta property="og:image" content="https://www.axo.dev/meta_small.jpeg" />
+        
+        
+            <meta property="og:image:alt" content="axo" />
+        
+        
+            <meta name="twitter:creator" content="@axodotdev" />
+            <meta name="twitter:site" content="@axodotdev" />
+        
+        <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
+        <link rel="stylesheet" href="/oranda/oranda-v0.4.0.css" />
+        
+        
+    </head>
+    <body>
+        <div class="container">
+            <div class="page-body">
+                
+                    <div class="repo_banner">
+                        <a href="https://github.com/axodotdev/oranda">
+                            <div class="github-icon" aria-hidden="true"></div>
+                            Check out our GitHub!
+                        </a>
+                    </div>
+                
+
+                <main>
+                    <header>
+                        
+                        <h1 class="title">oranda</h1>
+                        
+    <nav class="nav">
+        <ul>
+            <li><a href="/oranda/">Home</a></li>
+
+            
+
+            
+                <li><a href="/oranda/artifacts/">Install</a></li>
+            
+
+            
+                <li><a href="/oranda/book/">Docs</a></li>
+            
+
+            
+
+            
+                <li><a href="/oranda/changelog/">Changelog</a></li>
+            
+        </ul>
+    </nav>
+
+                    </header>
+
+                    
+<div>
+    <h1>0.2.0 - 2023-07-19</h1>
+    <div class="releases-body">
+        
+        
+        <section class="release ">
+    
+    <div class="release-info">
+        <span class="flex items-center gap-2">
+            <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6'>
+    <path stroke-linecap='round' stroke-linejoin='round' d='M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z' />
+    <path stroke-linecap='round' stroke-linejoin='round' d='M6 6h.008v.008H6V6z' /></svg>
+            v0.2.0
+        </span>
+        <span class="flex items-center gap-2">
+            
+                <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6'><path stroke-linecap='round' stroke-linejoin='round' d='M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5' /></svg>
+                Jul 19 2023 at 16:06 UTC
+            
+        </span>
+    </div>
+    <div class="release-body">
+        <h3>BREAKING</h3>
+<ul>
+<li>
+<p><strong>make artifact autodetect configurable - <a href="https://github.com/Gankra" rel="noopener noreferrer">Gankra</a>/<a href="https://github.com/axodotdev/oranda/pull/527" rel="noopener noreferrer">pr527</a></strong></p>
+<p>We now provide a new boolean key, <code>components.artifacts.auto</code>, that lets you explicitly
+enable autodetection of artifacts. Previously, we would only enable this if you either
+turned on <code>components.artifacts.cargo_dist</code>, or if you provided some package manager entries.
+Since oranda <em>does</em> also support gleaning artifacts even without <code>cargo-dist</code> support enabled,
+we added this extra switch to let you toggle it without having to mess around with package managers.</p>
+<p>This is a <strong>breaking change</strong>, as enabling <code>cargo-dist</code> support or specifying package managers does
+not turn on auto-detection of artifacts anymore. If you were previously relying on auto-detection, your
+artifacts will no longer be displayed. To re-enable auto-detection, create a <code>oranda.json</code> file if you don't
+already have one, and set the following configuration:</p>
+<pre style="background-color:#263238;"><span style="color:#89ddff;">{
+</span><span style="color:#eeffff;">  </span><span style="color:#c792ea;">"components"</span><span style="color:#89ddff;">: {
+</span><span style="color:#eeffff;">    </span><span style="color:#ffcb6b;">"artifacts"</span><span style="color:#89ddff;">: {
+</span><span style="color:#eeffff;">      </span><span style="color:#f78c6c;">"auto"</span><span style="color:#89ddff;">: </span><span style="color:#f78c6c;">true
+</span><span style="color:#eeffff;">    </span><span style="color:#89ddff;">}
+</span><span style="color:#eeffff;">  </span><span style="color:#89ddff;">}
+</span><span style="color:#89ddff;">}
+</span></pre>
+
+</li>
+</ul>
+<h3>Features</h3>
+<ul>
+<li>
+<p><strong>Typescript syntax highlighting support - <a href="https://github.com/shadows-withal" rel="noopener noreferrer">shadows-withal</a>/<a href="https://github.com/axodotdev/oranda/pull/525" rel="noopener noreferrer">pr525</a>, <a href="https://github.com/geelen" rel="noopener noreferrer">geelen</a>/<a href="https://github.com/axodotdev/oranda/issues/513" rel="noopener noreferrer">i513</a></strong></p>
+<p>You can now use the <code>ts</code>/<code>typescript</code> languages in code blocks! Hooray for types!</p>
+</li>
+<li>
+<p><strong>Better logo positioning - <a href="https://github.com/SaraVieira" rel="noopener noreferrer">SaraVieira</a>/<a href="https://github.com/axodotdev/oranda/pull/524" rel="noopener noreferrer">pr524</a>, <a href="https://github.com/tertsdiepraam" rel="noopener noreferrer">tertsdiepraam</a>/<a href="https://github.com/axodotdev/oranda/issues/519" rel="noopener noreferrer">i519</a></strong></p>
+<p>Logos set via the <code>styles.logo</code> option will now be properly centered/aligned in all themes,
+and set to a maximum width so that a 1920x1080 logo won't be displayed in its full width and height, thus
+pushing all content down below the fold.</p>
+</li>
+</ul>
+<h3>Fixes</h3>
+<ul>
+<li>
+<p><strong>Hacker theme highlight color - <a href="https://github.com/SaraVieira" rel="noopener noreferrer">SaraVieira</a>, <a href="https://github.com/axodotdev/oranda/pull/523" rel="noopener noreferrer">pr523</a>/<a href="https://github.com/axodotdev/oranda/issues/522" rel="noopener noreferrer">i522</a></strong></p>
+<p>Selecting text in the Hacker theme now applies a nice, green, high contrast highlight background
+color, instead of being the same color as the text, therefore hiding the content.</p>
+</li>
+<li>
+<p><strong>Package managers documentation - <a href="https://github.com/shadows-withal" rel="noopener noreferrer">shadows-withal</a>/<a href="https://github.com/axodotdev/oranda/pull/521" rel="noopener noreferrer">pr521</a>, <a href="https://github.com/tertsdiepraam" rel="noopener noreferrer">tertsdiepraam</a>/<a href="https://github.com/axodotdev/oranda/issues/520" rel="noopener noreferrer">i520</a></strong></p>
+<p>Some minor fixes to bring the package manager docs up to speed with how oranda actually processes options.</p>
+</li>
+</ul>
+<h3>Maintenance</h3>
+<ul>
+<li>
+<p><strong>Refactor into using minijinja templates instead of axohtml - <a href="https://github.com/shadows-withal" rel="noopener noreferrer">shadows-withal</a>/<a href="https://github.com/axodotdev/oranda/pull/526" rel="noopener noreferrer">pr526</a></strong></p>
+<p>A biiig internal refactor moving us away from our previous typed-HTML-in-Rust approach of generating
+HTML, towards using a proper template language (Jinja2) instead. This allows for a lot more flexibility
+and separation of concerns going forward!</p>
+</li>
+</ul>
+
+    </div>
+</section>
+    </div>
+</div>
+
+                </main>
+            </div>
+
+            <footer>
+                
+                    <a href="https://github.com/axodotdev/oranda"><div class="github-icon" aria-hidden="true"></div></a>
+                
+                <span>
+                    oranda, MIT OR Apache-2.0
+                </span>
+            </footer>
+        </div>
+
+        
+            <script defer="true" data-domain="opensource.axo.dev" src="https://plausible.io/js/script.js"></script>
+        
+        
+
+        
+    </body>
+</html>

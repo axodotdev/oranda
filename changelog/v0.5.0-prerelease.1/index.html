@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" id="oranda" class="dark axo">
+    <head>
+        <title>oranda</title>
+        
+            <meta property="og:url" content="https://opensource.axo.dev/oranda" />
+        
+        
+            <link rel="icon" href="/oranda/favicon.ico" />
+        
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        
+            <meta name="description" content="🎁 generate beautiful landing pages for your projects" />
+            <meta property="og:description" content="🎁 generate beautiful landing pages for your projects" />
+        
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="oranda" />
+        
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta property="og:image" content="https://www.axo.dev/meta_small.jpeg" />
+        
+        
+            <meta property="og:image:alt" content="axo" />
+        
+        
+            <meta name="twitter:creator" content="@axodotdev" />
+            <meta name="twitter:site" content="@axodotdev" />
+        
+        <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
+        <link rel="stylesheet" href="/oranda/oranda-v0.4.0.css" />
+        
+        
+    </head>
+    <body>
+        <div class="container">
+            <div class="page-body">
+                
+                    <div class="repo_banner">
+                        <a href="https://github.com/axodotdev/oranda">
+                            <div class="github-icon" aria-hidden="true"></div>
+                            Check out our GitHub!
+                        </a>
+                    </div>
+                
+
+                <main>
+                    <header>
+                        
+                        <h1 class="title">oranda</h1>
+                        
+    <nav class="nav">
+        <ul>
+            <li><a href="/oranda/">Home</a></li>
+
+            
+
+            
+                <li><a href="/oranda/artifacts/">Install</a></li>
+            
+
+            
+                <li><a href="/oranda/book/">Docs</a></li>
+            
+
+            
+
+            
+                <li><a href="/oranda/changelog/">Changelog</a></li>
+            
+        </ul>
+    </nav>
+
+                    </header>
+
+                    
+<div>
+    <h1>Version 0.5.0-prerelease.1</h1>
+    <div class="releases-body">
+        
+        
+        <section class="release pre-release ">
+    
+    <div class="release-info">
+        <span class="flex items-center gap-2">
+            <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6'>
+    <path stroke-linecap='round' stroke-linejoin='round' d='M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z' />
+    <path stroke-linecap='round' stroke-linejoin='round' d='M6 6h.008v.008H6V6z' /></svg>
+            v0.5.0-prerelease.1
+        </span>
+        <span class="flex items-center gap-2">
+            
+                <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6'><path stroke-linecap='round' stroke-linejoin='round' d='M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5' /></svg>
+                Sep 29 2023 at 16:57 UTC
+            
+        </span>
+    </div>
+    <div class="release-body">
+        <h3>Features</h3>
+<ul>
+<li>
+<p><strong>RSS feed support</strong> - <a href="https://github.com/shadows-withal" rel="noopener noreferrer">shadows-withal</a>/<a href="https://github.com/axodotdev/oranda/pull/656" rel="noopener noreferrer">pr656</a>, <a href="https://github.com/zkat" rel="noopener noreferrer">zkat</a></p>
+<p>When you have changelog functionality enabled, oranda will now automatically
+generate a RSS feed for it! This means you can plug it into your RSS reader, or
+use further automation that works with RSS files 🙌</p>
+<p>The link to the RSS feed will also be shown on the changelog page. You can disable
+the feed using the new <code>components.changelog.rss_feed</code> option.</p>
+</li>
+<li>
+<p><strong>Removed hard dependency on README.md</strong> - <a href="https://github.com/shadows-withal" rel="noopener noreferrer">shadows-withal</a>/<a href="https://github.com/axodotdev/oranda/pull/640" rel="noopener noreferrer">pr640</a></p>
+<p>In previous releases, you needed to have a README.md file for oranda to work.
+This is a holdover from the earliest version of oranda (which was literally just
+a tool to generate HTML from your readme files), but with all the since added
+functionality, there's no real reason to keep this requirement. This means that
+<strong>oranda now works without a readme file</strong>!!</p>
+</li>
+<li>
+<p><strong>New <code>match_package_names</code> option for workspace config</strong> - <a href="https://github.com/06chaynes" rel="noopener noreferrer">06chaynes</a>/<a href="https://github.com/axodotdev/oranda/pull/652" rel="noopener noreferrer">pr652</a></p>
+<p>When you have a workspace with multiple projects that all publish releases in the same
+GitHub repository, oranda will get confused and think that every release belongs to
+every project. With the new <code>components.artifacts.match_package_names</code>, each workspace
+member will now only include releases that contain their project name in the Git tag
+(<code>v0.4.0-myproject</code>, for example).</p>
+</li>
+<li>
+<p><strong>Ignore <code>public/</code> directory when running <code>oranda generate ci</code></strong> - <a href="https://github.com/shadows-withal" rel="noopener noreferrer">shadows-withal</a>/<a href="https://github.com/axodotdev/oranda/pull/649" rel="noopener noreferrer">pr649</a>, <a href="https://github.com/konstin" rel="noopener noreferrer">konstin</a>/<a href="https://github.com/axodotdev/oranda/issues/643" rel="noopener noreferrer">i643</a></p>
+<p>When running the CI generator command, it'll now prompt you whether it should append the <code>public/</code>
+directory to your <code>.gitignore</code> file.</p>
+</li>
+</ul>
+<h3>Fixes</h3>
+<ul>
+<li>
+<p><strong>Improved errors for when explicitly declared paths don't exist</strong> - <a href="https://github.com/shadows-withal" rel="noopener noreferrer">shadows-withal</a>/<a href="https://github.com/axodotdev/oranda/pull/640" rel="noopener noreferrer">pr640</a>, <a href="https://github.com/konstin" rel="noopener noreferrer">konstin</a></p>
+<p>There used to be some cryptic errors oranda would throw if it couldn't find a path you'd manually
+specified in the configuration file - these errors are much nicer now, and their handling is more consistent.</p>
+</li>
+<li>
+<p><strong>Workspace index now supports <code>additional_css</code></strong> - <a href="https://github.com/06chaynes" rel="noopener noreferrer">06chaynes</a>/<a href="https://github.com/axodotdev/oranda/pull/653" rel="noopener noreferrer">pr653</a></p>
+<p>The <code>additional_css</code> option will now be respected on the workspace index page!</p>
+</li>
+<li>
+<p><strong>Set correct colors for mdbook draft chapters</strong> - <a href="https://github.com/06chaynes" rel="noopener noreferrer">06chaynes</a>/<a href="https://github.com/axodotdev/oranda/pull/655" rel="noopener noreferrer">pr655</a>, <a href="https://github.com/hawkw" rel="noopener noreferrer">hawkw</a>/<a href="https://github.com/axodotdev/oranda/issues/654" rel="noopener noreferrer">i654</a></p>
+<p>In custom oranda themes, mdbook draft chapter titles in the sidebar were unreadable. This has been fixed!</p>
+</li>
+</ul>
+
+    </div>
+</section>
+    </div>
+</div>
+
+                </main>
+            </div>
+
+            <footer>
+                
+                    <a href="https://github.com/axodotdev/oranda"><div class="github-icon" aria-hidden="true"></div></a>
+                
+                <span>
+                    oranda, MIT OR Apache-2.0
+                </span>
+            </footer>
+        </div>
+
+        
+            <script defer="true" data-domain="opensource.axo.dev" src="https://plausible.io/js/script.js"></script>
+        
+        
+
+        
+    </body>
+</html>

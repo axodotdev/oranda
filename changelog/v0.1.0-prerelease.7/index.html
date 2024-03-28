@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" id="oranda" class="dark axo">
+    <head>
+        <title>oranda</title>
+        
+            <meta property="og:url" content="https://opensource.axo.dev/oranda" />
+        
+        
+            <link rel="icon" href="/oranda/favicon.ico" />
+        
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        
+            <meta name="description" content="🎁 generate beautiful landing pages for your projects" />
+            <meta property="og:description" content="🎁 generate beautiful landing pages for your projects" />
+        
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="oranda" />
+        
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta property="og:image" content="https://www.axo.dev/meta_small.jpeg" />
+        
+        
+            <meta property="og:image:alt" content="axo" />
+        
+        
+            <meta name="twitter:creator" content="@axodotdev" />
+            <meta name="twitter:site" content="@axodotdev" />
+        
+        <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
+        <link rel="stylesheet" href="/oranda/oranda-v0.4.0.css" />
+        
+        
+    </head>
+    <body>
+        <div class="container">
+            <div class="page-body">
+                
+                    <div class="repo_banner">
+                        <a href="https://github.com/axodotdev/oranda">
+                            <div class="github-icon" aria-hidden="true"></div>
+                            Check out our GitHub!
+                        </a>
+                    </div>
+                
+
+                <main>
+                    <header>
+                        
+                        <h1 class="title">oranda</h1>
+                        
+    <nav class="nav">
+        <ul>
+            <li><a href="/oranda/">Home</a></li>
+
+            
+
+            
+                <li><a href="/oranda/artifacts/">Install</a></li>
+            
+
+            
+                <li><a href="/oranda/book/">Docs</a></li>
+            
+
+            
+
+            
+                <li><a href="/oranda/changelog/">Changelog</a></li>
+            
+        </ul>
+    </nav>
+
+                    </header>
+
+                    
+<div>
+    <h1>Version 0.1.0-prerelease.7</h1>
+    <div class="releases-body">
+        
+        
+        <section class="release pre-release ">
+    
+    <div class="release-info">
+        <span class="flex items-center gap-2">
+            <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6'>
+    <path stroke-linecap='round' stroke-linejoin='round' d='M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z' />
+    <path stroke-linecap='round' stroke-linejoin='round' d='M6 6h.008v.008H6V6z' /></svg>
+            v0.1.0-prerelease.7
+        </span>
+        <span class="flex items-center gap-2">
+            
+                <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6'><path stroke-linecap='round' stroke-linejoin='round' d='M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5' /></svg>
+                Jun 20 2023 at 15:23 UTC
+            
+        </span>
+    </div>
+    <div class="release-body">
+        <h3>What is oranda?</h3>
+<p>oranda is a hands-off static site generator for people who want a website for their tool but don't want to get knee-deep into web development. As long as you have a <code>README.md</code> in your directory, you can benefit from oranda. oranda will also try to automatically work with:</p>
+<ul>
+<li>Release artifacts (currently only for GitHub releases)
+<ul>
+<li><code>cargo-dist</code>-generated ones, and</li>
+<li>arbitrary release artifacts</li>
+</ul>
+</li>
+<li><code>mdbook</code>docs</li>
+<li>GitHub-supported project/maintainer funding sources</li>
+</ul>
+<p>oranda is designed to <em>just work</em> in a lot of cases, and in cases where it doesn't, it should provide fine-grained configuration so you can make it work for your use case.</p>
+<h3>Features</h3>
+<h4>Components</h4>
+<h5>Github release artifacts inference</h5>
+<p>We can now not only figure out whether you're using <code>cargo-dist</code> <em>automatically</em>, but we also try and support arbitrary tarballs, as long as they're attached to a release and they're following the target-triple format. Oranda will now, for example, pick up a release artifact called <code>myapp-aarch64-apple-darwin.tar.xz</code>, even if the project isn't using <code>cargo-dist</code> to publish releases.</p>
+<h5>Smarter install widget</h5>
+<p>The installer widget on our main page has been upgraded! It now not only shows a select box where you can switch between different architectures (though we still attempt to figure out what platform you're running on), but it now additionally displays your package managers, all in a sleek tab-style view:</p>
+<p><img src="https://github-production-user-asset-6210df.s3.amazonaws.com/6445316/250566861-a635c28b-d4d3-4c90-a685-8e9a85673651.png" alt="oranda install widget preview"></p>
+<p>You can customize which package managers you want to be displayed on in this widget vs. which ones should only be displayed on the separate install page, as well. <a href="https://opensource.axo.dev/oranda/book/configuration/artifacts.html#adding-package-manager-installation-instructions" rel="noopener noreferrer">Read more in the docs</a></p>
+<h5>Funding page</h5>
+<p>oranda now has the ability to autodetect whether you're using GitHub's funding embed functionality (meaning you have a <code>.github/FUNDING.yml</code>), in which case it'll automatically generate a page showing your available funding options.</p>
+<p>Additionally, you can enhance this page by selecting a particular funding channel to be prioritized as your "main" funding method. You can also provide custom content from a <code>funding.md</code> Markdown file, to provide additional context to your funding page. <a href="https://opensource.axo.dev/oranda/book/configuration/funding.html" rel="noopener noreferrer">Read more in the docs</a></p>
+<p>This is less of a defined feature and more of an experiment on how we can better integrate maintainers' funding sources onto their websites. Please let us know what you think, or if you have any other feedback or input!</p>
+<h5><code>mdbook</code> autodetect and styling</h5>
+<p>oranda themes now get applied to your mdbook output, too, meaning there's less of a discrepancy between your flashy oranda page and your default-mdbook-styled docs. We've also been hard at work being able to detect when you use <code>mdbook</code> without you having to set it, which should now work in the majority of cases.</p>
+<h4>Configuration</h4>
+<h5>New configuration structure</h5>
+<p>We've completely revamped our configuration structure to be more future-proof and to require less refactoring in the fullness of time. For the new configuration layout, please <a href="https://opensource.axo.dev/oranda/book/configuration.html" rel="noopener noreferrer">consult the docs</a>.</p>
+<p>One other major change is that we now <strong>reject unknown config keys</strong>. This means that if you've had a oranda 0.0.3 site, it will now force you to migrate your config to the new format. We've decided on this because we believe that doing anything but hard erroring in this situation would lead to unwanted behavior (old keys getting interpreted in new, weird ways, and so on).</p>
+<h5>Config schema</h5>
+<p>oranda's configuration schema is now available in a JSON schema for each release starting with this one. This means that in editors like VSCode, you can attach the schema to your <code>oranda.json</code> file and get autofill and documentation, like this:</p>
+<pre style="background-color:#263238;"><span style="color:#89ddff;">{
+</span><span style="color:#eeffff;">  </span><span style="color:#c792ea;">"$schema"</span><span style="color:#89ddff;">: "</span><span style="color:#c3e88d;">https://github.com/axodotdev/oranda/releases/download/v0.1.0/oranda-config-schema.json</span><span style="color:#89ddff;">"
+</span><span style="color:#89ddff;">}
+</span></pre>
+
+<h4>CLI</h4>
+<h5><code>dev</code> command</h5>
+<p>This release introduces <code>oranda dev</code>, which bundles both building your site and serving it from a file server, as well as sprinkling in auto-recompilation when files change. It's intended to be the prime command for local development of a oranda site.</p>
+<h3>Bug fixes</h3>
+<p>(this is a selection, there's been way too many to fully list, at least until we're able to automatically generate a list)</p>
+<ul>
+<li>Various style fixes, lists now display correct, colors should be less offensive to the eye, that sort of stuff</li>
+<li>We're much better now at handling complex release histories!</li>
+<li>We've completely removed the <code>version</code> key from the configuration. It wasn't used, and we probably won't use it in the future, either</li>
+</ul>
+<h3>Docs</h3>
+<p>Documentation has had a major rewrite! We now provide a full configuration overview, as well as more detailed writeups for major parts of functionality.</p>
+<h3>Thank you to our contributors!</h3>
+<p>Despite being formally unannounced, several intrepid folks discovered oranda, and have been using it for personal projects and contributing issues and PRs. Their feedback has been invaluable in getting oranda to 0.1.0 today and we'd like to thank them:</p>
+<ul>
+<li><a href="https://github.com/2mill" rel="noopener noreferrer">2mill</a></li>
+<li><a href="https://github.com/andrewmd5" rel="noopener noreferrer">andrewmd5</a></li>
+<li><a href="https://github.com/jamesmunns" rel="noopener noreferrer">jamesmunns</a></li>
+<li><a href="https://github.com/MarcoIeni" rel="noopener noreferrer">MarcoIeni</a></li>
+<li><a href="https://github.com/msfjarvis" rel="noopener noreferrer">msjarvis</a></li>
+<li><a href="https://github.com/pomdtr" rel="noopener noreferrer">pomdtr</a></li>
+<li><a href="https://github.com/proofconstruction" rel="noopener noreferrer">proofconstruction</a></li>
+<li><a href="https://github.com/tshepang" rel="noopener noreferrer">tshepang</a></li>
+<li><a href="https://github.com/untitaker" rel="noopener noreferrer">untitaker</a></li>
+<li><a href="https://github.com/zkat" rel="noopener noreferrer">zkat</a></li>
+</ul>
+
+    </div>
+</section>
+    </div>
+</div>
+
+                </main>
+            </div>
+
+            <footer>
+                
+                    <a href="https://github.com/axodotdev/oranda"><div class="github-icon" aria-hidden="true"></div></a>
+                
+                <span>
+                    oranda, MIT OR Apache-2.0
+                </span>
+            </footer>
+        </div>
+
+        
+            <script defer="true" data-domain="opensource.axo.dev" src="https://plausible.io/js/script.js"></script>
+        
+        
+
+        
+    </body>
+</html>

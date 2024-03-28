@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" id="oranda" class="dark axo">
+    <head>
+        <title>oranda</title>
+        
+            <meta property="og:url" content="https://opensource.axo.dev/oranda" />
+        
+        
+            <link rel="icon" href="/oranda/favicon.ico" />
+        
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        
+            <meta name="description" content="🎁 generate beautiful landing pages for your projects" />
+            <meta property="og:description" content="🎁 generate beautiful landing pages for your projects" />
+        
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="oranda" />
+        
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta property="og:image" content="https://www.axo.dev/meta_small.jpeg" />
+        
+        
+            <meta property="og:image:alt" content="axo" />
+        
+        
+            <meta name="twitter:creator" content="@axodotdev" />
+            <meta name="twitter:site" content="@axodotdev" />
+        
+        <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
+        <link rel="stylesheet" href="/oranda/oranda-v0.4.0.css" />
+        
+        
+    </head>
+    <body>
+        <div class="container">
+            <div class="page-body">
+                
+                    <div class="repo_banner">
+                        <a href="https://github.com/axodotdev/oranda">
+                            <div class="github-icon" aria-hidden="true"></div>
+                            Check out our GitHub!
+                        </a>
+                    </div>
+                
+
+                <main>
+                    <header>
+                        
+                        <h1 class="title">oranda</h1>
+                        
+    <nav class="nav">
+        <ul>
+            <li><a href="/oranda/">Home</a></li>
+
+            
+
+            
+                <li><a href="/oranda/artifacts/">Install</a></li>
+            
+
+            
+                <li><a href="/oranda/book/">Docs</a></li>
+            
+
+            
+
+            
+                <li><a href="/oranda/changelog/">Changelog</a></li>
+            
+        </ul>
+    </nav>
+
+                    </header>
+
+                    
+<div>
+    <h1>Version 0.6.0-prerelease.1</h1>
+    <div class="releases-body">
+        
+        
+        <section class="release pre-release ">
+    
+    <div class="release-info">
+        <span class="flex items-center gap-2">
+            <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6'>
+    <path stroke-linecap='round' stroke-linejoin='round' d='M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z' />
+    <path stroke-linecap='round' stroke-linejoin='round' d='M6 6h.008v.008H6V6z' /></svg>
+            v0.6.0-prerelease.1
+        </span>
+        <span class="flex items-center gap-2">
+            
+                <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6'><path stroke-linecap='round' stroke-linejoin='round' d='M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5' /></svg>
+                Dec 13 2023 at 11:38 UTC
+            
+        </span>
+    </div>
+    <div class="release-body">
+        <h3>Features</h3>
+<ul>
+<li>
+<p><strong>axo Releases support</strong> - <a href="https://github.com/axodotdev/oranda/pull/672" rel="noopener noreferrer">impl</a></p>
+<p>oranda now supports axo's homegrown release hosting service, axo Releases! At time of writing,
+axo Releases is still in closed beta, however, if you have access and want to try it out, you can set the following
+configuration parameter:</p>
+<pre style="background-color:#263238;"><span style="color:#89ddff;">{
+</span><span style="color:#eeffff;">  </span><span style="color:#c792ea;">"components"</span><span style="color:#89ddff;">: {
+</span><span style="color:#eeffff;">    </span><span style="color:#ffcb6b;">"source"</span><span style="color:#89ddff;">: "</span><span style="color:#c3e88d;">axodotdev</span><span style="color:#89ddff;">"
+</span><span style="color:#eeffff;">  </span><span style="color:#89ddff;">}
+</span><span style="color:#89ddff;">}
+</span></pre>
+
+<p>Doing so will cause oranda to not fetch from GitHub <em>at all</em>, instead using axo Releases as a source of truth for your release data.</p>
+</li>
+<li>
+<p><strong>App names show on multi-app releases</strong> - <a href="https://github.com/axodotdev/oranda/pull/671" rel="noopener noreferrer">impl</a>, issue <a href="https://github.com/axodotdev/oranda/pull/666" rel="noopener noreferrer">#1</a>, <a href="https://github.com/axodotdev/oranda/issues/665" rel="noopener noreferrer">#2</a> (thanks
+to <a href="https://github.com/aumetra" rel="noopener noreferrer">aumetra</a>!)</p>
+<p>If you use oranda to work with a project that publishes multiple differently-named binaries, your install widget may
+end up looking very confusing, with lots of similarly-named tabs. Previously, your options were to set up a
+<a href="https://opensource.axo.dev/oranda/book/configuration/workspaces.html" rel="noopener noreferrer">workspace</a>, or to set the <a href="https://opensource.axo.dev/oranda/book/configuration/reference.html#componentsartifactsmatch_package_names" rel="noopener noreferrer"><code>components.artifacts.match_package_names</code></a> configuration
+setting. With this release, if you want to keep everything inside a single website, the install widget will now
+show the app names in the tabs, like this:</p>
+<p><img src="https://i.imgur.com/K0NG2SQ.png" alt="picture of an app with lots of tabs and app names"></p>
+<p>There's no configuration for this, it'll automatically enable if oranda detects that you have multiple "installable"
+apps in your release assets.</p>
+</li>
+</ul>
+<h3>Bug Fixes</h3>
+<ul>
+<li>
+<p><strong>Fixed a bug that could cause mdbook compilation to recurse infinitely</strong> - <a href="https://github.com/axodotdev/oranda/pull/674" rel="noopener noreferrer">impl</a>, <a href="https://github.com/axodotdev/oranda/issues/669" rel="noopener noreferrer">issue</a></p>
+<p>mdbook makes it very easy to put your book destination directory in the same directory as your book source, which in turn
+causes your built files to be read as source files, over and over again. We detect this now and don't let you do it anymore.</p>
+</li>
+</ul>
+<h3>Housekeeping</h3>
+<ul>
+<li>Minor cleanups to the source code, such as finally settling the "who has the better line endings, Linux or
+Windows" debate (it's Linux)</li>
+</ul>
+
+    </div>
+</section>
+    </div>
+</div>
+
+                </main>
+            </div>
+
+            <footer>
+                
+                    <a href="https://github.com/axodotdev/oranda"><div class="github-icon" aria-hidden="true"></div></a>
+                
+                <span>
+                    oranda, MIT OR Apache-2.0
+                </span>
+            </footer>
+        </div>
+
+        
+            <script defer="true" data-domain="opensource.axo.dev" src="https://plausible.io/js/script.js"></script>
+        
+        
+
+        
+    </body>
+</html>
