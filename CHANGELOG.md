@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.6.3 - 2024-05-03
+
+Lots of docs fixes and dependency updates thanks to @tshepang!
+
+
 ## 0.6.2 - 2024-02-23
 
 oranda will now output `iem | iex` expressions wrapped in `powershell -c` so they can be run from cmd.

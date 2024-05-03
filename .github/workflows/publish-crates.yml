@@ -1,0 +1,31 @@
+# Publishes a release to crates.io
+#
+# To trigger this:
+#
+# - go to Actions > PublishRelease
+# - click the Run Workflow dropdown in the top-right
+# - enter the tag of the release as “Release Tag” (e.g. v0.3.18)
+name: PublishCrates
+
+on:
+  workflow_call:
+    inputs:
+      plan:
+        required: true
+        type: string
+
+jobs:
+  # publish the current repo state to crates.io
+  cargo-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - run: cargo publish -p oranda-generate-css --token ${CRATES_TOKEN}
+        env:
+          CRATES_TOKEN: ${{ secrets.CRATES_TOKEN }}
+      - run: cargo publish -p oranda --token ${CRATES_TOKEN}
+        env:
+          CRATES_TOKEN: ${{ secrets.CRATES_TOKEN }}
