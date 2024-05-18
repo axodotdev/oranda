@@ -68,7 +68,7 @@ const FATHOM_SCRIPT_URL: &str = "https://cdn.usefathom.com/script.js";
 
 impl Google {
     pub fn get_script(&self) -> String {
-        format!("window.dataLayer = window.dataLayer || []; function gtag(){{dataLayer.push(arguments);}} gtag('js', new Date());gtag('config', '{}');", self.tracking_id)
+        format!("<script>window.dataLayer = window.dataLayer || []; function gtag(){{dataLayer.push(arguments);}} gtag('js', new Date());gtag('config', '{}');</script>", self.tracking_id)
     }
 }
 
