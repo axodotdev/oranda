@@ -51,4 +51,4 @@ nix profile install github:axodotdev/oranda
 ```
 
 [cargo-binstall]:https://github.com/cargo-bins/cargo-binstall
-[website]: https://opensource.axo.dev/oranda
+[website]: https://axodotdev.github.io/oranda
