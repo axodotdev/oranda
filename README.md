@@ -54,7 +54,7 @@ If you'd like to configure `oranda`, place an `oranda.json` file in the root of
 your project and fill it with the configuration you'd like. Check out the [docs]
 to learn more about your configuration options!
 
-[docs]: https://opensource.axo.dev/oranda/book/configuration.html
+[docs]: https://axodotdev.github.io/oranda/book/configuration.html
 
 ## Installers: integrating with `cargo-dist`
 
@@ -79,4 +79,4 @@ a good learning experience for new contributors.
 For local development on oranda, we also have a [special docs page][contributing-docs] with some tips.
 
 [good first issue]: https://github.com/axodotdev/oranda/labels/good%20first%20issue
-[contributing-docs]: https://opensource.axo.dev/oranda/book/contributing.html
+[contributing-docs]: https://axodotdev.github.io/oranda/book/contributing.html

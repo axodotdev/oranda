@@ -8,7 +8,7 @@ expression: "&snapshots"
   <head>
     <title>oranda</title>
     
-      <meta property="og:url" content="https://opensource.axo.dev/oranda" />
+      <meta property="og:url" content="https://axodotdev.github.io/oranda" />
     
     
       <link rel="icon" href="/oranda/favicon.ico" />
@@ -363,7 +363,7 @@ expression: "&snapshots"
     </div>
 
     
-      <script defer="true" data-domain="opensource.axo.dev" src="https://plausible.io/js/script.js"></script>
+      <script defer="true" data-domain="axodotdev.github.io" src="https://plausible.io/js/script.js"></script>
     
     
 
@@ -380,7 +380,7 @@ expression: "&snapshots"
   <head>
     <title>oranda</title>
     
-      <meta property="og:url" content="https://opensource.axo.dev/oranda" />
+      <meta property="og:url" content="https://axodotdev.github.io/oranda" />
     
     
       <link rel="icon" href="/oranda/favicon.ico" />
@@ -665,7 +665,7 @@ and separation of concerns going forward!</p>
     </div>
 
     
-      <script defer="true" data-domain="opensource.axo.dev" src="https://plausible.io/js/script.js"></script>
+      <script defer="true" data-domain="axodotdev.github.io" src="https://plausible.io/js/script.js"></script>
     
     
 
@@ -680,7 +680,7 @@ and separation of concerns going forward!</p>
   <head>
     <title>oranda</title>
     
-      <meta property="og:url" content="https://opensource.axo.dev/oranda" />
+      <meta property="og:url" content="https://axodotdev.github.io/oranda" />
     
     
       <link rel="icon" href="/oranda/favicon.ico" />
@@ -851,7 +851,7 @@ and separation of concerns going forward!</p>
     </div>
 
     
-      <script defer="true" data-domain="opensource.axo.dev" src="https://plausible.io/js/script.js"></script>
+      <script defer="true" data-domain="axodotdev.github.io" src="https://plausible.io/js/script.js"></script>
     
     
 
@@ -864,7 +864,7 @@ and separation of concerns going forward!</p>
   <head>
     <title>oranda</title>
     
-      <meta property="og:url" content="https://opensource.axo.dev/oranda" />
+      <meta property="og:url" content="https://axodotdev.github.io/oranda" />
     
     
       <link rel="icon" href="/oranda/favicon.ico" />
@@ -1020,7 +1020,7 @@ one that it <em>can't</em> parse.</p>
     </div>
 
     
-      <script defer="true" data-domain="opensource.axo.dev" src="https://plausible.io/js/script.js"></script>
+      <script defer="true" data-domain="axodotdev.github.io" src="https://plausible.io/js/script.js"></script>
     
     
 
@@ -1033,7 +1033,7 @@ one that it <em>can't</em> parse.</p>
   <head>
     <title>oranda</title>
     
-      <meta property="og:url" content="https://opensource.axo.dev/oranda" />
+      <meta property="og:url" content="https://axodotdev.github.io/oranda" />
     
     
       <link rel="icon" href="/oranda/favicon.ico" />
@@ -1687,7 +1687,7 @@ one from scratch.</p>
 <p><img src="https://github.com/axodotdev/oranda/assets/6445316/439082a6-2caa-477e-93cc-1ff985d9bb21" alt="oranda demo gif"></p>
 <h2>Configuration</h2>
 <p>If you'd like to configure <code>oranda</code>, place an <code>oranda.json</code> file in the root of
-your project and fill it with the configuration you'd like. Check out the <a href="https://opensource.axo.dev/oranda/book/configuration.html" rel="noopener noreferrer">docs</a>
+your project and fill it with the configuration you'd like. Check out the <a href="https://axodotdev.github.io/oranda/book/configuration.html" rel="noopener noreferrer">docs</a>
 to learn more about your configuration options!</p>
 <h2>Installers: integrating with <code>cargo-dist</code></h2>
 <p><code>oranda</code> is built to work alongside <a href="https://github.com/axodotdev/cargo-dist" rel="noopener noreferrer"><code>cargo-dist</code></a>, which is a tool that builds
@@ -1718,7 +1718,7 @@ installers and downloadable artifacts on your page.</p>
     </div>
 
     
-      <script defer="true" data-domain="opensource.axo.dev" src="https://plausible.io/js/script.js"></script>
+      <script defer="true" data-domain="axodotdev.github.io" src="https://plausible.io/js/script.js"></script>
     
     
 

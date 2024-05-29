@@ -32,7 +32,7 @@ For example:
     },
     "analytics": {
       "plausible": {
-        "domain": "opensource.axo.dev"
+        "domain": "axodotdev.github.io"
       }
     }
   },

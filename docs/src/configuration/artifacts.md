@@ -61,4 +61,4 @@ You can add custom installation instructions for package managers or package man
 All package manager entries are currently treated as "cross-platform", meaning they'll show up in the install widget for
 any platform you support. We're aware of this limitation, and will likely expand support for this in the future.
 
-[`cargo-dist`]: https://opensource.axo.dev/cargo-dist/
+[`cargo-dist`]: https://axodotdev.github.io/cargo-dist/

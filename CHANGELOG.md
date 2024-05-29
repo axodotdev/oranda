@@ -66,8 +66,8 @@ to produce the best possible expression.
   Windows" debate (it's Linux)
 
 [aumetra]: https://github.com/aumetra
-[workspace-docs]: https://opensource.axo.dev/oranda/book/configuration/workspaces.html
-[package-names]: https://opensource.axo.dev/oranda/book/configuration/reference.html#componentsartifactsmatch_package_names
+[workspace-docs]: https://axodotdev.github.io/oranda/book/configuration/workspaces.html
+[package-names]: https://axodotdev.github.io/oranda/book/configuration/reference.html#componentsartifactsmatch_package_names
 
 ## 0.5.0 - 2023-10-10
 
@@ -155,7 +155,7 @@ to produce the best possible expression.
 
   Users and distributors now have more control over how oranda and especially its CSS gets built! You can choose to
   opt-in to building CSS at build or runtime using the Tailwind binary, or you can explicitly prebuild the CSS using
-  npm. For more information, see the [docs](https://opensource.axo.dev/oranda/book/building.html#the-trouble-with-css).
+  npm. For more information, see the [docs](https://axodotdev.github.io/oranda/book/building.html#the-trouble-with-css).
 
 - **New `generate` command** - [shadows-withal]/[pr621], [ashleygwilliams]/[i188]
 
@@ -374,8 +374,8 @@ to produce the best possible expression.
 [mistydemeo]: https://github.com/mistydemeo
 [tertsdiepraam]: https://github.com/tertsdiepraam
 
-[workspace-docs]: https://opensource.axo.dev/oranda/book/configuration/workspaces.html
-[changelog-docs]: https://opensource.axo.dev/oranda/book/configuration/changelog.html
+[workspace-docs]: https://axodotdev.github.io/oranda/book/configuration/workspaces.html
+[changelog-docs]: https://axodotdev.github.io/oranda/book/configuration/changelog.html
 [discord]: https://discord.gg/8BwyXQmeUT
 
 ## 0.2.0 - 2023-07-19
@@ -524,13 +524,13 @@ The installer widget on our main page has been upgraded! It now not only shows a
 
 ![oranda install widget preview](https://github-production-user-asset-6210df.s3.amazonaws.com/6445316/250566861-a635c28b-d4d3-4c90-a685-8e9a85673651.png)
 
-You can customize which package managers you want to be displayed on in this widget vs. which ones should only be displayed on the separate install page, as well. [Read more in the docs](https://opensource.axo.dev/oranda/book/configuration/artifacts.html#adding-package-manager-installation-instructions)
+You can customize which package managers you want to be displayed on in this widget vs. which ones should only be displayed on the separate install page, as well. [Read more in the docs](https://axodotdev.github.io/oranda/book/configuration/artifacts.html#adding-package-manager-installation-instructions)
 
 ##### Funding page
 
 oranda now has the ability to autodetect whether you're using GitHub's funding embed functionality (meaning you have a `.github/FUNDING.yml`), in which case it'll automatically generate a page showing your available funding options.
 
-Additionally, you can enhance this page by selecting a particular funding channel to be prioritized as your "main" funding method. You can also provide custom content from a `funding.md` Markdown file, to provide additional context to your funding page. [Read more in the docs](https://opensource.axo.dev/oranda/book/configuration/funding.html)
+Additionally, you can enhance this page by selecting a particular funding channel to be prioritized as your "main" funding method. You can also provide custom content from a `funding.md` Markdown file, to provide additional context to your funding page. [Read more in the docs](https://axodotdev.github.io/oranda/book/configuration/funding.html)
 
 This is less of a defined feature and more of an experiment on how we can better integrate maintainers' funding sources onto their websites. Please let us know what you think, or if you have any other feedback or input!
 
@@ -542,7 +542,7 @@ oranda themes now get applied to your mdbook output, too, meaning there's less o
 
 ##### New configuration structure
 
-We've completely revamped our configuration structure to be more future-proof and to require less refactoring in the fullness of time. For the new configuration layout, please [consult the docs](https://opensource.axo.dev/oranda/book/configuration.html).
+We've completely revamped our configuration structure to be more future-proof and to require less refactoring in the fullness of time. For the new configuration layout, please [consult the docs](https://axodotdev.github.io/oranda/book/configuration.html).
 
 One other major change is that we now **reject unknown config keys**. This means that if you've had a oranda 0.0.3 site, it will now force you to migrate your config to the new format. We've decided on this because we believe that doing anything but hard erroring in this situation would lead to unwanted behavior (old keys getting interpreted in new, weird ways, and so on).
 
