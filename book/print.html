@@ -1,0 +1,1538 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js oranda-dark">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title></title>
+        <meta name="robots" content="noindex" />
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+        <link rel="stylesheet" href="oranda-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "oranda-dark" : "oranda-dark";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('orandamdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('orandamdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('orandamdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('oranda-dark')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="install.html"><strong aria-hidden="true">2.</strong> Install</a></li><li class="chapter-item expanded "><a href="quickstart.html"><strong aria-hidden="true">3.</strong> Quickstart</a></li><li class="chapter-item expanded "><a href="hosting.html"><strong aria-hidden="true">4.</strong> Hosting</a></li><li class="chapter-item expanded "><a href="assets.html"><strong aria-hidden="true">5.</strong> Assets</a></li><li class="chapter-item expanded "><a href="cli.html"><strong aria-hidden="true">6.</strong> Command Line</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="cli/build.html"><strong aria-hidden="true">6.1.</strong> build</a></li><li class="chapter-item expanded "><a href="cli/serve.html"><strong aria-hidden="true">6.2.</strong> serve</a></li><li class="chapter-item expanded "><a href="cli/dev.html"><strong aria-hidden="true">6.3.</strong> dev</a></li><li class="chapter-item expanded "><a href="cli/generate.html"><strong aria-hidden="true">6.4.</strong> generate</a></li></ol></li><li class="chapter-item expanded "><a href="tips.html"><strong aria-hidden="true">7.</strong> Tips and Tricks</a></li><li class="chapter-item expanded "><a href="configuration.html"><strong aria-hidden="true">8.</strong> Configuration</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="configuration/reference.html"><strong aria-hidden="true">8.1.</strong> Reference</a></li><li class="chapter-item expanded "><a href="configuration/artifacts.html"><strong aria-hidden="true">8.2.</strong> Artifacts & cargo-dist</a></li><li class="chapter-item expanded "><a href="configuration/additional-pages.html"><strong aria-hidden="true">8.3.</strong> Additional Pages</a></li><li class="chapter-item expanded "><a href="configuration/analytics.html"><strong aria-hidden="true">8.4.</strong> Analytics</a></li><li class="chapter-item expanded "><a href="configuration/changelog.html"><strong aria-hidden="true">8.5.</strong> Changelogs</a></li><li class="chapter-item expanded "><a href="configuration/mdbook.html"><strong aria-hidden="true">8.6.</strong> mdbook support</a></li><li class="chapter-item expanded "><a href="configuration/social.html"><strong aria-hidden="true">8.7.</strong> Social</a></li><li class="chapter-item expanded "><a href="configuration/theme.html"><strong aria-hidden="true">8.8.</strong> Theming</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="configuration/theme/previews.html"><strong aria-hidden="true">8.8.1.</strong> Theme Previews</a></li></ol></li><li class="chapter-item expanded "><a href="configuration/funding.html"><strong aria-hidden="true">8.9.</strong> Funding</a></li><li class="chapter-item expanded "><a href="configuration/workspaces.html"><strong aria-hidden="true">8.10.</strong> Workspaces</a></li></ol></li><li class="chapter-item expanded "><a href="contributing.html"><strong aria-hidden="true">9.</strong> Contributing</a></li><li class="chapter-item expanded "><a href="building.html"><strong aria-hidden="true">10.</strong> Building oranda</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="oranda-dark">Axo Dark</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="oranda-light">Axo Light</button></li>
+
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title"></h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
+<p>Oranda is a tool for generating beautiful landing pages for your projects.</p>
+<p>It can:</p>
+<ul>
+<li>Automagically generate a webpage based off your project readme file</li>
+<li>Include arbitrary Markdown pages</li>
+<li>Generate <code>mdbook</code> books for you</li>
+<li>Show downloadable and installable artifacts, and ways to install them, by integrating with <a href="https://github.com/axodotdev/cargo-dist">cargo-dist</a></li>
+<li>Provide integration with several web analytics providers</li>
+</ul>
+<p>and more!</p>
+<p>This is the oranda documentation, where we explain how to use the tool in detail. Use the
+sidebar to the left to navigate between pages.</p>
+<blockquote>
+<p><strong>Caveat emptor!</strong> oranda is still <em>beta-quality software</em>! There may be breaking changes at times, especially
+in the configuration format (although we're working hard on stabilizing it)</p>
+</blockquote>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="install"><a class="header" href="#install">Install</a></h1>
+<p>There's lots of ways to install oranda!</p>
+<h2 id="the-quickest-way"><a class="header" href="#the-quickest-way">The Quickest Way</a></h2>
+<p>On the <a href="https://opensource.axo.dev/oranda">oranda website</a>, there's a one-liner command you can execute for your
+OS that'll download and install oranda for you, without any further hassle!</p>
+<h2 id="install-prebuilt-binaries-with-cargo-binstall"><a class="header" href="#install-prebuilt-binaries-with-cargo-binstall">Install Prebuilt Binaries With <a href="https://github.com/cargo-bins/cargo-binstall">cargo-binstall</a></a></h2>
+<pre><code class="language-sh">cargo binstall oranda
+</code></pre>
+<h2 id="build-from-source-with-cargo"><a class="header" href="#build-from-source-with-cargo">Build From Source With Cargo</a></h2>
+<pre><code class="language-sh">cargo install oranda --locked --profile=dist
+</code></pre>
+<blockquote>
+<p><code>--profile=dist</code> is the profile we build our shippable binaries with, it's optional.</p>
+<p><code>--locked</code> asks Cargo to respect the lockfile, improving build reproducibility at
+the cost of not getting any bugfixes from newer releases of its dependencies.</p>
+</blockquote>
+<h2 id="download-prebuilt-binaries-from-github-releases"><a class="header" href="#download-prebuilt-binaries-from-github-releases">Download Prebuilt Binaries From GitHub Releases</a></h2>
+<p><a href="https://github.com/axodotdev/oranda/releases/latest">See the latest release</a>!</p>
+<h2 id="install-with-npm"><a class="header" href="#install-with-npm">Install With NPM</a></h2>
+<pre><code class="language-sh">npm install @axodotdev/oranda
+# alternatively:
+npx @axodotdev/oranda build
+</code></pre>
+<h2 id="install-with-nix"><a class="header" href="#install-with-nix">Install With Nix</a></h2>
+<p>oranda is available in <a href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/misc/oranda/default.nix"><code>nixpkgs</code></a>, and also as a nix flake. This installer is currently experimental, so we don't recommend you use it in production workflows.</p>
+<p>On a system with nix installed, you can run</p>
+<pre><code class="language-sh">nix-env -i oranda
+</code></pre>
+<p>or to install from GitHub using the flake,</p>
+<pre><code class="language-sh">nix profile install github:axodotdev/oranda
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="quickstart"><a class="header" href="#quickstart">Quickstart</a></h1>
+<p>After you've <a href="./install.html">installed</a> oranda, it's time to give it a spin. Make sure you can execute the
+<code>oranda</code> command, its output should look something like this:</p>
+<pre><code>$ oranda
+🎁 generate beautiful landing pages for your projects
+
+Usage: oranda [OPTIONS] &lt;COMMAND&gt;
+
+Commands:
+  build     Build an oranda site
+  dev       Start a local development server that recompiles your oranda site if a file changes
+  serve     Start a file server to access your oranda site in a browser
+  generate  Generate infrastructure files for oranda sites
+  help      Print this message or the help of the given subcommand(s)
+
+Options:
+  -h, --help
+          Print help (see a summary with '-h')
+
+  -V, --version
+          Print version
+
+GLOBAL OPTIONS:
+  -v, --verbose
+          Whether to output more detailed debug information
+
+      --output-format &lt;OUTPUT_FORMAT&gt;
+          The format of the output
+          
+          [default: human]
+
+          Possible values:
+          - human: Human-readable output
+          - json:  Machine-readable JSON output
+</code></pre>
+<p>Since <code>oranda</code> is designed to work without configuration, the quickest start is to just run <code>oranda dev</code> in an
+existing project! This will spawn a web server that serves your site, plus an extra process that watches for 
+changes in files relevant to <code>oranda</code>'s build process.</p>
+<blockquote>
+<p><strong>NOTE</strong>: Prior to version 0.5.0, oranda expects there to be a README.md file in your root directory!</p>
+</blockquote>
+<h2 id="in-a-cargo-project"><a class="header" href="#in-a-cargo-project">In a Cargo project</a></h2>
+<p><code>oranda</code> integrates with Cargo projects seamlessly. <code>oranda build</code> will pick up relevant
+metadata from your <code>Cargo.toml</code> file automatically, including <a href="https://opensource.axo.dev/cargo-dist"><code>cargo-dist</code></a> configuration,
+if you have that set up.</p>
+<h2 id="in-a-node-project"><a class="header" href="#in-a-node-project">In a Node project</a></h2>
+<p>If you use Node.js, oranda can not only be installed via npm, but also supports reading metadata
+from your package manifest file. Additionally, npm scripts make it easy to integrate <code>oranda</code> into
+your workflows, for example like this:</p>
+<pre><code class="language-json">{
+  &quot;scripts&quot;: {
+    &quot;build:site&quot;: &quot;oranda build&quot;
+  },
+  &quot;dependencies&quot;: {
+    &quot;@axodotdev/oranda&quot;: &quot;~0.3.0&quot;
+  }
+}
+</code></pre>
+<h2 id="further-steps"><a class="header" href="#further-steps">Further Steps</a></h2>
+<ul>
+<li>Explore the <a href="./configuration.html"><code>oranda</code> configuration options</a></li>
+<li><a href="./hosting.html">Host your site</a>, on GitHub Pages or elsewhere</li>
+<li>Read the <a href="./cli.html">CLI docs</a></li>
+<li>Learn more about <a href="./hosting.html">hosting <code>oranda</code> sites</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="hosting"><a class="header" href="#hosting">Hosting</a></h1>
+<h2 id="on-github-pages"><a class="header" href="#on-github-pages">On GitHub pages</a></h2>
+<blockquote>
+<p>Added in version 0.4.0.</p>
+</blockquote>
+<p>You can use <code>oranda generate ci --ci=github</code> to write a CI file for deploying your main branch to GitHub Pages.</p>
+<p>When hosting on GitHub Pages, depending on the name of your repository, your site may get served at different URLs:</p>
+<ul>
+<li>If your repo name is <code>&lt;user/org&gt;.github.io</code>, your site will be at that URL</li>
+<li>If you repo name is anything else, it'll be at <code>&lt;user/org&gt;.github.io/&lt;reponame&gt;</code>.</li>
+</ul>
+<p>For the latter case, you'll need to configure oranda to write its links to your <code>oranda.json</code> (more on that on chapter 8) with <code>&lt;reponame&gt;</code> as a prefix:</p>
+<pre><code class="language-json">{
+  &quot;build&quot;: {
+    &quot;path_prefix&quot;: &quot;reponame&quot;
+  }
+}
+</code></pre>
+<p>This will cause, for example, a link to <code>/changelog/</code> to be written as <code>/reponame/changelog/</code>.</p>
+<h2 id="elsewhere"><a class="header" href="#elsewhere">Elsewhere</a></h2>
+<p>oranda is, effectively, a static site generator. It outputs HTML, CSS and JavaScript files. These can all be hosted on a
+looooot of different platforms, in fact, too many for us to enumerate here! You can use Vercel, Netlify, any GitHub pages
+competitor, or you can plop it on your own server that runs nginx, Apache httpd, Caddy, or anything else!</p>
+<p>You can, in fact, also use the CI generated by <code>oranda generate ci</code> linked above and modify it to deploy to different 
+platforms. If you do, we'd love to hear about it!</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="adding-static-assets"><a class="header" href="#adding-static-assets">Adding static assets</a></h1>
+<p>If you reference static assets in your Markdown, you'll need to place them all inside a directory at the same level as
+your project manifest file called <code>static</code>. This is because Oranda currently doesn't know about each indidivual asset,
+and instead just copies the folder where they're contained.</p>
+<p>In your Markdown, you'll need to refer to the assets in this directory. For example:</p>
+<pre><code class="language-md">![An image from my amazing project](./static/project.png)
+</code></pre>
+<p>If you want to use a custom-named directory you can configure this in your <code>oranda.json</code>, like so:</p>
+<pre><code class="language-json">{
+  &quot;build&quot;: {
+    &quot;static_dir&quot;: &quot;assets&quot;
+  }
+}
+</code></pre>
+<p>In this case the <code>assets</code> directory will be used instead of the default <code>static</code> directory.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="command-line"><a class="header" href="#command-line">Command Line</a></h1>
+<p>Oranda currently has four subcommands that work in similar, but nuanced ways.</p>
+<ul>
+<li><a href="./cli/build.html"><code>build</code></a></li>
+<li><a href="./cli/serve.html"><code>serve</code></a></li>
+<li><a href="./cli/dev.html"><code>dev</code></a></li>
+<li><a href="./cli/generate.html"><code>generate</code></a></li>
+</ul>
+<p>Oranda supports some common options on each command:</p>
+<ul>
+<li><code>--verbose</code>. This controls the verbosity level for logs.</li>
+<li><code>--output-format</code>. If you want JSON for processing it with a machine, this is where you'd toggle it.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="oranda-build"><a class="header" href="#oranda-build"><code>oranda build</code></a></h1>
+<p>This command builds your oranda site. You can pass the <code>--json-only</code> flag in order for oranda to <em>only</em> build an
+<code>artifacts.json</code> file that can be read by other tools (or websites) for integration purposes. You can also specify
+<code>--config-path</code> if your configuration file is not <code>./oranda.json</code>, but oranda will still look for an
+<code>oranda-workspace.json</code> in the current directory.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="oranda-serve"><a class="header" href="#oranda-serve"><code>oranda serve</code></a></h1>
+<p>This command launches a small <a href="https://cra.tw/axum"><code>axum</code></a>-powered server that serves your generated oranda site.</p>
+<p>Importantly, this does <strong>not</strong> build your site for you. If it can't find a build in the <code>public/</code> directory,
+it will error and exit. You can set the port for the server to be launched using the <code>--port</code> option.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="oranda-dev"><a class="header" href="#oranda-dev"><code>oranda dev</code></a></h1>
+<p>This command basically combined <code>oranda build</code> and <code>oranda serve</code>, with the added benefit of watching for changes
+and recompiling automatically. When you launch, what happens is this:</p>
+<ol>
+<li>Oranda builds your site (unless you told it not to)</li>
+<li>Oranda launches a server similar to <code>oranda serve</code></li>
+<li>Oranda starts watching its relevant files for changes, and will rerun the build process when something changes</li>
+</ol>
+<p>Oranda's build can have a lot of side-effects (reading/writing files, but also talking to the GitHub API), and as
+such, we have to take care to only run the build process when <em>relevant</em> files change. These files are:</p>
+<ul>
+<li>Your project manifest files (<code>Cargo.toml</code>, <code>package.json</code>)</li>
+<li>Your oranda configuration file</li>
+<li>Any mdbook source files you may have</li>
+<li>Your readme, and additional files specified in the configuration</li>
+<li>Files immediately relevant to certain components oranda renders (funding, for example)</li>
+<li>Any other paths you give it using <code>--include-paths</code></li>
+</ul>
+<p>This command also supports several options:</p>
+<ul>
+<li><code>--port</code> to set a custom port for the file server</li>
+<li><code>--config-path</code> to specify a custom path for your oranda config (but oranda will still look for an <code>oranda-workspace.json</code>) in your current directory).</li>
+<li><code>--no-first-build</code> to skip the first step mentioned above where oranda builds your site before starting the watch process</li>
+<li><code>-i</code>, <code>--include-paths</code> to specify custom paths for oranda to watch</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="oranda-generate"><a class="header" href="#oranda-generate"><code>oranda generate</code></a></h1>
+<blockquote>
+<p>Added in version 0.4.0.</p>
+</blockquote>
+<p>This command generates files useful for working with oranda. Currently, it only supports one subcommand.</p>
+<h2 id="oranda-generate-ci"><a class="header" href="#oranda-generate-ci"><code>oranda generate ci</code></a></h2>
+<p>Generates a CI file that deploys your site. Supports the following options:</p>
+<ul>
+<li><code>-o, --output-path</code>: Specify a path for the file to be written to. Default: <code>.github/workflows/web.yml</code></li>
+<li><code>-s, --site-path</code>: Specify a path to your oranda site, in case it's in a subdirectory to your repository</li>
+<li><code>--ci</code>: Specify which CI platform to use. Currently only accepts and defaults to <code>github</code>, which deploys to GitHub 
+Pages using GitHub Actions.</li>
+</ul>
+<p>You can rerun this command to update the CI file based on what we currently recommend as the best workflow, but also 
+to, for example, update the oranda version that the CI uses (which will always be the oranda version you run 
+<code>generate</code> with).</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="tips-and-tricks"><a class="header" href="#tips-and-tricks">Tips and Tricks</a></h1>
+<h2 id="hiding-the-markdown-title"><a class="header" href="#hiding-the-markdown-title">Hiding the Markdown title</a></h2>
+<p>Oranda breaks out your project's title into its own header, which can be annoying if you've started your own
+README.md with something like this:</p>
+<pre><code class="language-markdown"># myprojectname
+
+Blah blah blah etc
+</code></pre>
+<p>If you build your oranda site like this, the title will appear twice! oranda supports a special class called <code>oranda-hide</code>
+that you can wrap your title (or whatever you don't want to appear on the page) with, like this:</p>
+<pre><code class="language-markdown">&lt;div class=&quot;oranda-hide&quot;&gt;
+
+# myprojectname
+
+&lt;/div&gt;
+
+Blah blah blah etc
+</code></pre>
+<p>Keep in mind the line breaks before and after the HTML, otherwise the Markdown parser may not function correctly.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="configuration"><a class="header" href="#configuration">Configuration</a></h1>
+<p><strong><code>oranda</code> is designed to work with no configuration</strong>- for projects with a
+<code>package.json</code> or <code>Cargo.toml</code>, <code>oranda</code> will grab the project metadata it needs
+from your project manifest file. It can also infer a lot of the things it wants to
+render from your already existing environment.</p>
+<p>If you project has both a <code>Cargo.toml</code> and a <code>package.json</code> we recommend defining
+project metadata fields like <code>name</code> in your <code>oranda.json</code>.</p>
+<h2 id="manifest-file-orandajson"><a class="header" href="#manifest-file-orandajson">Manifest file: <code>oranda.json</code></a></h2>
+<p>If you'd like to customize your project you can do so in a <code>oranda.json</code> file.</p>
+<p>For example:</p>
+<pre><code class="language-json">{
+  &quot;build&quot;: {
+    &quot;path_prefix&quot;: &quot;oranda&quot;
+  },
+  &quot;styles&quot;: {
+    &quot;theme&quot;: &quot;axodark&quot;,
+    &quot;favicon&quot;: &quot;https://www.axo.dev/favicon.ico&quot;
+  },
+  &quot;marketing&quot;: {
+    &quot;social&quot;: {
+      &quot;image&quot;: &quot;https://www.axo.dev/meta_small.jpeg&quot;,
+      &quot;image_alt&quot;: &quot;axo&quot;,
+      &quot;twitter_account&quot;: &quot;@axodotdev&quot;
+    },
+    &quot;analytics&quot;: {
+      &quot;plausible&quot;: {
+        &quot;domain&quot;: &quot;opensource.axo.dev&quot;
+      }
+    }
+  },
+  &quot;components&quot;: {
+    &quot;changelog&quot;: true,
+    &quot;artifacts&quot;: {
+      &quot;package_managers&quot;: {
+        &quot;preferred&quot;: {
+          &quot;npm&quot;: &quot;npm install @axodotdev/oranda --save-dev&quot;,
+          &quot;cargo&quot;: &quot;cargo install oranda --locked --profile=dist&quot;
+        },
+        &quot;additional&quot;: {
+          &quot;npx&quot;: &quot;npx @axodotdev/oranda&quot;,
+          &quot;binstall&quot;: &quot;cargo binstall oranda&quot;,
+          &quot;nix-env&quot;: &quot;nix-env -i oranda&quot;,
+          &quot;nix flake&quot;: &quot;nix profile install github:axodotdev/oranda&quot;
+        }
+      }
+    }
+  }
+}
+</code></pre>
+<blockquote>
+<p><strong>NOTE:</strong> All paths in <code>oranda.json</code> are relative to the <code>oranda.json</code> file.</p>
+</blockquote>
+<p><strong>See the <a href="./configuration/reference.html">configuration reference</a> for a detailed explanations of all options!</strong></p>
+<h2 id="workspace-manifest-file-oranda-workspacejson"><a class="header" href="#workspace-manifest-file-oranda-workspacejson">Workspace manifest file: <code>oranda-workspace.json</code></a></h2>
+<blockquote>
+<p>Added in version 0.3.0.</p>
+</blockquote>
+<p>oranda supports building multiple sites at once (referred to as building in a &quot;workspace&quot;). To control this behavior,
+you can create a <code>oranda-workspace.json</code> file inside your workspace root. Running an oranda command will pick up this
+file, and build the workspace members accordingly.</p>
+<p>The workspace file supports all other oranda config keys, which will be passed down to each workspace members.</p>
+<p><a href="configuration/workspaces.html">Read more about workspaces</a> or <a href="./configuration/reference.html#workspace">see the workspace reference</a></p>
+<h2 id="configuration-before-010"><a class="header" href="#configuration-before-010">Configuration before 0.1.0</a></h2>
+<p>Before version 0.1.0 (the last stable version was/is 0.0.3, the last prerelease was/is 0.1.0-prerelease7), the
+configuration format looked like this:</p>
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;oranda&quot;,
+  &quot;description&quot;: &quot;generate static sites for your dev tools&quot;,
+  &quot;dist_dir&quot;: &quot;oranda_out&quot;,
+  &quot;homepage&quot;: &quot;https://oranda.axo.dev&quot;,
+  &quot;static_dir&quot;: &quot;static&quot;,
+  &quot;no_header&quot;: false,
+  &quot;readme_path&quot;: &quot;dev/README.md&quot;,
+  &quot;repository&quot;: &quot;https://github.com/axodotdev/oranda&quot;,
+  &quot;additional_pages&quot;: {
+    &quot;Another page&quot;: &quot;dev/additional.md&quot;
+  },
+  &quot;favicon&quot;: &quot;https://www.axo.dev/favicon.ico&quot;,
+  &quot;analytics&quot;: {
+    &quot;plausible&quot;: {
+      &quot;domain&quot;: &quot;tools.axo.dev/oranda&quot;
+    }
+  },
+  &quot;social&quot;: {
+    &quot;image&quot;: &quot;https://www.axo.dev/meta_small.jpeg&quot;,
+    &quot;image_alt&quot;: &quot;axo&quot;,
+    &quot;twitter_account&quot;: &quot;@axodotdev&quot;
+  },
+  &quot;artifacts&quot;: {
+    &quot;cargo_dist&quot;: true
+  },
+  &quot;logo&quot;: &quot;assets/oranda.png&quot;,
+  &quot;license&quot;: &quot;MIT OR Apache-2.0&quot;,
+  &quot;mdbook&quot;: false,
+  &quot;path_prefix&quot;: &quot;oranda&quot;,
+  &quot;styles&quot;: {
+    &quot;theme&quot;: &quot;axo_dark&quot;
+  },
+  &quot;funding&quot;: {
+    &quot;preferred_funding&quot;: &quot;github&quot;
+  },
+  &quot;changelog&quot;: true
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="configuration-reference"><a class="header" href="#configuration-reference">Configuration Reference</a></h1>
+<ul>
+<li><a href="configuration/reference.html#project"><code>project</code></a>
+<ul>
+<li><a href="configuration/reference.html#projectname"><code>name</code></a> 📦 - the name of your application</li>
+<li><a href="configuration/reference.html#projectversion"><code>version</code></a> 📦 - current version of your project</li>
+<li><a href="configuration/reference.html#projectdescription"><code>description</code></a> 📦 - brief description of your project</li>
+<li><a href="configuration/reference.html#projecthomepage"><code>homepage</code></a> 📦 - url to the homepage of your project</li>
+<li><a href="configuration/reference.html#projectrepository"><code>repository</code></a> 📦 - url to the repository of your project</li>
+<li><a href="configuration/reference.html#projectreadme_path"><code>readme_path</code></a> - relative custom path to your project's readme file</li>
+<li><a href="configuration/reference.html#projectlicense"><code>license</code></a> 📦 - license of your project (in SPDX format)</li>
+</ul>
+</li>
+<li><a href="configuration/reference.html#build"><code>build</code></a>
+<ul>
+<li><a href="configuration/reference.html#builddist_dir"><code>dist_dir</code></a> - path to where built output should be placed</li>
+<li><a href="configuration/reference.html#buildstatic_dir"><code>static_dir</code></a> - path to a directory containing static assets</li>
+<li><a href="configuration/reference.html#buildpath_prefix"><code>path_prefix</code></a> - a URL fragment to prepend to URLs, useful if hosting from a subfolder</li>
+<li><a href="configuration/reference.html#buildadditional_pages"><code>additional_pages</code></a> - additional pages to be rendered and linked to</li>
+</ul>
+</li>
+<li><a href="configuration/reference.html#marketing"><code>marketing</code></a>
+<ul>
+<li><a href="configuration/reference.html#marketinganalytics"><code>analytics</code></a> - automatically insert analytics snippets for several providers</li>
+<li><a href="configuration/reference.html#marketingsocial"><code>social</code></a> - additional configuration for SEO-related inserts</li>
+</ul>
+</li>
+<li><a href="configuration/reference.html#styles"><code>styles</code></a>
+<ul>
+<li><a href="configuration/reference.html#stylestheme"><code>theme</code></a> - change oranda's CSS theme</li>
+<li><a href="configuration/reference.html#stylesadditional_css"><code>additional_css</code></a> - additional CSS to insert into your pages</li>
+<li><a href="configuration/reference.html#stylesoranda_css_version"><code>oranda_css_version</code></a> - custom version of oranda's built-in CSS to use</li>
+<li><a href="configuration/reference.html#styleslogo"><code>logo</code></a> - custom site logo</li>
+<li><a href="configuration/reference.html#stylesfavicon"><code>favicon</code></a> - custom site favicon</li>
+</ul>
+</li>
+<li><a href="configuration/reference.html#components"><code>components</code></a>
+<ul>
+<li><a href="configuration/reference.html#componentssource"><code>source</code></a> - change where oranda pulls your release data from</li>
+<li><a href="configuration/reference.html#componentschangelog"><code>changelog</code></a> - extract your changelog from GitHub automatically</li>
+<li><a href="configuration/reference.html#componentsmdbook-or-componentsmd_book"><code>mdbook</code></a> - let us render a mdbook site for you</li>
+<li><a href="configuration/reference.html#componentsfunding"><code>funding</code></a> - configuration for rendering a site related to project funding methods</li>
+<li><a href="configuration/reference.html#componentsartifacts"><code>artifacts</code></a> - configuration for displaying downloadable artifacts/installers</li>
+</ul>
+</li>
+<li><a href="configuration/reference.html#workspace"><code>workspace</code></a> - <strong><code>oranda-workspace.json</code> only!!</strong>
+<ul>
+<li><a href="configuration/reference.html#workspacename"><code>name</code></a> - set the overarching workspace name</li>
+<li><a href="configuration/reference.html#workspaceauto"><code>auto</code></a> - enable workspace autodetection</li>
+<li><a href="configuration/reference.html#workspacegenerate_index"><code>generate_index</code></a> - disable generating a workspace index page</li>
+<li><a href="configuration/reference.html#workspacemembers"><code>members</code></a> - list the workspace members</li>
+<li><a href="configuration/reference.html#workspacedocs_path"><code>docs_path</code></a> - path to a markdown file to embed into your workspace index page</li>
+<li><a href="configuration/reference.html#workspacepreferred_members"><code>preferred_members</code></a> - list of workspace members to highlight at the top of the index page</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>📦 = automatically collected from your package metadata!</p>
+</blockquote>
+<h2 id="project"><a class="header" href="#project">project</a></h2>
+<p>Configuration for metadata about your project. Most of the info in here can be automatically collected
+for Cargo and npm projects.</p>
+<h3 id="projectname"><a class="header" href="#projectname">project.name</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: Project manifest <code>name</code> field</li>
+</ul>
+<p>Your project's name. Will be used for the page title and header.</p>
+<h3 id="projectversion"><a class="header" href="#projectversion">project.version</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: Project manifest <code>version</code> field.</li>
+</ul>
+<p>Your project's current version.</p>
+<h3 id="projectdescription"><a class="header" href="#projectdescription">project.description</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: Project manifest <code>description</code> field</li>
+</ul>
+<p>Your project's description. Will be used for site metadata.</p>
+<h3 id="projecthomepage"><a class="header" href="#projecthomepage">project.homepage</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: Project manifest <code>homepage</code> field</li>
+</ul>
+<p>Your project's homepage. Will be used for backlinks and site metadata.</p>
+<h3 id="projectrepository"><a class="header" href="#projectrepository">project.repository</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: Project manifest <code>repository</code> field</li>
+</ul>
+<p>Your project's Git repository. If set to GitHub, this enables <code>oranda</code> to fetch data from GitHub releases
+(see <a href="configuration/./artifacts.html">artifacts</a>)</p>
+<h3 id="projectreadme_path"><a class="header" href="#projectreadme_path">project.readme_path</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: A variation of the standard <code>README.md</code></li>
+</ul>
+<p>The path to your project's readme file. The contents of this will be used for your index page.</p>
+<h3 id="projectlicense"><a class="header" href="#projectlicense">project.license</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: Project manifest <code>license</code> field.</li>
+</ul>
+<p>Your project's license. Will be embedded into the page footer.</p>
+<h2 id="build"><a class="header" href="#build">build</a></h2>
+<p>Configuration regarding the specifics of how and where you want your site built.</p>
+<h3 id="builddist_dir"><a class="header" href="#builddist_dir">build.dist_dir</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: <code>public/</code></li>
+</ul>
+<p>The directory where your static files will be output to. This must be relative to the <code>oranda.json</code> file.</p>
+<h3 id="buildstatic_dir"><a class="header" href="#buildstatic_dir">build.static_dir</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: <code>static/</code></li>
+</ul>
+<p>Static content that oranda will copy to its output folder. This must be relative to the <code>oranda.json</code> file.</p>
+<h3 id="buildpath_prefix"><a class="header" href="#buildpath_prefix">build.path_prefix</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: none</li>
+</ul>
+<p>If you're hosting oranda on a nested path (e.g. <code>mysite.cool/myproject</code>), you should set <code>path_prefix</code> to
+<code>myproject</code> in your configuration in order for oranda to generate correct links. This is specifically useful for
+GitHub pages, which, unless the repository name is <code>username.github.io</code> or you have a custom domain set, will host
+projects in a subfolder (e.g. <code>username.github.io/projectname</code>, so you'd set this option to <code>projectname</code>).</p>
+<h3 id="buildadditional_pages"><a class="header" href="#buildadditional_pages">build.additional_pages</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: object, Default: none</li>
+</ul>
+<p>An object of additional Markdown pages that you'd like to be included. Links to these will appear in the site header,
+and they will all be rendered into separate pages.</p>
+<p><a href="configuration/./additional-pages.html">More information</a></p>
+<h2 id="marketing"><a class="header" href="#marketing">marketing</a></h2>
+<p>Configuration regarding SEO, site metadata, and other &quot;marketing&quot;-related aspects of your page.</p>
+<h3 id="marketinganalytics"><a class="header" href="#marketinganalytics">marketing.analytics</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: object, Default: none</li>
+</ul>
+<p><a href="configuration/./analytics.html">More information</a></p>
+<p>Configuration for page analytics. Can be any combination of the following:</p>
+<h4 id="marketinganalyticsgoogle_analytics"><a class="header" href="#marketinganalyticsgoogle_analytics">marketing.analytics.google_analytics</a></h4>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: object, Default: none</li>
+</ul>
+<p>Set <code>google_analytics.tracking_id</code> to your site tracking ID to include the relevant
+snippet to your page.</p>
+<h4 id="marketinganalyticsplausible"><a class="header" href="#marketinganalyticsplausible">marketing.analytics.plausible</a></h4>
+<ul>
+<li>Type: object, Default: none</li>
+</ul>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<p>Set <code>plausible.domain</code> to your Plausible domain. Optionally, you can set <code>plausible.script_url</code>
+if you're self-hosting.</p>
+<h4 id="marketinganalyticsfathom"><a class="header" href="#marketinganalyticsfathom">marketing.analytics.fathom</a></h4>
+<ul>
+<li>Type: object, Default: none</li>
+</ul>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<p>Set <code>fathom.site</code> to your Fathom site.</p>
+<h4 id="marketinganalyticsunami"><a class="header" href="#marketinganalyticsunami">marketing.analytics.unami</a></h4>
+<ul>
+<li>Type: object, Default: none</li>
+</ul>
+<p>Set <code>unami.website</code> to your Unami website identifier, and <code>unami.script_url</code> to the location
+where you're hosting your Unami script.</p>
+<h3 id="marketingsocial"><a class="header" href="#marketingsocial">marketing.social</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: object, Default: none</li>
+</ul>
+<p><a href="configuration/./social.html">More information</a></p>
+<p>Options useful for SEO features.</p>
+<h4 id="marketingsocialimage"><a class="header" href="#marketingsocialimage">marketing.social.image</a></h4>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: none</li>
+</ul>
+<p>An image URL to use for page embeds.</p>
+<h4 id="marketingsocialimage_alt"><a class="header" href="#marketingsocialimage_alt">marketing.social.image_alt</a></h4>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: none</li>
+</ul>
+<p>An alt text for said image embed.</p>
+<h4 id="marketingsocialtwitter_account"><a class="header" href="#marketingsocialtwitter_account">marketing.social.twitter_account</a></h4>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: none</li>
+</ul>
+<p>Name of a Twitter/X account, to be used for Twitter/X embeds (including the <code>@</code>).</p>
+<h2 id="styles"><a class="header" href="#styles">styles</a></h2>
+<ul>
+<li>Type: object</li>
+</ul>
+<p>Configuration regarding the looks of your site.</p>
+<h3 id="stylestheme"><a class="header" href="#stylestheme">styles.theme</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: <code>dark</code></li>
+</ul>
+<p><a href="configuration/./theme.html">More information</a></p>
+<p>Choose which built-in theme to use. Possible choices:</p>
+<ul>
+<li><code>dark</code> (default)</li>
+<li><code>light</code></li>
+<li><code>axodark</code></li>
+<li><code>axolight</code></li>
+<li><code>hacker</code></li>
+<li><code>cupcake</code></li>
+</ul>
+<h3 id="stylesadditional_css"><a class="header" href="#stylesadditional_css">styles.additional_css</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: array, Default: none</li>
+</ul>
+<p><a href="configuration/./theme.html#customizing-themes">More information</a></p>
+<p>An array of local or remote CSS files that will be merged together and loaded into your page.</p>
+<h3 id="stylesoranda_css_version"><a class="header" href="#stylesoranda_css_version">styles.oranda_css_version</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: none (current version)</li>
+</ul>
+<p>Specify a version of the embedded oranda CSS. This can be used to opt into newer CSS releases that don't have
+an oranda release associated with them yet. (Internally, this looks for a <code>oranda.css</code> release artifact on the given
+tag in the <code>axodotdev/oranda</code> GitHub repository)</p>
+<h3 id="styleslogo"><a class="header" href="#styleslogo">styles.logo</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: none</li>
+</ul>
+<p>Path to a custom logo to be shown in your website header and in your site metadata.</p>
+<h3 id="stylesfavicon"><a class="header" href="#stylesfavicon">styles.favicon</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: none</li>
+</ul>
+<p>Path to a custom favicon.</p>
+<h2 id="components"><a class="header" href="#components">components</a></h2>
+<p>Configuration regarding extra components/functionality that oranda supports.</p>
+<h3 id="componentssource"><a class="header" href="#componentssource">components.source</a></h3>
+<blockquote>
+<p>Added in version 0.6.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: <code>github</code></li>
+</ul>
+<p>Controls where oranda should pull releases data from. Possible choices are:</p>
+<h4 id="github-default"><a class="header" href="#github-default"><code>github</code> (default)</a></h4>
+<p>Attempts to pull release data from GitHub Releases, using the repository specified for your project.</p>
+<h4 id="axodotdev"><a class="header" href="#axodotdev"><code>axodotdev</code></a></h4>
+<p>Attempts to pull release data from axo Releases. Since you can have multiple packages under the
+same project namespace on axo Releases, we use your project's name as the package name. </p>
+<h3 id="componentsartifacts"><a class="header" href="#componentsartifacts">components.artifacts</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: object or bool</li>
+</ul>
+<p><a href="configuration/./artifacts.html">More information</a></p>
+<p>Configuration for enabling downloadable artifacts, as well as the <code>cargo-dist</code> integration.</p>
+<h4 id="componentsartifactspackage_managers"><a class="header" href="#componentsartifactspackage_managers">components.artifacts.package_managers</a></h4>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: object, Default: none</li>
+</ul>
+<p>A list of &quot;package manager&quot;-like ways to install your app. These will be displayed on your
+page as extra runnable commands that users can execute to download your project. There's a few
+different &quot;states&quot; these can be in:</p>
+<ul>
+<li><code>package_managers.preferred</code> - Entries here will be shown in the install widget on your front page</li>
+<li><code>package_managers.additional</code> - Entries here will only be shown on the &quot;install&quot; page, but not on the front page</li>
+</ul>
+<p>The syntax for both of these is the same:</p>
+<pre><code class="language-json">{
+  &quot;components&quot;: {
+    &quot;artifacts&quot;: {
+      &quot;package_managers&quot;: {
+        &quot;preferred&quot;: {
+          &quot;user-friendly name&quot;: &quot;command to run&quot;,
+          &quot;for example, npm&quot;: &quot;npm install @axodotdev/oranda --save-dev&quot;
+        }
+      }
+    }
+  }
+}
+</code></pre>
+<h4 id="componentsartifactscargo_dist"><a class="header" href="#componentsartifactscargo_dist">components.artifacts.cargo_dist</a></h4>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: bool, Default: <code>true</code> if we detected support, <code>false</code> otherwise</li>
+</ul>
+<p>Enables/disables <code>cargo-dist</code> support. oranda may autodetect this if you have <code>cargo-dist</code>
+configuration in your <code>Cargo.toml</code>, but you can always explicitly disable it here.</p>
+<h4 id="componentsartifactsauto"><a class="header" href="#componentsartifactsauto">components.artifacts.auto</a></h4>
+<blockquote>
+<p>Added in version 0.2.0.</p>
+</blockquote>
+<ul>
+<li>Type: bool, Default: <code>false</code></li>
+</ul>
+<p>Enables/disables artifacts autodetection, even without <code>cargo-dist</code>. This is turned off by
+default, but if you provide GitHub release artifacts in a target-triple-like format, chances
+are that oranda can autodetect them, so it may be worth turning this on.</p>
+<h3 id="componentsartifactsmatch_package_names"><a class="header" href="#componentsartifactsmatch_package_names">components.artifacts.match_package_names</a></h3>
+<blockquote>
+<p>Added in version 0.5.0.</p>
+</blockquote>
+<ul>
+<li>Type: bool, Default: <code>false</code></li>
+</ul>
+<p>Only uses release tags that contain the name of the project being generated. Useful in a workspace environment,
+where multiple published projects are stored in the same repository.</p>
+<h3 id="componentsmdbook-or-componentsmd_book"><a class="header" href="#componentsmdbook-or-componentsmd_book">components.mdbook (or components.md_book)</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: object or bool</li>
+</ul>
+<p><a href="configuration/./mdbook.html">More information</a></p>
+<p>Configuration for mdbook support. You don't need mdbook itself installed to make use of this,
+since it also provides a Rust library that we use. oranda will attempt to autodetect
+this at several common paths, so you can disable it by setting <code>components.mdbook</code> to <code>false</code>.</p>
+<h4 id="componentsmdbookpath"><a class="header" href="#componentsmdbookpath">components.mdbook.path</a></h4>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: none</li>
+</ul>
+<p>Path to your mdbook directory, the one containing <code>book.toml</code>, relative to your
+configuration file.</p>
+<h4 id="componentsmdbooktheme"><a class="header" href="#componentsmdbooktheme">components.mdbook.theme</a></h4>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: bool, Default: <code>true</code></li>
+</ul>
+<p>Whether to enable or disable custom mdbook themes. We try to match your mdbook to
+the main oranda page look visually by default, but you can disable this by setting this
+option to <code>false</code>.</p>
+<h3 id="componentschangelog"><a class="header" href="#componentschangelog">components.changelog</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: object or bool</li>
+</ul>
+<p><a href="configuration/./changelog.html">More information</a></p>
+<p>Enable/disable changelog generation. This is enabled if you have a repository URL set,
+and you can disable it by setting <code>false</code> here.</p>
+<h4 id="componentschangelogread_changelog_file"><a class="header" href="#componentschangelogread_changelog_file">components.changelog.read_changelog_file</a></h4>
+<blockquote>
+<p>Added in version 0.3.0.</p>
+</blockquote>
+<ul>
+<li>Type: bool, Default: <code>true</code></li>
+</ul>
+<p>Disables reading the changelog file, meaning that oranda will fall back to embedding the GitHub release body instead.</p>
+<h4 id="componentschangelogrss_feed"><a class="header" href="#componentschangelogrss_feed">components.changelog.rss_feed</a></h4>
+<blockquote>
+<p>Added in version 0.5.0.</p>
+</blockquote>
+<ul>
+<li>Type: bool, Default: <code>true</code></li>
+</ul>
+<p>Disables the built-in generation of a RSS feed file for your changelog.</p>
+<h3 id="componentsfunding"><a class="header" href="#componentsfunding">components.funding</a></h3>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: object or bool</li>
+</ul>
+<p><a href="configuration/./funding.html">More information</a></p>
+<p>Allows you to tweak or disable oranda's funding page.</p>
+<h4 id="componentsfundingmd_path"><a class="header" href="#componentsfundingmd_path">components.funding.md_path</a></h4>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: none</li>
+</ul>
+<p>Path to a Markdown file which will be embedded into the funding page.</p>
+<h4 id="componentsfundingyml_path"><a class="header" href="#componentsfundingyml_path">components.funding.yml_path</a></h4>
+<blockquote>
+<p>Added in version 0.1.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: <code>.github/FUNDING.yml</code></li>
+</ul>
+<p>Custom path to the GitHub-formatted <code>FUNDING.yml</code> file.</p>
+<h2 id="workspace"><a class="header" href="#workspace">workspace</a></h2>
+<p><a href="configuration/./workspaces.html">More information</a></p>
+<p>Configuration for a workspace. This option and its sub-keys will only be honored
+in the <code>oranda-workspace.json</code> file, in a normal configuration file, they will be
+ignored.</p>
+<h3 id="workspacename"><a class="header" href="#workspacename">workspace.name</a></h3>
+<blockquote>
+<p>Added in version 0.3.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: My Oranda Workspace</li>
+</ul>
+<p>Set the overarching workspace name. This is optional, and will fall back to &quot;My Oranda Workspace&quot; if not set (not very
+intuitive, I know).</p>
+<h3 id="workspaceauto"><a class="header" href="#workspaceauto">workspace.auto</a></h3>
+<blockquote>
+<p>Added in version 0.3.0.</p>
+</blockquote>
+<ul>
+<li>Type: bool, Default: <code>false</code></li>
+</ul>
+<p>Enables workspace autodetection if set to <code>true</code>. This will cause oranda to attempt to find any Cargo or NPM workspaces
+under the current directory, and to attempt to build all of its members (all members must therefore have at least a
+readme file). Members manually listed under the <code>members</code> key override these automatically detected workspace members.</p>
+<h3 id="workspacegenerate_index"><a class="header" href="#workspacegenerate_index">workspace.generate_index</a></h3>
+<blockquote>
+<p>Added in version 0.3.0.</p>
+</blockquote>
+<ul>
+<li>Type: bool, Default: <code>true</code></li>
+</ul>
+<p>If set to <code>false</code>, does not generate a workspace index page that links between all workspace members. Use this if you
+just want to use oranda's workspace functionality to build multiple unrelated sites in one go.</p>
+<h3 id="workspacemembers"><a class="header" href="#workspacemembers">workspace.members</a></h3>
+<blockquote>
+<p>Added in version 0.3.0.</p>
+</blockquote>
+<ul>
+<li>Type: array, Default: none</li>
+</ul>
+<p>An array of objects representing the workspace members.</p>
+<h4 id="workspacemembersslug"><a class="header" href="#workspacemembersslug">workspace.members.slug</a></h4>
+<blockquote>
+<p>Added in version 0.3.0.</p>
+</blockquote>
+<ul>
+<li>Type: string</li>
+</ul>
+<p>The URL-safe slug this page will be built at. This needs to be something that can be parsed as a URL, as well as a folder
+name on your target system (because oranda is a static site generator, after all).</p>
+<h4 id="workspacememberspath"><a class="header" href="#workspacememberspath">workspace.members.path</a></h4>
+<blockquote>
+<p>Added in version 0.3.0.</p>
+</blockquote>
+<ul>
+<li>Type: string</li>
+</ul>
+<p>The path to the page source. Point this to the same directory that the <code>oranda.json</code> would be in.</p>
+<h3 id="workspacedocs_path"><a class="header" href="#workspacedocs_path">workspace.docs_path</a></h3>
+<blockquote>
+<p>Added in version 0.3.0.</p>
+</blockquote>
+<ul>
+<li>Type: string, Default: none</li>
+</ul>
+<p>Path to a Markdown file whose content is going to be rendered into the workspace index file.</p>
+<h3 id="workspacepreferred_members"><a class="header" href="#workspacepreferred_members">workspace.preferred_members</a></h3>
+<blockquote>
+<p>Added in version 0.3.0.</p>
+</blockquote>
+<ul>
+<li>Type: array, Default: none</li>
+</ul>
+<p>A list of workspace member <code>slug</code>s that should be highlighted at the top of the index page. For example:</p>
+<pre><code class="language-json">{
+  &quot;workspace&quot;: {
+    &quot;auto&quot;: true,
+    &quot;preferred_members&quot;: [&quot;projectone&quot;, &quot;projecthree&quot;]
+  }
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="artifacts--cargo-dist"><a class="header" href="#artifacts--cargo-dist">Artifacts &amp; <code>cargo-dist</code></a></h1>
+<p>oranda has first-class support for handling releases, including ones generated by <a href="https://opensource.axo.dev/cargo-dist/"><code>cargo-dist</code></a>.
+It can even detect the user's platform and recommend the best installer/archive to use!</p>
+<p>Artifact settings are managed in the <code>artifacts</code> key in your oranda config. This is what an example config looks like:</p>
+<pre><code class="language-json">{
+  &quot;components&quot;: {
+    &quot;artifacts&quot;: {
+      &quot;package_managers&quot;: {
+        &quot;preferred&quot;: {
+          &quot;npm&quot;: &quot;npm install @axodotdev/oranda --save-dev&quot;,
+          &quot;crates.io&quot;: &quot;cargo install oranda --locked --profile=dist&quot;,
+        },
+        &quot;additional&quot;: {
+          &quot;npx&quot;: &quot;npx @axodotdev/oranda&quot;,
+          &quot;binstall&quot;: &quot;cargo binstall oranda&quot;
+        }
+      }
+    }
+  }
+}
+</code></pre>
+<h2 id="enabling-cargo-dist"><a class="header" href="#enabling-cargo-dist">Enabling cargo-dist</a></h2>
+<p>oranda will automatically attempt to find a <code>cargo-dist</code> config in your Cargo.toml. If you want to force disable this,
+set <code>components.artifacts.cargo_dist</code> to <code>false</code>. Once oranda determines that <code>cargo-dist</code> support should be enabled,
+the following will happen:</p>
+<ul>
+<li>oranda will attempt to find GitHub releases generated by <code>cargo-dist</code></li>
+<li>A new &quot;Install&quot; page will be generated, containing all artifacts and installers for the latest version</li>
+<li>A section to quickly install the latest release for the user's current platform will be added to the homepage</li>
+</ul>
+<h2 id="enabling-arbitrary-github-release-support"><a class="header" href="#enabling-arbitrary-github-release-support">Enabling arbitrary GitHub release support</a></h2>
+<p>Even if you don't have <code>cargo-dist</code> set up, oranda can attempt to glean information about your supported targets and
+OSes from your GitHub release artifacts. It will attempt to do this if it can find any releases associated with your
+repository. It does this by trying to see if it can recognize any known target triples from your filenames, so for example,
+it will recognize <code>mytool-aarch64-apple-darwin.tar.gz</code>. If you would like to completely disable this, set
+<code>components.artifacts</code> to <code>false</code> (we may offer a more fine-grained setting for this in the future).</p>
+<h2 id="enabling-matching-a-release-to-a-specific-package"><a class="header" href="#enabling-matching-a-release-to-a-specific-package">Enabling matching a release to a specific package</a></h2>
+<p>If you have multiple packages being produced by a workspace and need to match a release to a specific package, you can do
+so by setting <code>components.artifacts.match_package_names</code> to <code>true</code>. Upon enabling, while working to determine the latest
+release oranda will check if the release tag contains the name of the project being generated. If no match is found
+that particular release will be skipped.</p>
+<h2 id="adding-package-manager-installation-instructions"><a class="header" href="#adding-package-manager-installation-instructions">Adding package manager installation instructions</a></h2>
+<p>You can add custom installation instructions for package managers or package manager-esque methods using the
+<code>components.artifacts.package_managers</code> key. These are broken up into two sections:</p>
+<ul>
+<li><code>components.artifacts.package_managers.preferred</code> - methods that you want to be recommended on the front page install
+widget</li>
+<li><code>components.artifacts.package_managers.additional</code> - methods that should only show up on the dedicated &quot;install&quot; page</li>
+</ul>
+<p>All package manager entries are currently treated as &quot;cross-platform&quot;, meaning they'll show up in the install widget for
+any platform you support. We're aware of this limitation, and will likely expand support for this in the future.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="additional-pages"><a class="header" href="#additional-pages">Additional Pages</a></h1>
+<p>If you have extra Markdown files you'd like to link directly as root pages on your generated website, you can
+use the <code>additional_pages</code> option to list them.</p>
+<p>The option's format is an object with the human-readable page name as keys, and the path to the file as values. Example:</p>
+<pre><code class="language-json">{
+  &quot;build&quot;: {
+    &quot;additional_pages&quot;: {
+      &quot;Another page&quot;: &quot;./AnotherFile.md&quot;
+    }
+  }
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="analytics"><a class="header" href="#analytics">Analytics</a></h1>
+<p>oranda supports automatically inserting the correct analytics snippet your provider into your generated pages.</p>
+<p>Right now we support the following analytics providers:</p>
+<ul>
+<li><a href="https://analytics.google.com/analytics/web/">Google Analytics</a></li>
+<li><a href="https://plausible.io/">Plausible</a></li>
+<li><a href="https://usefathom.com/">Fathom</a></li>
+<li><a href="https://umami.is/">Unami</a></li>
+</ul>
+<p>To add any of these, add the required configuration under the <code>analytics</code> key:</p>
+<h3 id="google-analytics"><a class="header" href="#google-analytics">Google Analytics</a></h3>
+<pre><code class="language-json">{
+  &quot;marketing&quot;: {
+    &quot;analytics&quot;: {
+      &quot;google_analytics&quot;: {
+        &quot;tracking_id&quot;: &quot;String&quot;
+      }
+    }
+  }
+}
+</code></pre>
+<h3 id="plausible"><a class="header" href="#plausible">Plausible</a></h3>
+<pre><code class="language-json">{
+  &quot;marketing&quot;: {
+    &quot;analytics&quot;: {
+      &quot;plausible&quot;: {
+        &quot;domain&quot;: &quot;String&quot;,
+        &quot;script_url&quot;: &quot;Optional string for self hosted&quot;
+      }
+    }
+  }
+}
+</code></pre>
+<h3 id="fathom"><a class="header" href="#fathom">Fathom</a></h3>
+<pre><code class="language-json">{
+  &quot;marketing&quot;: {
+    &quot;analytics&quot;: {
+      &quot;fathom&quot;: {
+        &quot;site&quot;: &quot;String&quot;
+      }
+    }
+  }
+}
+</code></pre>
+<h3 id="unami"><a class="header" href="#unami">Unami</a></h3>
+<pre><code class="language-json">{
+  &quot;marketing&quot;: {
+    &quot;analytics&quot;: {
+      &quot;unami&quot;: {
+        &quot;website&quot;: &quot;String&quot;,
+        &quot;script_url&quot;: &quot;String&quot;
+      }
+    }
+  }
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="changelogs"><a class="header" href="#changelogs">Changelogs</a></h1>
+<p>oranda can generate a separate changelog file from either a local <code>CHANGELOG.md</code> file in your repository, or from the body
+of GitHub releases. This setting is <strong>enabled</strong> by default, as long as you have a repository set for your project. To disable this
+feature, set it to false in the <code>oranda.json</code>:</p>
+<pre><code class="language-json">{
+  &quot;components&quot;: {
+    &quot;changelog&quot;: false
+  }
+}
+</code></pre>
+<p>By default, oranda will also generate a <code>changelog.rss</code> file which you can plug into RSS readers or other automation!</p>
+<h2 id="controlling-where-changelogs-are-read-from"><a class="header" href="#controlling-where-changelogs-are-read-from">Controlling where changelogs are read from</a></h2>
+<p>By default, oranda will try to read changelog contents from a file called <code>CHANGELOG(.md)</code>. This file needs to be formatted
+in such a way that it can be parsed, meaning you'll have to specify consistent headers in your Markdown file, like this:</p>
+<pre><code class="language-markdown"># Changelog
+
+## 0.1.1 - 2023-04-05
+
+- Fixed things
+
+## 0.1.0 - 2023-04-02
+
+### New features
+
+- Fancy thingie
+- Other cool stuff
+
+### Fixes
+
+- Beep booping is now consistent
+</code></pre>
+<p>If you would like oranda to use the bodies of GitHub releases that it finds instead, set the following option:</p>
+<pre><code class="language-json">{
+  &quot;components&quot;: {
+    &quot;changelog&quot;: {
+      &quot;read_changelog_file&quot;: false
+    }
+  }
+}
+</code></pre>
+<blockquote>
+<p>Even if oranda reads from a local changelog file, it will still try to match those releases to GitHub releases. Make
+sure that both version numbering schemes are the same between your local changelog and GitHub releases.</p>
+</blockquote>
+<p>For a complete reference of changelog configuration, consult the <a href="configuration/./reference.html#componentschangelog">reference</a></p>
+<h2 id="for-workspaces"><a class="header" href="#for-workspaces">For workspaces</a></h2>
+<p>If you have a <a href="configuration/./workspaces.html">workspace</a>, but you would like to opt-out of changelogs for only some members, you'll need
+to add manual overrides in those <code>oranda.json</code> files right now.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="mdbook-support"><a class="header" href="#mdbook-support">mdbook support</a></h1>
+<p>oranda can generate <a href="https://rust-lang.github.io/mdBook/">mdbooks</a> for you. If you've already worked with mdbook, it's as simple as pointing oranda
+at your book directory using the <code>mdbook.path</code> option:</p>
+<pre><code class="language-json">{
+  &quot;components&quot;: {
+    &quot;mdbook&quot;: {
+      &quot;path&quot;: &quot;./docs&quot;
+    }
+  }
+}
+</code></pre>
+<p>This will cause oranda to automatically recompile your book for you, which will be served at the <code>yoursite/book/</code> URL.
+<code>oranda dev</code> will also be watching this directory.</p>
+<h2 id="mdbook-quickstart"><a class="header" href="#mdbook-quickstart">mdbook quickstart</a></h2>
+<p>If this is the first time you're working with mdbook, these are the minimal steps you'd need before editing the oranda config.
+After you've <a href="https://rust-lang.github.io/mdBook/guide/installation.html">installed the mdbook tool</a>, you can generate a new book scaffold:</p>
+<pre><code class="language-sh">mdbook init docs # replace docs with your preferred directory
+</code></pre>
+<p>You can either use <code>oranda dev</code> or <code>mdbook serve docs/</code> to have a preview for your mdbook.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="social"><a class="header" href="#social">Social</a></h1>
+<p>In order to help with SEO, there are a couple of options you can use.</p>
+<pre><code class="language-json">{
+  &quot;marketing&quot;: {
+    &quot;social&quot;: {
+      &quot;image&quot;: &quot;used as the share image for social media&quot;,
+      &quot;image_alt&quot;: &quot;alt for said image&quot;,
+      &quot;twitter_account&quot;: &quot;twitter account for the website&quot;
+    }
+  }
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="theming"><a class="header" href="#theming">Theming</a></h1>
+<h2 id="predefined-themes"><a class="header" href="#predefined-themes">Predefined themes</a></h2>
+<p>Oranda comes with six default themes:</p>
+<ul>
+<li>Light</li>
+<li>Dark</li>
+<li>Axo Light (<code>axo_light</code> or <code>axolight</code>)</li>
+<li>Axo Dark (<code>axo_dark</code> or <code>axodark</code>)</li>
+<li>Hacker</li>
+<li>Cupcake</li>
+</ul>
+<p>You can change the theme by adding the <code>styles.theme</code> key to your <code>oranda.json</code>:</p>
+<pre><code class="language-json">{
+  &quot;styles&quot;: {
+    &quot;theme&quot;: &quot;hacker&quot;
+  }
+}
+</code></pre>
+<p>Dark is the default theme.</p>
+<h2 id="customizing-themes"><a class="header" href="#customizing-themes">Customizing Themes</a></h2>
+<p>Themes can be further customized by adding extra CSS.</p>
+<p>Additional CSS can be added using the <code>styles.additional_css</code> key.</p>
+<pre><code class="language-json">{
+  &quot;styles&quot;: {
+    &quot;additional_css&quot;: [&quot;./local/file.css&quot;, &quot;http://www.remote.dev/file.css&quot;]
+  }
+}
+</code></pre>
+<blockquote>
+<p>Note: Remote files will be copied and the copy served locally, so once a link is updated, the site must be regenerated for changes to take effect.</p>
+</blockquote>
+<h3 id="adding-css"><a class="header" href="#adding-css">Adding CSS</a></h3>
+<p>Oranda's CSS makes use of <a href="https://css-tricks.com/css-cascade-layers/">cascade layers</a> to scope CSS and make it simpler to override styles. To override themed styles, say on a <code>&lt;p&gt;</code> element, place it inside a layer called <code>overrides</code>.</p>
+<pre><code class="language-css">@layer overrides {
+  p {
+    color: aquamarine;
+  }
+}
+</code></pre>
+<p>Alternately, CSS that is not defined within a layer has precedence over all layered CSS, so this will also work.</p>
+<pre><code class="language-css">p {
+  color: aquamarine;
+}
+</code></pre>
+<h3 id="dark-vs-light"><a class="header" href="#dark-vs-light">Dark vs. Light</a></h3>
+<p>When the <code>dark</code> theme is selected, a <code>dark</code> class is added to the page, and styles to be applied in dark mode only can include this selector. For instance,</p>
+<pre><code class="language-css">.dark p {
+  color: aquamarine;
+}
+</code></pre>
+<p>Will create paragraphs colored aquamarine in dark mode only.</p>
+<h3 id="adding-classes"><a class="header" href="#adding-classes">Adding Classes</a></h3>
+<p>When there are specific elements you would like to add to your pages, these can be added into Markdown files as raw HTML with class selectors that you can target with your CSS.</p>
+<pre><code class="language-html">&lt;!-- README.md --&gt;
+
+## A Different Kind of Box
+
+&lt;div class=&quot;my-border-class&quot;&gt;
+  &lt;p&gt;An outlined box&lt;/p&gt;
+&lt;/div&gt;
+</code></pre>
+<pre><code class="language-css">.my-border-class {
+  padding: 1rem;
+  border: 6px dotted seagreen;
+}
+</code></pre>
+<h2 id="creating-a-new-theme"><a class="header" href="#creating-a-new-theme">Creating a New Theme</a></h2>
+<p>Currently, to create a new theme, you need to follow the directions above in &quot;Customizing Themes&quot; and overwrite the given CSS. We recommend continuing the layer approach and placing overrides in the <code>overrides</code> layer and then adding a new named layer for your theme.</p>
+<p>The ability to add a different theme directly will be included in future releases. Following the layers approach will make it simpler to transition your theme.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="theme-previews"><a class="header" href="#theme-previews">Theme Previews</a></h1>
+<p>Here you can see what themes look like without having to set up oranda yourself.</p>
+<p>These previews are generated by running oranda on itself.</p>
+<h2 id="dark-default"><a class="header" href="#dark-default">Dark (default)</a></h2>
+<p><img src="configuration/theme/../../images/themes/dark.png" alt="dark theme preview" /></p>
+<h2 id="light"><a class="header" href="#light">Light</a></h2>
+<p><img src="configuration/theme/../../images/themes/light.png" alt="light theme preview" /></p>
+<h2 id="axo-dark"><a class="header" href="#axo-dark">Axo Dark</a></h2>
+<p><img src="configuration/theme/../../images/themes/axodark.png" alt="axo dark theme preview" /></p>
+<h2 id="axo-light"><a class="header" href="#axo-light">Axo Light</a></h2>
+<p><img src="configuration/theme/../../images/themes/axolight.png" alt="axo light theme preview" /></p>
+<h2 id="hacker"><a class="header" href="#hacker">Hacker</a></h2>
+<p><img src="configuration/theme/../../images/themes/hacker.png" alt="hacker theme preview" /></p>
+<h2 id="cupcake"><a class="header" href="#cupcake">Cupcake</a></h2>
+<p><img src="configuration/theme/../../images/themes/cupcake.png" alt="cupcake preview" /></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="funding-page"><a class="header" href="#funding-page">Funding page</a></h1>
+<p>Oranda has the capability of reading information from your GitHub funding file, and
+automatically writing a page based on it. Unless you disable it by setting <code>components.funding</code> to <code>false</code>
+in the oranda config file, oranda will search your project for
+a <code>.github/FUNDING.yml</code> file, and generate a page based off of it. You can read
+more about the format of this file on <a href="https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/displaying-a-sponsor-button-in-your-repository">GitHub's docs</a>.</p>
+<p>Oranda will display your different sponsor/funding links next to each other, but
+if you have a &quot;main&quot; funding option, you can set the following configuration setting:</p>
+<pre><code class="language-json">{
+  &quot;components&quot;: {
+    &quot;funding&quot;: {
+      &quot;preferred_funding&quot;: &quot;github&quot;
+    }
+  }
+}
+</code></pre>
+<p>Make sure this key corresponds to one of the possible entries in the <code>FUNDING.yml</code>
+file.</p>
+<p>If you want to display additional information or context, oranda can also include
+the contents of a top-level <code>funding.md</code> Markdown file. Its contents will be translated
+into HTML and displayed on the Funding page as well.</p>
+<p>Both of the YAML and Markdown file paths can be customized as such:</p>
+<pre><code class="language-json">{
+  &quot;components&quot;: {
+    &quot;funding&quot;: {
+      &quot;md_path&quot;: &quot;myfunding.md&quot;,
+      &quot;yml_path&quot;: &quot;misc/funding.yml&quot;
+    }
+  }
+}
+</code></pre>
+<blockquote>
+<p>oranda's funding parsing and site generation are currently an experiment into how
+to better integrate common funding methods into your tools' websites. If you have
+any feedback on how we could do things better, let us know on
+<a href="https://discord.com/invite/wVqCRGsb">Discord</a> or <a href="https://github.com/axodotdev/oranda/issues/new">GitHub</a>!</p>
+</blockquote>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="workspaces"><a class="header" href="#workspaces">Workspaces</a></h1>
+<p>oranda supports building multiple sites at once (referred to as building in a &quot;workspace&quot;). To control this behavior,
+you can create a <code>oranda-workspace.json</code> file inside your workspace root. Running an oranda command will pick up this
+file, and build the workspace members accordingly.</p>
+<p>The reason why this is a separate file, and not part of the <code>oranda.json</code> file is to avoid confusing between <em>nonvirtual</em>
+workspace root members (meaning if a workspace root also contains a site/package of some kind). By putting your workspace
+configuration in a separate file, you can still have an oranda site at the same directory level, without any problems.</p>
+<blockquote>
+<p><strong>NOTE</strong>: Workspace functionality will not be enabled if the <code>oranda-workspace.json</code> file doesn't exist!</p>
+</blockquote>
+<p>A workspace configuration file looks something like this:</p>
+<pre><code class="language-json">{
+  &quot;workspace&quot;: {
+    &quot;name&quot;: &quot;My Workspace&quot;,
+    &quot;members&quot;: [
+      {
+        &quot;slug&quot;: &quot;projectone&quot;,
+        &quot;path&quot;: &quot;./project-one&quot;
+      },
+      {
+        &quot;slug&quot;: &quot;project_two&quot;,
+        &quot;path&quot;: &quot;./project-two&quot;
+      }
+    ]
+  }
+}
+</code></pre>
+<p>When ran with <code>oranda build</code>, this will produce two oranda sites, one at <code>/projectone</code>, and one at <code>/project_two</code>. oranda
+will consider each separate project's <code>oranda.json</code> file (should it exist).</p>
+<p>You can additionally pass down keys you'd like to be set for each member project:</p>
+<pre><code class="language-json">{
+  &quot;workspace&quot;: {
+    &quot;name&quot;: &quot;My Workspace&quot;,
+    &quot;members&quot;: [
+      {
+        &quot;slug&quot;: &quot;projectone&quot;,
+        &quot;path&quot;: &quot;./project-one&quot;
+      },
+      {
+        &quot;slug&quot;: &quot;project_two&quot;,
+        &quot;path&quot;: &quot;./project-two&quot;
+      }
+    ]
+  },
+  &quot;styles&quot;: {
+    &quot;theme&quot;: &quot;hacker&quot;
+  }
+}
+</code></pre>
+<p>Individual workspace member configs will still override what's set here, though. Also, <em>every</em> key will be passed down,
+including ones that don't make a lot of sense to be the same in multiple projects (for example <a href="configuration/artifacts.html">package manager</a>
+configuration).</p>
+<p>Building a workspace will also generate a nice workspace index page that can be used to provide an overview over the
+workspace's members, as well as some quick info and metadata.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="contributing"><a class="header" href="#contributing">Contributing</a></h1>
+<p>Here's some helpful tips for contributing.</p>
+<h2 id="auto-recompiling-based-on-source-changes"><a class="header" href="#auto-recompiling-based-on-source-changes">Auto-recompiling based on source changes</a></h2>
+<p>If you're working on oranda and you want to rebuild both oranda itself and your preview site when stuff changes,
+this is the command to keep in mind (assuming you have <code>cargo-watch</code> installed):</p>
+<pre><code class="language-shell">cargo watch -x &quot;run dev&quot;
+</code></pre>
+<p>On some platforms, apparently images also get recompiled and picked up by cargo-watch:</p>
+<pre><code class="language-shell">cargo watch -x &quot;run dev&quot; --ignore &quot;*.png&quot;  --ignore &quot;*.jpg&quot;
+</code></pre>
+<h2 id="plus-working-on-the-css"><a class="header" href="#plus-working-on-the-css">...plus working on the CSS</a></h2>
+<p>We provide an environment variable (<code>ORANDA_USE_TAILWIND_BINARY</code>) that, when set, will cause oranda to
+use a prebuilt Tailwind binary to rebuild the CSS on the fly. You can use it like this:</p>
+<pre><code class="language-shell">ORANDA_USE_TAILWIND_BINARY=true cargo run dev
+# for fish shell:
+env ORANDA_USE_TAILWIND_BINARY=true cargo run dev
+</code></pre>
+<p>(if you don't use this flag, oranda will most likely revert to fetching CSS from the current GitHub release.
+Read <a href="./building.html#the-trouble-with-css">this section</a> in the build documentation for more in-depth info)</p>
+<p><code>oranda dev</code> doesn't automatically reload on CSS changes (because it's meant to be used by users),
+but you can include the CSS directory manually like such:</p>
+<pre><code class="language-shell">ORANDA_USE_TAILWIND_BINARY=true cargo run dev -i oranda-css/css/
+</code></pre>
+<h2 id="updating-syntax-highlighting-languages"><a class="header" href="#updating-syntax-highlighting-languages">Updating syntax highlighting languages</a></h2>
+<p>We use <a href="https://crates.io/crates/syntect">syntect</a> to support syntax highlighting in Markdown code blocks. If you want to add support for a new language
+that's not included in syntect's default set of languages or the ones oranda provides, you'll need to extend the
+<code>oranda::site::markdown::syntax_highlight::dump_syntax_themes</code> function to load your new <code>.sublime-syntax</code> file from
+disk
+and to include it in our syntax set dump. This function, once adjusted, only needs to be ran once manually, by including
+it anywhere in the call path of the application (I recommend somewhere close to the top of the build CLI function).</p>
+<h3 id="converting-from-tmlanguage"><a class="header" href="#converting-from-tmlanguage">Converting from .tmLanguage</a></h3>
+<p><code>syntect</code> accepts <code>.sublime-syntax</code> files, but Sublime Text can also accept <code>.tmLanguage</code> (TextMate syntax bundles)
+files,
+so sometimes we need to convert from one to the other. Thankfully, the Sublime Text editor has a built-in feature for
+this.
+Here's what you need to do:</p>
+<ol>
+<li>Download and install Sublime Text</li>
+<li>In Sublime Text, from the menu, select Tools -&gt; Developer -&gt; New Syntax...</li>
+<li>This puts you in your Packages/User folder. Paste your tmLanguage file contents and save as <code>&lt;yourlang&gt;.tmLanguage</code>.</li>
+<li>Next, you should be able to run Tools -&gt; Developer -&gt; New Syntax from <yourlang>.tmLanguage...</li>
+<li>This opens a new tab with the converted output. Save and copy it or paste it into a new file in oranda. Profit!</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="building-oranda"><a class="header" href="#building-oranda">Building oranda</a></h1>
+<p>In case you're interested in building oranda from scratch, be it for packaging for a software distribution or
+something different, here's some information on things to keep in mind!</p>
+<h2 id="basic-setup"><a class="header" href="#basic-setup">Basic setup</a></h2>
+<p>To build oranda from source, you'll need the following:</p>
+<ul>
+<li>Stable Rust toolchain</li>
+<li><em>Optionally</em>, if you want to pre-compile CSS, Node &amp; npm</li>
+<li><code>cargo-dist</code>, if you want to opt into the same release flags we use in our CI</li>
+</ul>
+<p>oranda can be built from source by running <code>cargo build --release</code> (not including the CSS - read below for more).
+Since we use <code>cargo-dist</code> to build our binaries for the official distribution of oranda, you may want to
+run <code>cargo dist build</code> instead. This
+ensures that you generate the same builds that we do.</p>
+<h3 id="the-trouble-with-css"><a class="header" href="#the-trouble-with-css">The trouble with CSS</a></h3>
+<p>oranda includes some CSS to style pages - we call this oranda-css. This CSS uses <a href="https://tailwindcss.com">TailwindCSS</a>,
+and therefore needs to be compiled before it can be included. To figure out <em>how</em> to build and/or include this CSS,
+we use a <code>build.rs</code> file. This file sets configuration variables for one of these cases:</p>
+<blockquote>
+<p>Added in version 0.4.0.</p>
+</blockquote>
+<ul>
+<li>You have the environment variable <code>ORANDA_USE_TAILWIND_BINARY</code> set. This causes oranda to attempt to download a
+<code>tailwindcss</code> binary, and build using that.
+<ul>
+<li>If you run this in a development build, the CSS will get built at runtime.</li>
+<li>If you run it in a release build, the CSS will be built as part of <code>build.rs</code> and embedded into the resulting
+binary.</li>
+</ul>
+</li>
+<li>If a file exists at <code>oranda-css/dist/oranda.css</code>, oranda will inline that file and use it as its <em>current</em> version,
+meaning it'll insert it into sites unless the user overrides it with a different version. This means you can prebuild
+the CSS using npm, and then run <code>cargo build</code> to let it be picked up.</li>
+<li>If neither of these conditions are true, a Cargo build will produce a binary that'll always fetch the CSS from our
+GitHub releases. Stricly seen, this is a <strong>worse version of oranda</strong> (because it has to do extra CSS requests), so
+we suggest not distributing a binary that was built this way. You can check if a binary was built this way by looking
+out for the following log
+line: <code>warning: This build of oranda will pull CSS directly from GitHub releases! This is probably not what you want.</code></li>
+</ul>
+<blockquote>
+<p>For <code>cargo install</code> users: Your <code>oranda</code> binary is of the third type in the list above. This is unfortunately a
+shortcoming of Cargo's build pipeline, but if you're fine with using a slightly slower version of
+oranda, <code>cargo install</code>
+works fine. If you want a regular binary, check the <a href="./install.html">install page</a>!</p>
+</blockquote>
+<p>If you're distributing binaries anywhere, you can either use the Node toolchain, or the Tailwind binary
+using <code>ORANDA_USE_TAILWIND_BINARY</code>, depending on which is easier/more conformant in your build environment.</p>
+<pre><code class="language-sh"># either:
+ORANDA_USE_TAILWIND_BINARY=true cargo dist build
+
+# or:
+cd oranda-css
+npm run build
+cd ..
+cargo dist build
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+    </div>
+    </body>
+</html>
