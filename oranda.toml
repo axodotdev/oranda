@@ -1,0 +1,29 @@
+[build]
+path_prefix = "oranda"
+
+[styles]
+theme = "axodark"
+favicon = "https://www.axo.dev/favicon.ico"
+
+[marketing]
+analytics = { plausible = { domain = "opensource.axo.dev" }}
+
+[marketing.social]
+image = "https://www.axo.dev/meta_small.jpeg"
+image_alt = "axo"
+twitter_account = "@axodotdev"
+
+
+
+[components]
+changelog = true
+
+[components.artifacts.package_managers.preferred]
+npm = "npm install @axodotdev/oranda --save-dev"
+cargo = "cargo install oranda --locked --profile=dist"
+
+[components.artifacts.package_managers.additional]
+npx = "npx @axodotdev/oranda"
+binstall = "cargo binstall oranda"
+nix-env = "nix-env -i oranda"
+"nix flake" = "nix profile install github:axodotdev/oranda"
