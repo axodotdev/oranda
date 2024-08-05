@@ -216,7 +216,7 @@ fn it_inserts_plausible_tag() {
             "marketing": {
                 "analytics": {
                     "plausible": {
-                        "domain": "opensource.axo.dev"
+                        "domain": "axodotdev.github.io"
                     }
                 }
             }
@@ -225,5 +225,5 @@ fn it_inserts_plausible_tag() {
     );
     let site = Site::build_single(&config, None).unwrap();
     let page = find_page(&site.pages, "index.html");
-    assert_selector_exists(&page.contents, "script[defer='true'][data-domain='opensource.axo.dev'][src='https://plausible.io/js/script.js']");
+    assert_selector_exists(&page.contents, "script[defer='true'][data-domain='axodotdev.github.io'][src='https://plausible.io/js/script.js']");
 }
