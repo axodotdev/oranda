@@ -275,8 +275,10 @@ pub fn build_mdbook(
 ///
 /// Interesting things only happen when you run `.build()`
 pub fn load_mdbook(book_dir: &Utf8Path) -> Result<MDBook> {
-    let md = MDBook::load(book_dir).map_err(|e| OrandaError::MdBookLoad {
-        path: book_dir.to_string(),
+    // An absolute path is necessary for plugins such as linkcheck to work.
+    let path = book_dir.canonicalize_utf8().unwrap_or(book_dir.to_owned());
+    let md = MDBook::load(&path).map_err(|e| OrandaError::MdBookLoad {
+        path: path.to_string(),
         details: e,
     })?;
 
