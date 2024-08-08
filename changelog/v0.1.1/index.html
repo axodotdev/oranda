@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" id="oranda" class="dark axo">
+    <head>
+        <title>oranda</title>
+        
+            <meta property="og:url" content="https://opensource.axo.dev/oranda" />
+        
+        
+            <link rel="icon" href="/oranda/favicon.ico" />
+        
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        
+            <meta name="description" content="🎁 generate beautiful landing pages for your projects" />
+            <meta property="og:description" content="🎁 generate beautiful landing pages for your projects" />
+        
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="oranda" />
+        
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta property="og:image" content="https://www.axo.dev/meta_small.jpeg" />
+        
+        
+            <meta property="og:image:alt" content="axo" />
+        
+        
+            <meta name="twitter:creator" content="@axodotdev" />
+            <meta name="twitter:site" content="@axodotdev" />
+        
+        <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
+        <link rel="stylesheet" href="/oranda/oranda-v0.4.0.css" />
+        
+        
+    </head>
+    <body>
+        <div class="container">
+            <div class="page-body">
+                
+                    <div class="repo_banner">
+                        <a href="https://github.com/axodotdev/oranda">
+                            <div class="github-icon" aria-hidden="true"></div>
+                            Check out our GitHub!
+                        </a>
+                    </div>
+                
+
+                <main>
+                    <header>
+                        
+                        <h1 class="title">oranda</h1>
+                        
+    <nav class="nav">
+        <ul>
+            <li><a href="/oranda/">Home</a></li>
+
+            
+
+            
+                <li><a href="/oranda/artifacts/">Install</a></li>
+            
+
+            
+                <li><a href="/oranda/book/">Docs</a></li>
+            
+
+            
+
+            
+                <li><a href="/oranda/changelog/">Changelog</a></li>
+            
+        </ul>
+    </nav>
+
+                    </header>
+
+                    
+<div>
+    <h1>0.1.1 - 2023-07-04</h1>
+    <div class="releases-body">
+        
+        
+        <section class="release ">
+    
+    <div class="release-info">
+        <span class="flex items-center gap-2">
+            <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6'>
+    <path stroke-linecap='round' stroke-linejoin='round' d='M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z' />
+    <path stroke-linecap='round' stroke-linejoin='round' d='M6 6h.008v.008H6V6z' /></svg>
+            v0.1.1
+        </span>
+        <span class="flex items-center gap-2">
+            
+                <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6'><path stroke-linecap='round' stroke-linejoin='round' d='M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5' /></svg>
+                Jul  4 2023 at 17:13 UTC
+            
+        </span>
+    </div>
+    <div class="release-body">
+        <h3>Fixes</h3>
+<ul>
+<li>
+<p><strong>Remove OpenSSL dependency - <a href="https://github.com/ashleygwilliams" rel="noopener noreferrer">ashleygwilliams</a>/<a href="https://github.com/axodotdev/oranda/pull/515" rel="noopener noreferrer">pr515</a>, <a href="https://github.com/geelen" rel="noopener noreferrer">geelen</a>/<a href="https://github.com/axodotdev/oranda/issues/514" rel="noopener noreferrer">i514</a></strong></p>
+<p>If a release happens without an OpenSSL issue, does it really happen? In trying
+to run <code>oranda build</code> on a beta image for Cloudflare Pages, an end user discovered
+that we hadn't fully vanquished our dependency on OpenSSL. With this PR, we've
+made 100% sure we have.</p>
+</li>
+<li>
+<p><strong>Allow schema key in <code>oranda.json</code> - <a href="https://github.com/Gankra" rel="noopener noreferrer">Gankra</a>, <a href="https://github.com/axodotdev/oranda/pull/506" rel="noopener noreferrer">pr506</a></strong></p>
+<p>To improve the user experience of configuring oranda, we error on unexpected
+keys in the <code>oranda.json</code> file- which will help people see typos and other
+mistakes. However, this checking was over-eagerly erroring when folks added
+a schema key so they could use VS Code's schema support. This PR makes an
+exception for users including the "non-functional" (in oranda) schema key.</p>
+</li>
+<li>
+<p><strong>Add fallback to macOS Intel artifacts if Apple Silicon detected, but no artifacts found - <a href="https://github.com/Gankra" rel="noopener noreferrer">Gankra</a>, <a href="https://github.com/axodotdev/oranda/pull/511" rel="noopener noreferrer">pr511</a></strong></p>
+<p>Platform support and detection is slightly more complicated on Apple/macOS
+machines because Apple offers Rosetta2 which allows you to run binaries built
+for older Intel-based systems on the new Apple Silicon ones (but not vice versa).
+This PR updates the install widget's behavior to show artifacts built for
+Apple Intel-based systems if it detects an Apple Silicon system but cannot find
+any binaries built for Apple Silicon.</p>
+</li>
+<li>
+<p><strong>Artifact table width on mobile - <a href="https://github.com/SaraVieira" rel="noopener noreferrer">SaraVieira</a>, <a href="https://github.com/axodotdev/oranda/pull/505" rel="noopener noreferrer">pr505</a></strong></p>
+<p>On mobile, the artifact table's width was forcing a scroll. We've updated the
+CSS to fix this!</p>
+</li>
+</ul>
+
+    </div>
+</section>
+    </div>
+</div>
+
+                </main>
+            </div>
+
+            <footer>
+                
+                    <a href="https://github.com/axodotdev/oranda"><div class="github-icon" aria-hidden="true"></div></a>
+                
+                <span>
+                    oranda, MIT OR Apache-2.0
+                </span>
+            </footer>
+        </div>
+
+        
+            <script defer="true" data-domain="opensource.axo.dev" src="https://plausible.io/js/script.js"></script>
+        
+        
+
+        
+    </body>
+</html>
