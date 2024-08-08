@@ -3,7 +3,7 @@ name = "oranda"
 description = "🎁 generate beautiful landing pages for your projects"
 repository = "https://github.com/axodotdev/oranda"
 homepage = "https://opensource.axo.dev/oranda"
-version = "0.6.4"
+version = "0.6.5"
 edition = "2021"
 authors = ["Axo Developer Co. <hello@axo.dev>"]
 license = "MIT OR Apache-2.0"
@@ -56,7 +56,7 @@ pathdiff = { version = "0.2.1", features = ["camino"] }
 minijinja = { version = "1.0.3", features = ["loader", "preserve_order", "custom_syntax"] }
 include_dir = "0.7.3"
 slug = "0.1.4"
-oranda-generate-css = { version = "0.6.4", path = "generate-css" }
+oranda-generate-css = { version = "0.6.5", path = "generate-css" }
 inquire = "0.6.2"
 url-escape = "0.1.1"
 rss = { version = "2.0.6", features = ["atom"] }

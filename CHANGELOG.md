@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.6.4 - 2024-08-08
+## 0.6.5 - 2024-08-08
 
 Fixes a bug where the linkchecker plugin would fail to locate documentation source on Unix OSs.
 
