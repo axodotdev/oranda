@@ -35,17 +35,27 @@ pub struct OrandaLayer {
 
 impl OrandaLayer {
     pub fn load(config_path: &Utf8PathBuf) -> Result<Option<OrandaLayer>> {
-        let config_result = SourceFile::load_local(config_path.as_path());
-
-        match config_result {
-            Ok(config) => {
-                let data: OrandaLayer = config.deserialize_json()?;
-                Ok(Some(data))
-            }
-            Err(_) => {
-                tracing::debug!("No config found, using default values");
-                Ok(None)
+        let mut config_path = config_path.to_owned();
+        if config_path.extension() == Some("json") {
+            if config_path.exists() {
+                let config = SourceFile::load_local(config_path.as_path())?;
+                return Ok(Some(config.deserialize_json()?));
+            } else {
+                // Temporary hack
+                config_path.set_extension("toml");
             }
         }
+        if !config_path.exists() {
+            tracing::debug!("No config found, using default values");
+            return Ok(None);
+        }
+        if config_path.extension() == Some("toml") {
+            tracing::warn!("!!!Using toml config!!!!");
+            let config = SourceFile::load_local(config_path.as_path())?;
+            return Ok(Some(config.deserialize_toml()?));
+        }
+
+        tracing::debug!("No config found, using default values");
+        Ok(None)
     }
 }

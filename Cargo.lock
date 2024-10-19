@@ -209,6 +209,7 @@ dependencies = [
  "serde",
  "serde_json",
  "thiserror",
+ "toml",
  "toml_edit",
  "url",
 ]
