@@ -54,7 +54,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Setup
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - uses: dtolnay/rust-toolchain@stable
@@ -75,7 +75,7 @@ jobs:
         run: mkdir /tmp/public/ && cp -R public /tmp/public/oranda
 
       - name: Check HTML for broken internal links
-        uses: untitaker/hyperlink@0.1.29
+        uses: untitaker/hyperlink@0.1.42
         with:
           args: /tmp/public/ --sources docs/
       
