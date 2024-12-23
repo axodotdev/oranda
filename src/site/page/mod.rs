@@ -9,6 +9,7 @@ use crate::site::templates::Templates;
 use axoasset::SourceFile;
 use camino::Utf8PathBuf;
 use minijinja::context;
+use minijinja::filters::safe;
 use minijinja::value::Value;
 use serde::Serialize;
 
@@ -88,8 +89,7 @@ impl Page {
             tracing::warn!("{} could not be found on disk!", path);
         }
         let template = templates.get(template_name)?;
-        let context =
-            context!(layout => templates.layout, page => context, markdown_content => body);
+        let context = context!(layout => templates.layout, page => context, markdown_content => safe(body.unwrap_or_default()));
         let contents = template.render(context)?;
         Ok(Self {
             contents,
