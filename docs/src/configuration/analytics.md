@@ -7,7 +7,7 @@ Right now we support the following analytics providers:
 - [Google Analytics](https://analytics.google.com/analytics/web/)
 - [Plausible](https://plausible.io/)
 - [Fathom](https://usefathom.com/)
-- [Unami](https://umami.is/)
+- [Umami](https://umami.is/)
 
 To add any of these, add the required configuration under the `analytics` key:
 
@@ -54,13 +54,13 @@ To add any of these, add the required configuration under the `analytics` key:
 }
 ```
 
-### Unami
+### Umami
 
 ```json
 {
   "marketing": {
     "analytics": {
-      "unami": {
+      "umami": {
         "website": "String",
         "script_url": "String"
       }
