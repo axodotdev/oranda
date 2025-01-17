@@ -183,12 +183,12 @@ if you're self-hosting.
 
 Set `fathom.site` to your Fathom site.
 
-#### marketing.analytics.unami
+#### marketing.analytics.umami
 
 - Type: object, Default: none
 
-Set `unami.website` to your Unami website identifier, and `unami.script_url` to the location
-where you're hosting your Unami script.
+Set `umami.website` to your Umami website identifier, and `umami.script_url` to the location
+where you're hosting your Umami script.
 
 ### marketing.social
 
