@@ -1,0 +1,320 @@
+%YAML 1.2
+---
+# http://www.sublimetext.com/docs/3/syntax.html
+# Original source: https://github.com/aidenfoxivey/sublime-zig-unofficial/blob/96e22bb9a7b8368a32b10bc21b22e3b0b70201ee/Syntaxes/Zig.sublime-syntax
+#The MIT License (Expat)
+#
+#Copyright (c) 2018 Jeff Fowler
+#Copyright (c) 2024 Aiden Fox Ivey
+#
+#Permission is hereby granted, free of charge, to any person obtaining a copy
+#of this software and associated documentation files (the "Software"), to deal
+#in the Software without restriction, including without limitation the rights
+#to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+#copies of the Software, and to permit persons to whom the Software is
+#furnished to do so, subject to the following conditions:
+#
+#The above copyright notice and this permission notice shall be included in
+#all copies or substantial portions of the Software.
+#
+#THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+#IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+#FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+#AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+#LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+#OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+#THE SOFTWARE.
+name: Zig
+file_extensions:
+  - zig
+scope: source.zig
+contexts:
+  main:
+    - include: label
+    - include: function_type
+    - include: punctuation
+    - include: storage_modifier
+    - include: container_decl
+    - include: constants
+    - include: comments
+    - include: strings
+    - include: test
+    - include: storage
+    - include: keywords
+    - include: operators
+    - include: support
+    - include: field_decl
+    - include: block
+    - include: function_def
+    - include: function_call
+    - include: enum_literal
+    - include: variables
+  block:
+    - match: '([a-zA-Z_][\w.]*|@\".+\")?\s*(\{)'
+      captures:
+        1: storage.type.zig
+        2: punctuation.section.braces.begin.zig
+      push:
+        - match: '(\})'
+          captures:
+            1: punctuation.section.braces.end.zig
+          pop: true
+        - include: main
+  character_escapes:
+    - match: \\n
+      scope: constant.character.escape.newline.zig
+    - match: \\r
+      scope: constant.character.escape.carrigereturn.zig
+    - match: \\t
+      scope: constant.character.escape.tabulator.zig
+    - match: \\\\
+      scope: constant.character.escape.backslash.zig
+    - match: \\'
+      scope: constant.character.escape.single-quote.zig
+    - match: \\\"
+      scope: constant.character.escape.double-quote.zig
+    - match: '\\x[a-fA-F\d]{2}'
+      scope: constant.character.escape.hexidecimal.zig
+    - match: '\\u\{[a-fA-F\d]{1,6}\}'
+      scope: constant.character.escape.hexidecimal.zig
+  comments:
+    - match: ///
+      push:
+        - meta_scope: comment.line.documentation.zig
+        - match: $\n?
+          pop: true
+    - match: '//[^/]\s*TODO'
+      push:
+        - meta_scope: comment.line.todo.zig
+        - match: $\n?
+          pop: true
+    - match: "//[^/]*"
+      push:
+        - meta_scope: comment.line.zig
+        - match: $\n?
+          pop: true
+  constants:
+    - match: \b(null|undefined|true|false)\b
+      scope: constant.language.zig
+    - match: '\b(-?[\d_]+)(?!\.)\b'
+      scope: constant.numeric.integer.zig
+    - match: '\b(0x[a-fA-F\d_]+)(?!\.)\b'
+      scope: constant.numeric.integer.hexadecimal.zig
+    - match: '\b(0o[0-7_]+)(?!\.)\b'
+      scope: constant.numeric.integer.octal.zig
+    - match: '\b(0b[01_]+)(?!\.)\b'
+      scope: constant.numeric.integer.binary.zig
+    - match: '(-?\b[\d_]+(?:\.[\d_]+)?(?:[eE][+-]?[\d_]+)?)(?!\.)\b'
+      scope: constant.numeric.float.zig
+    - match: '(-?\b0x[a-fA-F\d_]+(?:\.[a-fA-F\d_]+)?[pP]?(?:[+-]?[\d_]+)?)(?!\.)\b'
+      scope: constant.numeric.float.hexadecimal.zig
+  container_decl:
+    - match: '\b(?!\d)([a-zA-Z_]\w*|@\".+\")?(?=\s*=\s*(?:extern|packed)?\b\s*(?:union)\s*[(\{])'
+      scope: entity.name.class.union.zig
+    - match: '\b(?!\d)([a-zA-Z_]\w*|@\".+\")?(?=\s*=\s*(?:extern|packed)?\b\s*(?:struct)\s*[(\{])'
+      scope: entity.name.class.struct.zig
+    - match: '\b(?!\d)([a-zA-Z_]\w*|@\".+\")?(?=\s*=\s*(?:extern|packed)?\b\s*(?:enum)\s*[(\{])'
+      scope: entity.name.class.enum.zig
+    - match: '\b(?!\d)([a-zA-Z_]\w*|@\".+\")?(?=\s*=\s*(?:error)\s*[(\{])'
+      scope: entity.name.class.error.zig
+    - match: '\b(error)(\.)([a-zA-Z_]\w*|@\".+\")'
+      captures:
+        1: storage.type.error.zig
+        2: punctuation.accessor.zig
+        3: constant.other.error.zig
+  enum_literal:
+    - match: '(^|\s+)(\.(?:[a-zA-Z_]\w*\b|@\"[^\"]*\"))(?!\(|\s*=[^=>])'
+      scope: constant.language.enum
+  field_decl:
+    - match: '([a-zA-Z_]\w*|@\".+\")\s*(:)\s*'
+      captures:
+        1: variable.other.member.zig
+        2: punctuation.separator.zig
+      push:
+        - match: '([a-zA-Z_][\w.]*|@\".+\")?\s*(?:(,)|(=)|$)'
+          captures:
+            1: storage.type.zig
+            2: punctuation.separator.zig
+            3: keyword.operator.assignment.zig
+          pop: true
+        - include: main
+  function_call:
+    - match: '\b([a-zA-Z_]\w*|@\".+\")(?=\s*\()'
+      scope: meta.function-call.zig variable.function.zig
+  function_def:
+    - match: '\b(fn)\s+([a-zA-Z_]\w*|@\".+\")(\()'
+      captures:
+        1: keyword.declaration.function.zig
+        2: entity.name.function
+        3: punctuation.section.parens.begin.zig
+      push:
+        - include: label
+        - include: param_list
+        - match: '([a-zA-Z_][\w.]*|@\".+\")'
+          scope: storage.type.zig
+        - match: '\)'
+          scope: punctuation.section.parens.end.zig
+          set: function_def_after_params
+        - include: main
+  function_def_after_params:
+    # TODO: be more precise here
+    - match: '\s*([a-zA-Z_][\w.]*|@\".+\")?(!)?\s*(?:([a-zA-Z_][\w.]*|@\".+\")\b(?!\s*\())?'
+      captures:
+        1: storage.type.zig
+        2: keyword.operator.zig
+        3: storage.type.zig
+      pop: true
+    # Bailout if we don't find what we want
+    - match: (?=.)
+      pop: true
+  function_type:
+    - match: \b(fn)\s*(\()
+      captures:
+        1: keyword.declaration.function.zig
+        2: punctuation.section.parens.begin.zig
+      push:
+        - meta_content_scope: meta.function.parameters.zig
+        - include: label
+        - include: param_list
+        - match: '([a-zA-Z_][\w.]*|@\".+\")'
+          scope: storage.type.zig
+        - match: '\)'
+          scope: punctuation.section.parens.end.zig
+          set: function_type_after_params
+        - include: main
+  function_type_after_params:
+    # TODO: Can we merge with function_def_after_params ? It seems similar.
+    - match: '\s*([a-zA-Z_][\w.]*|@\".+\")?\s*(!)?\s*([a-zA-Z_][\w.]*|@\".+\")'
+      captures:
+        1: storage.type.zig
+        2: keyword.operator.zig
+        3: storage.type.zig
+      pop: true
+    - match: (?=.)
+      pop: true
+  keywords:
+    - match: \b(while|for|break|return|continue|asm|defer|errdefer|unreachable)\b
+      scope: keyword.control.zig
+    - match: \b(async|await|suspend|nosuspend|resume)\b
+      scope: keyword.control.async.zig
+    - match: \b(if|else|switch|try|catch|orelse)\b
+      scope: keyword.control.conditional.zig
+    - match: (@import|@cImport|@cInclude)\b
+      scope: keyword.control.import.zig
+    - match: \b(usingnamespace)\b
+      scope: keyword.other.usingnamespace.zig
+  label:
+    - match: '\b(break|continue)\s*:\s*([a-zA-Z_]\w*|@\".+\")\b|\b(?!\d)([a-zA-Z_]\w*|@\".+\")\b(?=\s*:\s*(?:\{|while\b))'
+      captures:
+        1: keyword.control.zig
+        2: entity.name.label.zig
+        3: entity.name.label.zig
+  operators:
+    - match: \b!\b
+      scope: keyword.operator.zig
+    - match: '((?:(?:\+|-|\*)%?|/|%|<<|>>|&|\|(?=[^\|])|\^)=)'
+      scope: keyword.operator.assignment.zig
+    # The => is for switch expression, I'm not sure this is the best scope.
+    - match: '=>'
+      scope: keyword.operator.assignment.zig
+    - match: (==|(?:!|>|<)=?)
+      scope: keyword.operator.logical.zig
+    - match: '='
+      scope: keyword.operator.assignment.zig
+    - match: \b(and|or)\b
+      scope: keyword.operator.word.zig
+    - match: ((?:\+|-|\*)\%?|/(?!/)|%)
+      scope: keyword.operator.arithmetic.zig
+    - match: '(<<|>>|&(?=[a-zA-Z_]|@\")|\|(?=[^\|])|\^|~)'
+      scope: keyword.operator.bitwise.zig
+    - match: '(\+\+|\*\*|->|\.\?|\.\*|&(?=[a-zA-Z_]|@\")|\?|\|\||\.{2,3})'
+      scope: keyword.operator.other.zig
+  param_list:
+    - match: '([a-zA-Z_]\w*|@\".+\")\s*(:)\s*'
+      captures:
+        1: variable.parameter.zig
+        2: punctuation.separator.zig
+      push:
+        # Don't consume the closing ')'
+        - match: '([a-zA-Z_][\w.]*|@\".+\")?\s*(,|(?=\)))'
+          captures:
+            1: storage.type.zig
+            2: punctuation.separator.zig
+            3: punctuation.section.parens.end.zig
+          pop: true
+        - include: main
+        - match: '([a-zA-Z_][\w.]*|@\".+\")'
+          scope: storage.type.zig
+  punctuation:
+    - match: ","
+      scope: punctuation.separator.zig
+    - match: ;
+      scope: punctuation.terminator.zig
+    - match: (\()
+      scope: punctuation.section.parens.begin.zig
+    - match: (\))
+      scope: punctuation.section.parens.end.zig
+  storage:
+    - match: '\b(anyframe)\b\s*(->)?\s*(?:([a-zA-Z_][\w.]*|@\".+\")\b(?!\s*\())?'
+      captures:
+        1: keyword.declaration.anyframe.zig
+        2: keyword.operator.zig
+        3: keyword.declaration.zig
+    - match: \btest\b
+      scope: keyword.declaration.test.zig
+    - match: \bstruct\b
+      scope: keyword.declaration.struct.zig
+    - match: \benum\b
+      scope: keyword.declaration.enum.zig
+    - match: \bunion\b
+      scope: keyword.declaration.union.zig
+    - match: \berror\b
+      scope: keyword.declaration.error.zig
+  storage_modifier:
+    - match: \b(const|var|extern|packed|export|pub|noalias|inline|noinline|comptime|volatile|align|linksection|threadlocal|allowzero)\b
+      scope: storage.modifier.zig
+  strings:
+    - match: \'
+      push:
+        - meta_scope: string.quoted.single.zig
+        - match: \'
+          pop: true
+        - include: character_escapes
+        - match: '\\[^\''][^\'']*?'
+          scope: invalid.illegal.character.zig
+    - match: c?\"
+      push:
+        - meta_scope: string.quoted.double.zig
+        - match: \"
+          pop: true
+        - include: character_escapes
+        - match: '\\[^\''][^\'']*?'
+          scope: invalid.illegal.character.zig
+    - match: c?\\\\
+      push:
+        - meta_scope: string.quoted.other.zig
+        - match: $\n?
+          pop: true
+  support:
+    - match: '@[^\"\d][a-zA-Z_]\w*\b'
+      scope: support.function.zig
+  variables:
+    - match: '\b[_A-Z][_A-Z0-9]+\b'
+      scope: variable.constant.zig
+
+    - match: '\b[_a-zA-Z][_a-zA-Z0-9]*_t\b'
+      scope: storage.type.zig
+
+    - match: '\b[A-Z][a-zA-Z0-9]*\b'
+      scope: storage.type.zig
+
+    - match: '\b[_a-zA-Z][_a-zA-Z0-9]*\b'
+      scope: variable.zig
+
+  test:
+    - match: \b(test)\b\s+(\")(.*)(\")
+      captures:
+        0: entity.name.function.test.zig
+        1: keyword.declaration.test.zig
+        2: punctuation.string.start.zig
+        4: punctuation.string.end.zig
