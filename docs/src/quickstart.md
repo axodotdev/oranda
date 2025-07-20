@@ -73,4 +73,4 @@ your workflows, for example like this:
 - Read the [CLI docs](./cli.md)
 - Learn more about [hosting `oranda` sites](./hosting.md)
 
-[`cargo-dist`]: https://opensource.axo.dev/cargo-dist
+[`cargo-dist`]: https://axodotdev.github.io/cargo-dist
